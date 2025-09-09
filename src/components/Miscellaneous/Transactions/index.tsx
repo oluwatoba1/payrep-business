@@ -1,0 +1,109 @@
+import {FlatList, Image, Text, View, TouchableOpacity} from 'react-native';
+
+import styles from './styles';
+import {Badge, StatusIcon, TransactonItem} from '../../Cards';
+import Colors from '@theme/Colors';
+import ComponentImages from '@assets/images/components';
+import {Typography} from '@components/Forms';
+import {addCommas, scaleHeight} from '@utils/Helpers';
+import {BOTTOM_TAB_CONTAINER_HEIGHT} from '@utils/Constants';
+
+interface ITransaction {
+  account__account_name: string;
+  account__account_number: string;
+  id: string;
+  amount: number;
+  reference_number: string;
+  third_party_ref: string;
+  session_id: string;
+  rrn: string;
+  response_code: string;
+  serial_number: string;
+  service__code: string;
+  account_number: string;
+  bank: string;
+  company_commission: string;
+  bank_code: string;
+  bank_name: string;
+  fi: string;
+  beneficiary_account_name: string;
+  beneficiary_account_number: string;
+  senders_account_name: string;
+  source_account_number: string;
+  source_account_name: string;
+  senders_account_number: string;
+  card_number: string;
+  card_owner: string;
+  token: string;
+  units: number;
+  address: string;
+  kct: string;
+  remarks: string;
+  charges: string;
+  customer_commission: string;
+  bonus: string;
+  bank_commission: string;
+  aggregator_commission: string;
+  stamp_duty: string;
+  bank_charges: string;
+  service_charges: string;
+  balance_before: string;
+  balance_after: string;
+  transaction_type: 'credit' | 'debit';
+  transaction_description: string;
+  status: 'successful' | 'failed' | 'pending';
+  txn_status: 'successful' | 'failed' | 'pending';
+  is_reversal: string;
+  is_reversed: string;
+  is_lien: string;
+  is_bill: string;
+  created_at: string;
+  transaction_date: string;
+}
+
+interface TransactionsProps {
+  transactions: ITransaction[];
+  onItemPress?: (item: ITransaction) => void;
+}
+
+export default function Transactions({
+  transactions,
+  onItemPress = () => {},
+}: TransactionsProps) {
+  return (
+    <View style={styles.container}>
+      {transactions.length > 0 ? (
+        <FlatList
+          data={transactions}
+          renderItem={({item}) => {
+            return (
+              <TransactonItem
+                transaction={item}
+                onPress={() => onItemPress(item)}
+              />
+            );
+          }}
+          keyExtractor={item => item['id']}
+          contentContainerStyle={{
+            paddingBottom: scaleHeight(BOTTOM_TAB_CONTAINER_HEIGHT * 5),
+          }}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <View style={styles.emptyTransactionsContainer}>
+          <Image
+            source={ComponentImages.transactions.emptyBox}
+            style={styles.emptyBox}
+          />
+          <Typography
+            title="You do not have a transaction history. Start a transaction
+              today."
+            color={Colors.gray[400]}
+            style={{textAlign: 'center'}}
+            type="label-r"
+          />
+        </View>
+      )}
+    </View>
+  );
+}

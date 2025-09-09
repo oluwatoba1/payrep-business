@@ -1,0 +1,9 @@
+export {default as BillsCategories} from './BillsCategories';
+export {default as BillsServices} from './BillsServices';
+export {default as AirtimeForm} from './BillsForms/AirtimeForm';
+export {default as CableForm} from './BillsForms/CableForm';
+export {default as DataForm} from './BillsForms/DataForm';
+export {default as ElectricityForm} from './BillsForms/ElectricityForm';
+export {default as ConfirmBills} from './ConfirmBills';
+export {default as BillReceipt} from './BillReceipt';
+export {default as BillSuccess} from './BillSuccess';

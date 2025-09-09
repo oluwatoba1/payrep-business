@@ -1,0 +1,17 @@
+{
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./", // Base directory for resolving non-relative imports
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@assets/*": ["assets/*"],
+      "@utils/*": ["src/utils/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@store/*": ["src/store/*"],
+      "@navigation/*": ["src/navigation/*"],
+      "@screens/*": ["src/screens/*"],
+      "@theme/*": ["src/theme/*"]
+    }
+  },
+  "include": ["src/**/*", "env.d.ts"]
+}

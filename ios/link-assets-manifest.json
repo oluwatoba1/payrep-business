@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/Fonts/Proxima_Nova_Bold.otf",
+      "sha1": "05d7aec668e28d44fadf9536aee06c2fbf234032"
+    },
+    {
+      "path": "assets/Fonts/Proxima_Nova_Regular.otf",
+      "sha1": "e41a5e523f03be8b9b9002422a52e4e8741ca462"
+    },
+    {
+      "path": "assets/Fonts/Proxima_Nova_Semibold.otf",
+      "sha1": "1fbed071180d360f01e78672affeea6a0a256fbc"
+    }
+  ]
+}

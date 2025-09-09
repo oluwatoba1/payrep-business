@@ -1,0 +1,1 @@
+export const PNB = 'Proxima_Nova_Bold', PNR = 'Proxima_Nova_Regular', PNSB = 'Proxima_Nova_Semibold'; 

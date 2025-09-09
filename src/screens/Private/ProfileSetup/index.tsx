@@ -1,0 +1,10 @@
+export {default as ProfileCompletionIntro} from './ProfileSetupIntro';
+export {default as KycVerification} from './KycVerification';
+export {default as FacialRecognition} from './FacialRecognition';
+export {default as LocationDetails} from './LocationDetails';
+export {default as MeansOfIdentification} from './MeansOfIdentification';
+export {default as Pep} from './Pep';
+export {default as SourceOfIncome} from './SourceOfIncome';
+export {default as BusinessInformation} from './BusinessInformation';
+export {default as Pin} from './Pin';
+export {default as Attestation} from './Attestation';

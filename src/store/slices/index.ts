@@ -1,0 +1,9 @@
+export {default as AppSlice} from './appSlice';
+export {default as AuthSlice} from './authSlice';
+export {default as ComplianceSlice} from './complianceSlice';
+export {default as CustomerSlice} from './customerSlice';
+export {default as AccountSlice} from './accountSlice';
+export {default as TransferSlice} from './transferSlice';
+export {default as TransactionSlice} from './transactionSlice';
+export {default as ServiceSlice} from './serviceSlice';
+export {default as BillSlice} from './billSlice';
