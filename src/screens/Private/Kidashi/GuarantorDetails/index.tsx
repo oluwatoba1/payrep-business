@@ -3,37 +3,48 @@ import { BackHandler, View } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 
-import { MainLayout } from "@components/Layout";
-import { Typography, Button, TextInput, Dropdown } from "@components/Forms";
+import { MainLayout, Row } from "@components/Layout";
+import {
+	Typography,
+	Button,
+	TextInput,
+	Dropdown,
+	DateField,
+} from "@components/Forms";
 import { KidashiStackParamList, BottomTabParamList } from "@navigation/types";
 import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
-import useVendorInformation from "./validators";
 import Pad from "@components/Pad";
 import { useUpdateBusinessInformationMutation } from "@store/apis/customerApi";
 import {
 	useFetchLgasMutation,
 	useFetchStatesQuery,
 } from "@store/apis/generalApi";
+import useGuarantorDetails from "./validators";
 
-type VendorInformationProps = CompositeScreenProps<
-	StackScreenProps<KidashiStackParamList, "VendorInformation">,
+type GuarantorDetailsProps = CompositeScreenProps<
+	StackScreenProps<KidashiStackParamList, "GuarantorDetails">,
 	StackScreenProps<BottomTabParamList, "Home">
 >;
 
-export default function VendorInformation({
+export default function GuarantorDetails({
 	navigation: { navigate },
-}: VendorInformationProps) {
+}: GuarantorDetailsProps) {
 	const { showToast } = useToast();
 	const {
 		formData,
 		formErrors,
 		validateForm,
-		setCommunity,
-		setBusinessCategory,
+		setFirstName,
+		setLastName,
+		setGender,
+		setPhoneNumber,
+		setDateOfBirth,
 		setState,
 		setLga,
-	} = useVendorInformation(showToast);
+		setEmail,
+		setNin,
+	} = useGuarantorDetails();
 	const [updateBusinessInformation, { isLoading }] =
 		useUpdateBusinessInformationMutation();
 
@@ -43,6 +54,9 @@ export default function VendorInformation({
 	const [fetchLgas, { isLoading: lgasLoading }] = useFetchLgasMutation();
 
 	// Local states for dropdown selections
+	const [selectedGender, setSelectedGender] = useState<
+		DefaultDropdownOption | undefined
+	>(undefined);
 	const [selectedState, setSelectedState] = useState<
 		DefaultDropdownOption | undefined
 	>(undefined);
@@ -70,7 +84,7 @@ export default function VendorInformation({
 	};
 
 	const submit = async () => {
-		navigate("VendorItems");
+		navigate("ReviewDetails");
 	};
 
 	// Update LGAs when state changes
@@ -100,7 +114,7 @@ export default function VendorInformation({
 			keyboardAvoidingType='scroll-view'
 			backAction={() => navigate("Home", { screen: "Dashboard" })}
 			isLoading={isLoading}
-			rightTitle='Vendor Information'
+			rightTitle='Guarantor Details'
 		>
 			<Typography
 				type='heading4-sb'
@@ -110,18 +124,23 @@ export default function VendorInformation({
 				type='body-r'
 				title='Here’s what we have on your business so far. Take a moment to review and update'
 			/>
-			<Dropdown
-				label='Category'
-				options={[]}
-				selectedOption={selectedState}
-				onSelect={(option) => {
-					setSelectedState(option);
+			<Row alignItems='center' justifyContent='flex-start' gap={10}>
+				<TextInput
+					label='First Name'
+					placeholder='e.g John'
+					onChangeText={setFirstName}
+					value={formData.firstName}
+					error={formErrors.firstName}
+				/>
 
-					setSelectedLga(undefined); // Reset LGA when state changes
-				}}
-				error=''
-				isLoading={statesLoading}
-			/>
+				<TextInput
+					label='Last Name'
+					placeholder='e.g Doe'
+					onChangeText={setLastName}
+					value={formData.lastName}
+					error={formErrors.lastName}
+				/>
+			</Row>
 
 			<Pad size={12} />
 
@@ -145,31 +164,96 @@ export default function VendorInformation({
 
 			<Pad size={12} />
 
-			{/* LGA Dropdown */}
 			<Dropdown
-				label='Local Govt. Area'
-				options={
-					lgas.map((option: any) => ({
-						label: option.name,
-						value: option.id,
-					})) || []
-				}
-				selectedOption={selectedLga}
+				label='Gender'
+				options={[
+					{ label: "Male", value: "male" },
+					{ label: "Female", value: "female" },
+				]}
+				selectedOption={selectedGender}
 				onSelect={(option) => {
-					setSelectedLga(option);
+					setSelectedGender(option);
+					setGender(option.value);
 				}}
-				error=''
-				isLoading={lgasLoading}
+				error={formErrors.gender}
 			/>
 
 			<Pad size={12} />
 
 			<TextInput
-				label='Community'
-				placeholder='Enter community'
-				onChangeText={setCommunity}
-				value={formData.community}
-				error={formErrors.community}
+				type='phone'
+				label='Phone Number'
+				keyboardType='numeric'
+				placeholder='Ex: 8000000000'
+				value={formData.phoneNumber}
+				onChangeText={setPhoneNumber}
+				maxLength={11}
+				error={formErrors.phoneNumber}
+			/>
+
+			<Pad size={12} />
+
+			<DateField
+				label='Date of Birth'
+				onDateChange={setDateOfBirth}
+				error={formErrors.dateOfBirth}
+			/>
+
+			<Row alignItems='center' justifyContent='flex-start' gap={10}>
+				<Dropdown
+					label='State'
+					options={
+						statesData?.data.map((option: any) => ({
+							label: option.name,
+							value: option.id,
+						})) || []
+					}
+					selectedOption={selectedState}
+					onSelect={(option) => {
+						setSelectedState(option);
+
+						setSelectedLga(undefined); // Reset LGA when state changes
+					}}
+					error=''
+					isLoading={statesLoading}
+				/>
+
+				{/* LGA Dropdown */}
+				<Dropdown
+					label='Local Govt. Area'
+					options={
+						lgas.map((option: any) => ({
+							label: option.name,
+							value: option.id,
+						})) || []
+					}
+					selectedOption={selectedLga}
+					onSelect={(option) => {
+						setSelectedLga(option);
+					}}
+					error=''
+					isLoading={lgasLoading}
+				/>
+			</Row>
+
+			<Pad size={12} />
+
+			<TextInput
+				label='Email'
+				placeholder='e.g. zababubakarr@gmail.com'
+				onChangeText={setEmail}
+				value={formData.email}
+				error={formErrors.email}
+			/>
+
+			<TextInput
+				label='NIN'
+				keyboardType='numeric'
+				placeholder='Ex: 12345678901'
+				maxLength={11} // adjust if NIN length differs
+				onChangeText={setNin}
+				value={formData.nin}
+				error={formErrors.nin}
 			/>
 
 			<Pad size={40} />
