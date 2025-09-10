@@ -91,8 +91,8 @@ export default function Typography({
 			case "subheading":
 				return {
 					color: color || Colors.gray[700],
-					fontSize: 14,
-					lineHeight: 14 * 1.5,
+					fontSize: 16,
+					lineHeight: 21,
 					fontFamily: PNR,
 				};
 			case "subheading-sb":

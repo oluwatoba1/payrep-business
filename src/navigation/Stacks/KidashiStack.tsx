@@ -5,6 +5,8 @@ import {
 	KidashiOnboarding,
 	VendorInformation,
 	VendorItems,
+	GuarantorDetails,
+	ReviewDetails,
 } from "@screens/Private/Kidashi";
 import { KidashiStackParamList } from "../types";
 
@@ -19,6 +21,8 @@ export default function BillsStack() {
 			<Stack.Screen name='KidashiOnboarding' component={KidashiOnboarding} />
 			<Stack.Screen name='VendorInformation' component={VendorInformation} />
 			<Stack.Screen name='VendorItems' component={VendorItems} />
+			<Stack.Screen name='GuarantorDetails' component={GuarantorDetails} />
+			<Stack.Screen name='ReviewDetails' component={ReviewDetails} />
 		</Stack.Navigator>
 	);
 }
