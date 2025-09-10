@@ -1,4 +1,4 @@
-import { Image, ImageBackground, Pressable } from "react-native";
+import { Image, Pressable, View } from "react-native";
 
 import ComponentImages from "@assets/images/components";
 import styles from "./styles";
@@ -14,10 +14,9 @@ interface KidashiCardProps {
 export default function KidashiCard({ onProceed }: KidashiCardProps) {
 	return (
 		<Pressable onPress={onProceed} style={styles.container}>
-			<ImageBackground
+			<Image
 				source={ComponentImages.kidashiCard.headerImage}
-				style={styles.headerBackground}
-				imageStyle={styles.headerImage}
+				style={styles.headerImage}
 			/>
 			<Pad size={16} />
 
@@ -43,7 +42,6 @@ export default function KidashiCard({ onProceed }: KidashiCardProps) {
 					style={styles.arrowRight}
 				/>
 			</Row>
-			<Pad />
 		</Pressable>
 	);
 }
