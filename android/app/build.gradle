@@ -77,9 +77,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.shinobi.payrep"
+    namespace "com.shinobi.payrepbusiness"
     defaultConfig {
-        applicationId "com.shinobi.payrep"
+        applicationId "com.shinobi.payrepbusiness"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

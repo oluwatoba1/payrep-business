@@ -18,7 +18,7 @@ export default function KidashiStack() {
 	return (
 		<Stack.Navigator
 			screenOptions={{ headerShown: false }}
-			initialRouteName='OnboardingStatus'
+			initialRouteName='KidashiOnboarding'
 		>
 			<Stack.Screen name='VendorInformation' component={VendorInformation} />
 			<Stack.Screen name='KidashiOnboarding' component={KidashiOnboarding} />

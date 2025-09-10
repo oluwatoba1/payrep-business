@@ -5,6 +5,8 @@ import styles from "./styles";
 import { Typography } from "@components/Forms";
 import Colors from "@theme/Colors";
 import { Row } from "@components/Layout";
+import { MAIN_LAYOUT_HORIZONTAL_PADDING, width } from "@utils/Constants";
+import { scale } from "@utils/Helpers";
 
 interface StepperProps {
 	steps: number;
@@ -12,6 +14,13 @@ interface StepperProps {
 }
 
 export default function Stepper({ steps, currentStep }: StepperProps) {
+	const gap = 10;
+	const computeWidth = () => {
+		const layoutWidth = width - 2 * scale(MAIN_LAYOUT_HORIZONTAL_PADDING);
+		const totalPaddingWidth = (steps - 1) * (2 * gap);
+
+		return (layoutWidth - totalPaddingWidth) / (steps - 1);
+	};
 	return (
 		<View style={styles.container}>
 			{Array.from({ length: steps }).map((_, index) => {
@@ -20,7 +29,12 @@ export default function Stepper({ steps, currentStep }: StepperProps) {
 				const isActive = stepNumber === currentStep;
 
 				return (
-					<Row key={index}>
+					<Row
+						key={index}
+						alignItems='center'
+						justifyContent='space-between'
+						gap={gap}
+					>
 						{/* Step Circle */}
 						<View
 							style={[
@@ -37,7 +51,11 @@ export default function Stepper({ steps, currentStep }: StepperProps) {
 							/>
 						</View>
 
-						{stepNumber !== steps && <View style={styles.stepperDivider} />}
+						{stepNumber !== steps && (
+							<View
+								style={[styles.stepperDivider, { width: computeWidth() }]}
+							/>
+						)}
 					</Row>
 				);
 			})}

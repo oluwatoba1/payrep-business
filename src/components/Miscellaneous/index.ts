@@ -11,3 +11,4 @@ export { default as BillsRecents } from "./BillsRecents";
 export { default as Statement } from "./Statement";
 export { default as Transactions } from "./Transactions";
 export { default as Stepper } from "./Stepper";
+export { default as KidashiOnboarder } from "./KidashiOnboarder";

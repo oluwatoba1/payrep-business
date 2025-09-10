@@ -1,4 +1,4 @@
-package com.shinobi.payrep
+package com.shinobi.payrepbusiness
 
 import android.app.Application
 import com.facebook.react.PackageList

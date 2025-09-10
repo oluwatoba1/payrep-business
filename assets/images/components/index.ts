@@ -155,6 +155,15 @@ const ComponentImages = {
 		headerImage: require("./KidashiCard/kidashi-card-header-image.png"),
 		arrowRight: require("./KidashiCard/arrow-right.png"),
 	},
+	kidashiOnboarder: {
+		backgroundOne: require("./KidashiOnboarder/kidashi-onboarding-one.png"),
+		backgroundTwo: require("./KidashiOnboarder/kidashi-onboarding-two.png"),
+		backgroundThree: require("./KidashiOnboarder/kidashi-onboarding-three.png"),
+		backgroundFour: require("./KidashiOnboarder/kidashi-onboarding-four.png"),
+		payrepMonochromeLogo: require("./KidashiOnboarder/white-logo.png"),
+		kidashiLogo: require("./KidashiOnboarder/kidashi-logo.png"),
+		cancelIcon: require("./KidashiOnboarder/cancel.png"),
+	},
 };
 
 export default ComponentImages;
