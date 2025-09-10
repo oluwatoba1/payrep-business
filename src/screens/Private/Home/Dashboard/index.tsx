@@ -26,11 +26,7 @@ import { Typography } from "@components/Forms";
 import IconImages from "@assets/images/appIcons";
 import { addCommas, moderateScale, scaleHeight } from "@utils/Helpers";
 import { DEFAULT_ERROR_MESSAGE, shimmerDelay } from "@utils/Constants";
-import {
-	BottomTabParamList,
-	HomeStackParamList,
-	KidashiStackParamList,
-} from "@navigation/types";
+import { BottomTabParamList, HomeStackParamList } from "@navigation/types";
 import useToast from "@hooks/useToast";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import {
@@ -53,10 +49,7 @@ type DashboardProps = CompositeScreenProps<
 	StackScreenProps<HomeStackParamList, "Dashboard">,
 	CompositeScreenProps<
 		BottomTabScreenProps<BottomTabParamList, "More">,
-		CompositeScreenProps<
-			BottomTabScreenProps<BottomTabParamList, "History">,
-			StackScreenProps<KidashiStackParamList, "VendorInformation">
-		>
+		BottomTabScreenProps<BottomTabParamList, "History">
 	>
 >;
 
@@ -333,8 +326,12 @@ export default function Dashboard({
 						: {}
 				}
 			>
-				<KidashiCard onProceed={() => navigate("VendorInformation")} />
+				<KidashiCard
+					onProceed={() => navigate("More", { screen: "Kidashi" })}
+				/>
 			</ShimmerPlaceholder>
+
+			<Pad size={20} />
 
 			<ShimmerPlaceholder
 				visible={!isLoadingAccounts && !isLoadingTransactions}

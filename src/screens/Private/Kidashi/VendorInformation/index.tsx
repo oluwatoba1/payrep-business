@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { BackHandler, View } from "react-native";
+import { BackHandler } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 
@@ -35,8 +35,6 @@ export default function VendorInformation({
 		setState,
 		setLga,
 	} = useVendorInformation(showToast);
-	const [updateBusinessInformation, { isLoading }] =
-		useUpdateBusinessInformationMutation();
 
 	const { data: statesData, isLoading: statesLoading } = useFetchStatesQuery();
 
@@ -100,12 +98,11 @@ export default function VendorInformation({
 		<MainLayout
 			keyboardAvoidingType='scroll-view'
 			backAction={() => navigate("Home", { screen: "Dashboard" })}
-			isLoading={isLoading}
 		>
 			<Stepper steps={3} currentStep={1} />
 
 			<Pad size={20} />
-			
+
 			<Typography
 				type='heading4-sb'
 				title='Confirm Your Business Information'
@@ -176,9 +173,9 @@ export default function VendorInformation({
 				error={formErrors.community}
 			/>
 
-			<Pad size={40} />
+			<Pad size={150} />
 
-			<Button title='Save' onPress={submit} />
+			<Button title='Next' onPress={submit} />
 		</MainLayout>
 	);
 }

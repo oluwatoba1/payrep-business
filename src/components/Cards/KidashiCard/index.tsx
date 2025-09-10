@@ -43,6 +43,7 @@ export default function KidashiCard({ onProceed }: KidashiCardProps) {
 					style={styles.arrowRight}
 				/>
 			</Row>
+			<Pad />
 		</Pressable>
 	);
 }

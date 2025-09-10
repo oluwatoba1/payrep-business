@@ -264,7 +264,7 @@ export default function GuarantorDetails({
 				/>
 			</View>
 
-			<Pad size={8} />
+			<Pad size={12} />
 
 			<Checkbox
 				label='I confirm that the guarantor details I provided are correct, and that my guarantor is aware and has agreed to stand as my guarantor'
@@ -272,9 +272,10 @@ export default function GuarantorDetails({
 				onPress={() => setAgreed(!agreed)}
 			/>
 
-			<Pad size={13} />
+			<Pad size={80} />
 
 			<Button title='Next' onPress={submit} />
+			<Pad size={20} />
 		</MainLayout>
 	);
 }

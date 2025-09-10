@@ -4,6 +4,7 @@ import { View, Text } from "react-native";
 import styles from "./styles";
 import { Typography } from "@components/Forms";
 import Colors from "@theme/Colors";
+import { Row } from "@components/Layout";
 
 interface StepperProps {
 	steps: number;
@@ -19,7 +20,7 @@ export default function Stepper({ steps, currentStep }: StepperProps) {
 				const isActive = stepNumber === currentStep;
 
 				return (
-					<View key={index}>
+					<Row key={index}>
 						{/* Step Circle */}
 						<View
 							style={[
@@ -37,7 +38,7 @@ export default function Stepper({ steps, currentStep }: StepperProps) {
 						</View>
 
 						{stepNumber !== steps && <View style={styles.stepperDivider} />}
-					</View>
+					</Row>
 				);
 			})}
 		</View>

@@ -19,7 +19,7 @@ export default function OnboardingStatus({}: OnboardingStatusProps) {
 	const { reset } =
 		useNavigation<BottomTabNavigationProp<BottomTabParamList>>();
 
-	const [status] = useState<"rejected" | "in-review">("in-review");
+	const [status] = useState<"rejected" | "pending">("pending");
 
 	const navigateToHome = () => {
 		reset({
@@ -49,10 +49,10 @@ export default function OnboardingStatus({}: OnboardingStatusProps) {
 	);
 
 	return (
-		<MainLayout>
+		<MainLayout showHeader={false}>
 			<View style={styles.container}>
 				<Image
-					source={ScreenImages.kidashiOnboardingState.success}
+					source={ScreenImages.kidashiOnboardingStatus[status]}
 					style={styles.checkIcon}
 				/>
 
@@ -60,7 +60,7 @@ export default function OnboardingStatus({}: OnboardingStatusProps) {
 
 				<Typography
 					title={
-						status === "in-review"
+						status === "pending"
 							? "We’re Reviewing Your Request"
 							: "Application Not Approved"
 					}
@@ -71,16 +71,21 @@ export default function OnboardingStatus({}: OnboardingStatusProps) {
 
 				<Typography
 					title={
-						status === "in-review"
+						status === "pending"
 							? "Your application to join the financing program is in progress. Sit tight — we’ll notify you as soon as it’s approved"
 							: "Thanks for your interest in joining Asset Finance. Right now, our program isn’t active in your community — but we’re working on reaching more locations soon"
 					}
 					type='label-r'
+					style={{ textAlign: "center" }}
 				/>
 
 				<Pad size={8} />
 
-				<Button title='Return to home' onPress={navigateToHome} />
+				<Button
+					title='Return to home'
+					onPress={navigateToHome}
+					containerStyle={styles.homeButton}
+				/>
 			</View>
 		</MainLayout>
 	);

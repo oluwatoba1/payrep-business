@@ -47,10 +47,10 @@ export default function OnboardingSuccess({}: OnboardingSuccessProps) {
 	);
 
 	return (
-		<MainLayout>
+		<MainLayout showHeader={false}>
 			<View style={styles.container}>
 				<Image
-					source={ScreenImages.kidashiOnboardingState.success}
+					source={ScreenImages.kidashiOnboardingStatus.success}
 					style={styles.checkIcon}
 				/>
 
@@ -62,12 +62,16 @@ export default function OnboardingSuccess({}: OnboardingSuccessProps) {
 
 				<Typography
 					title='We’ve received your request to be a vendor for our asset financing program. We’ll notify you once it’s reviewed'
-					type='label-r'
+					type='body-r'
+					style={{ textAlign: "center" }}
 				/>
 
 				<Pad size={8} />
-
-				<Button title='Return to home' onPress={navigateToHome} />
+				<Button
+					title='Return to home'
+					onPress={navigateToHome}
+					containerStyle={styles.homeButton}
+				/>
 			</View>
 		</MainLayout>
 	);

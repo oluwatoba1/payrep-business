@@ -1,7 +1,6 @@
-import { StyleSheet } from "react-native";
-
 import { MAIN_LAYOUT_HORIZONTAL_PADDING, width } from "@utils/Constants";
-import { scaleHeight, scale } from "@utils/Helpers";
+import { scale, scaleHeight } from "@utils/Helpers";
+import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 	container: {

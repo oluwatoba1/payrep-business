@@ -33,6 +33,7 @@ export type PublicNavigatorParamList = {
 export type PrivateNavigatorParamList = {
 	ProfileSetupIntro: undefined;
 	BillsCategories: undefined;
+	Kidashi: undefined;
 	BottomTabs: NavigatorScreenParams<BottomTabParamList>;
 	MessageScreen: { title: string; message: string; action: () => void };
 };
@@ -144,6 +145,7 @@ export type MoreStackParamList = {
 		disputeId: string;
 	};
 	AddAccount: undefined;
+	Kidashi: undefined;
 };
 
 export type SupportStackParamList = {

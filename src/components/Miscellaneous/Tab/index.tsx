@@ -1,5 +1,5 @@
 import { Typography } from "@components/Forms";
-import { ScrollView } from "react-native";
+import { Pressable, ScrollView } from "react-native";
 import styles from "./styles";
 import Colors from "@theme/Colors";
 
@@ -17,17 +17,20 @@ export default function Tab({ items, onTap, value }: TabProps) {
 			contentContainerStyle={styles.tabContainer}
 		>
 			{items.map((item, index) => (
-				<Typography
+				<Pressable
 					key={index}
-					title={item}
-					type={value === item ? "label-sb" : "label-r"}
 					style={[
-						styles.tabText,
-						{ textDecorationLine: value === item ? "underline" : "none" },
+						styles.tabItem,
+						{ borderBottomWidth: value === item ? 1 : 0 },
 					]}
-					color={value === item ? Colors.black : Colors.gray["1000"]}
-					onPress={() => onTap(item)}
-				/>
+				>
+					<Typography
+						title={item}
+						type={value === item ? "body-sb" : "body-r"}
+						color={value === item ? Colors.black : Colors.gray["400"]}
+						onPress={() => onTap(item)}
+					/>
+				</Pressable>
 			))}
 		</ScrollView>
 	);

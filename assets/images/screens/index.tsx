@@ -48,8 +48,10 @@ const ScreenImages = {
 		userPlaceholder: require("../screens/Kidashi/OnboardingReviewDetails/vendor-image-placeholder.png"),
 		editIcon: require("../screens/Kidashi/OnboardingReviewDetails/edit-icon.png"),
 	},
-	kidashiOnboardingState: {
-		success: require("../screens/Kidashi/OnboardingState/check.png"),
+	kidashiOnboardingStatus: {
+		success: require("../screens/Kidashi/OnboardingStatus/check.png"),
+		pending: require("../screens/Kidashi/OnboardingStatus/hourglass.png"),
+		rejected: require("../screens/Kidashi/OnboardingStatus/error.png"),
 	},
 };
 

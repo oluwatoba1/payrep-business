@@ -49,6 +49,7 @@ const Colors = {
 	neutral: {
 		200: "#C0C4C7",
 		300: "#A1A7AA",
+		400: "#828A8E",
 	},
 	white: "#FFFFFF",
 	black: "#000000",

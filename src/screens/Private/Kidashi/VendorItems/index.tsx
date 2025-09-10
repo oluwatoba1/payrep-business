@@ -74,11 +74,9 @@ export default function VendorItems({
 				customTextInputStyle={styles.customTextInputStyle}
 			/>
 
-			<Pad size={80} />
+			<Pad size={200} />
 
-			<Button title='Save' onPress={submit} />
-
-			<Pad size={40} />
+			<Button title='Next' onPress={submit} />
 		</MainLayout>
 	);
 }

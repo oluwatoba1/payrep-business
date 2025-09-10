@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 	container: {
-		padding: scaleHeight(16),
+		paddingHorizontal: scaleHeight(16),
 		borderRadius: moderateScale(12),
 		backgroundColor: Colors.gray["1000"],
 		borderWidth: 1,
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 	headerImage: {
 		width: scale(311),
 		height: scaleHeight(141),
-		resizeMode: "cover",
+		resizeMode: "contain",
 	},
 	arrowRight: {
 		width: scaleHeight(16),

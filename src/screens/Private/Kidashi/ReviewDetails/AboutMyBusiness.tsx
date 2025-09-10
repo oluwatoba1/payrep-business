@@ -21,7 +21,11 @@ export default function AboutMyBusiness({
 		<View>
 			<View style={styles.reviewCardContainer}>
 				<Row containerStyle={styles.reviewCardHeader}>
-					<Typography title='What I sell' type='subheading' />
+					<Typography
+						title='What I sell'
+						type='subheading'
+						style={styles.businessReviewText}
+					/>
 				</Row>
 
 				<Pad size={8} />
@@ -29,6 +33,7 @@ export default function AboutMyBusiness({
 				<Typography
 					title={businessDetails.businessDescription}
 					type='subheading-sb'
+					style={styles.businessReviewText}
 				/>
 			</View>
 

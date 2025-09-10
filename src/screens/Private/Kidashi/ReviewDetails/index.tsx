@@ -10,6 +10,8 @@ import Pad from "@components/Pad";
 import Tab from "@components/Miscellaneous/Tab";
 import { useState } from "react";
 import Guarantors from "./Guarantors";
+import AboutMyBusiness from "./AboutMyBusiness";
+import { Stepper } from "@components/Miscellaneous";
 
 type ReviewDetailsProps = StackScreenProps<
 	KidashiStackParamList,
@@ -46,34 +48,44 @@ export default function ReviewDetails({
 	]);
 
 	return (
-		<MainLayout rightTitle='Review and Send' backAction={goBack}>
-			<View style={styles.vendorPlaceholderContainer}>
-				<Image
-					source={ScreenImages.kidashiReviewDetails.userPlaceholder}
-					style={styles.vendorPlaceholderImage}
-				/>
-			</View>
+		<MainLayout
+			keyboardAvoidingType='scroll-view'
+			rightTitle='Review and Send'
+			backAction={goBack}
+		>
+			<Stepper steps={3} currentStep={3} />
 
-			<Pad size={8} />
+			<Pad />
 
-			<Typography title='Mama Bintu’s Kitchen' type='subheading-sb' />
-			<Typography title='Food & Drinks' type='label-r' />
-			<Typography title='Local Restaurant / Catering' type='label-r' />
-
-			<Pad size={8} />
-
-			<IconButton
-				containerStyle={styles.editContainer}
-				onPress={() => navigate("VendorInformation")}
-			>
-				<Row alignItems='center' justifyContent='flex-start' gap={8}>
+			<View style={styles.reviewHeader}>
+				<View style={styles.vendorPlaceholderContainer}>
 					<Image
-						source={ScreenImages.kidashiReviewDetails.editIcon}
-						style={styles.editIcon}
+						source={ScreenImages.kidashiReviewDetails.userPlaceholder}
+						style={styles.vendorPlaceholderImage}
 					/>
-					<Typography title='Edit' type='label-sb' />
-				</Row>
-			</IconButton>
+				</View>
+
+				<Pad size={8} />
+
+				<Typography title='Mama Bintu’s Kitchen' type='subheading-sb' />
+				<Typography title='Food & Drinks' type='label-r' />
+				<Typography title='Local Restaurant / Catering' type='label-r' />
+
+				<Pad size={8} />
+
+				<IconButton
+					containerStyle={styles.editContainer}
+					onPress={() => navigate("VendorInformation")}
+				>
+					<Row alignItems='center' justifyContent='flex-start' gap={8}>
+						<Image
+							source={ScreenImages.kidashiReviewDetails.editIcon}
+							style={styles.editIcon}
+						/>
+						<Typography title='Edit' type='label-sb' />
+					</Row>
+				</IconButton>
+			</View>
 
 			<Pad size={24} />
 
@@ -90,7 +102,16 @@ export default function ReviewDetails({
 					guarantors={guarantors}
 					onEdit={() => navigate("GuarantorDetails")}
 				/>
-			) : null}
+			) : (
+				<AboutMyBusiness
+					businessDetails={{
+						businessDescription: "I sell igba ati awo",
+						state: "Kaduna",
+						lga: "Zaria",
+						community: "Kaurna",
+					}}
+				/>
+			)}
 
 			<Pad size={40} />
 
@@ -98,6 +119,8 @@ export default function ReviewDetails({
 				title='Submit for Review'
 				onPress={() => navigate("OnboardingSuccess")}
 			/>
+
+			<Pad size={100} />
 		</MainLayout>
 	);
 }

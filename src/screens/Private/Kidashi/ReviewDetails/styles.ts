@@ -4,6 +4,10 @@ import { moderateScale, scaleHeight } from "@utils/Helpers";
 import Colors from "@theme/Colors";
 
 const styles = StyleSheet.create({
+	reviewHeader: {
+		alignItems: "center",
+		justifyContent: "center",
+	},
 	vendorPlaceholderContainer: {
 		width: scaleHeight(56),
 		height: scaleHeight(56),
@@ -25,7 +29,7 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 	},
 	reviewCardContainer: {
-		padding: scaleHeight(12),
+		paddingVertical: scaleHeight(12),
 		borderRadius: moderateScale(12),
 		borderWidth: 1,
 		borderColor: Colors.gray["1000"],
@@ -34,7 +38,12 @@ const styles = StyleSheet.create({
 	reviewCardHeader: {
 		borderBottomWidth: 1,
 		borderBottomColor: Colors.gray["1000"],
+		paddingBottom: scaleHeight(10),
+		backgroundColor: "#f9f9fb",
 	},
+	businessReviewText: {
+		paddingHorizontal: scaleHeight(16)
+	}
 });
 
 export default styles;

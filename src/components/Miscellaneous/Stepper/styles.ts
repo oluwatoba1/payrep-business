@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
 	container: {
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "center",
+		justifyContent: "space-between",
 		paddingVertical: scaleHeight(8),
 	},
 	step: {
@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
 	},
 	stepperDivider: {
 		height: 2,
-		flex: 1,
 		backgroundColor: Colors.neutral["300"],
 		marginHorizontal: scale(10),
 	},
