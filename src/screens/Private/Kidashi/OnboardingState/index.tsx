@@ -8,16 +8,18 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { BottomTabParamList, KidashiStackParamList } from "@navigation/types";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
-type OnboardingSuccessProps = StackScreenProps<
+type OnboardingStatusProps = StackScreenProps<
 	KidashiStackParamList,
-	"OnboardingSuccess"
+	"OnboardingStatus"
 >;
 
-export default function OnboardingSuccess({}: OnboardingSuccessProps) {
+export default function OnboardingStatus({}: OnboardingStatusProps) {
 	const { reset } =
 		useNavigation<BottomTabNavigationProp<BottomTabParamList>>();
+
+	const [status] = useState<"rejected" | "in-review">("in-review");
 
 	const navigateToHome = () => {
 		reset({
@@ -56,12 +58,23 @@ export default function OnboardingSuccess({}: OnboardingSuccessProps) {
 
 				<Pad size={8} />
 
-				<Typography title='Request Submitted' type='heading-sb' />
+				<Typography
+					title={
+						status === "in-review"
+							? "We’re Reviewing Your Request"
+							: "Application Not Approved"
+					}
+					type='heading-sb'
+				/>
 
 				<Pad size={8} />
 
 				<Typography
-					title='We’ve received your request to be a vendor for our asset financing program. We’ll notify you once it’s reviewed'
+					title={
+						status === "in-review"
+							? "Your application to join the financing program is in progress. Sit tight — we’ll notify you as soon as it’s approved"
+							: "Thanks for your interest in joining Asset Finance. Right now, our program isn’t active in your community — but we’re working on reaching more locations soon"
+					}
 					type='label-r'
 				/>
 

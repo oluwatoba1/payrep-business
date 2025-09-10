@@ -13,6 +13,7 @@ import Pad from "@components/Pad";
 import { useUpdateBusinessInformationMutation } from "@store/apis/customerApi";
 import useVendorItems from "./validators";
 import styles from "./styles";
+import { Stepper } from "@components/Miscellaneous";
 
 type VendorItemsProps = CompositeScreenProps<
 	StackScreenProps<KidashiStackParamList, "VendorItems">,
@@ -54,6 +55,10 @@ export default function VendorItems({
 			isLoading={isLoading}
 			rightTitle='Vendor Items'
 		>
+			<Stepper steps={3} currentStep={2} />
+
+			<Pad size={20} />
+
 			<Typography type='heading4-sb' title='What do you sell?' />
 			<Typography
 				type='body-r'

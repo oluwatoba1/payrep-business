@@ -10,6 +10,7 @@ import {
 	TextInput,
 	Dropdown,
 	DateField,
+	Checkbox,
 } from "@components/Forms";
 import { KidashiStackParamList, BottomTabParamList } from "@navigation/types";
 import useToast from "@hooks/useToast";
@@ -21,6 +22,7 @@ import {
 	useFetchStatesQuery,
 } from "@store/apis/generalApi";
 import useGuarantorDetails from "./validators";
+import { Stepper } from "@components/Miscellaneous";
 
 type GuarantorDetailsProps = CompositeScreenProps<
 	StackScreenProps<KidashiStackParamList, "GuarantorDetails">,
@@ -64,6 +66,7 @@ export default function GuarantorDetails({
 	const [selectedLga, setSelectedLga] = useState<
 		DefaultDropdownOption | undefined
 	>(undefined);
+	const [agreed, setAgreed] = useState<boolean>(false);
 
 	const _fetchLgas = async () => {
 		try {
@@ -116,90 +119,37 @@ export default function GuarantorDetails({
 			isLoading={isLoading}
 			rightTitle='Guarantor Details'
 		>
-			<Typography
-				type='heading4-sb'
-				title='Confirm Your Business Information'
-			/>
+			<Stepper steps={3} currentStep={3} />
+
+			<Pad size={20} />
+
+			<Typography type='heading4-sb' title='Guarantor Details #1' />
 			<Typography
 				type='body-r'
-				title='Here’s what we have on your business so far. Take a moment to review and update'
-			/>
-			<Row alignItems='center' justifyContent='flex-start' gap={10}>
-				<TextInput
-					label='First Name'
-					placeholder='e.g John'
-					onChangeText={setFirstName}
-					value={formData.firstName}
-					error={formErrors.firstName}
-				/>
-
-				<TextInput
-					label='Last Name'
-					placeholder='e.g Doe'
-					onChangeText={setLastName}
-					value={formData.lastName}
-					error={formErrors.lastName}
-				/>
-			</Row>
-
-			<Pad size={12} />
-
-			<Dropdown
-				label='State'
-				options={
-					statesData?.data.map((option: any) => ({
-						label: option.name,
-						value: option.id,
-					})) || []
-				}
-				selectedOption={selectedState}
-				onSelect={(option) => {
-					setSelectedState(option);
-
-					setSelectedLga(undefined); // Reset LGA when state changes
-				}}
-				error=''
-				isLoading={statesLoading}
+				title='Provide the details of a trusted guarantor. This helps us confirm credibility and support your application review'
 			/>
 
-			<Pad size={12} />
+			<View>
+				<Row alignItems='center' justifyContent='flex-start' gap={10}>
+					<TextInput
+						label='First Name'
+						placeholder='e.g John'
+						onChangeText={setFirstName}
+						value={formData.firstName}
+						error={formErrors.firstName}
+					/>
 
-			<Dropdown
-				label='Gender'
-				options={[
-					{ label: "Male", value: "male" },
-					{ label: "Female", value: "female" },
-				]}
-				selectedOption={selectedGender}
-				onSelect={(option) => {
-					setSelectedGender(option);
-					setGender(option.value);
-				}}
-				error={formErrors.gender}
-			/>
+					<TextInput
+						label='Last Name'
+						placeholder='e.g Doe'
+						onChangeText={setLastName}
+						value={formData.lastName}
+						error={formErrors.lastName}
+					/>
+				</Row>
 
-			<Pad size={12} />
+				<Pad size={12} />
 
-			<TextInput
-				type='phone'
-				label='Phone Number'
-				keyboardType='numeric'
-				placeholder='Ex: 8000000000'
-				value={formData.phoneNumber}
-				onChangeText={setPhoneNumber}
-				maxLength={11}
-				error={formErrors.phoneNumber}
-			/>
-
-			<Pad size={12} />
-
-			<DateField
-				label='Date of Birth'
-				onDateChange={setDateOfBirth}
-				error={formErrors.dateOfBirth}
-			/>
-
-			<Row alignItems='center' justifyContent='flex-start' gap={10}>
 				<Dropdown
 					label='State'
 					options={
@@ -218,47 +168,113 @@ export default function GuarantorDetails({
 					isLoading={statesLoading}
 				/>
 
-				{/* LGA Dropdown */}
+				<Pad size={12} />
+
 				<Dropdown
-					label='Local Govt. Area'
-					options={
-						lgas.map((option: any) => ({
-							label: option.name,
-							value: option.id,
-						})) || []
-					}
-					selectedOption={selectedLga}
+					label='Gender'
+					options={[
+						{ label: "Male", value: "male" },
+						{ label: "Female", value: "female" },
+					]}
+					selectedOption={selectedGender}
 					onSelect={(option) => {
-						setSelectedLga(option);
+						setSelectedGender(option);
+						setGender(option.value);
 					}}
-					error=''
-					isLoading={lgasLoading}
+					error={formErrors.gender}
 				/>
-			</Row>
 
-			<Pad size={12} />
+				<Pad size={12} />
 
-			<TextInput
-				label='Email'
-				placeholder='e.g. zababubakarr@gmail.com'
-				onChangeText={setEmail}
-				value={formData.email}
-				error={formErrors.email}
+				<TextInput
+					type='phone'
+					label='Phone Number'
+					keyboardType='numeric'
+					placeholder='Ex: 8000000000'
+					value={formData.phoneNumber}
+					onChangeText={setPhoneNumber}
+					maxLength={11}
+					error={formErrors.phoneNumber}
+				/>
+
+				<Pad size={12} />
+
+				<DateField
+					label='Date of Birth'
+					onDateChange={setDateOfBirth}
+					error={formErrors.dateOfBirth}
+				/>
+
+				<Row alignItems='center' justifyContent='flex-start' gap={10}>
+					<Dropdown
+						label='State'
+						options={
+							statesData?.data.map((option: any) => ({
+								label: option.name,
+								value: option.id,
+							})) || []
+						}
+						selectedOption={selectedState}
+						onSelect={(option) => {
+							setSelectedState(option);
+
+							setState(option.value); // Reset LGA when state changes
+						}}
+						error=''
+						isLoading={statesLoading}
+					/>
+
+					{/* LGA Dropdown */}
+					<Dropdown
+						label='Local Govt. Area'
+						options={
+							lgas.map((option: any) => ({
+								label: option.name,
+								value: option.id,
+							})) || []
+						}
+						selectedOption={selectedLga}
+						onSelect={(option) => {
+							setSelectedLga(option);
+							setLga(option.value);
+						}}
+						error=''
+						isLoading={lgasLoading}
+					/>
+				</Row>
+
+				<Pad size={12} />
+
+				<TextInput
+					label='Email'
+					placeholder='e.g. zababubakarr@gmail.com'
+					onChangeText={setEmail}
+					value={formData.email}
+					error={formErrors.email}
+				/>
+
+				<TextInput
+					label='NIN'
+					keyboardType='numeric'
+					placeholder='Ex: 12345678901'
+					maxLength={11} // adjust if NIN length differs
+					onChangeText={setNin}
+					value={formData.nin}
+					error={formErrors.nin}
+				/>
+			</View>
+
+			<Pad size={8} />
+
+			<Checkbox
+				label='I confirm that the guarantor details I provided are correct, and that my guarantor is aware and has agreed to stand as my guarantor'
+				value={agreed}
+				onPress={() => setAgreed(!agreed)}
 			/>
 
-			<TextInput
-				label='NIN'
-				keyboardType='numeric'
-				placeholder='Ex: 12345678901'
-				maxLength={11} // adjust if NIN length differs
-				onChangeText={setNin}
-				value={formData.nin}
-				error={formErrors.nin}
-			/>
+			<Pad size={13} />
 
-			<Pad size={40} />
-
-			<Button title='Save' onPress={submit} />
+			<Button title='Next' onPress={submit} />
 		</MainLayout>
 	);
 }

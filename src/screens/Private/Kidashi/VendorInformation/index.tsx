@@ -15,6 +15,7 @@ import {
 	useFetchLgasMutation,
 	useFetchStatesQuery,
 } from "@store/apis/generalApi";
+import { Stepper } from "@components/Miscellaneous";
 
 type VendorInformationProps = CompositeScreenProps<
 	StackScreenProps<KidashiStackParamList, "VendorInformation">,
@@ -100,8 +101,11 @@ export default function VendorInformation({
 			keyboardAvoidingType='scroll-view'
 			backAction={() => navigate("Home", { screen: "Dashboard" })}
 			isLoading={isLoading}
-			rightTitle='Vendor Information'
 		>
+			<Stepper steps={3} currentStep={1} />
+
+			<Pad size={20} />
+			
 			<Typography
 				type='heading4-sb'
 				title='Confirm Your Business Information'
