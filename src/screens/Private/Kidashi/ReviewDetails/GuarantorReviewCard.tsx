@@ -16,7 +16,7 @@ export default function GuarantorReviewCard({
 	onEdit,
 }: GuarantorReviewCardProps) {
 	return (
-		<View style={styles.reviewCardContainer}>
+		<View style={[styles.reviewCardContainer, styles.reviewPadding]}>
 			<Row containerStyle={styles.reviewCardHeader}>
 				<Row gap={10}>
 					<View style={styles.vendorPlaceholderContainer}>

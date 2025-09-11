@@ -6,7 +6,7 @@ import { Typography } from "@components/Forms";
 import Colors from "@theme/Colors";
 import { Row } from "@components/Layout";
 import { MAIN_LAYOUT_HORIZONTAL_PADDING, width } from "@utils/Constants";
-import { scale } from "@utils/Helpers";
+import { scale, scaleHeight } from "@utils/Helpers";
 
 interface StepperProps {
 	steps: number;
@@ -18,8 +18,11 @@ export default function Stepper({ steps, currentStep }: StepperProps) {
 	const computeWidth = () => {
 		const layoutWidth = width - 2 * scale(MAIN_LAYOUT_HORIZONTAL_PADDING);
 		const totalPaddingWidth = (steps - 1) * (2 * gap);
+		const totalStepsContainerWidth = steps * scaleHeight(40);
 
-		return (layoutWidth - totalPaddingWidth) / (steps - 1);
+		return (
+			(layoutWidth - totalPaddingWidth - totalStepsContainerWidth) / (steps - 1)
+		);
 	};
 	return (
 		<View style={styles.container}>

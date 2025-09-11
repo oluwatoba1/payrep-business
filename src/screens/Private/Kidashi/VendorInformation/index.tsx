@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { BackHandler } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
 import { MainLayout } from "@components/Layout";
 import { Typography, Button, TextInput, Dropdown } from "@components/Forms";
@@ -10,7 +11,6 @@ import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import useVendorInformation from "./validators";
 import Pad from "@components/Pad";
-import { useUpdateBusinessInformationMutation } from "@store/apis/customerApi";
 import {
 	useFetchLgasMutation,
 	useFetchStatesQuery,
@@ -19,7 +19,7 @@ import { Stepper } from "@components/Miscellaneous";
 
 type VendorInformationProps = CompositeScreenProps<
 	StackScreenProps<KidashiStackParamList, "VendorInformation">,
-	StackScreenProps<BottomTabParamList, "Home">
+	BottomTabScreenProps<BottomTabParamList, "Home">
 >;
 
 export default function VendorInformation({
@@ -82,6 +82,7 @@ export default function VendorInformation({
 	useFocusEffect(
 		useCallback(() => {
 			const backAction = () => {
+				navigate("Home", { screen: "Dashboard" });
 				return true; // Prevent default behavior
 			};
 

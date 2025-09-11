@@ -70,7 +70,7 @@ export default function Onboarder({ onProceed, onCancel }: OnboarderProps) {
 		},
 		onPanResponderRelease: (_, gestureState) => {
 			const { dx } = gestureState;
-			if (dx < -THRESHOLD && currentIndex < 2) {
+			if (dx < -THRESHOLD && currentIndex !== ONBOARDING_ITEMS.length - 1) {
 				Animated.timing(animatedValue, {
 					toValue: currentWidth - width,
 					duration: 300,
@@ -104,78 +104,81 @@ export default function Onboarder({ onProceed, onCancel }: OnboarderProps) {
 	};
 
 	return (
-		<View>
-			<Animated.View style={animatedStyles} {...panResponder.panHandlers}>
-				{ONBOARDING_ITEMS.map((item, index) => (
-					<ImageBackground
-						key={index}
-						style={styles.onboardingContainer}
-						source={item.image}
+		<Animated.View style={animatedStyles} {...panResponder.panHandlers}>
+			{ONBOARDING_ITEMS.map((item, index) => (
+				<ImageBackground
+					key={index}
+					style={styles.onboardingContainer}
+					source={item.image}
+				>
+					<Row
+						alignItems='center'
+						justifyContent='space-between'
+						containerStyle={styles.headerContainer}
 					>
-						<Row alignItems='center' justifyContent='space-between'>
-							<View style={styles.headerContainerLeft} />
-							<View style={styles.headerContainerMiddle}>
-								<Image
-									source={ComponentImages.kidashiOnboarder.payrepMonochromeLogo}
-									style={styles.headerContainerMiddleLogo}
-								/>
-							</View>
-							<IconButton onPress={onCancel}>
-								<Row alignItems='center' justifyContent='flex-start' gap={5}>
-									<Image
-										source={ComponentImages.kidashiOnboarder.cancelIcon}
-										style={styles.cancelIcon}
-									/>
-									<Typography
-										title='Cancel'
-										type='label-r'
-										color={Colors.neutral["200"]}
-									/>
-								</Row>
-							</IconButton>
-						</Row>
-						<View style={styles.footerContainer}>
+						<View style={styles.headerContainerLeft} />
+						<View style={styles.headerContainerMiddle}>
 							<Image
-								source={ComponentImages.kidashiOnboarder.kidashiLogo}
-								style={styles.kidashiLogo}
+								source={ComponentImages.kidashiOnboarder.payrepMonochromeLogo}
+								style={styles.headerContainerMiddleLogo}
 							/>
-							<Pad size={16} />
-							<Typography
-								title={item.title}
-								type='heading-sb'
-								style={styles.onboardingTitle}
-							/>
-							<Pad size={8} />
-							<Typography
-								title={item.description}
-								type='label-sb'
-								style={styles.onboardingDescription}
-							/>
-							<Pad size={16} />
-							<View style={styles.dotContainer}>
-								{[0, 1, 2, 3].map((item) => (
-									<View
-										key={item}
-										style={
-											item === currentIndex
-												? styles.activeDot
-												: styles.inactiveDot
-										}
-									/>
-								))}
-							</View>
-							<Pad size={16} />
-							{currentIndex === ONBOARDING_ITEMS.length - 1 ? (
-								<Button
-									title='Join Now'
-									color={Colors.white}
-									onPress={onProceed}
-								/>
-							) : null}
 						</View>
-					</ImageBackground>
-				))}
-			</Animated.View>
-		</View>
+						<IconButton onPress={onCancel}>
+							<Row alignItems='center' justifyContent='flex-start' gap={5}>
+								<Image
+									source={ComponentImages.kidashiOnboarder.cancelIcon}
+									style={styles.cancelIcon}
+								/>
+								<Typography
+									title='Cancel'
+									type='label-r'
+									color={Colors.neutral["200"]}
+								/>
+							</Row>
+						</IconButton>
+					</Row>
+					<View style={styles.footerContainer}>
+						<Image
+							source={ComponentImages.kidashiOnboarder.kidashiLogo}
+							style={styles.kidashiLogo}
+						/>
+						<Pad size={16} />
+						<Typography
+							title={item.title}
+							type='heading-sb'
+							style={styles.onboardingTitle}
+						/>
+						<Pad size={8} />
+						<Typography
+							title={item.description}
+							type='label-sb'
+							style={styles.onboardingDescription}
+						/>
+						<Pad size={16} />
+						<View style={styles.dotContainer}>
+							{[0, 1, 2, 3].map((item) => (
+								<View
+									key={item}
+									style={
+										item === currentIndex
+											? styles.activeDot
+											: styles.inactiveDot
+									}
+								/>
+							))}
+						</View>
+						<Pad size={16} />
+						{currentIndex === ONBOARDING_ITEMS.length - 1 ? (
+							<Button
+								title='Join Now'
+								color={Colors.white}
+								onPress={onProceed}
+								containerStyle={styles.joinNowButton}
+							/>
+						) : null}
+					</View>
+				</ImageBackground>
+			))}
+		</Animated.View>
 	);
 }

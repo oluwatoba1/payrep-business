@@ -7,6 +7,7 @@ import {
 	BackHandler,
 	Alert,
 	Platform,
+	KeyboardAvoidingView,
 } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import DeviceInfo from "react-native-device-info";

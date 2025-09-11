@@ -4,6 +4,7 @@ import { View } from "react-native";
 import styles from "./styles";
 import { Typography } from "@components/Forms";
 import Pad from "@components/Pad";
+import { scaleHeight } from "@utils/Helpers";
 
 interface AboutMyBusinessProps {
 	businessDetails: {
@@ -18,13 +19,13 @@ export default function AboutMyBusiness({
 	businessDetails,
 }: AboutMyBusinessProps) {
 	return (
-		<View>
+		<View style={{ height: scaleHeight(300) }}>
 			<View style={styles.reviewCardContainer}>
 				<Row containerStyle={styles.reviewCardHeader}>
 					<Typography
 						title='What I sell'
 						type='subheading'
-						style={styles.businessReviewText}
+						style={styles.reviewPadding}
 					/>
 				</Row>
 
@@ -33,13 +34,13 @@ export default function AboutMyBusiness({
 				<Typography
 					title={businessDetails.businessDescription}
 					type='subheading-sb'
-					style={styles.businessReviewText}
+					style={styles.reviewPadding}
 				/>
 			</View>
 
 			<Pad size={16} />
 
-			<View style={styles.reviewCardContainer}>
+			<View style={[styles.reviewCardContainer, styles.reviewPadding]}>
 				<Row alignItems='center' justifyContent='space-between'>
 					<Typography title='State' type='subheading' />
 					<Typography

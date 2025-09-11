@@ -41,9 +41,9 @@ const styles = StyleSheet.create({
 		paddingBottom: scaleHeight(10),
 		backgroundColor: "#f9f9fb",
 	},
-	businessReviewText: {
-		paddingHorizontal: scaleHeight(16)
-	}
+	reviewPadding: {
+		paddingHorizontal: scaleHeight(16),
+	},
 });
 
 export default styles;

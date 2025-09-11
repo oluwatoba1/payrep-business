@@ -1,17 +1,22 @@
 import { StyleSheet } from "react-native";
-import { moderateScale, scale, scaleHeight } from "@utils/Helpers";
+import { scale, scaleHeight } from "@utils/Helpers";
 import { PNB, PNSB } from "@theme/Fonts";
 import Colors from "@theme/Colors";
-import { height, width } from "@utils/Constants";
+import {
+	height,
+	MAIN_LAYOUT_HORIZONTAL_PADDING,
+	width,
+} from "@utils/Constants";
 
 const styles = StyleSheet.create({
 	onboardingContainer: {
 		height,
 		width,
-		paddingHorizontal: scale(38),
-		position: "relative",
-		flexDirection: "column",
+		paddingHorizontal: scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
 		justifyContent: "space-between",
+	},
+	headerContainer: {
+		paddingTop: scaleHeight(40),
 	},
 	headerContainerLeft: {
 		width: scaleHeight(56),
@@ -23,6 +28,8 @@ const styles = StyleSheet.create({
 		height: scaleHeight(56),
 		borderRadius: scaleHeight(28),
 		backgroundColor: `${Colors.white}1A`,
+		alignItems: "center",
+		justifyContent: "center",
 	},
 	headerContainerMiddleLogo: {
 		width: scaleHeight(24),
@@ -36,7 +43,8 @@ const styles = StyleSheet.create({
 	},
 	footerContainer: {
 		alignItems: "center",
-		justifyContent: "center",
+		justifyContent: "flex-end",
+		paddingBottom: scaleHeight(40),
 	},
 	kidashiLogo: {
 		height: scaleHeight(24),
@@ -53,26 +61,21 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 	dotContainer: {
-		position: "absolute",
-		top: scaleHeight(57),
-		left: 0,
-		width: "100%",
 		justifyContent: "center",
-		zIndex: 5,
 		flexDirection: "row",
 	},
 	activeDot: {
-		height: scaleHeight(7),
-		width: scale(42),
+		height: scaleHeight(6),
+		width: scale(31),
 		borderRadius: scale(7),
-		backgroundColor: Colors.primary.base,
+		backgroundColor: Colors.white,
 		marginRight: scale(6),
 	},
 	inactiveDot: {
-		height: scaleHeight(7),
-		width: scale(29),
-		borderRadius: scale(7),
-		backgroundColor: Colors.white,
+		height: scaleHeight(6),
+		width: scaleHeight(6),
+		borderRadius: scaleHeight(6),
+		backgroundColor: "#919091",
 		marginRight: scale(6),
 	},
 	onboardingButtonContainer: {
@@ -82,23 +85,8 @@ const styles = StyleSheet.create({
 		width,
 		paddingHorizontal: scale(38),
 	},
-	skipButtonText: {
-		fontFamily: PNSB,
-		color: Colors.white,
-		fontSize: scale(17),
-		lineHeight: scale(17 * 1.44),
-	},
-	skipButtonContainer: {
-		backgroundColor: "transparent",
-	},
-	signInText: {
-		fontFamily: PNSB,
-		color: Colors.white,
-		fontSize: scale(17),
-		lineHeight: scale(17 * 1.44),
-	},
-	signInButtonContainer: {
-		backgroundColor: Colors.primary.base,
+	joinNowButton: {
+		width: width - 2 * scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
 	},
 });
 

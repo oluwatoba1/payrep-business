@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
 	stepperDivider: {
 		height: 2,
 		backgroundColor: Colors.neutral["300"],
-		marginHorizontal: scale(10),
 	},
 });
 
