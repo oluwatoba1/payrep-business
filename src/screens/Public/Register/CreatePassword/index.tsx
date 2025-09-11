@@ -31,7 +31,7 @@ export default function CreatePassword({
   } = useRegisterPasswordValidation();
   const [registerPassword, { isLoading }] = useRegisterPasswordMutation();
 
-  const mobileNumber = useAppSelector(state => state.auth.registration.mobileNumber);
+  const {mobileNumber, customer_id} = useAppSelector(state => state.auth.registration);
 
   const [loadingTitle, setLoadingTitle] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -43,7 +43,7 @@ export default function CreatePassword({
     }
     setLoadingTitle('Creating Password');
     try {
-      const { status } = await registerPassword({ password, mobile_number: mobileNumber, device_id: DeviceInfo.getDeviceId() }).unwrap();
+      const { status } = await registerPassword({ password, mobile_number: mobileNumber, device_id: DeviceInfo.getDeviceId(), customer_id }).unwrap();
       if (status) {
         navigate('SuccessMessage', {
           title: 'Success!',
