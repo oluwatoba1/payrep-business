@@ -46,6 +46,20 @@ export type BottomTabParamList = {
 	Savings: NavigatorScreenParams<SavingsStackParamList>;
 };
 
+export type KidashiBottomTabParamList = {
+	KidashiHome: NavigatorScreenParams<KidashiHomeStackParamList>;
+	KidashiTrustCircle: NavigatorScreenParams<KidashiHomeStackParamList>;
+	KidashiMembers: NavigatorScreenParams<KidashiHomeStackParamList>;
+};
+
+export type KidashiHomeStackParamList = {
+	KidashiDashboard: undefined;
+};
+
+export type KidashiTrustCircleParamList = {};
+
+export type KidashiMembersParamList = {};
+
 export type HomeStackParamList = {
 	Dashboard: undefined;
 	Earnings: undefined;

@@ -164,6 +164,11 @@ const ComponentImages = {
 		kidashiLogo: require("./KidashiOnboarder/kidashi-logo.png"),
 		cancelIcon: require("./KidashiOnboarder/cancel.png"),
 	},
+	kidashiLayout: {
+		bellIcon: require("./KidashiLayout/bell.png"),
+		kidashiBlackLogo: require("./KidashiLayout/kidashi-black.png"),
+		returnHomeIcon: require("./KidashiLayout/return-home.png"),
+	},
 };
 
 export default ComponentImages;
