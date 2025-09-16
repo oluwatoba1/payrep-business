@@ -121,6 +121,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 		customerType: string | null = null
 	) => {
 		setLoginType(loginType);
+		console.log("DeviceInfo.getDeviceId():", DeviceInfo.getDeviceId());
 		try {
 			const { status, message, data } = await login({
 				username: !!username ? username : customer?.username || "",
@@ -221,7 +222,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 				type: customerType,
 			}).unwrap();
 			if (status) {
-				navigate("RegisterNewDevice", { username });
+				navigate("RegisterNewDevice", { username, customerType });
 			}
 		} catch (error: any) {
 			showToast(

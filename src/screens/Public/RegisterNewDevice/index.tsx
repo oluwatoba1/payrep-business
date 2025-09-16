@@ -1,6 +1,6 @@
 import { StackScreenProps } from "@react-navigation/stack";
 
-import { Button, PinPad, TextInput, Typography } from "@components/Forms";
+import { Button, PinPad, Typography } from "@components/Forms";
 import { MainLayout } from "@components/Layout";
 import Pad from "@components/Pad";
 import { PublicNavigatorParamList } from "@navigation/types";
@@ -35,6 +35,7 @@ export default function RegisterNewDevice({
 				username: route.params.username || "",
 				otp,
 				device_id: DeviceInfo.getDeviceId(),
+				customer_type: route.params.customerType || null,
 			}).unwrap();
 			if (status && !data?.facial_recognition) {
 				goBack();
@@ -65,21 +66,11 @@ export default function RegisterNewDevice({
 
 			<Pad size={30} />
 
-			{/* <PinPad
+			<PinPad
 				pin={otp}
 				onInput={setOtp}
 				codeLength={6}
 				secure={false}
-				error={error}
-			/> */}
-			<TextInput
-				type='text'
-				label='OTP'
-				keyboardType='numeric'
-				placeholder='Ex: 123456'
-				maxLength={6}
-				value={otp}
-				onChangeText={setOtp}
 				error={error}
 			/>
 

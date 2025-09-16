@@ -58,6 +58,18 @@ const ScreenImages = {
 		create: require("./Kidashi/KidashiHome/kidashi-plus-icon.png"),
 		noTransactions: require("./Kidashi/KidashiHome/no-transactions.png"),
 		noTrustCircles: require("./Kidashi/KidashiHome/no-trust-circles.png"),
+		createAccount: require("./Kidashi/KidashiHome/create-account.png"),
+		joinKidashi: require("./Kidashi/KidashiHome/members.png"),
+		createTrustCircle: require("./Kidashi/KidashiHome/badge.png"),
+		closeIcon: require("./Kidashi/KidashiHome/close.png"),
+	},
+	kidashiCreateTrustCircles: {
+		headericon: require("./Kidashi/CreateTrustCircle/top-badge.png"),
+		backIcon: require("./Kidashi/CreateTrustCircle/back-icon.png"),
+		forwardIcon: require("./Kidashi/CreateTrustCircle/forward-icon.png"),
+		lockIcon: require("./Kidashi/CreateTrustCircle/lock.png"),
+		peopleIcon: require("./Kidashi/CreateTrustCircle/people.png"),
+		buildIcon: require("./Kidashi/CreateTrustCircle/build.png"),
 	},
 };
 
