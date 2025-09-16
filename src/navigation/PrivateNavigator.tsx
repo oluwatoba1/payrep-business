@@ -8,7 +8,6 @@ import MessageScreen from "@screens/Private/Message";
 import { useAppSelector } from "@store/hooks";
 import { ProfileSetupStack } from "./Stacks";
 import useAutoLogout from "@hooks/useAutoLogout";
-import { scaleHeight } from "@utils/Helpers";
 
 const Stack = createNativeStackNavigator<PrivateNavigatorParamList>();
 

@@ -169,6 +169,11 @@ const ComponentImages = {
 		kidashiBlackLogo: require("./KidashiLayout/kidashi-black.png"),
 		returnHomeIcon: require("./KidashiLayout/return-home.png"),
 	},
+	kidashiBottomNavigator: {
+		home: require("./KidashiBottomNavigator/kidashi-home-icon.png"),
+		members: require("./KidashiBottomNavigator/members-icon.png"),
+		trustCircles: require("./KidashiBottomNavigator/trust-circles-icon.png"),
+	},
 };
 
 export default ComponentImages;

@@ -33,13 +33,13 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	tabLabel: {
-		color: Colors.gray.base,
+		color: Colors.neutral["400"],
 		fontFamily: PNSB,
 		fontSize: moderateScale(12),
 		lineHeight: moderateScale(12 * 1.5),
 	},
 	activeTabLabel: {
-		color: Colors.primary.base,
+		color: Colors.black,
 	},
 	tabIcon: {
 		width: scale(24),
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 	},
 	activeIcon: {
-		tintColor: Colors.primary.base,
+		tintColor: Colors.black,
 	},
 	homeTabItemContainer: {
 		position: "relative",

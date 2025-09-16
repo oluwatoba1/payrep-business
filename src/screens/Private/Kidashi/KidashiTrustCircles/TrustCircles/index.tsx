@@ -1,35 +1,31 @@
 import { useState } from "react";
-import { Image, Pressable } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
 import { Typography } from "@components/Forms";
-import { KidashiLayout, Row } from "@components/Layout";
+import { KidashiLayout } from "@components/Layout";
 import ScreenImages from "@assets/images/screens";
-import { KidashiHomeCard } from "@components/Cards";
 import { KidashiHomeCardProps } from "@components/Cards/KidashiHomeCard";
 import Colors from "@theme/Colors";
-import styles from "./styles";
 import Pad from "@components/Pad";
-import Tab from "@components/Miscellaneous/Tab";
 import { KidashiDashboardEmptyState } from "@components/Miscellaneous";
 import { KidashiDashboardEmptyStateProps } from "@components/Miscellaneous/KidashiDashboardEmptyState";
 import {
 	HomeStackParamList,
-	KidashiHomeStackParamList,
+	TrustCircleStackParamList,
 } from "@navigation/types";
 
 type TabType = "Top Performing" | "Recent Transactions";
 
-type KidashiDashboardProps = CompositeScreenProps<
-	StackScreenProps<KidashiHomeStackParamList, "KidashiDashboard">,
+type TrustCirclesProps = CompositeScreenProps<
+	StackScreenProps<TrustCircleStackParamList, "TrustCircles">,
 	BottomTabScreenProps<HomeStackParamList, "Dashboard">
 >;
 
-export default function KidashiDashboard({
+export default function TrustCircles({
 	navigation: { navigate },
-}: KidashiDashboardProps) {
+}: TrustCirclesProps) {
 	const [activeTab, setActiveTab] = useState<TabType>("Top Performing");
 
 	const overview: KidashiHomeCardProps["items"] = [
@@ -66,60 +62,20 @@ export default function KidashiDashboard({
 
 	return (
 		<KidashiLayout
-			rightAction={() => navigate("Dashboard")}
-			headerFooter={
-				<Row
-					alignItems='center'
-					justifyContent='space-between'
-					containerStyle={styles.earningsBanner}
-				>
-					<Typography
-						title='My Earnings'
-						type='label-r'
-						color={Colors.neutral["400"]}
-					/>
-
-					<Row alignItems='center' justifyContent='space-between' gap={8}>
-						<Typography
-							title='+₦0.00'
-							type='label-sb'
-							color={Colors.success["600"]}
-						/>
-						<Row alignItems='center' justifyContent='space-between'>
-							<Typography
-								title='See Breakdown'
-								type='label-sb'
-								color={Colors.primary["600"]}
-							/>
-							<Image
-								source={ScreenImages.kidashiHome.caretRight}
-								style={styles.caretIcon}
-							/>
-						</Row>
-					</Row>
-				</Row>
+			leftNode={
+				<Typography
+					title='Trust Circles'
+					type='subheading-b'
+					color={Colors.neutral["700"]}
+				/>
 			}
+			rightAction={() => navigate("Dashboard")}
 		>
 			<Pad size={16} />
 
-			<KidashiHomeCard items={overview} />
-
-			<Pad size={16} />
-
-			<Tab
-				items={["Top Performing", "Recent Transactions"]}
-				value={activeTab}
-				onTap={(value) => setActiveTab(value as TabType)}
-			/>
+			<Typography title='Trust Circles' />
 
 			<KidashiDashboardEmptyState {...emptyStateData[activeTab]} />
-
-			<Pressable style={styles.plusIconContainer}>
-				<Image
-					source={ScreenImages.kidashiHome.create}
-					style={styles.plusIcon}
-				/>
-			</Pressable>
 		</KidashiLayout>
 	);
 }

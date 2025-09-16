@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 
 // Local
 import {
@@ -11,15 +11,20 @@ import { scale, scaleHeight } from "@utils/Helpers";
 const styles = StyleSheet.create({
 	mainLayoutContainer: {
 		flex: 1,
-		paddingHorizontal: scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
 	},
-	container: {
-		flex: 1,
-		height,
-		width: width - 2 * scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
+	headerContainer: {
+		paddingTop: StatusBar.currentHeight
+			? StatusBar.currentHeight
+			: scaleHeight(20),
+		paddingBottom: scaleHeight(8),
+		width,
+		paddingHorizontal: scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
+		maxHeight: scaleHeight(120),
 	},
 	kidashiLogo: {
+		width: scaleHeight(83),
 		height: scaleHeight(24),
+		resizeMode: "contain",
 	},
 	bellIconContainer: {
 		width: scaleHeight(32),
@@ -40,6 +45,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: scale(12),
 		paddingVertical: scale(7),
 		backgroundColor: "#FFF1D0",
+		borderRadius: scaleHeight(16),
 		borderWidth: 1,
 		borderColor: "#E5D9BB",
 	},
@@ -47,6 +53,10 @@ const styles = StyleSheet.create({
 		width: scaleHeight(16),
 		height: scaleHeight(16),
 		resizeMode: "contain",
+	},
+	childrenContainer: {
+		paddingHorizontal: scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
+		height: height - scaleHeight(120),
 	},
 });
 

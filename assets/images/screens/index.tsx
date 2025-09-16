@@ -53,6 +53,12 @@ const ScreenImages = {
 		pending: require("../screens/Kidashi/OnboardingStatus/hourglass.png"),
 		rejected: require("../screens/Kidashi/OnboardingStatus/error.png"),
 	},
+	kidashiHome: {
+		caretRight: require("./Kidashi/KidashiHome/caret-right-icon.png"),
+		create: require("./Kidashi/KidashiHome/kidashi-plus-icon.png"),
+		noTransactions: require("./Kidashi/KidashiHome/no-transactions.png"),
+		noTrustCircles: require("./Kidashi/KidashiHome/no-trust-circles.png"),
+	},
 };
 
 export default ScreenImages;

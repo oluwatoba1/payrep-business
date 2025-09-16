@@ -1,45 +1,59 @@
 import { ReactNode } from "react";
-import { Image, Pressable } from "react-native";
+import { Image, Pressable, View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 
 import Row from "../Row";
 import ComponentImages from "@assets/images/components";
 import { Typography } from "@components/Forms";
 import Colors from "@theme/Colors";
+import styles from "./styles";
+import Pad from "@components/Pad";
 
 interface KidashiHeaderProps {
 	leftNode?: ReactNode;
 	rightNode?: ReactNode;
 	rightAction?: () => void;
+	headerFooter?: ReactNode;
 }
 
 export default function KidashiHeader({
 	leftNode,
 	rightNode,
 	rightAction = () => {},
+	headerFooter,
 }: KidashiHeaderProps) {
 	return (
 		<LinearGradient
 			colors={["#FFF1D0", "#FFF1D0"]} // same color top → bottom
 			start={{ x: 0, y: 0 }}
 			end={{ x: 0, y: 1 }}
+			style={styles.headerContainer}
 		>
-			<Row>
+			<Row alignItems='center' justifyContent='space-between'>
 				{leftNode ? (
 					leftNode
 				) : (
-					<Image source={ComponentImages.kidashiLayout.kidashiBlackLogo} />
+					<Image
+						source={ComponentImages.kidashiLayout.kidashiBlackLogo}
+						style={styles.kidashiLogo}
+					/>
 				)}
 				{rightNode ? (
 					rightNode
 				) : (
 					<Row alignItems='center' gap={8}>
-						<Pressable>
-							<Image source={ComponentImages.kidashiLayout.bellIcon} />
+						<Pressable style={styles.bellIconContainer}>
+							<Image
+								source={ComponentImages.kidashiLayout.bellIcon}
+								style={styles.bellIcon}
+							/>
 						</Pressable>
-						<Pressable onPress={rightAction}>
+						<Pressable onPress={rightAction} style={styles.returnHomeContainer}>
 							<Row alignItems='center' gap={7}>
-								<Image source={ComponentImages.kidashiLayout.returnHomeIcon} />
+								<Image
+									source={ComponentImages.kidashiLayout.returnHomeIcon}
+									style={styles.returnHomeIcon}
+								/>
 								<Typography
 									title='Return Home'
 									type='label-sb'
@@ -50,6 +64,12 @@ export default function KidashiHeader({
 					</Row>
 				)}
 			</Row>
+			{headerFooter ? (
+				<View>
+					<Pad size={16} />
+					{headerFooter}
+				</View>
+			) : null}
 		</LinearGradient>
 	);
 }
