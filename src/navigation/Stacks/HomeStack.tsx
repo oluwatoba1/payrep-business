@@ -14,6 +14,8 @@ import { useAppDispatch, useAppSelector } from "@store/hooks";
 import useToast from "@hooks/useToast";
 import { useFetchCustomerDetailsQuery } from "@store/apis/customerApi";
 import { setCustomerDetails } from "@store/slices/customerSlice";
+import KidashiStack from "./KidashiRegistrationStack";
+import KidashiBottomTabNavigator from "@navigation/KidashiBottomNavigator";
 
 const Stack = createNativeStackNavigator<HomeStackParamList>();
 
@@ -53,6 +55,12 @@ export default function HomeStack() {
 			<Stack.Screen
 				name='CashoutConfirmation'
 				component={CashoutConfirmation}
+			/>
+			<Stack.Screen name='KidashiRegistration' component={KidashiStack} />
+			<Stack.Screen
+				name='KidashiBottomTabs'
+				component={KidashiBottomTabNavigator}
+				options={{ headerShown: false }}
 			/>
 		</Stack.Navigator>
 	);

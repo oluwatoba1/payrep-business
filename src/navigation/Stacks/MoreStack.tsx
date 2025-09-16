@@ -31,7 +31,6 @@ import {
 	ViewDisputeScreen,
 	AddAccount,
 } from "../../screens/Private/More";
-import KidashiStack from "./KidashiStack";
 
 const Stack = createNativeStackNavigator<MoreStackParamList>();
 
@@ -89,7 +88,6 @@ export default function MoreStackNavigator() {
 			<Stack.Screen name='ListDisputesScreen' component={ListDisputesScreen} />
 			<Stack.Screen name='ViewDisputeScreen' component={ViewDisputeScreen} />
 			<Stack.Screen name='AddAccount' component={AddAccount} />
-			<Stack.Screen name='Kidashi' component={KidashiStack} />
 		</Stack.Navigator>
 	);
 }

@@ -5,5 +5,7 @@ export { default as MoreStack } from "./MoreStack";
 export { default as TransactionStack } from "./TransactionStack";
 export { default as SavingsStack } from "./SavingsStack";
 export { default as SupportStack } from "./SupportStack";
-export { default as KidashiStack } from "./KidashiStack";
+export { default as KidashiStack } from "./KidashiRegistrationStack";
 export { default as KidashiHomeStack } from "./KidashiHomeStack";
+export { default as TrustCircleStack } from "./TrustCircleStack";
+export { default as MemberStack } from "./MemberStack";

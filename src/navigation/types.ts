@@ -48,17 +48,21 @@ export type BottomTabParamList = {
 
 export type KidashiBottomTabParamList = {
 	KidashiHome: NavigatorScreenParams<KidashiHomeStackParamList>;
-	KidashiTrustCircle: NavigatorScreenParams<KidashiHomeStackParamList>;
-	KidashiMembers: NavigatorScreenParams<KidashiHomeStackParamList>;
+	"Trust Circles": NavigatorScreenParams<TrustCircleStackParamList>;
+	KidashiMembers: NavigatorScreenParams<MembersStackParamList>;
 };
 
 export type KidashiHomeStackParamList = {
 	KidashiDashboard: undefined;
 };
 
-export type KidashiTrustCircleParamList = {};
+export type TrustCircleStackParamList = {
+	TrustCircles: undefined;
+};
 
-export type KidashiMembersParamList = {};
+export type MembersStackParamList = {
+	Members: undefined;
+};
 
 export type HomeStackParamList = {
 	Dashboard: undefined;
@@ -66,6 +70,8 @@ export type HomeStackParamList = {
 	Cashout: undefined;
 	CashoutConfirmation: undefined;
 	Notifications: undefined;
+	KidashiRegistration: undefined;
+	KidashiBottomTabs: NavigatorScreenParams<KidashiBottomTabParamList>;
 };
 
 export type ProfileStackParamList = {
@@ -159,7 +165,6 @@ export type MoreStackParamList = {
 		disputeId: string;
 	};
 	AddAccount: undefined;
-	Kidashi: undefined;
 };
 
 export type SupportStackParamList = {

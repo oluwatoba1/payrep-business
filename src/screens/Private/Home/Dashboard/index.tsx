@@ -46,7 +46,10 @@ import ComponentImages from "@assets/images/components";
 import { setCredentials } from "@store/slices/authSlice";
 
 type DashboardProps = CompositeScreenProps<
-	StackScreenProps<HomeStackParamList, "Dashboard">,
+	CompositeScreenProps<
+		StackScreenProps<HomeStackParamList, "Dashboard">,
+		BottomTabScreenProps<BottomTabParamList, "Home">
+	>,
 	CompositeScreenProps<
 		BottomTabScreenProps<BottomTabParamList, "More">,
 		BottomTabScreenProps<BottomTabParamList, "History">
@@ -327,7 +330,13 @@ export default function Dashboard({
 				}
 			>
 				<KidashiCard
-					onProceed={() => navigate("More", { screen: "Kidashi" })}
+					// onProceed={() => navigate("Home", { screen: "KidashiRegistration" })}
+					onProceed={() =>
+						navigate("KidashiBottomTabs", {
+							screen: "KidashiHome",
+							params: { screen: "KidashiDashboard" },
+						})
+					}
 				/>
 			</ShimmerPlaceholder>
 

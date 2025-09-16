@@ -15,6 +15,7 @@ import { BOTTOM_TAB_CONTAINER_HEIGHT } from "@utils/Constants";
 
 interface MainLayoutProps {
 	showHeader?: boolean;
+	headerFooter?: ReactNode;
 	children: ReactNode;
 	backgroundColor?: string;
 	leftNode?: ReactNode;
@@ -47,7 +48,6 @@ const KeyboardAvoider = ({
 		return (
 			<KeyboardAwareScrollView
 				resetScrollToCoords={{ x: 0, y: 0 }}
-				style={styles.container}
 				contentContainerStyle={{ flexGrow: 1 }} // allow scroll when content < screen
 				keyboardShouldPersistTaps='handled' // lets taps pass through while keyboard open
 				enableOnAndroid // actually enable behavior on Android
@@ -72,11 +72,7 @@ const KeyboardAvoider = ({
 		);
 	} else {
 		return (
-			<KeyboardAvoidingView
-				behavior='padding'
-				enabled={enableKeyboardAvoiding}
-				style={styles.container}
-			>
+			<KeyboardAvoidingView behavior='padding' enabled={enableKeyboardAvoiding}>
 				{children}
 			</KeyboardAvoidingView>
 		);
@@ -85,6 +81,7 @@ const KeyboardAvoider = ({
 
 export default function MainLayout({
 	showHeader = true,
+	headerFooter,
 	children,
 	backgroundColor = Colors.appBackground,
 	leftNode,
@@ -118,9 +115,10 @@ export default function MainLayout({
 						leftNode={leftNode}
 						rightNode={rightNode}
 						rightAction={rightAction}
+						headerFooter={headerFooter}
 					/>
 				) : null}
-				{children}
+				<View style={styles.childrenContainer}>{children}</View>
 				{hasBottomTabBar ? <Pad size={BOTTOM_TAB_CONTAINER_HEIGHT} /> : null}
 			</KeyboardAvoider>
 		</View>
