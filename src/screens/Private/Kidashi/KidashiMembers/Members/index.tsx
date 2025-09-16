@@ -60,13 +60,15 @@ export default function Members({
 	return (
 		<KidashiLayout
 			leftNode={
-				<Typography title='Members' type='subheading-b' color={Colors.neutral["700"]} />
+				<Typography
+					title='Members'
+					type='subheading-b'
+					color={Colors.neutral["700"]}
+				/>
 			}
 			rightAction={() => navigate("Dashboard")}
 		>
 			<Pad size={16} />
-
-			<Typography title='Trust Circles' />
 
 			<KidashiDashboardEmptyState {...emptyStateData[activeTab]} />
 		</KidashiLayout>

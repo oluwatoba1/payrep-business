@@ -78,6 +78,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 	const [showSelectProfileModal, setShowSelectProfileModal] =
 		useState<boolean>(false);
 	const [profiles, setProfiles] = useState<ICustomerInfo[]>([]);
+	const [customerType, setCustomerType] = useState<string | null>(null);
 
 	const prepUserDetails = async ({
 		status,
@@ -217,6 +218,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 		try {
 			const { status } = await verifyDevice({
 				mobile_number: `0${username}`,
+				type: customerType,
 			}).unwrap();
 			if (status) {
 				navigate("RegisterNewDevice", { username });
@@ -308,6 +310,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 				profiles={profiles}
 				onSelectProfile={(profile) => {
 					setShowSelectProfileModal(false);
+					setCustomerType(profile.type);
 					loginType === "biometrics"
 						? handleBiometricLogin(profile.type)
 						: handleLogin("password", undefined, undefined, profile.type);

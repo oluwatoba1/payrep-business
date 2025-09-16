@@ -73,8 +73,6 @@ export default function TrustCircles({
 		>
 			<Pad size={16} />
 
-			<Typography title='Trust Circles' />
-
 			<KidashiDashboardEmptyState {...emptyStateData[activeTab]} />
 		</KidashiLayout>
 	);
