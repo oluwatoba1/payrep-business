@@ -7,28 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C70936CB8F8806F0996B1CC /* libPods-PayrepMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EF8EA2E2CAC6EB552028644 /* libPods-PayrepMobile.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		295BEFDE04B9459BADE0CD90 /* Proxima_Nova_Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 311B6F8720B440C39BCF1739 /* Proxima_Nova_Semibold.otf */; };
 		6ECAB65AC18849CC8E706787 /* Proxima_Nova_Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = C0DE3BA3ED0B4CC3BD64C24F /* Proxima_Nova_Regular.otf */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		81BEF58B9C0A035ACD79EE8F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
-		8D716885EAF113C70E00FD2E /* libPods-PayrepMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 167D0FE01A7E8E847E6D0B16 /* libPods-PayrepMobile.a */; };
 		DEFBF23DFBDC4CD496BECA6F /* Proxima_Nova_Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 337A43414F9246188BC79C0D /* Proxima_Nova_Bold.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		08BA73B050BB76A7CBDAF58C /* Pods-PayrepMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PayrepMobile.debug.xcconfig"; path = "Target Support Files/Pods-PayrepMobile/Pods-PayrepMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* PayrepMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PayrepMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = PayrepMobile/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = PayrepMobile/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = PayrepMobile/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		167D0FE01A7E8E847E6D0B16 /* libPods-PayrepMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PayrepMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		311B6F8720B440C39BCF1739 /* Proxima_Nova_Semibold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Proxima_Nova_Semibold.otf; path = ../assets/Fonts/Proxima_Nova_Semibold.otf; sourceTree = "<group>"; };
 		337A43414F9246188BC79C0D /* Proxima_Nova_Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Proxima_Nova_Bold.otf; path = ../assets/Fonts/Proxima_Nova_Bold.otf; sourceTree = "<group>"; };
-		5D1EAB9ED3189DC1A22F9E93 /* Pods-PayrepMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PayrepMobile.release.xcconfig"; path = "Target Support Files/Pods-PayrepMobile/Pods-PayrepMobile.release.xcconfig"; sourceTree = "<group>"; };
-		67535879DD5400C5EF5CC0D9 /* Pods-PayrepMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PayrepMobile.debug.xcconfig"; path = "Target Support Files/Pods-PayrepMobile/Pods-PayrepMobile.debug.xcconfig"; sourceTree = "<group>"; };
+		4EF8EA2E2CAC6EB552028644 /* libPods-PayrepMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PayrepMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = PayrepMobile/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = PayrepMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B9C3F45BA4933A0597C4188D /* Pods-PayrepMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PayrepMobile.release.xcconfig"; path = "Target Support Files/Pods-PayrepMobile/Pods-PayrepMobile.release.xcconfig"; sourceTree = "<group>"; };
 		C0DE3BA3ED0B4CC3BD64C24F /* Proxima_Nova_Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Proxima_Nova_Regular.otf; path = ../assets/Fonts/Proxima_Nova_Regular.otf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -38,7 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D716885EAF113C70E00FD2E /* libPods-PayrepMobile.a in Frameworks */,
+				0C70936CB8F8806F0996B1CC /* libPods-PayrepMobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,7 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				167D0FE01A7E8E847E6D0B16 /* libPods-PayrepMobile.a */,
+				4EF8EA2E2CAC6EB552028644 /* libPods-PayrepMobile.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -109,8 +109,8 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				67535879DD5400C5EF5CC0D9 /* Pods-PayrepMobile.debug.xcconfig */,
-				5D1EAB9ED3189DC1A22F9E93 /* Pods-PayrepMobile.release.xcconfig */,
+				08BA73B050BB76A7CBDAF58C /* Pods-PayrepMobile.debug.xcconfig */,
+				B9C3F45BA4933A0597C4188D /* Pods-PayrepMobile.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -122,13 +122,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "PayrepMobile" */;
 			buildPhases = (
-				072B8B1F7172646F9D4EFD80 /* [CP] Check Pods Manifest.lock */,
+				8AFC55A027B0DE94AD59B338 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				21AC21F233D8890421BAD6F1 /* [CP] Embed Pods Frameworks */,
-				0A4CB4554E10EFA463331164 /* [CP] Copy Pods Resources */,
+				6DF8A259AB00516FD86ACEB8 /* [CP] Embed Pods Frameworks */,
+				CFF3573A4AB0FC3EA3C5B81A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -203,7 +203,24 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		072B8B1F7172646F9D4EFD80 /* [CP] Check Pods Manifest.lock */ = {
+		6DF8A259AB00516FD86ACEB8 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PayrepMobile/Pods-PayrepMobile-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PayrepMobile/Pods-PayrepMobile-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PayrepMobile/Pods-PayrepMobile-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8AFC55A027B0DE94AD59B338 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -225,7 +242,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		0A4CB4554E10EFA463331164 /* [CP] Copy Pods Resources */ = {
+		CFF3573A4AB0FC3EA3C5B81A /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -240,23 +257,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PayrepMobile/Pods-PayrepMobile-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		21AC21F233D8890421BAD6F1 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PayrepMobile/Pods-PayrepMobile-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PayrepMobile/Pods-PayrepMobile-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PayrepMobile/Pods-PayrepMobile-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -275,7 +275,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 67535879DD5400C5EF5CC0D9 /* Pods-PayrepMobile.debug.xcconfig */;
+			baseConfigurationReference = 08BA73B050BB76A7CBDAF58C /* Pods-PayrepMobile.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -312,7 +312,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5D1EAB9ED3189DC1A22F9E93 /* Pods-PayrepMobile.release.xcconfig */;
+			baseConfigurationReference = B9C3F45BA4933A0597C4188D /* Pods-PayrepMobile.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

@@ -27,6 +27,7 @@ export default function KidashiStack() {
 			<Stack.Screen name='ReviewDetails' component={ReviewDetails} />
 			<Stack.Screen name='OnboardingSuccess' component={OnboardingSuccess} />
 			<Stack.Screen name='OnboardingStatus' component={OnboardingStatus} />
+			{/* Add screeens for trust cycle */}
 		</Stack.Navigator>
 	);
 }
