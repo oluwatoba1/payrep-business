@@ -23,7 +23,7 @@ export type PublicNavigatorParamList = {
 	VerificationCode: { userType: string };
 	EmailVerification: undefined;
 	EmailAddress: undefined;
-	RegisterNewDevice: { username: string };
+	RegisterNewDevice: { username: string; customerType: string | null };
 	FacialRecognition: { token: string; customer: string };
 	SuccessMessage: {
 		title: string;

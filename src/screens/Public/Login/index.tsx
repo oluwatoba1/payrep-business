@@ -221,7 +221,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 				type: customerType,
 			}).unwrap();
 			if (status) {
-				navigate("RegisterNewDevice", { username });
+				navigate("RegisterNewDevice", { username, customerType });
 			}
 		} catch (error: any) {
 			showToast(

@@ -234,6 +234,7 @@ interface RegisterDeviceCredentials {
 	username: string;
 	otp: string;
 	device_id: string;
+	customer_type: string | null;
 }
 
 interface RegisterDeviceResponse {
@@ -261,7 +262,7 @@ interface RegisterBiometricsCredentials {
 }
 
 interface RegisterCredentials {
-	type: string;
+	type: string | null;
 	mobile_number: string;
 	email: string;
 	password: string;
