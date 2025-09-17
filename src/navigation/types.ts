@@ -64,6 +64,7 @@ export type TrustCircleStackParamList = {
 
 export type MembersStackParamList = {
 	Members: undefined;
+	MemberDetails: undefined;
 };
 
 export type HomeStackParamList = {

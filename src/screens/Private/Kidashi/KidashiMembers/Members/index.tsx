@@ -3,7 +3,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
-import { Typography } from "@components/Forms";
+import { Button, Typography } from "@components/Forms";
 import { KidashiLayout, Row } from "@components/Layout";
 import ScreenImages from "@assets/images/screens";
 import { KidashiHomeCardProps } from "@components/Cards/KidashiHomeCard";
@@ -68,6 +68,10 @@ export default function Members({
 			}
 			rightAction={() => navigate("Dashboard")}
 		>
+			<Button
+				title='Member Details'
+				onPress={() => navigate("MemberDetails")}
+			/>
 			<Pad size={16} />
 
 			<KidashiDashboardEmptyState {...emptyStateData[activeTab]} />

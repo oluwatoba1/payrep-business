@@ -42,6 +42,7 @@ import { PNB } from "@theme/Fonts";
 import Colors from "@theme/Colors";
 import { useFocusEffect } from "@react-navigation/native";
 import Pad from "@components/Pad";
+import MemberDetails from "@screens/Private/Kidashi/KidashiMembers/MemberDetails";
 
 type LoginProps = StackScreenProps<PublicNavigatorParamList, "Login">;
 
