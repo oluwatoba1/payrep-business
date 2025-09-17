@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Image, Pressable } from "react-native";
+import { Image, Pressable, Text } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
@@ -19,6 +19,8 @@ import {
 	HomeStackParamList,
 	KidashiHomeStackParamList,
 } from "@navigation/types";
+import { ModalWrapper } from "@components/Modal";
+import CreateTrustCircleModal from "@components/Modal/CreateTrustCircleModal";
 
 type TabType = "Top Performing" | "Recent Transactions";
 
@@ -31,6 +33,7 @@ export default function KidashiDashboard({
 	navigation: { navigate },
 }: KidashiDashboardProps) {
 	const [activeTab, setActiveTab] = useState<TabType>("Top Performing");
+	const [showBottomSheet, setShowBottomSheet] = useState(false);
 
 	const overview: KidashiHomeCardProps["items"] = [
 		{
@@ -114,12 +117,20 @@ export default function KidashiDashboard({
 
 			<KidashiDashboardEmptyState {...emptyStateData[activeTab]} />
 
-			<Pressable style={styles.plusIconContainer}>
+			<Pressable
+				onPress={() => setShowBottomSheet(true)}
+				style={styles.plusIconContainer}
+			>
 				<Image
 					source={ScreenImages.kidashiHome.create}
 					style={styles.plusIcon}
 				/>
 			</Pressable>
+
+			<CreateTrustCircleModal
+				visible={showBottomSheet}
+				onClose={() => setShowBottomSheet(false)}
+			/>
 		</KidashiLayout>
 	);
 }

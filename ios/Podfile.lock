@@ -32,9 +32,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - QoreIDSDK (1.0.3):
+  - QoreIDSDK (1.0.6):
     - QoreIDSDKDependencies
-  - QoreIDSDKDependencies (1.0.3)
+  - QoreIDSDKDependencies (1.0.5)
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -2203,8 +2203,8 @@ SPEC CHECKSUMS:
   glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
   hermes-engine: 1f783c3d53940aed0d2c84586f0b7a85ab7827ef
   qore-id-react-native-qoreid-sdk: b562193ec4eddf85e8794c330575267e51ecc9a2
-  QoreIDSDK: 6feb0a2f2e6d11ee6fdcf4d33caa59bd947c6af3
-  QoreIDSDKDependencies: 9570fa821e329604b29115385d6938093e892d89
+  QoreIDSDK: ad55fdc516b7ed9eb425776b682fb81727daada1
+  QoreIDSDKDependencies: 0b159a6801a8b08319ce699ccd00655a00d83eeb
   RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
   RCTDeprecation: f5c19ebdb8804b53ed029123eb69914356192fc8
   RCTRequired: 6ae6cebe470486e0e0ce89c1c0eabb998e7c51f4
@@ -2286,4 +2286,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 9d1a1bca1208287d0d2a9205e303a46a714a5010
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.15.2

@@ -12,7 +12,7 @@ class AppDelegate: RCTAppDelegate {
   ) -> Bool {
 
     // Must match AppRegistry.registerComponent(...)
-    self.moduleName = "PayRep Business"
+    self.moduleName = "PayRep"
     self.initialProps = [:]
 
     // Remove these two lines if you're not using Expo Modules
