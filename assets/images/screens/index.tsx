@@ -62,6 +62,8 @@ const ScreenImages = {
 		joinKidashi: require("./Kidashi/KidashiHome/members.png"),
 		createTrustCircle: require("./Kidashi/KidashiHome/badge.png"),
 		closeIcon: require("./Kidashi/KidashiHome/close.png"),
+		loanDisbursement: require("./Kidashi/KidashiHome/loan-disbursement.png"),
+		loanRepayment: require("./Kidashi/KidashiHome/loan-repayment.png"),
 	},
 	kidashiCreateTrustCircles: {
 		headericon: require("./Kidashi/CreateTrustCircle/top-badge.png"),

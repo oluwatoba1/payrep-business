@@ -20,10 +20,13 @@ import {
 	KidashiHomeStackParamList,
 } from "@navigation/types";
 import CreateTrustCircleModal from "@components/Modal/CreateTrustCircleModal";
-import TrustCircleItem, {
-	ITrustCircleItem,
-} from "@components/UI/TrustCircle/TrustCircleItem";
 import { addCommas } from "@utils/Helpers";
+import { ITrustCircleItem } from "@components/UI/TrustCircle/Cards/TrustCircleItemCard";
+import {
+	TrustCircleItemCard,
+	MemberTransactionCard,
+} from "@components/UI/TrustCircle/Cards";
+import { IMemberTransaction } from "@components/UI/TrustCircle/Cards/MemberTransactionCard";
 
 const overview: KidashiHomeCardProps["items"] = [
 	{
@@ -59,7 +62,7 @@ const emptyStateData: Record<TabType, KidashiDashboardEmptyStateProps> = {
 
 const dummyTrustCircleData: ITrustCircleItem[] = [
 	{
-		name: "Ladi Cooperative Groupppppppppppppppp",
+		name: "Ladi Cooperative Group",
 		membersCount: 5,
 		totalAmount: `₦${addCommas(5000)}`,
 	},
@@ -72,6 +75,27 @@ const dummyTrustCircleData: ITrustCircleItem[] = [
 		name: "Kawo Food Sellers Union",
 		membersCount: 3,
 		totalAmount: `₦${addCommas(3250)}`,
+	},
+];
+
+const dummyMemberTransactionData: IMemberTransaction[] = [
+	{
+		description: "Loan Disbursed",
+		date: "Sep 3, 2025",
+		totalAmount: `₦${addCommas(5000)}`,
+		transactionType: "loan-disbursement",
+	},
+	{
+		description: "Loan Repayment",
+		date: "Sep 10, 2025",
+		totalAmount: `₦${addCommas(3000)}`,
+		transactionType: "loan-repayment",
+	},
+	{
+		description: "Loan Disbursed",
+		date: "Sep 15, 2025",
+		totalAmount: `₦${addCommas(7000)}`,
+		transactionType: "loan-disbursement",
 	},
 ];
 
@@ -136,15 +160,26 @@ export default function KidashiDashboard({
 				onTap={(value) => setActiveTab(value as TabType)}
 			/>
 
-			<FlatList
-				data={dummyTrustCircleData}
-				renderItem={({ item, index }) => (
-					<TrustCircleItem
-						item={item}
-						isLastItem={index === dummyTrustCircleData.length - 1}
-					/>
-				)}
-				keyExtractor={(item) => item.name}
+			<FlatList<ITrustCircleItem | IMemberTransaction>
+				data={
+					activeTab === "Recent Transactions"
+						? dummyMemberTransactionData
+						: dummyTrustCircleData
+				}
+				renderItem={({ item, index }) =>
+					activeTab === "Recent Transactions" ? (
+						<MemberTransactionCard
+							item={item as IMemberTransaction}
+							isLastItem={index === dummyMemberTransactionData.length - 1}
+						/>
+					) : (
+						<TrustCircleItemCard
+							item={item as ITrustCircleItem}
+							isLastItem={index === dummyTrustCircleData.length - 1}
+						/>
+					)
+				}
+				keyExtractor={(_, index) => index.toString()}
 				ListEmptyComponent={
 					<KidashiDashboardEmptyState {...emptyStateData[activeTab]} />
 				}
