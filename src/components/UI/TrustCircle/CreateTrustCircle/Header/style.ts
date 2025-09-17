@@ -1,12 +1,8 @@
-import { StyleSheet, Platform } from "react-native";
+import { StyleSheet } from "react-native";
 import Colors from "@theme/Colors";
 import { scale, scaleHeight } from "@utils/Helpers";
 
 export const styles = StyleSheet.create({
-	container: {
-		// paddingTop: scaleHeight(50),
-		// Account for status bar
-	},
 	header: {
 		flexDirection: "row",
 		alignItems: "center",

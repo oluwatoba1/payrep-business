@@ -1,14 +1,14 @@
 import { View, Text, Image } from "react-native";
 import React from "react";
-import CreateTrustCircleHeader from "@components/UI/CreateTrustCircle/Header";
-import HowItWorks from "@components/UI/CreateTrustCircle/HowItWorks";
+import { useNavigation } from "@react-navigation/native";
+
 import { styles } from "./style";
 import { Button, Typography } from "@components/Forms";
 import Pad from "@components/Pad";
 import { Pressable, ScrollView } from "react-native-gesture-handler";
 import Colors from "@theme/Colors";
 import ScreenImages from "@assets/images/screens";
-import { useNavigation } from "@react-navigation/native";
+import { CreateTrustCircleHeader, TrustCircleHowItWorks } from "@components/UI";
 
 const CreateTrustCircle = () => {
 	const navigation = useNavigation();
@@ -16,7 +16,7 @@ const CreateTrustCircle = () => {
 		<ScrollView style={styles.container}>
 			<CreateTrustCircleHeader />
 			<View style={styles.contentContainer}>
-				<HowItWorks />
+				<TrustCircleHowItWorks />
 				<Pad size={30} />
 				<Pressable
 					style={styles.skipButton}

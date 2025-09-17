@@ -13,7 +13,6 @@ const CreateTrustCircleHeader = () => {
 	return (
 		<LinearGradient
 			colors={[Colors.primary["100"], "#FFFFFF"]} // Light yellow gradient
-			style={styles.container}
 		>
 			{/* Header with back button */}
 			<View style={styles.header}>

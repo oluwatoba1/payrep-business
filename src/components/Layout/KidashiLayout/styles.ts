@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
 		paddingBottom: scaleHeight(8),
 		width,
 		paddingHorizontal: scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
-		maxHeight: scaleHeight(120),
 	},
 	kidashiLogo: {
 		width: scaleHeight(83),
