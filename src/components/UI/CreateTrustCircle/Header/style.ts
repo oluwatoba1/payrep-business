@@ -4,7 +4,8 @@ import { scale, scaleHeight } from "@utils/Helpers";
 
 export const styles = StyleSheet.create({
 	container: {
-		paddingTop: scaleHeight(50), // Account for status bar
+		// paddingTop: scaleHeight(50),
+		// Account for status bar
 	},
 	header: {
 		flexDirection: "row",
@@ -14,20 +15,21 @@ export const styles = StyleSheet.create({
 	},
 	backButton: {
 		padding: scale(8),
+		position: "absolute",
+		zIndex: 10,
+		top: scaleHeight(50),
+		left: scale(20),
 	},
 	backIcon: {
-		width: scale(24),
-		height: scale(24),
+		width: scale(20),
+		height: scale(20),
 		tintColor: Colors.gray[900],
 		resizeMode: "contain",
 	},
 	contentContainer: {
 		alignItems: "center",
 		justifyContent: "center",
-		// backgroundColor: "red",
-		transform: [{ translateY: scaleHeight(-100) }],
-		// paddingHorizontal: scale(40),
-		// paddingTop: scaleHeight(40),
+		paddingBottom: scaleHeight(20),
 	},
 	iconContainer: {
 		position: "relative",
@@ -35,7 +37,6 @@ export const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 	},
-
 	headerIcon: {
 		width: scale(200),
 		height: scale(200),
@@ -43,8 +44,8 @@ export const styles = StyleSheet.create({
 	title: {
 		textAlign: "center",
 		marginBottom: scaleHeight(16),
-		fontSize: scale(28),
-		fontWeight: "bold",
+		// fontSize: scale(28),
+		// fontWeight: "bold",
 	},
 	subtitle: {
 		textAlign: "center",

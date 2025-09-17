@@ -11,8 +11,6 @@ import {
 	OnboardingStatus,
 } from "@screens/Private/Kidashi";
 import { KidashiStackParamList } from "../types";
-import CreateTrustCircles from "@screens/Private/Kidashi/CreateTrustCircles";
-import CircleName from "@screens/Private/Kidashi/CreateTrustCircles/CircleName";
 
 const Stack = createNativeStackNavigator<KidashiStackParamList>();
 
@@ -29,8 +27,7 @@ export default function KidashiStack() {
 			<Stack.Screen name='ReviewDetails' component={ReviewDetails} />
 			<Stack.Screen name='OnboardingSuccess' component={OnboardingSuccess} />
 			<Stack.Screen name='OnboardingStatus' component={OnboardingStatus} />
-			<Stack.Screen name='CreateTrustCircles' component={CreateTrustCircles} />
-			<Stack.Screen name='CircleName' component={CircleName} />
+
 			{/* Add screeens for trust cycle */}
 		</Stack.Navigator>
 	);

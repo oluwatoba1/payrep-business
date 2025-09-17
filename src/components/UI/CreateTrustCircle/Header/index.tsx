@@ -12,7 +12,7 @@ const CreateTrustCircleHeader = () => {
 	const navigation = useNavigation();
 	return (
 		<LinearGradient
-			colors={["#F0AE00", "#FFF8E1", "#FFFFFF"]} // Light yellow gradient
+			colors={[Colors.primary["100"], "#FFFFFF"]} // Light yellow gradient
 			style={styles.container}
 		>
 			{/* Header with back button */}
@@ -40,7 +40,7 @@ const CreateTrustCircleHeader = () => {
 				{/* Title */}
 				<Typography
 					title='Create a Trust Circle'
-					type='heading3-b'
+					type='heading4-sb'
 					color={Colors.gray[900]}
 					style={styles.title}
 				/>
