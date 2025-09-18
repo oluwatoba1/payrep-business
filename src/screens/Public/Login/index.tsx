@@ -96,10 +96,9 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 
 			// Show biometric modal if user has never logged in, or
 			// Set token to navigate to dashbord or profile setup
-			// !appState?.hasEverLoggedIn
-			// 	? setShowBiometricsModal(true)
-			// 	: dispatch(setCredentials({ token: data.token, user_id: null }));
-			dispatch(setCredentials({ token: data.token, user_id: null }));
+			!appState?.hasEverLoggedIn
+				? setShowBiometricsModal(true)
+				: dispatch(setCredentials({ token: data.token, user_id: null }));
 
 			// persist customer details
 			await persistAppState({
@@ -121,7 +120,6 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 		customerType: string | null = null
 	) => {
 		setLoginType(loginType);
-		console.log("DeviceInfo.getDeviceId():", DeviceInfo.getDeviceId());
 		try {
 			const { status, message, data } = await login({
 				username: !!username ? username : customer?.username || "",
@@ -132,6 +130,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 				signature_payload: payload,
 				customer_type: customerType,
 			}).unwrap();
+
 			if (data?.is_new_device) {
 				setShowRegisterDeviceModal(true);
 				return;
