@@ -111,6 +111,20 @@ export type KidashiStackParamList = {
 	OnboardingStatus: undefined;
 };
 
+export type MemberRegistrationStackParamList = {
+	MemberPhoneNumber: undefined;
+	MemberPhoneNumberVerification: undefined;
+	MemberEmail: undefined;
+	MemberEmailVerification: undefined;
+	MemberMeansOfVerification: undefined;
+	MemberFaceCaptureVerification: undefined;
+	MemberPersonalInformation: undefined;
+	MemberMeansOfIdentification: undefined;
+	MemberPep: undefined;
+	MemberSourceOfIncome: undefined;
+	MemberSuccessScreen: undefined;
+};
+
 export type TransferStackParamList = {
 	FundWallet: undefined;
 	BankTransfer: undefined;

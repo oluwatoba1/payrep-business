@@ -1,0 +1,11 @@
+export { default as MemberPhoneNumber } from "./MemberPhoneNumber";
+export { default as MemberPhoneNumberVerification } from "./MemberPhoneNumberVerification";
+export { default as MemberEmail } from "./MemberEmail";
+export { default as MemberEmailVerification } from "./MemberEmailVerification";
+export { default as MemberMeansOfVerification } from "./MemberMeansOfVerification";
+export { default as MemberFaceCaptureVerification } from "./MemberFaceCaptureVerification";
+export { default as MemberPersonalInformation } from "./MemberPersonalInformation";
+export { default as MemberMeansOfIdentification } from "./MemberMeansOfIdentification";
+export { default as MemberPep } from "./MemberPep";
+export { default as MemberSourceOfIncome } from "./MemberSourceOfIncome";
+export { default as MemberSuccessScreen } from "./MemberSuccessScreen";

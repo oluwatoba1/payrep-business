@@ -1,32 +1,23 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import {
-	KidashiOnboarding,
-	VendorInformation,
-	VendorItems,
-	GuarantorDetails,
-	ReviewDetails,
-	OnboardingSuccess,
-	OnboardingStatus,
-} from "@screens/Private/Kidashi/VendorRegistration";
-import { KidashiStackParamList } from "../types";
+import { MemberRegistrationStackParamList } from "../types";
 
-const Stack = createNativeStackNavigator<KidashiStackParamList>();
+const Stack = createNativeStackNavigator<MemberRegistrationStackParamList>();
 
-export default function KidashiStack() {
+export default function MemberRegistrationStack() {
 	return (
 		<Stack.Navigator
 			screenOptions={{ headerShown: false }}
-			initialRouteName='OnboardingStatus'
+			initialRouteName='MemberPhoneNumber'
 		>
-			<Stack.Screen name='VendorInformation' component={VendorInformation} />
+			{/* <Stack.Screen name='VendorInformation' component={VendorInformation} />
 			<Stack.Screen name='KidashiOnboarding' component={KidashiOnboarding} />
 			<Stack.Screen name='VendorItems' component={VendorItems} />
 			<Stack.Screen name='GuarantorDetails' component={GuarantorDetails} />
 			<Stack.Screen name='ReviewDetails' component={ReviewDetails} />
 			<Stack.Screen name='OnboardingSuccess' component={OnboardingSuccess} />
-			<Stack.Screen name='OnboardingStatus' component={OnboardingStatus} />
+			<Stack.Screen name='OnboardingStatus' component={OnboardingStatus} /> */}
 
 			{/* Add screeens for trust cycle */}
 		</Stack.Navigator>
