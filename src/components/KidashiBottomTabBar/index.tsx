@@ -96,23 +96,20 @@ export default function KidashiBottomTabBar({
 	const kidashiBottomNavigationRoutesList = [
 		"KidashiDashboard",
 		"TrustCircles",
-		"iMembers",
+		"KidashiMembers",
 	];
 
 	const bottomTabResolver = (): boolean => {
-		const landingScreen = state.routes.find(
-			(route) =>
-				kidashiBottomNavigationRoutesList.includes(
-					(route.params as any)?.screen
-				) || !route.params
-		);
-		console.log("state.routes", state.routes);
-		console.log("hererrreeyyy", landingScreen);
-		if (landingScreen) return true;
-		return false;
-	};
+		const currentRoute = state.routes[state.index];
 
-	console.log("resolver::::::", state);
+		if (!currentRoute.state?.routes || currentRoute.state?.index === undefined)
+			return true;
+		const landingScreen = kidashiBottomNavigationRoutesList.includes(
+			(currentRoute.state?.routes[currentRoute.state?.index] as any)?.name
+		);
+
+		return landingScreen;
+	};
 
 	if (!bottomTabResolver()) return null;
 

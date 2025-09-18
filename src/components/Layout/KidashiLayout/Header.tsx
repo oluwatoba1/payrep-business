@@ -24,7 +24,7 @@ export default function KidashiHeader({
 }: KidashiHeaderProps) {
 	return (
 		<LinearGradient
-			colors={["#FFF1D0", "#FFF1D0"]} // same color top → bottom
+			colors={["#FFE099", "#FFFFFF"]} // same color top → bottom
 			start={{ x: 0, y: 0 }}
 			end={{ x: 0, y: 1 }}
 			style={styles.headerContainer}

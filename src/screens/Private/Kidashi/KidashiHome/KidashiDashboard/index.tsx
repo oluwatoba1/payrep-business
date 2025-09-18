@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Image, Pressable, Text } from "react-native";
+import { FlatList, Image, Pressable, Text } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
@@ -19,8 +19,85 @@ import {
 	HomeStackParamList,
 	KidashiHomeStackParamList,
 } from "@navigation/types";
-import { ModalWrapper } from "@components/Modal";
 import CreateTrustCircleModal from "@components/Modal/CreateTrustCircleModal";
+import { addCommas } from "@utils/Helpers";
+import { ITrustCircleItem } from "@components/UI/TrustCircle/Cards/TrustCircleItemCard";
+import {
+	TrustCircleItemCard,
+	MemberTransactionCard,
+} from "@components/UI/TrustCircle/Cards";
+import { IMemberTransaction } from "@components/UI/TrustCircle/Cards/MemberTransactionCard";
+
+const overview: KidashiHomeCardProps["items"] = [
+	{
+		title: "Running Assets",
+		value: "0",
+		backgroundColor: Colors.neutral["50"],
+		titleColor: Colors.neutral["400"],
+		descriptionColor: Colors.black,
+	},
+	{
+		title: "Overdue Payments",
+		value: "₦0.00",
+		backgroundColor: Colors.success["100"],
+		titleColor: Colors.success["400"],
+		descriptionColor: Colors.success["700"],
+	},
+];
+
+const emptyStateData: Record<TabType, KidashiDashboardEmptyStateProps> = {
+	"Top Performing": {
+		icon: ScreenImages.kidashiHome.noTrustCircles,
+		title: "Your top circles will grow here",
+		description:
+			"Circles with high repayments and will appear here once your members stay consistent",
+	},
+	"Recent Transactions": {
+		icon: ScreenImages.kidashiHome.noTransactions,
+		title: "No Transactions yet",
+		description:
+			"When loans are created or payments are made, you’ll see them listed here",
+	},
+};
+
+const dummyTrustCircleData: ITrustCircleItem[] = [
+	{
+		name: "Ladi Cooperative Group",
+		membersCount: 5,
+		totalAmount: `₦${addCommas(5000)}`,
+	},
+	{
+		name: "Bayan Dutse Traders Group",
+		membersCount: 8,
+		totalAmount: `₦${addCommas(120000)}`,
+	},
+	{
+		name: "Kawo Food Sellers Union",
+		membersCount: 3,
+		totalAmount: `₦${addCommas(3250)}`,
+	},
+];
+
+const dummyMemberTransactionData: IMemberTransaction[] = [
+	{
+		description: "Loan Disbursed",
+		date: "Sep 3, 2025",
+		totalAmount: `₦${addCommas(5000)}`,
+		transactionType: "loan-disbursement",
+	},
+	{
+		description: "Loan Repayment",
+		date: "Sep 10, 2025",
+		totalAmount: `₦${addCommas(3000)}`,
+		transactionType: "loan-repayment",
+	},
+	{
+		description: "Loan Disbursed",
+		date: "Sep 15, 2025",
+		totalAmount: `₦${addCommas(7000)}`,
+		transactionType: "loan-disbursement",
+	},
+];
 
 type TabType = "Top Performing" | "Recent Transactions";
 
@@ -34,38 +111,6 @@ export default function KidashiDashboard({
 }: KidashiDashboardProps) {
 	const [activeTab, setActiveTab] = useState<TabType>("Top Performing");
 	const [showBottomSheet, setShowBottomSheet] = useState(false);
-
-	const overview: KidashiHomeCardProps["items"] = [
-		{
-			title: "Running Assets",
-			value: "0",
-			backgroundColor: Colors.neutral["50"],
-			titleColor: Colors.neutral["400"],
-			descriptionColor: Colors.black,
-		},
-		{
-			title: "Overdue Payments",
-			value: "₦0.00",
-			backgroundColor: Colors.success["100"],
-			titleColor: Colors.success["400"],
-			descriptionColor: Colors.success["700"],
-		},
-	];
-
-	const emptyStateData: Record<TabType, KidashiDashboardEmptyStateProps> = {
-		"Top Performing": {
-			icon: ScreenImages.kidashiHome.noTrustCircles,
-			title: "Your top circles will grow here",
-			description:
-				"Circles with high repayments and will appear here once your members stay consistent",
-		},
-		"Recent Transactions": {
-			icon: ScreenImages.kidashiHome.noTransactions,
-			title: "No Transactions yet",
-			description:
-				"When loans are created or payments are made, you’ll see them listed here",
-		},
-	};
 
 	return (
 		<KidashiLayout
@@ -115,7 +160,30 @@ export default function KidashiDashboard({
 				onTap={(value) => setActiveTab(value as TabType)}
 			/>
 
-			<KidashiDashboardEmptyState {...emptyStateData[activeTab]} />
+			<FlatList<ITrustCircleItem | IMemberTransaction>
+				data={
+					activeTab === "Recent Transactions"
+						? dummyMemberTransactionData
+						: dummyTrustCircleData
+				}
+				renderItem={({ item, index }) =>
+					activeTab === "Recent Transactions" ? (
+						<MemberTransactionCard
+							item={item as IMemberTransaction}
+							isLastItem={index === dummyMemberTransactionData.length - 1}
+						/>
+					) : (
+						<TrustCircleItemCard
+							item={item as ITrustCircleItem}
+							isLastItem={index === dummyTrustCircleData.length - 1}
+						/>
+					)
+				}
+				keyExtractor={(_, index) => index.toString()}
+				ListEmptyComponent={
+					<KidashiDashboardEmptyState {...emptyStateData[activeTab]} />
+				}
+			/>
 
 			<Pressable
 				onPress={() => setShowBottomSheet(true)}

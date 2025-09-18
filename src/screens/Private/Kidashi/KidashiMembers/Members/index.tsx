@@ -4,16 +4,15 @@ import { CompositeScreenProps } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
 import { Button, Typography } from "@components/Forms";
-import { KidashiLayout, Row } from "@components/Layout";
+import { KidashiLayout } from "@components/Layout";
 import ScreenImages from "@assets/images/screens";
-import { KidashiHomeCardProps } from "@components/Cards/KidashiHomeCard";
 import Colors from "@theme/Colors";
-import Pad from "@components/Pad";
-import { KidashiDashboardEmptyState } from "@components/Miscellaneous";
+import {
+	KidashiDashboardEmptyState,
+	SearchContainer,
+} from "@components/Miscellaneous";
 import { KidashiDashboardEmptyStateProps } from "@components/Miscellaneous/KidashiDashboardEmptyState";
 import { HomeStackParamList, MembersStackParamList } from "@navigation/types";
-
-type TabType = "Top Performing" | "Recent Transactions";
 
 type KidashiMembersProps = CompositeScreenProps<
 	StackScreenProps<MembersStackParamList, "Members">,
@@ -23,38 +22,13 @@ type KidashiMembersProps = CompositeScreenProps<
 export default function Members({
 	navigation: { navigate },
 }: KidashiMembersProps) {
-	const [activeTab, setActiveTab] = useState<TabType>("Top Performing");
+	const [searchText, setSearchText] = useState("");
 
-	const overview: KidashiHomeCardProps["items"] = [
-		{
-			title: "Running Assets",
-			value: "0",
-			backgroundColor: Colors.neutral["50"],
-			titleColor: Colors.neutral["400"],
-			descriptionColor: Colors.black,
-		},
-		{
-			title: "Overdue Payments",
-			value: "₦0.00",
-			backgroundColor: Colors.success["100"],
-			titleColor: Colors.success["400"],
-			descriptionColor: Colors.success["700"],
-		},
-	];
-
-	const emptyStateData: Record<TabType, KidashiDashboardEmptyStateProps> = {
-		"Top Performing": {
-			icon: ScreenImages.kidashiHome.noTrustCircles,
-			title: "Your top circles will grow here",
-			description:
-				"Circles with high repayments and will appear here once your members stay consistent",
-		},
-		"Recent Transactions": {
-			icon: ScreenImages.kidashiHome.noTransactions,
-			title: "No Transactions yet",
-			description:
-				"When loans are created or payments are made, you’ll see them listed here",
-		},
+	const emptyStateData: KidashiDashboardEmptyStateProps = {
+		icon: ScreenImages.kidashiHome.searchIcon,
+		title: "Find members",
+		description:
+			"Start typing a Phone No, Account No or NIN to search for members",
 	};
 
 	return (
@@ -68,13 +42,14 @@ export default function Members({
 			}
 			rightAction={() => navigate("Dashboard")}
 		>
-			<Button
-				title='Member Details'
-				onPress={() => navigate("MemberDetails")}
+			<SearchContainer
+				searchText={searchText}
+				setSearchText={setSearchText}
+				onSearch={() => {}}
+				placeholder='Phone, Account no or NIN'
 			/>
-			<Pad size={16} />
-
-			<KidashiDashboardEmptyState {...emptyStateData[activeTab]} />
+			<Button title='Add Member' onPress={() => navigate("MemberDetails")} />
+			<KidashiDashboardEmptyState {...emptyStateData} />
 		</KidashiLayout>
 	);
 }

@@ -1,8 +1,8 @@
-import { View, Text, ScrollView, Pressable, Image } from "react-native";
+import { View, Image } from "react-native";
 import React from "react";
 import { styles } from "./style";
 import ScreenImages from "@assets/images/screens";
-import { Button, Typography } from "@components/Forms";
+import { Typography } from "@components/Forms";
 import Colors from "@theme/Colors";
 import { scale, scaleHeight } from "@utils/Helpers";
 import Divider from "@components/Miscellaneous/Divider";

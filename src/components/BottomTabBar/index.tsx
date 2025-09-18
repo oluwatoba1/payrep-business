@@ -111,14 +111,28 @@ const TabItem = ({
 };
 
 export default function BottomTabBar({ state, navigation }: BottomTabBarProps) {
-	console.log(state.routes);
-	console.log(state.index);
-	if (state.index === 4) return null;
-	if (
-		!!state.routes[state.index].state?.index ||
-		!!state.routes[state.index].params
-	)
-		return null;
+
+	const bottomNavigationRoutesList = [
+		"Dashboard",
+		"TransactionHistory",
+		"SupportScreen",
+		"SavingsScreen",
+		"Profile",
+	];
+
+	const bottomTabResolver = (): boolean => {
+		const currentRoute = state.routes[state.index];
+
+		if (!currentRoute.state?.routes || currentRoute.state?.index === undefined)
+			return true;
+		const landingScreen = bottomNavigationRoutesList.includes(
+			(currentRoute.state?.routes[currentRoute.state?.index] as any)?.name
+		);
+
+		return landingScreen;
+	};
+
+	if (!bottomTabResolver()) return null;
 
 	return (
 		<View style={[styles.container]}>
