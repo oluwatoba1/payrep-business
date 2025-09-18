@@ -14,15 +14,16 @@ const styles = StyleSheet.create({
 		width:
 			(width - 2 * scale(MAIN_LAYOUT_HORIZONTAL_PADDING) - scale(12 * 1)) / 2,
 	},
-	valueContainer: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-	},
 	chevronRightIcon: {
 		width: scale(16),
 		height: scale(16),
 		resizeMode: "contain",
+	},
+	dot: {
+		width: scale(12),
+		height: scale(12),
+		borderRadius: "100%",
+		backgroundColor: Colors.primary[600],
 	},
 });
 

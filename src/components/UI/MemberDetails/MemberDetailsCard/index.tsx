@@ -4,51 +4,86 @@ import styles from "./styles";
 import { Typography } from "@components/Forms";
 import ScreenImages from "@assets/images/screens";
 import Divider from "@components/Miscellaneous/Divider";
-import { scale, scaleHeight } from "@utils/Helpers";
+import { formatCurrency, scale, scaleHeight } from "@utils/Helpers";
+import Colors from "@theme/Colors";
 
 interface CardProps {
 	title: string;
-	value: string;
+	value: number;
 	backgroundColor: string;
 	titleColor: string;
 	descriptionColor: string;
 	onPress?: () => void;
+	isOutstanding?: boolean;
 }
 
-export interface MemberDetailsCardProps {
-	items: CardProps[];
-}
+const OutstandingCard = () => {
+	const isNegative = true;
+	return (
+		<Pressable
+			onPress={() => {}}
+			style={[
+				styles.card,
+				{
+					backgroundColor: isNegative
+						? Colors.danger["100"]
+						: Colors.success["100"],
+				},
+			]}
+		>
+			<Typography
+				title='Outstanding'
+				type='label-sb'
+				color={isNegative ? Colors.danger["400"] : Colors.success["400"]}
+			/>
 
-const Card = ({
-	title,
-	value,
-	backgroundColor,
-	titleColor,
-	descriptionColor,
-	onPress,
-}: CardProps) => (
-	<Pressable onPress={onPress} style={[styles.card, { backgroundColor }]}>
-		<Typography title={title} type='label-sb' color={titleColor} />
-		<View style={styles.valueContainer}>
-			<Typography title={value} type='body-sb' color={descriptionColor} />
-			{onPress && (
+			<Typography
+				title={formatCurrency(10)}
+				type='body-sb'
+				color={Colors.black}
+			/>
+		</Pressable>
+	);
+};
+
+const AssetsCard = () => {
+	const isOngoing = true;
+	return (
+		<Pressable
+			onPress={() => {}}
+			style={[styles.card, { backgroundColor: Colors.neutral["50"] }]}
+		>
+			<Typography
+				title='Assets'
+				type='label-sb'
+				color={Colors.neutral["400"]}
+			/>
+			<Row>
+				<Row gap={scale(4)}>
+					<View style={styles.dot} />
+					<Typography
+						title={isOngoing ? "2 Ongoing" : "0"}
+						type='body-sb'
+						color={Colors.black}
+					/>
+				</Row>
+
 				<Image
 					style={styles.chevronRightIcon}
 					source={ScreenImages.kidashiMemberDetails.chevronRightIcon}
 				/>
-			)}
-		</View>
-	</Pressable>
-);
+			</Row>
+		</Pressable>
+	);
+};
 
-const MemberDetailsCard = ({ items }: MemberDetailsCardProps) => {
+const MemberDetailsCard = () => {
 	return (
 		<View>
 			<Divider gapY={scaleHeight(10)} gapX={scale(-10)} />
 			<Row containerStyle={styles.cardContainer}>
-				{items.map((item, i) => (
-					<Card key={i} {...item} />
-				))}
+				<AssetsCard />
+				<OutstandingCard />
 			</Row>
 			<Divider gapY={scaleHeight(10)} gapX={scale(-10)} />
 		</View>

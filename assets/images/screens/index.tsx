@@ -78,6 +78,9 @@ const ScreenImages = {
 		infoIcon: require("./Kidashi/MemberDetails/info.png"),
 		chevronRightIcon: require("./Kidashi/MemberDetails/chevron-right.png"),
 		arrowRightIcon: require("./Kidashi/MemberDetails/arrow-right.png"),
+		debitIcon: require("./Kidashi/MemberDetails/debit.png"),
+		creditIcon: require("./Kidashi/MemberDetails/credit.png"),
+		debitCreditIcon: require("./Kidashi/MemberDetails/tran.png"),
 	},
 };
 

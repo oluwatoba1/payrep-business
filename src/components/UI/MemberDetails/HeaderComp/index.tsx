@@ -3,6 +3,7 @@ import React from "react";
 import ScreenImages from "@assets/images/screens";
 import { Typography } from "@components/Forms";
 import { styles } from "./style";
+import Colors from "@theme/Colors";
 
 interface MemberDetailsHeaderCompProps {
 	userName?: string;
@@ -28,7 +29,7 @@ const MemberDetailsHeaderComp = ({
 
 			{/* User Name */}
 			<View style={styles.userNameContainer}>
-				<Typography title={userName} type='heading-sb' color='#000000' />
+				<Typography title={userName} type='heading-sb' color={Colors.black} />
 			</View>
 
 			{/* OTP Status Bar */}
@@ -44,9 +45,9 @@ const MemberDetailsHeaderComp = ({
 						resizeMode='contain'
 					/>
 					<Typography
-						title='OTP pending to join circle: Tap to manage verifiers'
+						title='OTP pend ing to join circle: Tap to manage verifiers'
 						type='label-r'
-						color='#8B4513'
+						color={Colors.cardColor.brown[200]}
 						style={styles.otpText}
 					/>
 					<Image
@@ -60,10 +61,10 @@ const MemberDetailsHeaderComp = ({
 			{/* Balance Section */}
 			<View style={styles.balanceContainer}>
 				<View style={styles.balanceContent}>
-					<Typography title='Balance' type='label-r' color='#828A8E' />
+					<Typography title='Balance' type='label-r' color={Colors.gray[700]} />
 				</View>
 				<View style={styles.balanceAmountContainer}>
-					<Typography title={balance} type='heading-sb' color='#000000' />
+					<Typography title={balance} type='heading-sb' color={Colors.black} />
 				</View>
 			</View>
 		</View>

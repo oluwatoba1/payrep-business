@@ -1,10 +1,196 @@
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 import React from "react";
 import EmptyState from "@components/Miscellaneous/EmptyState";
 import ScreenImages from "@assets/images/screens";
+import { MemberTransaction } from "./interface";
+import { styles } from "./style";
+import { Row } from "@components/Layout";
+import { scale, scaleHeight } from "@utils/Helpers";
+import { Typography } from "@components/Forms";
+import Colors from "@theme/Colors";
+import { Pressable, ScrollView } from "react-native-gesture-handler";
+import Divider from "@components/Miscellaneous/Divider";
 
-const MemberTransactions = () => {
-	const transactions = [];
+const TransactionCard = ({
+	transaction,
+	navigate,
+}: {
+	navigate: any;
+	transaction: MemberTransaction;
+}) => {
+	const iconStyle = [
+		styles.iconContainer,
+		transaction.type === "credit"
+			? styles.iconContainerCredit
+			: transaction.type === "debit"
+			? styles.iconContainerDebit
+			: styles.iconContainerUnknown,
+	];
+
+	return (
+		<Pressable
+			style={styles.container}
+			onPress={() => {
+				navigate("TransactionDetails");
+			}}
+		>
+			<Row>
+				<Row gap={scale(10)}>
+					<View style={iconStyle}>
+						<Image
+							source={
+								transaction.type === "credit"
+									? ScreenImages.kidashiMemberDetails.creditIcon
+									: transaction.type === "debit"
+									? ScreenImages.kidashiMemberDetails.debitIcon
+									: ScreenImages.kidashiMemberDetails.debitCreditIcon
+							}
+							style={styles.transactionIcon}
+						/>
+					</View>
+					<View>
+						<Typography title={transaction.title} type='subheading-sb' />
+						<Typography title={transaction.date} type='label-r' />
+					</View>
+				</Row>
+				<Typography
+					title={`${
+						transaction.type === "credit"
+							? "+ "
+							: transaction.type === "debit"
+							? "- "
+							: ""
+					}${transaction.amount}`}
+					type='body-b'
+					color={
+						transaction.type === "credit"
+							? Colors.success[600]
+							: transaction.type === "debit"
+							? Colors.danger[600]
+							: Colors.gray[700]
+					}
+				/>
+			</Row>
+			<Divider gapY={scaleHeight(10)} />
+		</Pressable>
+	);
+};
+
+const MemberTransactions = ({ navigate }: { navigate: any }) => {
+	const transactions: MemberTransaction[] = [
+		{
+			title: "Repayment",
+			amount: "₦100,000",
+			date: "Aug 01, 2025",
+			status: "successful",
+			type: "debit",
+		},
+		{
+			title: "Loan Disbursed",
+			amount: "₦300,000",
+			date: "Aug 01, 2025",
+			status: "successful",
+			type: "credit",
+		},
+		{
+			title: "Deposit",
+			amount: "₦150,000",
+			date: "Aug 01, 2025",
+			status: "successful",
+			type: "other",
+		},
+		{
+			title: "Repayment",
+			amount: "₦100,000",
+			date: "Aug 01, 2025",
+			status: "successful",
+			type: "debit",
+		},
+		{
+			title: "Loan Disbursed",
+			amount: "₦300,000",
+			date: "Aug 01, 2025",
+			status: "successful",
+			type: "credit",
+		},
+		{
+			title: "Deposit",
+			amount: "₦150,000",
+			date: "Aug 01, 2025",
+			status: "successful",
+			type: "other",
+		},
+		{
+			title: "Loan Disbursed",
+			amount: "₦300,000",
+			date: "Aug 01, 2025",
+			status: "successful",
+			type: "credit",
+		},
+		{
+			title: "Deposit",
+			amount: "₦150,000",
+			date: "Aug 01, 2025",
+			status: "successful",
+			type: "other",
+		},
+		{
+			title: "Repayment",
+			amount: "₦100,000",
+			date: "Aug 01, 2025",
+			status: "successful",
+			type: "debit",
+		},
+		{
+			title: "Loan Disbursed",
+			amount: "₦300,000",
+			date: "Aug 01, 2025",
+			status: "successful",
+			type: "credit",
+		},
+		{
+			title: "Deposit",
+			amount: "₦150,000",
+			date: "Aug 01, 2025",
+			status: "successful",
+			type: "other",
+		},
+		{
+			title: "Loan Disbursed",
+			amount: "₦300,000",
+			date: "Aug 01, 2025",
+			status: "successful",
+			type: "credit",
+		},
+		{
+			title: "Deposit",
+			amount: "₦150,000",
+			date: "Aug 01, 2025",
+			status: "successful",
+			type: "other",
+		},
+		{
+			title: "Repayment",
+			amount: "₦100,000",
+			date: "Aug 01, 2025",
+			status: "successful",
+			type: "debit",
+		},
+		{
+			title: "Loan Disbursed",
+			amount: "₦300,000",
+			date: "Aug 01, 2025",
+			status: "successful",
+			type: "credit",
+		},
+		{
+			title: "Deposit",
+			amount: "₦150,000",
+			date: "Aug 01, 2025",
+			status: "successful",
+			type: "other",
+		},
+	];
 
 	const hasTransactions = transactions.length > 0;
 
@@ -26,9 +212,15 @@ const MemberTransactions = () => {
 		);
 	}
 	return (
-		<View>
-			<Text>MemberTransactions</Text>
-		</View>
+		<ScrollView style={{ flex: 1 }}>
+			{transactions.map((transaction, index) => (
+				<TransactionCard
+					navigate={navigate}
+					key={index}
+					transaction={transaction}
+				/>
+			))}
+		</ScrollView>
 	);
 };
 
