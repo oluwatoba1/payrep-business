@@ -2,6 +2,20 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { MemberRegistrationStackParamList } from "../types";
+import {
+	MemberPhoneNumber,
+	MemberPhoneNumberVerification,
+	MemberEmail,
+	MemberEmailVerification,
+	MemberFaceCaptureVerification,
+	MemberLocationDetails,
+	MemberMeansOfIdentification,
+	MemberMeansOfVerification,
+	MemberPep,
+	MemberPersonalInformation,
+	MemberSourceOfIncome,
+	MemberSuccessScreen,
+} from "@screens/Private/Kidashi/KidashiHome/MemberRegistration";
 
 const Stack = createNativeStackNavigator<MemberRegistrationStackParamList>();
 
@@ -11,15 +25,45 @@ export default function MemberRegistrationStack() {
 			screenOptions={{ headerShown: false }}
 			initialRouteName='MemberPhoneNumber'
 		>
-			{/* <Stack.Screen name='VendorInformation' component={VendorInformation} />
-			<Stack.Screen name='KidashiOnboarding' component={KidashiOnboarding} />
-			<Stack.Screen name='VendorItems' component={VendorItems} />
-			<Stack.Screen name='GuarantorDetails' component={GuarantorDetails} />
-			<Stack.Screen name='ReviewDetails' component={ReviewDetails} />
-			<Stack.Screen name='OnboardingSuccess' component={OnboardingSuccess} />
-			<Stack.Screen name='OnboardingStatus' component={OnboardingStatus} /> */}
-
-			{/* Add screeens for trust cycle */}
+			<Stack.Screen name='MemberPhoneNumber' component={MemberPhoneNumber} />
+			<Stack.Screen
+				name='MemberPhoneNumberVerification'
+				component={MemberPhoneNumberVerification}
+			/>
+			<Stack.Screen name='MemberEmail' component={MemberEmail} />
+			<Stack.Screen
+				name='MemberEmailVerification'
+				component={MemberEmailVerification}
+			/>
+			<Stack.Screen
+				name='MemberMeansOfVerification'
+				component={MemberMeansOfVerification}
+			/>
+			<Stack.Screen
+				name='MemberFaceCaptureVerification'
+				component={MemberFaceCaptureVerification}
+			/>
+			<Stack.Screen
+				name='MemberPersonalInformation'
+				component={MemberPersonalInformation}
+			/>
+			<Stack.Screen
+				name='MemberLocationDetails'
+				component={MemberLocationDetails}
+			/>
+			<Stack.Screen
+				name='MemberMeansOfIdentification'
+				component={MemberMeansOfIdentification}
+			/>
+			<Stack.Screen name='MemberPep' component={MemberPep} />
+			<Stack.Screen
+				name='MemberSourceOfIncome'
+				component={MemberSourceOfIncome}
+			/>
+			<Stack.Screen
+				name='MemberSuccessScreen'
+				component={MemberSuccessScreen}
+			/>
 		</Stack.Navigator>
 	);
 }

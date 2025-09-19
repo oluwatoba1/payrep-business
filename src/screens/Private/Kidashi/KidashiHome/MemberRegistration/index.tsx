@@ -4,6 +4,7 @@ export { default as MemberEmail } from "./MemberEmail";
 export { default as MemberEmailVerification } from "./MemberEmailVerification";
 export { default as MemberMeansOfVerification } from "./MemberMeansOfVerification";
 export { default as MemberFaceCaptureVerification } from "./MemberFaceCaptureVerification";
+export { default as MemberLocationDetails } from "./MemberLocationDetails";
 export { default as MemberPersonalInformation } from "./MemberPersonalInformation";
 export { default as MemberMeansOfIdentification } from "./MemberMeansOfIdentification";
 export { default as MemberPep } from "./MemberPep";

@@ -119,6 +119,7 @@ export type MemberRegistrationStackParamList = {
 	MemberMeansOfVerification: undefined;
 	MemberFaceCaptureVerification: undefined;
 	MemberPersonalInformation: undefined;
+	MemberLocationDetails: undefined;
 	MemberMeansOfIdentification: undefined;
 	MemberPep: undefined;
 	MemberSourceOfIncome: undefined;
