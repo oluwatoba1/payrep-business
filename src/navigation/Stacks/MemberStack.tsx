@@ -3,6 +3,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { MembersStackParamList } from "../types";
 import { Members } from "@screens/Private/Kidashi/KidashiMembers";
+import MemberDetails from "@screens/Private/Kidashi/KidashiMembers/MemberDetails";
+import TransactionDetails from "@screens/Private/Kidashi/KidashiMembers/MemberDetails/TransactionDetails";
 
 const Stack = createNativeStackNavigator<MembersStackParamList>();
 
@@ -13,6 +15,8 @@ export default function MembersStack() {
 			initialRouteName='Members'
 		>
 			<Stack.Screen name='Members' component={Members} />
+			<Stack.Screen name='MemberDetails' component={MemberDetails} />
+			<Stack.Screen name='TransactionDetails' component={TransactionDetails} />
 		</Stack.Navigator>
 	);
 }

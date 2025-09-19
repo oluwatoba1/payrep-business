@@ -3,7 +3,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
-import { Typography } from "@components/Forms";
+import { Button, Typography } from "@components/Forms";
 import { KidashiLayout } from "@components/Layout";
 import ScreenImages from "@assets/images/screens";
 import Colors from "@theme/Colors";
@@ -48,6 +48,7 @@ export default function Members({
 				onSearch={() => {}}
 				placeholder='Phone, Account no or NIN'
 			/>
+			<Button title='Add Member' onPress={() => navigate("MemberDetails")} />
 			<KidashiDashboardEmptyState {...emptyStateData} />
 		</KidashiLayout>
 	);

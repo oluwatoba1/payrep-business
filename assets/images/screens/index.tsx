@@ -74,6 +74,19 @@ const ScreenImages = {
 		peopleIcon: require("./Kidashi/CreateTrustCircle/people.png"),
 		buildIcon: require("./Kidashi/CreateTrustCircle/build.png"),
 	},
+	kidashiMemberDetails: {
+		userPlaceholder: require("./Kidashi/MemberDetails/user.png"),
+		transactionIcon: require("./Kidashi/MemberDetails/payment.png"),
+		backIcon: require("./Kidashi/MemberDetails/back.png"),
+		infoIcon: require("./Kidashi/MemberDetails/info.png"),
+		chevronRightIcon: require("./Kidashi/MemberDetails/chevron-right.png"),
+		arrowRightIcon: require("./Kidashi/MemberDetails/arrow-right.png"),
+		debitIcon: require("./Kidashi/MemberDetails/debit.png"),
+		creditIcon: require("./Kidashi/MemberDetails/credit.png"),
+		debitCreditIcon: require("./Kidashi/MemberDetails/tran.png"),
+		checkIcon: require("./Kidashi/MemberDetails/check.png"),
+		downloadIcon: require("./Kidashi/MemberDetails/download.png"),
+	},
 };
 
 export default ScreenImages;
