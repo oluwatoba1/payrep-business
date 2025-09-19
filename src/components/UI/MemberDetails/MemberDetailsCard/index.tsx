@@ -46,11 +46,13 @@ const OutstandingCard = () => {
 	);
 };
 
-const AssetsCard = () => {
+const AssetsCard = ({ navigate }: { navigate: (screen: string) => void }) => {
 	const isOngoing = true;
 	return (
 		<Pressable
-			onPress={() => {}}
+			onPress={() => {
+				navigate("Assets");
+			}}
 			style={[styles.card, { backgroundColor: Colors.neutral["50"] }]}
 		>
 			<Typography
@@ -77,12 +79,16 @@ const AssetsCard = () => {
 	);
 };
 
-const MemberDetailsCard = () => {
+const MemberDetailsCard = ({
+	navigate,
+}: {
+	navigate: (screen: string) => void;
+}) => {
 	return (
 		<View>
 			<Divider gapY={scaleHeight(10)} gapX={scale(-10)} />
 			<Row containerStyle={styles.cardContainer}>
-				<AssetsCard />
+				<AssetsCard navigate={navigate} />
 				<OutstandingCard />
 			</Row>
 			<Divider gapY={scaleHeight(10)} gapX={scale(-10)} />

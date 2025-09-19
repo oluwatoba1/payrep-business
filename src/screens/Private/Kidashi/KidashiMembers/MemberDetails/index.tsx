@@ -23,7 +23,7 @@ const MemberDetails = ({ navigation: { navigate } }: MemberDetailsProps) => {
 	return (
 		<SafeAreaWrapper title='Member Details'>
 			<MemberDetailsHeaderComp />
-			<MemberDetailsCard />
+			<MemberDetailsCard navigate={navigate} />
 			<Tab
 				items={["Transactions", "More details", "Account Info"]}
 				value={activeTab}
