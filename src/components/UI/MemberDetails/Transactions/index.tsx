@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, FlatList } from "react-native";
 import React from "react";
 import EmptyState from "@components/Miscellaneous/EmptyState";
 import ScreenImages from "@assets/images/screens";
@@ -8,7 +8,7 @@ import { Row } from "@components/Layout";
 import { scale, scaleHeight } from "@utils/Helpers";
 import { Typography } from "@components/Forms";
 import Colors from "@theme/Colors";
-import { Pressable, ScrollView } from "react-native-gesture-handler";
+import { Pressable } from "react-native-gesture-handler";
 import Divider from "@components/Miscellaneous/Divider";
 
 const TransactionCard = ({
@@ -212,15 +212,14 @@ const MemberTransactions = ({ navigate }: { navigate: any }) => {
 		);
 	}
 	return (
-		<ScrollView style={{ flex: 1 }}>
-			{transactions.map((transaction, index) => (
-				<TransactionCard
-					navigate={navigate}
-					key={index}
-					transaction={transaction}
-				/>
-			))}
-		</ScrollView>
+		<FlatList<MemberTransaction>
+			data={transactions}
+			keyExtractor={(_, index) => index.toString()}
+			renderItem={({ item }) => (
+				<TransactionCard navigate={navigate} transaction={item} />
+			)}
+			contentContainerStyle={{ flexGrow: 1 }}
+		/>
 	);
 };
 

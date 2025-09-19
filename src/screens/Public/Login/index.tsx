@@ -7,7 +7,6 @@ import {
 	BackHandler,
 	Alert,
 	Platform,
-	KeyboardAvoidingView,
 } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import DeviceInfo from "react-native-device-info";
@@ -42,8 +41,6 @@ import { PNB } from "@theme/Fonts";
 import Colors from "@theme/Colors";
 import { useFocusEffect } from "@react-navigation/native";
 import Pad from "@components/Pad";
-import MemberDetails from "@screens/Private/Kidashi/KidashiMembers/MemberDetails";
-import { TransactionDetails } from "@screens/Private/Kidashi/KidashiMembers";
 
 type LoginProps = StackScreenProps<PublicNavigatorParamList, "Login">;
 
@@ -291,8 +288,6 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 			return () => backHandler.remove(); // Cleanup
 		}, [])
 	);
-
-	return <TransactionDetails />;
 
 	return (
 		<AuthLayout isLoading={isLoading}>
