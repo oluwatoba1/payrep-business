@@ -7,22 +7,26 @@ import {
 	TextInput,
 } from "react-native";
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
 import ScreenImages from "@assets/images/screens";
 import { styles } from "./style";
 import { Button, Typography } from "@components/Forms";
 import Colors from "@theme/Colors";
 import Pad from "@components/Pad";
+import { StackScreenProps } from "@react-navigation/stack";
+import { TrustCircleStackParamList } from "@navigation/types";
 
-const CircleName = () => {
-	const navigation = useNavigation();
+type CircleNameProps = StackScreenProps<
+	TrustCircleStackParamList,
+	"CircleName"
+>;
+
+export default function CircleName({
+	navigation: { navigate, goBack },
+}: CircleNameProps) {
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.header}>
-				<Pressable
-					onPress={() => navigation.goBack()}
-					style={styles.backButton}
-				>
+				<Pressable onPress={goBack} style={styles.backButton}>
 					<Image
 						source={ScreenImages.kidashiCreateTrustCircles.backIcon}
 						style={styles.backIcon}
@@ -55,9 +59,7 @@ const CircleName = () => {
 				<Pad size={10} />
 			</View>
 			<View style={{ flex: 1 }} />
-			<Button title='Create Trust Circle' onPress={() => {}} />
+			<Button title='Create Trust Circle' onPress={() => navigate("TrustCircleDetails")} />
 		</SafeAreaView>
 	);
-};
-
-export default CircleName;
+}

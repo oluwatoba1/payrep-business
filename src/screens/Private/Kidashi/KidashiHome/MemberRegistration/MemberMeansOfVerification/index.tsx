@@ -1,19 +1,26 @@
+import { BackHandler } from "react-native";
+import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { StackScreenProps } from "@react-navigation/stack";
+
+import useBvnVerificationValidation from "./validator";
 import { Button, Dropdown, TextInput } from "@components/Forms";
 import { MainLayout } from "@components/Layout";
 import Pad from "@components/Pad";
-import { StackScreenProps } from "@react-navigation/stack";
-import useBvnVerificationValidation from "./validator";
 import {
 	useBvnLookupMutation,
 	useNinLookupMutation,
 } from "@store/apis/complianceApi";
 import { useAppDispatch } from "@store/hooks";
 import useToast from "@hooks/useToast";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import { IsThisYouModal } from "@components/Modal";
 import { updateBvnData, updateNinData } from "@store/slices/complianceSlice";
-import { MemberRegistrationStackParamList } from "@navigation/types";
+import {
+	KidashiHomeStackParamList,
+	MemberRegistrationStackParamList,
+} from "@navigation/types";
 
 interface IKycData {
 	customer: string;
@@ -28,9 +35,12 @@ interface IKycData {
 	gender: string;
 }
 
-type MemberMeansOfVerificationProps = StackScreenProps<
-	MemberRegistrationStackParamList,
-	"MemberMeansOfVerification"
+type MemberMeansOfVerificationProps = CompositeScreenProps<
+	StackScreenProps<
+		MemberRegistrationStackParamList,
+		"MemberMeansOfVerification"
+	>,
+	BottomTabScreenProps<KidashiHomeStackParamList, "KidashiDashboard">
 >;
 
 export default function MemberMeansOfVerification({
@@ -169,11 +179,27 @@ export default function MemberMeansOfVerification({
 		navigate("MemberFaceCaptureVerification");
 	};
 
+	const backAction = () => {
+		navigate("KidashiDashboard");
+		return true; // Prevent default behavior
+	};
+
+	useFocusEffect(
+		useCallback(() => {
+			const backHandler = BackHandler.addEventListener(
+				"hardwareBackPress",
+				backAction
+			);
+
+			return () => backHandler.remove(); // Cleanup
+		}, [])
+	);
+
 	return (
 		<MainLayout
 			rightTitle='KYC Registration'
 			isLoading={isBvnLoading || isNinLoading}
-			backAction={() => canGoBack() && goBack()}
+			backAction={backAction}
 		>
 			<IsThisYouModal
 				title={kycData.first_name + " " + kycData.last_name}

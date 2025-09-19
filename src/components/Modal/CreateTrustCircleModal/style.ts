@@ -31,13 +31,10 @@ export const styles = StyleSheet.create({
 		paddingHorizontal: scale(10),
 		paddingBottom: scaleHeight(16),
 	},
-	optionItem: {
-		// paddingVertical: scaleHeight(16),
-	},
 	optionContent: {
 		flexDirection: "row",
 		alignItems: "center",
-		paddingVertical: scaleHeight(8),
+		paddingVertical: scaleHeight(16),
 	},
 	iconContainer: {
 		width: scale(40),
@@ -51,7 +48,7 @@ export const styles = StyleSheet.create({
 	optionIcon: {
 		width: scale(16),
 		height: scale(16),
-		tintColor: Colors.gray[400],
+		tintColor: Colors.neutral[700],
 		resizeMode: "contain",
 	},
 	textContainer: {

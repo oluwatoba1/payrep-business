@@ -14,6 +14,7 @@ import useToast from "@hooks/useToast";
 import { useVerifyEmailMutation } from "@store/apis/authApi";
 import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import Pad from "@components/Pad";
 
 type MemberEmailProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberEmail">,
@@ -43,13 +44,13 @@ export default function MemberEmail({
 		navigate("MemberMeansOfVerification");
 	};
 
+	const backAction = () => {
+		navigate("KidashiDashboard");
+		return true; // Prevent default behavior
+	};
+
 	useFocusEffect(
 		useCallback(() => {
-			const backAction = () => {
-				navigate("KidashiDashboard");
-				return true; // Prevent default behavior
-			};
-
 			const backHandler = BackHandler.addEventListener(
 				"hardwareBackPress",
 				backAction
@@ -60,7 +61,7 @@ export default function MemberEmail({
 	);
 
 	return (
-		<MainLayout backAction={() => {}} isLoading={isLoading}>
+		<MainLayout backAction={backAction} isLoading={isLoading}>
 			<Typography title='Provide your Email Address' type='heading4-sb' />
 			<Typography
 				title='Please enter a valid email address'
@@ -76,9 +77,11 @@ export default function MemberEmail({
 				error={formErrors.email}
 			/>
 
+			<Pad size={176} />
+
 			<Button
 				title='Continue'
-				onPress={() => navigate("MemberMeansOfVerification")}
+				onPress={() => navigate("MemberEmailVerification")}
 			/>
 		</MainLayout>
 	);

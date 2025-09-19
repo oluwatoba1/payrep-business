@@ -98,7 +98,10 @@ export default function MemberPep({
 
 			<Pad size={40} />
 
-			<Button title='Save' onPress={submit} />
+			<Button
+				title='Continue'
+				onPress={() => navigate("MemberSourceOfIncome")}
+			/>
 		</MainLayout>
 	);
 }

@@ -1,6 +1,12 @@
 import { Row } from "@components/Layout";
 
-import { Image, Pressable, View, TouchableOpacity } from "react-native";
+import {
+	Image,
+	Pressable,
+	View,
+	TouchableOpacity,
+	ImageSourcePropType,
+} from "react-native";
 import { Typography } from "@components/Forms";
 import ScreenImages from "@assets/images/screens";
 import Colors from "@theme/Colors";
@@ -10,48 +16,28 @@ import { ModalWrapper } from "..";
 import Divider from "@components/Miscellaneous/Divider";
 import { scaleHeight } from "@utils/Helpers";
 
+export interface CircleOptions {
+	label: string;
+	sub: string;
+	icon: ImageSourcePropType;
+	onPress: () => void;
+}
+
 interface CreateTrustCircleModalProps {
 	visible: boolean;
 	onClose: () => void;
+	options: CircleOptions[];
 }
 
 export default function CreateTrustCircleModal({
 	visible,
 	onClose,
+	options,
 }: CreateTrustCircleModalProps) {
 	const { navigate } = useNavigation();
-	const modalContentData = [
-		{
-			label: "Create a PayRep Account",
-			sub: "Open a main account for your member to use",
-			icon: ScreenImages.kidashiHome.createAccount,
-			onPress: () => {
-				// navigate("CreatePayRepAccount");
-			},
-		},
-		{
-			label: "Join Kidashi Program",
-			sub: "Enroll a member on Kidashi",
-			icon: ScreenImages.kidashiHome.joinKidashi,
-			onPress: () => {
-				// navigate("JoinKidashiProgram");
-			},
-		},
-		{
-			label: "Create a Trust Circle",
-			sub: "Set up a new group for loans",
-			icon: ScreenImages.kidashiHome.createTrustCircle,
-			onPress: () => {
-				navigate("CreateTrustCircles" as never);
-			},
-		},
-	];
+
 	return (
-		<ModalWrapper
-			visible={visible}
-			onClose={onClose}
-			// dismissOnTouchOutside={true}
-		>
+		<ModalWrapper visible={visible} onClose={onClose}>
 			<View style={styles.container}>
 				{/* Header */}
 				<View style={styles.header}>
@@ -71,10 +57,9 @@ export default function CreateTrustCircleModal({
 
 				{/* Options List */}
 				<View style={styles.optionsContainer}>
-					{modalContentData.map((item, index) => (
+					{options.map((item, index) => (
 						<TouchableOpacity
 							key={index}
-							style={styles.optionItem}
 							onPress={item.onPress}
 							activeOpacity={0.7}
 						>
@@ -99,9 +84,7 @@ export default function CreateTrustCircleModal({
 									style={styles.arrowIcon}
 								/>
 							</View>
-							{index < modalContentData.length - 1 && (
-								<Divider gapY={scaleHeight(16)} />
-							)}
+							{index < options.length - 1 && <Divider gapY={scaleHeight(0)} />}
 						</TouchableOpacity>
 					))}
 				</View>

@@ -56,10 +56,14 @@ export type KidashiHomeStackParamList = {
 	KidashiDashboard: undefined;
 	CreateTrustCircles: undefined;
 	CircleName: undefined;
+	MemberRegistration: NavigatorScreenParams<MemberRegistrationStackParamList>;
 };
 
 export type TrustCircleStackParamList = {
 	TrustCircles: undefined;
+	TrustCircleDetails: undefined;
+	CreateTrustCircle: undefined;
+	CircleName: undefined;
 };
 
 export type MembersStackParamList = {

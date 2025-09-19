@@ -147,16 +147,6 @@ export default function MemberLocationDetails({
 
 			<Pad />
 
-			<TextInput
-				label='Residential Address'
-				placeholder='Enter your address'
-				onChangeText={setResidentialAddress}
-				value={formData.residentialAddress}
-				error={formErrors.residentialAddress}
-			/>
-
-			<Pad />
-
 			{/* Country Dropdown */}
 			<Dropdown
 				label='Country'
@@ -215,6 +205,16 @@ export default function MemberLocationDetails({
 				}}
 				error={formErrors.lga}
 				isLoading={lgasLoading}
+			/>
+
+			<Pad />
+
+			<TextInput
+				label='Residential Address'
+				placeholder='Enter your address'
+				onChangeText={setResidentialAddress}
+				value={formData.residentialAddress}
+				error={formErrors.residentialAddress}
 			/>
 
 			<Pad size={40} />

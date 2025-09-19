@@ -14,6 +14,7 @@ import {
 } from "@store/apis/authApi";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import { HasPersonalProfileModal } from "@components/Modal";
+import Pad from "@components/Pad";
 
 type MemberPhoneNumberProps = StackScreenProps<
 	MemberRegistrationStackParamList,
@@ -80,7 +81,7 @@ export default function MemberPhoneNumber({
 					})
 				);
 				if (data.stage == "NEW_USER") {
-					navigate("MemberPhoneNumberVerification" );
+					navigate("MemberPhoneNumberVerification");
 					return;
 				}
 				handleNavigation(data.stage);
@@ -124,30 +125,29 @@ export default function MemberPhoneNumber({
 				onSubmit={_clonePersonalProfile}
 			/>
 
+			<Typography title='Create your Account' type='heading4-sb' />
+			<Typography
+				title='Register with a number you have access to'
+				type='subheading'
+			/>
 
+			<TextInput
+				type='phone'
+				label='Mobile Number'
+				keyboardType='numeric'
+				placeholder='Ex: 08123456789'
+				value={mobileNumber}
+				onChangeText={setMobileNumber}
+				maxLength={11}
+				error={formErrors.mobileNumber}
+			/>
 
-					<Typography title='Create your Account' type='heading4-sb' />
-					<Typography
-						title='Register with a number you have access to'
-						type='subheading'
-					/>
+			<Pad size={176} />
 
-
-					<TextInput
-						type='phone'
-						label='Mobile Number'
-						keyboardType='numeric'
-						placeholder='Ex: 08123456789'
-						value={mobileNumber}
-						onChangeText={setMobileNumber}
-						maxLength={11}
-						error={formErrors.mobileNumber}
-					/>
-
-
-					<Button title='Continue' onPress={() => validateForm(submit)} />
-
-
+			<Button
+				title='Continue'
+				onPress={() => navigate("MemberPhoneNumberVerification")}
+			/>
 		</MainLayout>
 	);
 }

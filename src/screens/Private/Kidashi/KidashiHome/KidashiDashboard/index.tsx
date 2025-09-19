@@ -17,7 +17,9 @@ import { KidashiDashboardEmptyState } from "@components/Miscellaneous";
 import { KidashiDashboardEmptyStateProps } from "@components/Miscellaneous/KidashiDashboardEmptyState";
 import {
 	HomeStackParamList,
+	KidashiBottomTabParamList,
 	KidashiHomeStackParamList,
+	TrustCircleStackParamList,
 } from "@navigation/types";
 import CreateTrustCircleModal from "@components/Modal/CreateTrustCircleModal";
 import { addCommas } from "@utils/Helpers";
@@ -103,7 +105,10 @@ type TabType = "Top Performing" | "Recent Transactions";
 
 type KidashiDashboardProps = CompositeScreenProps<
 	StackScreenProps<KidashiHomeStackParamList, "KidashiDashboard">,
-	BottomTabScreenProps<HomeStackParamList, "Dashboard">
+	CompositeScreenProps<
+		BottomTabScreenProps<HomeStackParamList, "Dashboard">,
+		BottomTabScreenProps<KidashiBottomTabParamList, "Trust Circles">
+	>
 >;
 
 export default function KidashiDashboard({
@@ -111,6 +116,22 @@ export default function KidashiDashboard({
 }: KidashiDashboardProps) {
 	const [activeTab, setActiveTab] = useState<TabType>("Top Performing");
 	const [showBottomSheet, setShowBottomSheet] = useState(false);
+
+	const options = [
+		{
+			label: "Create a Trust Circle",
+			sub: "Set up a new group for loans",
+			icon: ScreenImages.kidashiHome.createTrustCircle,
+			onPress: () => navigate("Trust Circles", { screen: "CreateTrustCircle" }),
+		},
+		{
+			label: "Add a New Member",
+			sub: "Create account or add to circle",
+			icon: ScreenImages.kidashiHome.joinKidashi,
+			onPress: () =>
+				navigate("MemberRegistration", { screen: "MemberPhoneNumber" }),
+		},
+	];
 
 	return (
 		<KidashiLayout
@@ -198,6 +219,7 @@ export default function KidashiDashboard({
 			<CreateTrustCircleModal
 				visible={showBottomSheet}
 				onClose={() => setShowBottomSheet(false)}
+				options={options}
 			/>
 		</KidashiLayout>
 	);

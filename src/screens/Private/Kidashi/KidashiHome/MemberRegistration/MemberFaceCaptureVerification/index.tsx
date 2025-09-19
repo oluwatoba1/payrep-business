@@ -202,7 +202,10 @@ export default function MemberFaceCaptureVerification({
 
 			<Pad size={100} />
 
-			<Button title='Capture' onPress={onSubmit} />
+			<Button
+				title='Capture'
+				onPress={() => navigate("MemberLocationDetails")}
+			/>
 		</MainLayout>
 	);
 }
