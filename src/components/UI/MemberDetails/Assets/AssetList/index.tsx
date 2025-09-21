@@ -11,6 +11,8 @@ import ProgressBar from "@components/Forms/ProgressBar";
 import Pad from "@components/Pad";
 import { AssetItem, assetList } from "./mockData";
 import { getStatusColor } from "./utll";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { MembersStackParamList } from "@navigation/types";
 
 const TapReview = () => {
 	return (
@@ -34,9 +36,12 @@ const AssetCard = ({
 	amount,
 	progress,
 	date,
-}: AssetItem) => {
+	navigation,
+}: Omit<AssetItem, "navigate"> & {
+	navigation: NativeStackNavigationProp<MembersStackParamList>;
+}) => {
 	return (
-		<Pressable>
+		<Pressable onPress={() => navigation.navigate("AssetDetails")}>
 			<Row gap={scale(12)} alignItems='flex-start'>
 				<View style={styles.packageIconContainer}>
 					<Image
@@ -95,7 +100,13 @@ const AssetCard = ({
 	);
 };
 
-const AssetList = ({ status }: { status?: string }) => {
+const AssetList = ({
+	status,
+	navigation,
+}: {
+	status?: string;
+	navigation: any;
+}) => {
 	return (
 		<View style={{ flex: 1 }}>
 			<TextInput
@@ -114,7 +125,10 @@ const AssetList = ({ status }: { status?: string }) => {
 						? assetList.filter((item) => item.status === status)
 						: assetList
 				}
-				renderItem={({ item }) => <AssetCard {...item} />}
+				renderItem={({ item }) => (
+					<AssetCard {...item} navigation={navigation} />
+				)}
+				keyExtractor={(item) => item.id}
 			/>
 		</View>
 	);

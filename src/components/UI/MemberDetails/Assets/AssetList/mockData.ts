@@ -13,6 +13,7 @@ export interface AssetItem {
 	progress?: number;
 	date: string;
 	description?: string;
+	navigate?: (screen: string) => void;
 }
 
 export const assetList: AssetItem[] = [
