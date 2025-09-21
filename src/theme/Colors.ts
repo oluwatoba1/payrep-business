@@ -55,6 +55,11 @@ const Colors = {
 		600: "#2D3539",
 		700: "#161A1D",
 	},
+	pink: {
+		50: "#FFE0F0",
+		100: "#FF69B4",
+		200: "#FF1493",
+	},
 	white: "#FFFFFF",
 	black: "#000000",
 	appBackground: "#FCFBF8",

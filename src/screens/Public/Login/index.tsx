@@ -41,7 +41,7 @@ import { PNB } from "@theme/Fonts";
 import Colors from "@theme/Colors";
 import { useFocusEffect } from "@react-navigation/native";
 import Pad from "@components/Pad";
-import Assets from "@screens/Private/Kidashi/KidashiMembers/MemberDetails/Assets";
+import AssetDetails from "@screens/Private/Kidashi/KidashiMembers/MemberDetails/Assets/AssetDetails";
 
 type LoginProps = StackScreenProps<PublicNavigatorParamList, "Login">;
 
@@ -289,7 +289,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 		}, [])
 	);
 
-	return <Assets />;
+	return <AssetDetails />;
 
 	return (
 		<AuthLayout isLoading={isLoading}>

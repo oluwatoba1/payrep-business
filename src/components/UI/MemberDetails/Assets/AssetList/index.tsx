@@ -1,15 +1,16 @@
-import { View, Text, Image, Pressable, FlatList } from "react-native";
+import { View, Image, Pressable, FlatList } from "react-native";
 import React from "react";
 import { TextInput, Typography } from "@components/Forms";
 import ScreenImages from "@assets/images/screens";
 import styles from "./styles";
 import Divider from "@components/Miscellaneous/Divider";
-import { moderateScale, scale, scaleHeight } from "@utils/Helpers";
+import { scale, scaleHeight } from "@utils/Helpers";
 import { Row } from "@components/Layout";
 import Colors from "@theme/Colors";
 import ProgressBar from "@components/Forms/ProgressBar";
 import Pad from "@components/Pad";
 import { AssetItem, assetList } from "./mockData";
+import { getStatusColor } from "./utll";
 
 const TapReview = () => {
 	return (
@@ -34,43 +35,8 @@ const AssetCard = ({
 	progress,
 	date,
 }: AssetItem) => {
-	const getStatusColor = (status: string) => {
-		switch (status) {
-			case "ongoing":
-				return {
-					backgroundColor: Colors.primary[100],
-					color: Colors.cardColor.brown["200"],
-				};
-			case "approved":
-				return {
-					backgroundColor: Colors.success[50],
-					color: Colors.success["base"],
-				};
-			case "pending approval":
-				return {
-					backgroundColor: Colors.primary[100],
-					color: Colors.cardColor.brown["200"],
-				};
-			case "denied":
-				return {
-					backgroundColor: Colors.danger[100],
-					color: Colors.danger["base"],
-				};
-			case "repaid":
-				return {
-					backgroundColor: Colors.success[50],
-					color: Colors.success["base"],
-				};
-			case "cancelled":
-				return {
-					backgroundColor: Colors.neutral[50],
-					color: Colors.neutral["base"],
-				};
-		}
-	};
-
 	return (
-		<View>
+		<Pressable>
 			<Row gap={scale(12)} alignItems='flex-start'>
 				<View style={styles.packageIconContainer}>
 					<Image
@@ -125,7 +91,7 @@ const AssetCard = ({
 				</View>
 			</Row>
 			<Divider gapY={scaleHeight(16)} />
-		</View>
+		</Pressable>
 	);
 };
 
