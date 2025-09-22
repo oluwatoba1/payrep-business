@@ -70,6 +70,8 @@ export type MembersStackParamList = {
 	Members: undefined;
 	MemberDetails: undefined;
 	TransactionDetails: undefined;
+	Assets: undefined;
+	AssetDetails: undefined;
 };
 
 export type HomeStackParamList = {

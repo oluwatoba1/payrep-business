@@ -86,6 +86,9 @@ const ScreenImages = {
 		debitCreditIcon: require("./Kidashi/MemberDetails/tran.png"),
 		checkIcon: require("./Kidashi/MemberDetails/check.png"),
 		downloadIcon: require("./Kidashi/MemberDetails/download.png"),
+		searchIcon: require("./Kidashi/MemberDetails/search.png"),
+		infoRedIcon: require("./Kidashi/MemberDetails/info-red.png"),
+		packageIcon: require("./Kidashi/MemberDetails/package.png"),
 	},
 };
 
