@@ -13,7 +13,7 @@ import {
 	useFetchCountriesQuery,
 } from "@store/apis/generalApi";
 import Pad from "@components/Pad";
-import useLocationValidation from "./validators";
+import useLocationValidation from "./validator";
 import {
 	KidashiHomeStackParamList,
 	MemberRegistrationStackParamList,
@@ -141,9 +141,10 @@ export default function MemberLocationDetails({
 		<MainLayout
 			backAction={() => navigate("KidashiDashboard")}
 			isLoading={isLoading}
+			keyboardAvoidingType='scroll-view'
 		>
-			<Typography title='Location' type='heading4-sb' />
-			<Typography type='body-r' title='Please provide your full address' />
+			<Typography title='Location' type='heading-sb' />
+			<Typography type='label-r' title='Please provide your full address' />
 
 			<Pad />
 
@@ -210,8 +211,18 @@ export default function MemberLocationDetails({
 			<Pad />
 
 			<TextInput
-				label='Residential Address'
+				label='Address'
 				placeholder='Enter your address'
+				onChangeText={setResidentialAddress}
+				value={formData.residentialAddress}
+				error={formErrors.residentialAddress}
+			/>
+
+			<Pad />
+
+			<TextInput
+				label='Community'
+				placeholder='Enter community'
 				onChangeText={setResidentialAddress}
 				value={formData.residentialAddress}
 				error={formErrors.residentialAddress}

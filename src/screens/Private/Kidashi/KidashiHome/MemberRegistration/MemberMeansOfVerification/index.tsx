@@ -254,7 +254,7 @@ export default function MemberMeansOfVerification({
 
 			<Pad size={24} />
 
-			<IconButton onPress={() => {}}>
+			<IconButton onPress={() => navigate("MemberPersonalInformation")}>
 				<Row gap={8} alignItems='center' justifyContent='center'>
 					<Typography title="I don't have any " />
 					<Image
