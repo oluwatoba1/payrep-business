@@ -81,7 +81,11 @@ export default function MemberPep({
 			backAction={() => navigate("KidashiDashboard")}
 			isLoading={isLoading}
 		>
-			<Typography title='PEP Status' type='heading4-sb' />
+			<Typography title='PEP Status' type='heading-sb' />
+			<Typography
+				title='Are you politically exposed? Please respond with either Yes or No.'
+				type='label-sb'
+			/>
 
 			<Pad size={20} />
 
@@ -99,7 +103,7 @@ export default function MemberPep({
 			<Pad size={40} />
 
 			<Button
-				title='Continue'
+				title='Save and Continue'
 				onPress={() => navigate("MemberSourceOfIncome")}
 			/>
 		</MainLayout>

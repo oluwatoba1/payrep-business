@@ -14,6 +14,7 @@ import {
 	MemberPep,
 	MemberPersonalInformation,
 	MemberSourceOfIncome,
+	MemberAttestation,
 	MemberSuccessScreen,
 } from "@screens/Private/Kidashi/KidashiHome/MemberRegistration";
 
@@ -60,6 +61,7 @@ export default function MemberRegistrationStack() {
 				name='MemberSourceOfIncome'
 				component={MemberSourceOfIncome}
 			/>
+			<Stack.Screen name='MemberAttestation' component={MemberAttestation} />
 			<Stack.Screen
 				name='MemberSuccessScreen'
 				component={MemberSuccessScreen}

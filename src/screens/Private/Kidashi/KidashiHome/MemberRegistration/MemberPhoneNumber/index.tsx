@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { StackScreenProps } from "@react-navigation/stack";
 
-import { Button, TextInput, Typography } from "@components/Forms";
-import { MainLayout } from "@components/Layout";
+import { Button, TextInput, Typography, IconButton } from "@components/Forms";
+import { MainLayout, Row } from "@components/Layout";
 import { MemberRegistrationStackParamList } from "@navigation/types";
 import { useAppDispatch } from "@store/hooks";
 import useToast from "@hooks/useToast";
@@ -15,6 +15,9 @@ import {
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import { HasPersonalProfileModal } from "@components/Modal";
 import Pad from "@components/Pad";
+import { Image } from "react-native";
+import ComponentImages from "@assets/images/components";
+import styles from "../styles";
 
 type MemberPhoneNumberProps = StackScreenProps<
 	MemberRegistrationStackParamList,
@@ -125,10 +128,10 @@ export default function MemberPhoneNumber({
 				onSubmit={_clonePersonalProfile}
 			/>
 
-			<Typography title='Create your Account' type='heading4-sb' />
+			<Typography title='Create your Account' type='heading-sb' />
 			<Typography
 				title='Register with a number you have access to'
-				type='subheading'
+				type='label-sb'
 			/>
 
 			<TextInput
@@ -148,6 +151,18 @@ export default function MemberPhoneNumber({
 				title='Continue'
 				onPress={() => navigate("MemberPhoneNumberVerification")}
 			/>
+
+			<Pad size={360} />
+
+			<IconButton onPress={() => {}}>
+				<Row gap={8} alignItems='center' justifyContent='center'>
+					<Typography title='Already have a PayRep Account' />
+					<Image
+						source={ComponentImages.kidashiCard.arrowRight}
+						style={styles.skipIcon}
+					/>
+				</Row>
+			</IconButton>
 		</MainLayout>
 	);
 }

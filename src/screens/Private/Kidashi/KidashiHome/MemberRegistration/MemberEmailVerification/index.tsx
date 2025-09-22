@@ -1,5 +1,10 @@
-import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import {
+	ActivityIndicator,
+	AppState,
+	AppStateStatus,
+	View,
+} from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 
 // Local
@@ -13,7 +18,11 @@ import Pad from "@components/Pad";
 import { DEFAULT_ERROR_MESSAGE, RESEND_COUNTDOWN } from "@utils/Constants";
 import useToast from "@hooks/useToast";
 import useVerifyMobileValidation from "./validator";
-import { useRegisterEmailMutation } from "@store/apis/authApi";
+import {
+	useRegisterEmailMutation,
+	useVerifyMobileNumberMutation,
+} from "@store/apis/authApi";
+import Colors from "@theme/Colors";
 
 type MemberEmailVerificationProps = StackScreenProps<
 	MemberRegistrationStackParamList,
@@ -31,12 +40,19 @@ export default function MemberEmailVerification({
 		setOtp,
 	} = useVerifyMobileValidation();
 	const [registerEmail, { isLoading }] = useRegisterEmailMutation();
+	const [verifyMobileNumber, { isLoading: isResending }] =
+		useVerifyMobileNumberMutation();
 
 	const { mobileNumber, email } = useAppSelector(
 		(state) => state.auth.registration
 	);
 	const [countdown, setCountdown] = useState<number>(RESEND_COUNTDOWN);
+	const [countdownEndTime, setCountdownEndTime] = useState<number>(
+		Date.now() + RESEND_COUNTDOWN * 1000
+	);
 	const [loadingTitle, setLoadingTitle] = useState<string>("");
+
+	const appState = useRef(AppState.currentState);
 
 	const submit = async () => {
 		setLoadingTitle("Verifying OTP");
@@ -57,17 +73,62 @@ export default function MemberEmailVerification({
 		}
 	};
 
+	const resend = async () => {
+		setOtp("");
+		try {
+			const { status } = await verifyMobileNumber({
+				mobile_number: mobileNumber,
+			}).unwrap();
+			if (status) {
+				const endTime = Date.now() + RESEND_COUNTDOWN * 1000;
+				setCountdownEndTime(endTime);
+			}
+		} catch (error: any) {
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
+
 	useEffect(() => {
 		const interval = setInterval(() => {
-			if (countdown > 0) {
-				setCountdown(countdown - 1);
-			} else {
-				clearInterval(interval);
-			}
+			const now = Date.now();
+			const secondsLeft = Math.max(
+				Math.floor((countdownEndTime - now) / 1000),
+				0
+			);
+			setCountdown(secondsLeft);
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [countdown]);
+	}, [countdownEndTime]);
+
+	useEffect(() => {
+		const handleAppStateChange = (nextAppState: AppStateStatus) => {
+			if (
+				appState.current.match(/inactive|background/) &&
+				nextAppState === "active"
+			) {
+				const now = Date.now();
+				const secondsLeft = Math.max(
+					Math.floor((countdownEndTime - now) / 1000),
+					0
+				);
+				setCountdown(secondsLeft);
+			}
+			appState.current = nextAppState;
+		};
+
+		const subscription = AppState.addEventListener(
+			"change",
+			handleAppStateChange
+		);
+
+		return () => {
+			subscription.remove();
+		};
+	}, [countdownEndTime]);
 
 	return (
 		<MainLayout
@@ -75,14 +136,13 @@ export default function MemberEmailVerification({
 			isLoading={isLoading}
 			loadingTitle={loadingTitle}
 		>
-			<Typography title='Verify Email Address' type='heading4-sb' />
-
-			<Pad size={16} />
+			<Typography title='Verify Email Address' type='heading-sb' />
 
 			<HybridTypography
 				textTray={[
-					{ text: "We sent an OTP to ", bold: false },
-					{ text: email || "your email address", bold: true },
+					{ text: "We sent a 6-digit code to ", bold: false },
+					{ text: `${email} `, bold: true },
+					{ text: "Enter it below to continue", bold: false },
 				]}
 			/>
 
@@ -96,17 +156,21 @@ export default function MemberEmailVerification({
 				error={formErrors.otp}
 			/>
 
-			<Pad size={30} />
+			<Pad size={8} />
 
 			<Typography
 				title={
 					countdown === 0
 						? "Resend"
-						: `Resend code in ${formatCountdown(countdown)}`
+						: `Didn't get the code? Resend in ${formatCountdown(countdown)}`
 				}
 				type='body-sb'
-				onPress={() => countdown === 0 && {}}
+				onPress={() => countdown === 0 && resend()}
 			/>
+
+			{isResending ? (
+				<ActivityIndicator size={16} color={Colors.black} />
+			) : null}
 
 			<Pad size={176} />
 

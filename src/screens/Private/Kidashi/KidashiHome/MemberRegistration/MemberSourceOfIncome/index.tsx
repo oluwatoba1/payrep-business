@@ -94,7 +94,7 @@ export default function MemberSourceOfIncome({
 			<Typography type='heading4-sb' title='Source of Income' />
 			<Typography
 				type='body-r'
-				title='Please fill out the following details about your financial background'
+				title='Please fill out the following details about your financial background.'
 			/>
 			<Pad />
 			<View style={styles.inputContainer}>
@@ -146,7 +146,10 @@ export default function MemberSourceOfIncome({
 				/>
 			</View>
 			<Pad size={40} />
-			<Button title='Save' onPress={() => navigate("MemberSuccessScreen")} />
+			<Button
+				title='Save and Continue'
+				onPress={() => navigate("MemberAttestation")}
+			/>
 		</MainLayout>
 	);
 }

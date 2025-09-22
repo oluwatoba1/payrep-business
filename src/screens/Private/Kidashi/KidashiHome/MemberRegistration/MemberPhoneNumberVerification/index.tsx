@@ -139,16 +139,15 @@ export default function MemberPhoneNumberVerification({
 			backAction={goBack}
 			isLoading={isLoading}
 			loadingTitle={loadingTitle}
+			keyboardAvoidingType='scroll-view'
 		>
-			<Typography title='Enter your code' type='heading4-sb' />
-
-			<Pad size={16} />
+			<Typography title='Verify Your Phone Number' type='heading-sb' />
 
 			<HybridTypography
 				textTray={[
-					{ text: "We sent an OTP to ", bold: false },
+					{ text: "We sent a 6-digit code to ", bold: false },
 					{ text: `${mobileNumber} `, bold: true },
-					{ text: "Please enter the code", bold: false },
+					{ text: "Enter it below to continue", bold: false },
 				]}
 			/>
 
@@ -163,25 +162,15 @@ export default function MemberPhoneNumberVerification({
 
 			<Pad size={16} />
 
-			<Row
-				alignItems='flex-end'
-				justifyContent={countdown === 0 ? "flex-end" : "space-between"}
-			>
-				{countdown ? (
-					<Typography
-						title={`Code to be resent in ${formatCountdown(countdown)}`}
-						type='body-sb'
-						color={Colors.black}
-					/>
-				) : (
-					<Typography
-						title='Resend'
-						type='body-b'
-						color={Colors.primary.base}
-						onPress={resend}
-					/>
-				)}
-			</Row>
+			<Typography
+				title={
+					countdown === 0
+						? "Resend"
+						: `Didn't get the code? Resend in ${formatCountdown(countdown)}`
+				}
+				type='body-sb'
+				onPress={() => countdown === 0 && resend()}
+			/>
 
 			{isResending ? (
 				<ActivityIndicator size={16} color={Colors.black} />

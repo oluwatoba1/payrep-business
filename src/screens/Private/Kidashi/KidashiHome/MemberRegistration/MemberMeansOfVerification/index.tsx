@@ -1,11 +1,17 @@
-import { BackHandler } from "react-native";
+import { BackHandler, Image } from "react-native";
 import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { StackScreenProps } from "@react-navigation/stack";
 
 import useBvnVerificationValidation from "./validator";
-import { Button, Dropdown, TextInput } from "@components/Forms";
-import { MainLayout } from "@components/Layout";
+import {
+	Button,
+	Dropdown,
+	IconButton,
+	TextInput,
+	Typography,
+} from "@components/Forms";
+import { MainLayout, Row } from "@components/Layout";
 import Pad from "@components/Pad";
 import {
 	useBvnLookupMutation,
@@ -21,6 +27,8 @@ import {
 	KidashiHomeStackParamList,
 	MemberRegistrationStackParamList,
 } from "@navigation/types";
+import ComponentImages from "@assets/images/components";
+import styles from "../styles";
 
 interface IKycData {
 	customer: string;
@@ -197,15 +205,23 @@ export default function MemberMeansOfVerification({
 
 	return (
 		<MainLayout
-			rightTitle='KYC Registration'
 			isLoading={isBvnLoading || isNinLoading}
 			backAction={backAction}
+			keyboardAvoidingType='scroll-view'
 		>
 			<IsThisYouModal
 				title={kycData.first_name + " " + kycData.last_name}
 				showModal={showIsThisYouModal}
 				onClose={() => setShowIsThisYouModal(false)}
 				onProceed={proceed}
+			/>
+
+			<Pad size={16} />
+
+			<Typography title='Means of Verification' type='heading-sb' />
+			<Typography
+				title='Select your identity verification method'
+				type='label-sb'
 			/>
 
 			<Dropdown
@@ -235,6 +251,18 @@ export default function MemberMeansOfVerification({
 				value={idNumber}
 				error={formErrors.idNumber}
 			/>
+
+			<Pad size={24} />
+
+			<IconButton onPress={() => {}}>
+				<Row gap={8} alignItems='center' justifyContent='center'>
+					<Typography title="I don't have any " />
+					<Image
+						source={ComponentImages.kidashiCard.arrowRight}
+						style={styles.skipIcon}
+					/>
+				</Row>
+			</IconButton>
 
 			<Pad size={100} />
 

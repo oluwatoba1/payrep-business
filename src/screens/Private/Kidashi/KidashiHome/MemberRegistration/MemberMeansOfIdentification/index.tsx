@@ -88,10 +88,10 @@ export default function MemberMeansOfIdentification({
 			keyboardAvoidingType='scroll-view'
 			isLoading={isLoading}
 		>
-			<Typography title='Identification Card' type='heading4-sb' />
+			<Typography title='Means of Identification' type='heading-sb' />
 			<Typography
-				type='body-r'
-				title="Please upload a photo of a valid ID to upload. Accepted forms include: international passport, driver's license, voter's card, or national ID card. This helps us verify that your ID matches your photo."
+				type='label-sb'
+				title='Please take a photo of a valid ID to upload. This helps us verify that your ID matches your photo.'
 			/>
 
 			<Pad size={16} />
@@ -128,7 +128,7 @@ export default function MemberMeansOfIdentification({
 				notifier={(message) => showToast("warning", message)}
 			/>
 
-			<Button title='Save' onPress={() => navigate("MemberPep")} />
+			<Button title='Submit ID Card' onPress={() => navigate("MemberPep")} />
 			<Pad size={40} />
 		</MainLayout>
 	);

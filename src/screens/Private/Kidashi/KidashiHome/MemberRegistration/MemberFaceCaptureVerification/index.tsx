@@ -163,12 +163,12 @@ export default function MemberFaceCaptureVerification({
 			backAction={goBack}
 			isLoading={isLoading}
 			loadingTitle='Validating KYC'
-			rightTitle='KYC Facial Recognition'
 		>
 			<Pad size={16} />
+			<Typography title='Face Capture Verification' type='heading-sb' />
 			<Typography
-				type='body-r'
 				title='Please capture a photo of yourself. This will be used to confirm that your face matches the image on your identity card.'
+				type='label-sb'
 			/>
 			<Pad size={24} />
 
@@ -203,7 +203,7 @@ export default function MemberFaceCaptureVerification({
 			<Pad size={100} />
 
 			<Button
-				title='Capture'
+				title='Start Face Capture'
 				onPress={() => navigate("MemberLocationDetails")}
 			/>
 		</MainLayout>

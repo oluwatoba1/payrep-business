@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
-import { Alert, BackHandler, View } from "react-native";
+import { Alert, BackHandler, Image, View } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 
-import { MainLayout } from "@components/Layout";
-import { Button, TextInput, Typography } from "@components/Forms";
+import { MainLayout, Row } from "@components/Layout";
+import { Button, IconButton, TextInput, Typography } from "@components/Forms";
 import {
 	KidashiHomeStackParamList,
 	MemberRegistrationStackParamList,
@@ -15,6 +15,8 @@ import { useVerifyEmailMutation } from "@store/apis/authApi";
 import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import Pad from "@components/Pad";
+import ComponentImages from "@assets/images/components";
+import styles from "../styles";
 
 type MemberEmailProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberEmail">,
@@ -62,11 +64,8 @@ export default function MemberEmail({
 
 	return (
 		<MainLayout backAction={backAction} isLoading={isLoading}>
-			<Typography title='Provide your Email Address' type='heading4-sb' />
-			<Typography
-				title='Please enter a valid email address'
-				type='subheading'
-			/>
+			<Typography title='Provide your Email Address' type='heading-sb' />
+			<Typography title='Please enter a valid email address' type='label-sb' />
 
 			<TextInput
 				type='text'
@@ -77,12 +76,24 @@ export default function MemberEmail({
 				error={formErrors.email}
 			/>
 
-			<Pad size={176} />
+			<Pad />
 
 			<Button
 				title='Continue'
 				onPress={() => navigate("MemberEmailVerification")}
 			/>
+
+			<Pad size={24} />
+
+			<IconButton onPress={() => {}}>
+				<Row gap={8} alignItems='center' justifyContent='center'>
+					<Typography title='Skip for now' />
+					<Image
+						source={ComponentImages.kidashiCard.arrowRight}
+						style={styles.skipIcon}
+					/>
+				</Row>
+			</IconButton>
 		</MainLayout>
 	);
 }

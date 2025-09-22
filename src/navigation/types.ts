@@ -131,6 +131,7 @@ export type MemberRegistrationStackParamList = {
 	MemberMeansOfIdentification: undefined;
 	MemberPep: undefined;
 	MemberSourceOfIncome: undefined;
+	MemberAttestation: undefined;
 	MemberSuccessScreen: undefined;
 };
 

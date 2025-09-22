@@ -9,4 +9,5 @@ export { default as MemberPersonalInformation } from "./MemberPersonalInformatio
 export { default as MemberMeansOfIdentification } from "./MemberMeansOfIdentification";
 export { default as MemberPep } from "./MemberPep";
 export { default as MemberSourceOfIncome } from "./MemberSourceOfIncome";
+export { default as MemberAttestation } from "./MemberAttestation";
 export { default as MemberSuccessScreen } from "./MemberSuccessScreen";
