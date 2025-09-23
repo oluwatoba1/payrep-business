@@ -89,6 +89,7 @@ const ScreenImages = {
 		searchIcon: require("./Kidashi/MemberDetails/search.png"),
 		infoRedIcon: require("./Kidashi/MemberDetails/info-red.png"),
 		packageIcon: require("./Kidashi/MemberDetails/package.png"),
+		cautionIcon: require("./Kidashi/MemberDetails/caution.png"),
 	},
 	kidashiMemberRegistration: {
 		success: require("./Kidashi/MemberRegistration/success-icon.png"),

@@ -218,7 +218,7 @@ const MemberTransactions = ({ navigate }: { navigate: any }) => {
 			renderItem={({ item }) => (
 				<TransactionCard navigate={navigate} transaction={item} />
 			)}
-			contentContainerStyle={{ flexGrow: 1 }}
+			style={{ flex: 1 }}
 		/>
 	);
 };

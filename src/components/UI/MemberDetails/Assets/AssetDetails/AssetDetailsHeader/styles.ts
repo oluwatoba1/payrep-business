@@ -16,12 +16,12 @@ export const styles = StyleSheet.create({
 		marginHorizontal: "auto",
 	},
 	packageIcon: {
-		width: scale(20),
-		height: scale(20),
+		width: scale(40),
+		height: scale(40),
 	},
 	amount: {
 		fontWeight: "bold",
-		marginVertical: scaleHeight(2),
+		marginVertical: scaleHeight(4),
 	},
 	reference: {
 		fontSize: scale(12),
