@@ -72,6 +72,7 @@ export type MembersStackParamList = {
 	TransactionDetails: undefined;
 	Assets: undefined;
 	AssetDetails: { status: string } | undefined;
+	EnterAssetInformation: undefined;
 };
 
 export type HomeStackParamList = {

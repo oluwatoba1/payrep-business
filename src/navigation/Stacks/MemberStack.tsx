@@ -7,6 +7,7 @@ import MemberDetails from "@screens/Private/Kidashi/KidashiMembers/MemberDetails
 import TransactionDetails from "@screens/Private/Kidashi/KidashiMembers/MemberDetails/TransactionDetails";
 import AssetDetails from "@screens/Private/Kidashi/KidashiMembers/MemberDetails/Assets/AssetDetails";
 import Assets from "@screens/Private/Kidashi/KidashiMembers/MemberDetails/Assets";
+import EnterAssetInformation from "@screens/Private/Kidashi/KidashiMembers/MemberDetails/Assets/EnterAssetInformation";
 
 const Stack = createNativeStackNavigator<MembersStackParamList>();
 
@@ -21,6 +22,10 @@ export default function MembersStack() {
 			<Stack.Screen name='TransactionDetails' component={TransactionDetails} />
 			<Stack.Screen name='Assets' component={Assets} />
 			<Stack.Screen name='AssetDetails' component={AssetDetails} />
+			<Stack.Screen
+				name='EnterAssetInformation'
+				component={EnterAssetInformation}
+			/>
 		</Stack.Navigator>
 	);
 }
