@@ -11,6 +11,10 @@ import Transactions from "@components/UI/MemberDetails/Transactions";
 import Pad from "@components/Pad";
 import { StackScreenProps } from "@react-navigation/stack";
 import { MembersStackParamList } from "@navigation/types";
+import { Image, Pressable } from "react-native";
+import { Typography } from "@components/Forms";
+import ScreenImages from "@assets/images/screens";
+import PerformActionModal from "@components/UI/MemberDetails/PerformActionModal";
 
 type TabType = "Transactions" | "More details" | "Account Info";
 
@@ -20,6 +24,7 @@ type MemberDetailsProps = StackScreenProps<
 >;
 const MemberDetails = ({ navigation: { navigate } }: MemberDetailsProps) => {
 	const [activeTab, setActiveTab] = useState<TabType>("Transactions");
+	const [visible, setVisible] = useState(false);
 	return (
 		<SafeAreaWrapper title='Member Details'>
 			<MemberDetailsHeaderComp />
@@ -33,6 +38,26 @@ const MemberDetails = ({ navigation: { navigate } }: MemberDetailsProps) => {
 			{activeTab === "Transactions" && <Transactions navigate={navigate} />}
 			{activeTab === "More details" && <MoreDetails />}
 			{activeTab === "Account Info" && <AccountInfo />}
+			<Pressable
+				style={styles.performActionButton}
+				onPress={() => setVisible(true)}
+			>
+				<Image
+					source={ScreenImages.kidashiMemberDetails.boltIcon}
+					style={styles.boltIcon}
+				/>
+				<Typography
+					title='Perform an Action'
+					type='body-sb'
+					style={styles.performActionText}
+				/>
+			</Pressable>
+			<PerformActionModal
+				visible={visible}
+				onClose={() => setVisible(false)}
+				parent='MemberDetails'
+				navigate={navigate}
+			/>
 		</SafeAreaWrapper>
 	);
 };

@@ -56,8 +56,6 @@ export const styles = StyleSheet.create({
 	approvedCardHeaderContainer: {
 		padding: scale(8),
 		backgroundColor: Colors.success["50"],
-		borderTopWidth: scale(2),
-		borderColor: Colors.success["100"],
 	},
 	approvedCardDetailsContainer: {
 		padding: scale(8),
