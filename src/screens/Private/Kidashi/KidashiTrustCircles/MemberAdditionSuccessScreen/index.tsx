@@ -1,34 +1,26 @@
 import { useCallback } from "react";
 import { BackHandler, Image, View } from "react-native";
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { StackScreenProps } from "@react-navigation/stack";
 
-import { Button, Typography } from "@components/Forms";
+import { Button, IconButton, Typography } from "@components/Forms";
 import { MainLayout, Row } from "@components/Layout";
-import {
-	KidashiBottomTabParamList,
-	KidashiHomeStackParamList,
-	MemberRegistrationStackParamList,
-	TrustCircleStackParamList,
-} from "@navigation/types";
-import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
+import { TrustCircleStackParamList } from "@navigation/types";
+import { useFocusEffect } from "@react-navigation/native";
 import Pad from "@components/Pad";
 import ScreenImages from "@assets/images/screens";
 import styles from "./styles";
+import Colors from "@theme/Colors";
 
-type MemberSuccessScreenProps = CompositeScreenProps<
-	StackScreenProps<MemberRegistrationStackParamList, "MemberSuccessScreen">,
-	CompositeScreenProps<
-		BottomTabScreenProps<KidashiHomeStackParamList, "KidashiDashboard">,
-		BottomTabScreenProps<KidashiBottomTabParamList, "Trust Circles">
-	>
+type MemberAdditionSuccessScreenProps = StackScreenProps<
+	TrustCircleStackParamList,
+	"MemberAdditionSuccessScreen"
 >;
 
-export default function MemberSuccessScreen({
+export default function MemberAdditionSuccessScreen({
 	navigation: { navigate },
-}: MemberSuccessScreenProps) {
+}: MemberAdditionSuccessScreenProps) {
 	const backAction = () => {
-		navigate("KidashiDashboard");
+		navigate("TrustCircleDetails");
 		return true; // Prevent default behavior
 	};
 
@@ -53,7 +45,11 @@ export default function MemberSuccessScreen({
 
 				<Pad size={8} />
 
-				<Typography title='Account Created Successfully' type='heading-sb' />
+				<Typography title='New Member Added!' type='heading-sb' />
+
+				<Pad size={8} />
+
+				<Typography title='Zainab Abubakar has been added to Ladi Cooperative Group' />
 
 				<Pad size={16} />
 
@@ -68,17 +64,35 @@ export default function MemberSuccessScreen({
 					</Row>
 				</View>
 
-				<Pad size={24} />
-
-				<Button title='Add Member to Kidashi' onPress={() => navigate("Trust Circles", {screen: "EnterAccountNumber"})} />
-
 				<Pad size={16} />
 
-				<Button
-					title='Return Home'
-					containerStyle={{ backgroundColor: "transparent" }}
-					onPress={() => navigate("KidashiDashboard")}
+				<Typography
+					title='Every member makes the trust circle more dependable'
+					type='label-sb'
+					color={Colors.neutral["400"]}
 				/>
+
+				<Pad size={8} />
+
+				<Button
+					title='View Trust Circle'
+					containerStyle={{ backgroundColor: "transparent" }}
+					onPress={() => navigate("TrustCircleDetails")}
+				/>
+
+				<Pad size={24} />
+
+				<IconButton onPress={() => navigate("EnterAccountNumber")}>
+					<Image
+						source={ScreenImages.kidashiMemberAddition.addAnotherMemberIcon}
+						style={styles.addMemberIcon}
+					/>
+					<Typography
+						title='Add another member'
+						type='label-sb'
+						color={Colors.primary["600"]}
+					/>
+				</IconButton>
 			</View>
 		</MainLayout>
 	);

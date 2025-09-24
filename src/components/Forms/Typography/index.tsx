@@ -130,13 +130,6 @@ export default function Typography({
 					fontSize: 14,
 					lineHeight: 21,
 				};
-			case "body-sr":
-				return {
-					color: color || Colors.gray[700],
-					fontFamily: PNR,
-					fontSize: 14,
-					lineHeight: 21,
-				};
 			case "label-sb":
 				return {
 					color: color || Colors.gray[700],

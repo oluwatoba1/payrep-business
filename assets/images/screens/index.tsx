@@ -93,6 +93,11 @@ const ScreenImages = {
 	kidashiMemberRegistration: {
 		success: require("./Kidashi/MemberRegistration/success-icon.png"),
 	},
+	kidashiMemberAddition: {
+		noticeIcon: require("./Kidashi/MemberAddition/notice-icon.png"),
+		verifierTrustCircle: require("./Kidashi/MemberAddition/select-verifier-trust-circle.png"),
+		addAnotherMemberIcon: require("./Kidashi/MemberAddition/add-circle.png"),
+	},
 };
 
 export default ScreenImages;

@@ -29,4 +29,5 @@ export { default as ActionCard } from "./ActionCard";
 export { default as NetworkCard } from "./NetworkCard";
 export { default as KidashiCard } from "./KidashiCard";
 export { default as KidashiHomeCard } from "./KidashiHomeCard";
+export { default as KidashiMemberItemCard } from "./KidashiMemberItemCard";
 export { default as Pill } from "./Pill";

@@ -7,6 +7,10 @@ import {
 	TrustCircleDetails,
 	CircleName,
 	CreateTrustCircle,
+	EnterAccountNumber,
+	SelectVerifiers,
+	MemberVerification,
+	MemberAdditionSuccessScreen,
 } from "@screens/Private/Kidashi/KidashiTrustCircles";
 
 const Stack = createNativeStackNavigator<TrustCircleStackParamList>();
@@ -21,6 +25,13 @@ export default function TrustCirclesStack() {
 			<Stack.Screen name='TrustCircleDetails' component={TrustCircleDetails} />
 			<Stack.Screen name='CreateTrustCircle' component={CreateTrustCircle} />
 			<Stack.Screen name='CircleName' component={CircleName} />
+			<Stack.Screen name='EnterAccountNumber' component={EnterAccountNumber} />
+			<Stack.Screen name='SelectVerifiers' component={SelectVerifiers} />
+			<Stack.Screen name='MemberVerification' component={MemberVerification} />
+			<Stack.Screen
+				name='MemberAdditionSuccessScreen'
+				component={MemberAdditionSuccessScreen}
+			/>
 		</Stack.Navigator>
 	);
 }

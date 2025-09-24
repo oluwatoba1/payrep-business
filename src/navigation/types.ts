@@ -64,6 +64,10 @@ export type TrustCircleStackParamList = {
 	TrustCircleDetails: undefined;
 	CreateTrustCircle: undefined;
 	CircleName: undefined;
+	EnterAccountNumber: undefined;
+	SelectVerifiers: undefined;
+	MemberVerification: undefined;
+	MemberAdditionSuccessScreen: undefined;
 };
 
 export type MembersStackParamList = {
