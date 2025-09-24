@@ -41,7 +41,7 @@ const AssetCard = ({
 	navigation: NativeStackNavigationProp<MembersStackParamList>;
 }) => {
 	return (
-		<Pressable onPress={() => navigation.navigate("AssetDetails")}>
+		<Pressable onPress={() => navigation.navigate("AssetDetails", { status })}>
 			<Row gap={scale(12)} alignItems='flex-start'>
 				<View style={styles.packageIconContainer}>
 					<Image

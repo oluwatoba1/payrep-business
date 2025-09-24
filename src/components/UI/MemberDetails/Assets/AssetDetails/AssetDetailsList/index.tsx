@@ -132,8 +132,8 @@ const AssetDetailList = ({
 					/>
 				</Row>
 			</View>
-			<Pad size={scaleHeight(16)} />
-			{status === "approved" && (
+
+			{/* {status === "approved" && (
 				<View>
 					<Row gap={scale(8)}>
 						<Button title='Accept' containerStyle={{ flex: 1 }} />
@@ -144,14 +144,8 @@ const AssetDetailList = ({
 						/>
 					</Row>
 				</View>
-			)}
-			{status === "pending approval" && (
-				<Button
-					title='Cancel Request'
-					containerStyle={styles.rejectedCardContainer}
-					textStyle={{ color: Colors.danger["base"] }}
-				/>
-			)}
+			)} */}
+			<Pad size={scaleHeight(16)} />
 		</View>
 	);
 };
