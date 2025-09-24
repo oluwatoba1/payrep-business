@@ -10,6 +10,7 @@ import Colors from "@theme/Colors";
 import styles from "./styles";
 import { KidashiMemberItemCard } from "@components/Cards";
 import { useState } from "react";
+import { TrustCirclePill } from "@components/UI";
 
 type SelectVerifiersProps = StackScreenProps<
 	TrustCircleStackParamList,
@@ -48,17 +49,10 @@ export default function SelectVerifiers({
 
 			<Pad size={12} />
 
-			<Row alignItems='center' gap={8} containerStyle={styles.trustCircleCard}>
-				<Image
-					source={ScreenImages.kidashiMemberAddition.verifierTrustCircle}
-					style={styles.trustCircleIcon}
-				/>
-				<Typography
-					title='Ladi Cooperative Group'
-					type='label-sb'
-					color={Colors.neutral.base}
-				/>
-			</Row>
+			<TrustCirclePill
+				icon={ScreenImages.kidashiMemberAddition.verifierTrustCircle}
+				title='Ladi Cooperative Group'
+			/>
 
 			<Pad size={24} />
 

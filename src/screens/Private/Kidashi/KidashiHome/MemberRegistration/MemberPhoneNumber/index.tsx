@@ -3,7 +3,10 @@ import { StackScreenProps } from "@react-navigation/stack";
 
 import { Button, TextInput, Typography, IconButton } from "@components/Forms";
 import { MainLayout, Row } from "@components/Layout";
-import { MemberRegistrationStackParamList } from "@navigation/types";
+import {
+	KidashiBottomTabParamList,
+	MemberRegistrationStackParamList,
+} from "@navigation/types";
 import { useAppDispatch } from "@store/hooks";
 import useToast from "@hooks/useToast";
 import useRegisterMobileValidation from "./validator";
@@ -18,10 +21,12 @@ import Pad from "@components/Pad";
 import { Image } from "react-native";
 import ComponentImages from "@assets/images/components";
 import styles from "../styles";
+import { CompositeScreenProps } from "@react-navigation/native";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
-type MemberPhoneNumberProps = StackScreenProps<
-	MemberRegistrationStackParamList,
-	"MemberPhoneNumber"
+type MemberPhoneNumberProps = CompositeScreenProps<
+	StackScreenProps<MemberRegistrationStackParamList, "MemberPhoneNumber">,
+	BottomTabScreenProps<KidashiBottomTabParamList, "Trust Circles">
 >;
 
 export default function MemberPhoneNumber({
@@ -154,7 +159,11 @@ export default function MemberPhoneNumber({
 
 			<Pad size={360} />
 
-			<IconButton onPress={() => {}}>
+			<IconButton
+				onPress={() =>
+					navigate("Trust Circles", { screen: "EnterAccountNumber" })
+				}
+			>
 				<Row gap={8} alignItems='center' justifyContent='center'>
 					<Typography title='Already have a PayRep Account' />
 					<Image
