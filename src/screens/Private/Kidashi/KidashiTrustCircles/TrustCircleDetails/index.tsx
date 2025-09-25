@@ -148,6 +148,7 @@ export default function TrustCircleDetails({
 						}
 					/>
 				)}
+				showsVerticalScrollIndicator={false}
 			/>
 		</MainLayout>
 	);

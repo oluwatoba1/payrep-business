@@ -1,4 +1,4 @@
-import { scale, scaleHeight } from "@utils/Helpers";
+import { moderateScale, scale, scaleHeight } from "@utils/Helpers";
 import { StyleSheet } from "react-native";
 import Colors from "@theme/Colors";
 
@@ -8,9 +8,11 @@ export const styles = StyleSheet.create({
 	},
 	iconContainer: {
 		flexDirection: "row",
-		justifyContent: "space-between",
+		justifyContent: "center",
 		alignItems: "center",
-		borderRadius: "100%",
+		width: scaleHeight(46),
+		height: scaleHeight(46),
+		borderRadius: moderateScale(46),
 		padding: scale(16),
 	},
 	iconContainerCredit: {
@@ -24,7 +26,7 @@ export const styles = StyleSheet.create({
 		backgroundColor: Colors.primary[100],
 	},
 	transactionIcon: {
-		width: scale(24),
+		width: scaleHeight(24),
 		height: scaleHeight(24),
 	},
 });
