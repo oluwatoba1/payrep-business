@@ -29,6 +29,7 @@ import {
 } from "@navigation/types";
 import ComponentImages from "@assets/images/components";
 import styles from "../styles";
+import Colors from "@theme/Colors";
 
 interface IKycData {
 	customer: string;
@@ -234,8 +235,6 @@ export default function MemberMeansOfVerification({
 				onSelect={setSelectedOption}
 			/>
 
-			<Pad size={20} />
-
 			<TextInput
 				label={
 					selectedOption.value === "bvn"
@@ -256,7 +255,11 @@ export default function MemberMeansOfVerification({
 
 			<IconButton onPress={() => navigate("MemberPersonalInformation")}>
 				<Row gap={8} alignItems='center' justifyContent='center'>
-					<Typography title="I don't have any " />
+					<Typography
+						title="I don't have any"
+						type='label-sb'
+						color={Colors.primary["600"]}
+					/>
 					<Image
 						source={ComponentImages.kidashiCard.arrowRight}
 						style={styles.skipIcon}

@@ -33,7 +33,7 @@ const PrivateNavigator = () => {
 			<Stack.Navigator
 				screenOptions={{ headerShown: false }}
 				initialRouteName={
-					customerStage === RegistrationSteps.ATTESTATION
+					customerStage !== RegistrationSteps.ATTESTATION
 						? "BottomTabs"
 						: "ProfileSetupIntro"
 				}

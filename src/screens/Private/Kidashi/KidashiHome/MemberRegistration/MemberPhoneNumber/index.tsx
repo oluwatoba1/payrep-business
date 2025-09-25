@@ -23,6 +23,7 @@ import ComponentImages from "@assets/images/components";
 import styles from "../styles";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import Colors from "@theme/Colors";
 
 type MemberPhoneNumberProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberPhoneNumber">,
@@ -165,7 +166,11 @@ export default function MemberPhoneNumber({
 				}
 			>
 				<Row gap={8} alignItems='center' justifyContent='center'>
-					<Typography title='Already have a PayRep Account' />
+					<Typography
+						title='Already have a PayRep Account'
+						type='label-sb'
+						color={Colors.primary["600"]}
+					/>
 					<Image
 						source={ComponentImages.kidashiCard.arrowRight}
 						style={styles.skipIcon}

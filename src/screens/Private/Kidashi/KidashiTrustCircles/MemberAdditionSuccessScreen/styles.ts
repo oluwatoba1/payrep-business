@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.gray["50"],
 		borderWidth: 1,
 		borderColor: "#E7E9E9",
+		width: "100%",
 	},
 	successIcon: {
 		width: scale(96),

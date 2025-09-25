@@ -35,10 +35,17 @@ export default function SelectVerifiers({
 	const [selectedMembers, setSelectedMembers] = useState<IMember[]>([]);
 
 	const onSelect = (item: IMember) => {
+		const member = selectedMembers.find((member) => member.id === item.id);
+		if (member) {
+			setSelectedMembers(
+				selectedMembers.filter((item) => item.id !== member.id)
+			);
+			return;
+		}
 		setSelectedMembers([...selectedMembers, item]);
 	};
 	return (
-		<MainLayout backAction={goBack}>
+		<MainLayout backAction={goBack} keyboardAvoidingType='view'>
 			<Pad size={16} />
 
 			<Typography title='Select Verifiers' type='heading-sb' />
@@ -70,12 +77,16 @@ export default function SelectVerifiers({
 					renderItem={({ item }) => (
 						<KidashiMemberItemCard
 							{...item}
-							value={!!selectedMembers.find((member) => member.id === item.id)}
+							isSelected={
+								!!selectedMembers.find((member) => member.id === item.id)
+							}
 							onSelect={() => onSelect(item)}
 						/>
 					)}
 				/>
 			</View>
+
+			<Pad size={30} />
 
 			<Button title='Continue' onPress={() => navigate("MemberVerification")} />
 		</MainLayout>

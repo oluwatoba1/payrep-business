@@ -17,6 +17,7 @@ import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import Pad from "@components/Pad";
 import ComponentImages from "@assets/images/components";
 import styles from "../styles";
+import Colors from "@theme/Colors";
 
 type MemberEmailProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberEmail">,
@@ -85,9 +86,13 @@ export default function MemberEmail({
 
 			<Pad size={24} />
 
-			<IconButton onPress={() => {}}>
+			<IconButton onPress={() => navigate("MemberMeansOfVerification")}>
 				<Row gap={8} alignItems='center' justifyContent='center'>
-					<Typography title='Skip for now' />
+					<Typography
+						title='Skip for now'
+						type='label-sb'
+						color={Colors.primary["600"]}
+					/>
 					<Image
 						source={ComponentImages.kidashiCard.arrowRight}
 						style={styles.skipIcon}

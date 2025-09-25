@@ -4,6 +4,8 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 	verifierContainer: {
+		alignItems: "center",
+		justifyContent: "center",
 		paddingVertical: scaleHeight(16),
 		borderBottomWidth: 1,
 		borderBottomColor: Colors.neutral["50"],

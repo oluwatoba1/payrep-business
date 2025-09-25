@@ -10,6 +10,8 @@ import Pad from "@components/Pad";
 import ScreenImages from "@assets/images/screens";
 import styles from "./styles";
 import Colors from "@theme/Colors";
+import { MAIN_LAYOUT_HORIZONTAL_PADDING, width } from "@utils/Constants";
+import { scale } from "@utils/Helpers";
 
 type MemberAdditionSuccessScreenProps = StackScreenProps<
 	TrustCircleStackParamList,
@@ -45,11 +47,19 @@ export default function MemberAdditionSuccessScreen({
 
 				<Pad size={8} />
 
-				<Typography title='New Member Added!' type='heading-sb' />
+				<Typography
+					title='New Member Added!'
+					type='heading-sb'
+					color={Colors.neutral["600"]}
+				/>
 
 				<Pad size={8} />
 
-				<Typography title='Zainab Abubakar has been added to Ladi Cooperative Group' />
+				<Typography
+					title='Zainab Abubakar has been added to Ladi Cooperative Group'
+					type='label-r'
+					color={Colors.neutral["300"]}
+				/>
 
 				<Pad size={16} />
 
@@ -76,22 +86,26 @@ export default function MemberAdditionSuccessScreen({
 
 				<Button
 					title='View Trust Circle'
-					containerStyle={{ backgroundColor: "transparent" }}
+					containerStyle={{
+						width: width - 2 * scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
+					}}
 					onPress={() => navigate("TrustCircleDetails")}
 				/>
 
 				<Pad size={24} />
 
 				<IconButton onPress={() => navigate("EnterAccountNumber")}>
-					<Image
-						source={ScreenImages.kidashiMemberAddition.addAnotherMemberIcon}
-						style={styles.addMemberIcon}
-					/>
-					<Typography
-						title='Add another member'
-						type='label-sb'
-						color={Colors.primary["600"]}
-					/>
+					<Row gap={8}>
+						<Image
+							source={ScreenImages.kidashiMemberAddition.addAnotherMemberIcon}
+							style={styles.addMemberIcon}
+						/>
+						<Typography
+							title='Add another member'
+							type='label-sb'
+							color={Colors.primary["600"]}
+						/>
+					</Row>
 				</IconButton>
 			</View>
 		</MainLayout>

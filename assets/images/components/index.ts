@@ -176,6 +176,7 @@ const ComponentImages = {
 	},
 	kidashiMemberCard: {
 		memberIcon: require("./KidashiMemberCard/member.png"),
+		arrowRightIcon2: require("./KidashiMemberCard/arrow-right-01.png"),
 	},
 };
 

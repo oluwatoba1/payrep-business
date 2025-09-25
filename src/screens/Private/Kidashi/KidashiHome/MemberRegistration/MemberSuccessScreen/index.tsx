@@ -15,6 +15,9 @@ import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 import Pad from "@components/Pad";
 import ScreenImages from "@assets/images/screens";
 import styles from "./styles";
+import Colors from "@theme/Colors";
+import { MAIN_LAYOUT_HORIZONTAL_PADDING, width } from "@utils/Constants";
+import { scale } from "@utils/Helpers";
 
 type MemberSuccessScreenProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberSuccessScreen">,
@@ -53,7 +56,17 @@ export default function MemberSuccessScreen({
 
 				<Pad size={8} />
 
-				<Typography title='Account Created Successfully' type='heading-sb' />
+				<Typography
+					title='Account Created Successfully'
+					type='heading-sb'
+					color={Colors.neutral["600"]}
+				/>
+				<Typography
+					title='Congratulations, member account has been created successfully'
+					type='label-r'
+					color={Colors.neutral["300"]}
+					style={{ textAlign: "center" }}
+				/>
 
 				<Pad size={16} />
 
@@ -70,7 +83,15 @@ export default function MemberSuccessScreen({
 
 				<Pad size={24} />
 
-				<Button title='Add Member to Kidashi' onPress={() => navigate("Trust Circles", {screen: "EnterAccountNumber"})} />
+				<Button
+					title='Add Member to Kidashi'
+					onPress={() =>
+						navigate("Trust Circles", { screen: "EnterAccountNumber" })
+					}
+					containerStyle={{
+						width: width - 2 * scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
+					}}
+				/>
 
 				<Pad size={16} />
 

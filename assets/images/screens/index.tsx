@@ -65,6 +65,7 @@ const ScreenImages = {
 		loanDisbursement: require("./Kidashi/KidashiHome/loan-disbursement.png"),
 		loanRepayment: require("./Kidashi/KidashiHome/loan-repayment.png"),
 		searchIcon: require("./Kidashi/KidashiHome/search-icon.png"),
+		trustCircleDetailsIcon: require("./Kidashi/KidashiHome/trust-circle-details-icon.png"),
 	},
 	kidashiCreateTrustCircles: {
 		headericon: require("./Kidashi/CreateTrustCircle/top-badge.png"),

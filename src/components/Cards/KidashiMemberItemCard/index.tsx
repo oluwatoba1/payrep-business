@@ -5,21 +5,22 @@ import { Checkbox, Typography } from "@components/Forms";
 import ComponentImages from "@assets/images/components";
 import Colors from "@theme/Colors";
 import styles from "./styles";
+import { ReactNode } from "react";
 
 interface KidashiMemberItemCardProps {
-	id: string;
 	title: string;
 	subtitle: string;
-	value: boolean;
+	isSelected?: boolean;
 	onSelect: () => void;
+	rightNode?: ReactNode;
 }
 
 export default function KidashiMemberItemCard({
-	id,
 	title,
 	subtitle,
-	value,
+	isSelected=false,
 	onSelect,
+	rightNode,
 }: KidashiMemberItemCardProps) {
 	return (
 		<Pressable onPress={onSelect}>
@@ -46,7 +47,11 @@ export default function KidashiMemberItemCard({
 						/>
 					</View>
 				</Row>
-				<Checkbox value={value} onPress={() => {}} />
+				{rightNode ? (
+					rightNode
+				) : (
+					<Checkbox value={isSelected} onPress={onSelect} />
+				)}
 			</Row>
 		</Pressable>
 	);
