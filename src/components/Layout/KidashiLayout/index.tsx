@@ -37,7 +37,7 @@ interface KeyboardAvoiderProps {
 	onRefresh?: () => void;
 }
 
-const KeyboardAvoider = ({
+export const KeyboardAvoider = ({
 	type,
 	children,
 	enableKeyboardAvoiding,
