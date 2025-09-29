@@ -218,7 +218,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 		try {
 			const { status } = await verifyDevice({
 				mobile_number: `0${username}`,
-				type: customerType,
+				type: "corporate",
 			}).unwrap();
 			if (status) {
 				navigate("RegisterNewDevice", { username, customerType });
