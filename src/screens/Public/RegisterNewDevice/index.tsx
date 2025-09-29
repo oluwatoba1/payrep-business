@@ -35,7 +35,7 @@ export default function RegisterNewDevice({
 				username: route.params.username || "",
 				otp,
 				device_id: await DeviceInfo.getUniqueId(),
-				customer_type: route.params.customerType || null,
+				customer_type: "corporate",
 			}).unwrap();
 			if (status && !data?.facial_recognition) {
 				goBack();

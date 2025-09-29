@@ -48,7 +48,7 @@ export default function CreatePassword({
 		console.log({
 			password,
 			mobile_number: mobileNumber,
-			device_id: DeviceInfo.getUniqueId(),
+			device_id: await DeviceInfo.getUniqueId(),
 			customer_id,
 		});
 		try {

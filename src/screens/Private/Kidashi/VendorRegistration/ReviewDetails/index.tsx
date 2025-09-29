@@ -42,7 +42,7 @@ export default function ReviewDetails({
 				guarantors: registration?.guarantors || [],
 				business_description: registration?.business_description || "",
 
-				cba_customer_id: "4d324abf-fad5-4a4d-ad67-7fe1736e8a28",
+				cba_customer_id: customer?.id || "",
 			}).unwrap();
 
 			if (status) {
