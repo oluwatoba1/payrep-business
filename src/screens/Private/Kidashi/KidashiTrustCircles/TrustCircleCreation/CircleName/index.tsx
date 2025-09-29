@@ -37,7 +37,7 @@ export default function CircleName({
 		validateForm(async () => {
 			try {
 				const payload = {
-					vendor_id: "69797674-14ce-44a5-92f7-0cc5555ac8b2",
+					vendor_id,
 					circle_name: circleName,
 					description: "",
 				};
