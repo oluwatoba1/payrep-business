@@ -49,7 +49,7 @@ const useGuarantorDetails = () => {
 	const [lastName, setLastName] = useState<string>("");
 	const [gender, setGender] = useState<string>("");
 	const [phoneNumber, setPhoneNumber] = useState<string>("");
-	const [dateOfBirth, setDateOfBirth] = useState<string>("");
+	const [dateOfBirth, setDateOfBirth] = useState<string | undefined>("");
 	const [state, setState] = useState<string>("");
 	const [lga, setLga] = useState<string>("");
 	const [email, setEmail] = useState<string>("");
@@ -130,7 +130,7 @@ const useGuarantorDetails = () => {
 				state_id: state,
 				lga_id: lga,
 				gender,
-				dob: dateOfBirth,
+				dob: dateOfBirth??'',
 				nationality: "NG", // Default to Nigeria
 			};
 
