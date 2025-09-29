@@ -9,7 +9,7 @@ export default function AppNavigator() {
 
 	return (
 		<NavigationContainer>
-			{!token ? <PrivateNavigator /> : <PublicNavigator />}
+			{token ? <PrivateNavigator /> : <PublicNavigator />}
 		</NavigationContainer>
 	);
 }

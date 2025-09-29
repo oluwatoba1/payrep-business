@@ -12,26 +12,31 @@ import {
 	DateField,
 	Checkbox,
 } from "@components/Forms";
-import { KidashiStackParamList, BottomTabParamList } from "@navigation/types";
+import {
+	KidashiRegistrationStackParamList,
+	BottomTabParamList,
+} from "@navigation/types";
 import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import Pad from "@components/Pad";
-import { useUpdateBusinessInformationMutation } from "@store/apis/customerApi";
 import {
 	useFetchLgasMutation,
 	useFetchStatesQuery,
 } from "@store/apis/generalApi";
 import useGuarantorDetails from "./validators";
 import { Stepper } from "@components/Miscellaneous";
+import { useAppDispatch } from "@store/hooks";
+import { setRegistrationDetails } from "@store/slices/kidashiSlice";
 
 type GuarantorDetailsProps = CompositeScreenProps<
-	StackScreenProps<KidashiStackParamList, "GuarantorDetails">,
+	StackScreenProps<KidashiRegistrationStackParamList, "GuarantorDetails">,
 	StackScreenProps<BottomTabParamList, "Home">
 >;
 
 export default function GuarantorDetails({
 	navigation: { navigate },
 }: GuarantorDetailsProps) {
+	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
 	const {
 		formData,
@@ -46,9 +51,8 @@ export default function GuarantorDetails({
 		setLga,
 		setEmail,
 		setNin,
+		setRelationship,
 	} = useGuarantorDetails();
-	const [updateBusinessInformation, { isLoading }] =
-		useUpdateBusinessInformationMutation();
 
 	const { data: statesData, isLoading: statesLoading } = useFetchStatesQuery();
 
@@ -64,6 +68,9 @@ export default function GuarantorDetails({
 	>(undefined);
 	const [lgas, setLgas] = useState<any[]>([]);
 	const [selectedLga, setSelectedLga] = useState<
+		DefaultDropdownOption | undefined
+	>(undefined);
+	const [selectedRelationship, setSelectedRelationship] = useState<
 		DefaultDropdownOption | undefined
 	>(undefined);
 	const [agreed, setAgreed] = useState<boolean>(false);
@@ -86,8 +93,12 @@ export default function GuarantorDetails({
 		}
 	};
 
-	const submit = async () => {
-		navigate("ReviewDetails");
+	const handleSubmit = () => {
+		validateForm((guarantors) => {
+			console.log(guarantors);
+			dispatch(setRegistrationDetails({ guarantors }));
+			navigate("ReviewDetails");
+		});
 	};
 
 	// Update LGAs when state changes
@@ -115,9 +126,7 @@ export default function GuarantorDetails({
 	return (
 		<MainLayout
 			keyboardAvoidingType='scroll-view'
-			backAction={() => navigate("Home", { screen: "Dashboard" })}
-			isLoading={isLoading}
-			rightTitle='Guarantor Details'
+			backAction={() => navigate("VendorItems")}
 		>
 			<Stepper steps={3} currentStep={3} />
 
@@ -130,23 +139,23 @@ export default function GuarantorDetails({
 			/>
 
 			<View>
-				<Row alignItems='center' justifyContent='flex-start' gap={10}>
-					<TextInput
-						label='First Name'
-						placeholder='e.g John'
-						onChangeText={setFirstName}
-						value={formData.firstName}
-						error={formErrors.firstName}
-					/>
+				<TextInput
+					label='First Name'
+					placeholder='e.g John'
+					onChangeText={setFirstName}
+					value={formData.firstName}
+					error={formErrors.firstName}
+				/>
 
-					<TextInput
-						label='Last Name'
-						placeholder='e.g Doe'
-						onChangeText={setLastName}
-						value={formData.lastName}
-						error={formErrors.lastName}
-					/>
-				</Row>
+				<Pad size={12} />
+
+				<TextInput
+					label='Last Name'
+					placeholder='e.g Doe'
+					onChangeText={setLastName}
+					value={formData.lastName}
+					error={formErrors.lastName}
+				/>
 
 				<Pad size={12} />
 
@@ -161,11 +170,31 @@ export default function GuarantorDetails({
 					selectedOption={selectedState}
 					onSelect={(option) => {
 						setSelectedState(option);
-
+						setState(option.value);
 						setSelectedLga(undefined); // Reset LGA when state changes
 					}}
 					error=''
 					isLoading={statesLoading}
+				/>
+
+				<Pad size={12} />
+
+				{/* LGA Dropdown */}
+				<Dropdown
+					label='Local Govt. Area'
+					options={
+						lgas.map((option: any) => ({
+							label: option.name,
+							value: option.id,
+						})) || []
+					}
+					selectedOption={selectedLga}
+					onSelect={(option) => {
+						setSelectedLga(option);
+						setLga(option.value);
+					}}
+					error={formErrors.lga}
+					isLoading={lgasLoading}
 				/>
 
 				<Pad size={12} />
@@ -205,44 +234,6 @@ export default function GuarantorDetails({
 					error={formErrors.dateOfBirth}
 				/>
 
-				<Row alignItems='center' justifyContent='flex-start' gap={10}>
-					<Dropdown
-						label='State'
-						options={
-							statesData?.data.map((option: any) => ({
-								label: option.name,
-								value: option.id,
-							})) || []
-						}
-						selectedOption={selectedState}
-						onSelect={(option) => {
-							setSelectedState(option);
-
-							setState(option.value); // Reset LGA when state changes
-						}}
-						error=''
-						isLoading={statesLoading}
-					/>
-
-					{/* LGA Dropdown */}
-					<Dropdown
-						label='Local Govt. Area'
-						options={
-							lgas.map((option: any) => ({
-								label: option.name,
-								value: option.id,
-							})) || []
-						}
-						selectedOption={selectedLga}
-						onSelect={(option) => {
-							setSelectedLga(option);
-							setLga(option.value);
-						}}
-						error=''
-						isLoading={lgasLoading}
-					/>
-				</Row>
-
 				<Pad size={12} />
 
 				<TextInput
@@ -253,6 +244,8 @@ export default function GuarantorDetails({
 					error={formErrors.email}
 				/>
 
+				<Pad size={12} />
+
 				<TextInput
 					label='NIN'
 					keyboardType='numeric'
@@ -261,6 +254,23 @@ export default function GuarantorDetails({
 					onChangeText={setNin}
 					value={formData.nin}
 					error={formErrors.nin}
+				/>
+
+				<Pad size={12} />
+
+				<Dropdown
+					label='Relationship'
+					options={[
+						{ label: "Family", value: "family" },
+						{ label: "Friend", value: "friend" },
+						{ label: "Colleague", value: "colleague" },
+					]}
+					selectedOption={selectedRelationship}
+					onSelect={(option) => {
+						setSelectedRelationship(option);
+						setRelationship(option.value);
+					}}
+					error={formErrors.relationship}
 				/>
 			</View>
 
@@ -274,7 +284,7 @@ export default function GuarantorDetails({
 
 			<Pad size={80} />
 
-			<Button title='Next' onPress={submit} />
+			<Button title='Next' onPress={handleSubmit} />
 			<Pad size={20} />
 		</MainLayout>
 	);

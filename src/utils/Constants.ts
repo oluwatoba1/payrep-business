@@ -8,12 +8,16 @@ import {
 	QOREID_LOCAL_CLIENT_ID,
 	QOREID_PROD_CLIENT_ID,
 	QOREID_SANDBOX_CLIENT_ID,
+	KIDASHI_LOCAL_URL,
+	KIDASHI_SANDBOX_URL,
+	KIDASHI_PROD_URL,
 } from "@env";
 import ComponentImages from "../../assets/images/components";
 
 interface ENV_CONFIG {
 	BASE_URL: string;
 	QOREID_CLIENT_ID: string;
+	KIDASHI_URL: string;
 }
 
 export const { height, width } = Dimensions.get("window");
@@ -75,20 +79,25 @@ const APP_CONFIG: Record<"local" | "sandbox" | "production", ENV_CONFIG> = {
 	local: {
 		BASE_URL: LOCAL_BASE_URL,
 		QOREID_CLIENT_ID: QOREID_LOCAL_CLIENT_ID,
+		KIDASHI_URL: KIDASHI_LOCAL_URL,
 	},
 	sandbox: {
 		BASE_URL: SANDBOX_BASE_URL,
 		QOREID_CLIENT_ID: QOREID_SANDBOX_CLIENT_ID,
+		KIDASHI_URL: KIDASHI_SANDBOX_URL,
 	},
 	production: {
 		BASE_URL: PROD_BASE_URL,
 		QOREID_CLIENT_ID: QOREID_PROD_CLIENT_ID,
+		KIDASHI_URL: KIDASHI_PROD_URL,
 	},
 };
 
 export const BASE_URL = APP_CONFIG[APP_MODE].BASE_URL;
+export const KIDASHI_URL = APP_CONFIG[APP_MODE].KIDASHI_URL;
 export const QOREID_CLIENT_ID = APP_CONFIG[APP_MODE].QOREID_CLIENT_ID;
-console.log("BASE_URL:--------------", BASE_URL);
+console.log("BASE_URL:----------------", BASE_URL);
+console.log("KBASE_URL:-------------------", KIDASHI_URL);
 export const DEFAULT_ERROR_MESSAGE = "Something went wrong, contact support";
 
 export const IDCardTypes = [
@@ -170,3 +179,12 @@ export const KYCLOG_TYPES = {
 	BVN_VERIFICATION: "bvn_verification",
 	NIN_VERIFICATION: "nin_verification",
 };
+
+export const VENDOR_CATEGORIES = [
+	{ label: "Retail", value: "RETAIL" },
+	{ label: "Wholesale", value: "WHOLESALE" },
+	{ label: "Manufacturing", value: "MANUFACTURING" },
+	{ label: "Services", value: "SERVICES" },
+	{ label: "Agriculture", value: "AGRICULTURE" },
+	{ label: "Others", value: "OTHER" },
+];

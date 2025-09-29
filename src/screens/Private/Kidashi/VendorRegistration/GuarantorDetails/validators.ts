@@ -11,6 +11,7 @@ interface Form {
 	lga: string;
 	email: string;
 	nin: string;
+	relationship: string;
 }
 
 interface FormError {
@@ -23,6 +24,7 @@ interface FormError {
 	lga: string;
 	email: string;
 	nin: string;
+	relationship: string;
 }
 
 const defaultForm = {
@@ -35,9 +37,14 @@ const defaultForm = {
 	lga: "",
 	email: "",
 	nin: "",
+	relationship: "",
 };
 
 const useGuarantorDetails = () => {
+	const [guarantorNumber, setGuarantorNumber] = useState<number>(1);
+	const [guarantors, setGuarantors] = useState<IVendorGuarantor[]>([]);
+
+	// Form states
 	const [firstName, setFirstName] = useState<string>("");
 	const [lastName, setLastName] = useState<string>("");
 	const [gender, setGender] = useState<string>("");
@@ -47,18 +54,29 @@ const useGuarantorDetails = () => {
 	const [lga, setLga] = useState<string>("");
 	const [email, setEmail] = useState<string>("");
 	const [nin, setNin] = useState<string>("");
+	const [relationship, setRelationship] = useState<string>("");
 
-	// Validation schemas
-	const vendorItemsSchema = z.object({
+	const guarantorSchema = z.object({
 		firstName: z.string().min(1, "First name is required"),
 		lastName: z.string().min(1, "Last name is required"),
 		gender: z.string().min(1, "Gender is required"),
-		phoneNumber: z.string().min(1, "Phone number is required"),
+		phoneNumber: z
+			.string()
+			.min(1, "Phone number is required")
+			.refine((val) => /^\d{11}$/.test(val), {
+				message: "Phone number must be exactly 11 digits",
+			}),
 		dateOfBirth: z.string().min(1, "Date of birth is required"),
 		state: z.string().min(1, "State is required"),
 		lga: z.string().min(1, "LGA is required"),
-		email: z.string().min(1, "Email is required"),
-		nin: z.string().min(1, "NIN is required"),
+		email: z.string().email("Invalid email").min(1, "Email is required"),
+		nin: z
+			.string()
+			.min(1, "NIN is required")
+			.refine((val) => /^\d{11}$/.test(val), {
+				message: "NIN must be exactly 11 digits",
+			}),
+		relationship: z.string().min(1, "Relationship is required"),
 	});
 
 	const formData = {
@@ -71,16 +89,58 @@ const useGuarantorDetails = () => {
 		lga,
 		email,
 		nin,
+		relationship,
 	};
 
 	const [formErrors, setFormErrors] = useState<FormError>(defaultForm);
 
-	const validateForm = (cb: Function) => {
+	const clearForm = () => {
+		setFirstName("");
+		setLastName("");
+		setGender("");
+		setPhoneNumber("");
+		setDateOfBirth("");
+		setState("");
+		setLga("");
+		setEmail("");
+		setNin("");
+		setRelationship("");
+		setFormErrors(defaultForm);
+	};
+
+	const addGuarantor = (guarantorData: IVendorGuarantor) => {
+		setGuarantors([...guarantors, guarantorData]);
+		setGuarantorNumber(guarantorNumber + 1);
+		guarantorNumber !== 2 && clearForm();
+	};
+
+	const validateForm = (cb: (guarantors: IVendorGuarantor[]) => void) => {
 		try {
-			vendorItemsSchema.parse(formData);
+			guarantorSchema.parse(formData);
 			setFormErrors(defaultForm);
-			cb();
+
+			const guarantorData: IVendorGuarantor = {
+				first_name: firstName,
+				surname: lastName,
+				other_name: "",
+				phone: phoneNumber,
+				relationship,
+				nin,
+				email,
+				state_id: state,
+				lga_id: lga,
+				gender,
+				dob: dateOfBirth,
+				nationality: "NG", // Default to Nigeria
+			};
+
+			addGuarantor(guarantorData);
+
+			if (guarantorNumber === 2) {
+				cb([...guarantors, guarantorData]);
+			}
 		} catch (error) {
+			console.log(error);
 			if (error instanceof z.ZodError) {
 				const errors: Record<keyof Form, string> = defaultForm;
 				error.errors.forEach((err) => {
@@ -93,14 +153,13 @@ const useGuarantorDetails = () => {
 		}
 	};
 
-	const clearFormError = (key: string) =>
-		setFormErrors((errors) => ({ ...errors, [key]: "" }));
-
 	return {
 		formData,
 		formErrors,
-		clearFormError,
+		guarantorNumber,
 		validateForm,
+		clearFormError: (key: string) =>
+			setFormErrors((errors) => ({ ...errors, [key]: "" })),
 		setFirstName,
 		setLastName,
 		setGender,
@@ -110,6 +169,7 @@ const useGuarantorDetails = () => {
 		setLga,
 		setEmail,
 		setNin,
+		setRelationship,
 	};
 };
 

@@ -102,10 +102,16 @@ export default function KidashiBottomTabBar({
 	const bottomTabResolver = (): boolean => {
 		const currentRoute = state.routes[state.index];
 
-		if (!currentRoute.state?.routes || currentRoute.state?.index === undefined)
+		console.log("---------->>>>>", currentRoute);
+
+		if (
+			(!currentRoute.state?.routes ||
+				currentRoute.state?.index === undefined) &&
+			!currentRoute.params
+		)
 			return true;
 		const landingScreen = kidashiBottomNavigationRoutesList.includes(
-			(currentRoute.state?.routes[currentRoute.state?.index] as any)?.name
+			(currentRoute.state?.routes[currentRoute.state?.index || 0] as any)?.name
 		);
 
 		return landingScreen;

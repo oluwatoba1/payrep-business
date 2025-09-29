@@ -21,10 +21,6 @@ const useVendorItems = () => {
 		businessDescription: z.string().min(1, "Business description is required"),
 	});
 
-	const formData = {
-		businessDescription,
-	};
-
 	const [formErrors, setFormErrors] = useState<FormError>(defaultForm);
 
 	const validateForm = (cb: Function) => {
@@ -47,6 +43,10 @@ const useVendorItems = () => {
 				setFormErrors(errors);
 			}
 		}
+	};
+
+	const formData = {
+		businessDescription,
 	};
 
 	const clearFormError = (key: string) =>

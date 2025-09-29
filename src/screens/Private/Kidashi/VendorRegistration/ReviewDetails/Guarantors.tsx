@@ -1,7 +1,7 @@
 import GuarantorReviewCard from "./GuarantorReviewCard";
 
 interface GuarantorsProps {
-	guarantors: IGuarantorDetails[];
+	guarantors: IVendorGuarantor[];
 	onEdit: () => void;
 }
 

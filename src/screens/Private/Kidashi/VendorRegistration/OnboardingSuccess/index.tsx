@@ -4,18 +4,31 @@ import styles from "./styles";
 import ScreenImages from "@assets/images/screens";
 import Pad from "@components/Pad";
 import { Button, Typography } from "@components/Forms";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import {
+	CompositeScreenProps,
+	useFocusEffect,
+	useNavigation,
+} from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import { BottomTabParamList, KidashiStackParamList } from "@navigation/types";
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import {
+	BottomTabParamList,
+	KidashiBottomTabParamList,
+	KidashiRegistrationStackParamList,
+} from "@navigation/types";
+import {
+	BottomTabNavigationProp,
+	BottomTabScreenProps,
+} from "@react-navigation/bottom-tabs";
 import { useCallback } from "react";
 
-type OnboardingSuccessProps = StackScreenProps<
-	KidashiStackParamList,
-	"OnboardingSuccess"
+type OnboardingSuccessProps = CompositeScreenProps<
+	StackScreenProps<KidashiRegistrationStackParamList, "OnboardingSuccess">,
+	BottomTabScreenProps<KidashiBottomTabParamList, "KidashiHome">
 >;
 
-export default function OnboardingSuccess({}: OnboardingSuccessProps) {
+export default function OnboardingSuccess({
+	navigation: { navigate },
+}: OnboardingSuccessProps) {
 	const { reset } =
 		useNavigation<BottomTabNavigationProp<BottomTabParamList>>();
 
@@ -32,6 +45,7 @@ export default function OnboardingSuccess({}: OnboardingSuccessProps) {
 				},
 			],
 		});
+		navigate("KidashiHome", { screen: "KidashiDashboard" });
 		return true;
 	};
 

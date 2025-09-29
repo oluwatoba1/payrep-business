@@ -7,7 +7,7 @@ import Pad from "@components/Pad";
 import Colors from "@theme/Colors";
 
 interface GuarantorReviewCardProps {
-	guarantorDetails: IGuarantorDetails;
+	guarantorDetails: IVendorGuarantor;
 	onEdit: () => void;
 }
 
@@ -27,7 +27,7 @@ export default function GuarantorReviewCard({
 					</View>
 					<View>
 						<Typography
-							title={`${guarantorDetails.firstName} ${guarantorDetails.lastName}`}
+							title={`${guarantorDetails.first_name} ${guarantorDetails.surname}`}
 							type='subheading-sb'
 						/>
 						<Typography title={guarantorDetails.gender} type='subheading' />
@@ -52,7 +52,7 @@ export default function GuarantorReviewCard({
 					color={Colors.neutral["400"]}
 				/>
 				<Typography
-					title={guarantorDetails.dateOfBirth}
+					title={guarantorDetails.dob}
 					type='body-sb'
 					style={{ textAlign: "right" }}
 				/>
@@ -70,7 +70,7 @@ export default function GuarantorReviewCard({
 					style={{ textAlign: "right" }}
 				/>
 			</Row>
-			<Pad size={8} />
+			{/* <Pad size={8} />
 			<Row alignItems='center' justifyContent='space-between'>
 				<Typography
 					title='State'
@@ -78,7 +78,7 @@ export default function GuarantorReviewCard({
 					color={Colors.neutral["400"]}
 				/>
 				<Typography
-					title={guarantorDetails.state}
+					title={guarantorDetails.state_id}
 					type='body-sb'
 					style={{ textAlign: "right" }}
 				/>
@@ -91,11 +91,11 @@ export default function GuarantorReviewCard({
 					color={Colors.neutral["400"]}
 				/>
 				<Typography
-					title={guarantorDetails.lga}
+					title={guarantorDetails.lga_id}
 					type='body-sb'
 					style={{ textAlign: "right" }}
 				/>
-			</Row>
+			</Row> */}
 			<Pad size={8} />
 			<Row alignItems='center' justifyContent='space-between'>
 				<Typography

@@ -7,16 +7,11 @@ import Pad from "@components/Pad";
 import { scaleHeight } from "@utils/Helpers";
 
 interface AboutMyBusinessProps {
-	businessDetails: {
-		businessDescription: string;
-		state: string;
-		lga: string;
-		community: string;
-	};
+	businessDescription: string;
 }
 
 export default function AboutMyBusiness({
-	businessDetails,
+	businessDescription,
 }: AboutMyBusinessProps) {
 	return (
 		<View style={{ height: scaleHeight(300) }}>
@@ -32,39 +27,10 @@ export default function AboutMyBusiness({
 				<Pad size={8} />
 
 				<Typography
-					title={businessDetails.businessDescription}
+					title={businessDescription}
 					type='subheading-sb'
 					style={styles.reviewPadding}
 				/>
-			</View>
-
-			<Pad size={16} />
-
-			<View style={[styles.reviewCardContainer, styles.reviewPadding]}>
-				<Row alignItems='center' justifyContent='space-between'>
-					<Typography title='State' type='subheading' />
-					<Typography
-						title={businessDetails.state}
-						type='subheading-sb'
-						style={{ textAlign: "right" }}
-					/>
-				</Row>
-				<Row alignItems='center' justifyContent='space-between'>
-					<Typography title='Local Government Area' type='subheading' />
-					<Typography
-						title={businessDetails.lga}
-						type='subheading-sb'
-						style={{ textAlign: "right" }}
-					/>
-				</Row>
-				<Row alignItems='center' justifyContent='space-between'>
-					<Typography title='Community' type='subheading' />
-					<Typography
-						title={businessDetails.community}
-						type='subheading-sb'
-						style={{ textAlign: "right" }}
-					/>
-				</Row>
 			</View>
 		</View>
 	);

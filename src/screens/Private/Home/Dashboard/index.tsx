@@ -334,7 +334,7 @@ export default function Dashboard({
 					onProceed={() =>
 						navigate("KidashiBottomTabs", {
 							screen: "KidashiHome",
-							params: { screen: "KidashiDashboard" },
+							params: { screen: "KidashiRegistration" },
 						})
 					}
 				/>

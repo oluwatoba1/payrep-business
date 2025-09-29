@@ -1,59 +1,49 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { BackHandler, View } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
-import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
+import { CompositeScreenProps } from "@react-navigation/native";
 
 import { MainLayout } from "@components/Layout";
-import { Typography, Button, TextInput, Dropdown } from "@components/Forms";
-import { KidashiStackParamList, BottomTabParamList } from "@navigation/types";
-import useToast from "@hooks/useToast";
-import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
-
+import { Typography, Button, TextInput } from "@components/Forms";
+import {
+	KidashiRegistrationStackParamList,
+	BottomTabParamList,
+} from "@navigation/types";
 import Pad from "@components/Pad";
-import { useUpdateBusinessInformationMutation } from "@store/apis/customerApi";
 import useVendorItems from "./validators";
 import styles from "./styles";
 import { Stepper } from "@components/Miscellaneous";
+import { setRegistrationDetails } from "@store/slices/kidashiSlice";
+import { useAppDispatch } from "@store/hooks";
 
 type VendorItemsProps = CompositeScreenProps<
-	StackScreenProps<KidashiStackParamList, "VendorItems">,
+	StackScreenProps<KidashiRegistrationStackParamList, "VendorItems">,
 	StackScreenProps<BottomTabParamList, "Home">
 >;
 
 export default function VendorItems({
 	navigation: { navigate, goBack },
 }: VendorItemsProps) {
-	const { showToast } = useToast();
+	const dispatch = useAppDispatch();
 	const { formData, formErrors, validateForm, setBusinessDescription } =
 		useVendorItems();
-	const [updateBusinessInformation, { isLoading }] =
-		useUpdateBusinessInformationMutation();
 
 	const submit = async () => {
-		navigate("GuarantorDetails");
-	};
-
-	useFocusEffect(
-		useCallback(() => {
-			const backAction = () => {
-				return true; // Prevent default behavior
-			};
-
-			const backHandler = BackHandler.addEventListener(
-				"hardwareBackPress",
-				backAction
+		console.log({
+			business_description: formData.businessDescription,
+		});
+		validateForm(() => {
+			dispatch(
+				setRegistrationDetails({
+					business_description: formData.businessDescription,
+				})
 			);
-
-			return () => backHandler.remove(); // Cleanup
-		}, [])
-	);
+			navigate("GuarantorDetails");
+		});
+	};
 
 	return (
 		<MainLayout
 			keyboardAvoidingType='scroll-view'
-			backAction={goBack}
-			isLoading={isLoading}
-			rightTitle='Vendor Items'
+			backAction={() => navigate("VendorInformation")}
 		>
 			<Stepper steps={3} currentStep={2} />
 
@@ -72,6 +62,9 @@ export default function VendorItems({
 				value={formData.businessDescription}
 				error={formErrors.businessDescription}
 				customTextInputStyle={styles.customTextInputStyle}
+				multiline
+				numberOfLines={4}
+				textAlignVertical='top'
 			/>
 
 			<Pad size={200} />

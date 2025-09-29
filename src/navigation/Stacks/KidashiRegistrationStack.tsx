@@ -10,15 +10,15 @@ import {
 	OnboardingSuccess,
 	OnboardingStatus,
 } from "@screens/Private/Kidashi/VendorRegistration";
-import { KidashiStackParamList } from "../types";
+import { KidashiRegistrationStackParamList } from "../types";
 
-const Stack = createNativeStackNavigator<KidashiStackParamList>();
+const Stack = createNativeStackNavigator<KidashiRegistrationStackParamList>();
 
-export default function KidashiStack() {
+export default function KidashiRegistrationStack() {
 	return (
 		<Stack.Navigator
 			screenOptions={{ headerShown: false }}
-			initialRouteName='OnboardingStatus'
+			initialRouteName='KidashiOnboarding'
 		>
 			<Stack.Screen name='VendorInformation' component={VendorInformation} />
 			<Stack.Screen name='KidashiOnboarding' component={KidashiOnboarding} />

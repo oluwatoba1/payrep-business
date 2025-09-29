@@ -83,6 +83,7 @@ export default function SelectVerifiers({
 							onSelect={() => onSelect(item)}
 						/>
 					)}
+					showsVerticalScrollIndicator={false}
 				/>
 			</View>
 

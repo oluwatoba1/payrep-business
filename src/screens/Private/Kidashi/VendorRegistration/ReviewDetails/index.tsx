@@ -3,7 +3,7 @@ import { Image, View } from "react-native";
 
 import { Button, IconButton, Typography } from "@components/Forms";
 import { MainLayout, Row } from "@components/Layout";
-import { KidashiStackParamList } from "@navigation/types";
+import { KidashiRegistrationStackParamList } from "@navigation/types";
 import styles from "./styles";
 import ScreenImages from "@assets/images/screens";
 import Pad from "@components/Pad";
@@ -12,46 +12,62 @@ import { useState } from "react";
 import Guarantors from "./Guarantors";
 import AboutMyBusiness from "./AboutMyBusiness";
 import { Stepper } from "@components/Miscellaneous";
+import useToast from "@hooks/useToast";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { useRegisterMutation } from "@store/apis/kidashiApi";
+import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
+import { setVendorId } from "@store/slices/kidashiSlice";
 
 type ReviewDetailsProps = StackScreenProps<
-	KidashiStackParamList,
+	KidashiRegistrationStackParamList,
 	"ReviewDetails"
 >;
 
 export default function ReviewDetails({
 	navigation: { navigate, goBack },
 }: ReviewDetailsProps) {
+	const dispatch = useAppDispatch();
 	const [activeTab, setActiveTab] = useState<string>("Guarantors");
-	const [guarantors, setGuarantors] = useState<IGuarantorDetails[]>([
-		{
-			firstName: "Zainab",
-			lastName: "Abubakar",
-			gender: "Female",
-			dateOfBirth: "14/03/1958",
-			nin: "12345678901",
-			state: "Kaduna",
-			lga: "Zaria",
-			email: "zeemama@gmail.com",
-			phone: "+2349012345678",
-		},
-		{
-			firstName: "Amina",
-			lastName: "Abubakar",
-			gender: "Female",
-			dateOfBirth: "14/03/ 1963",
-			nin: "23456789012",
-			state: "Kaduna",
-			lga: "Zaria",
-			email: "aminaabubakar@gmail.com",
-			phone: "+2348155443210",
-		},
-	]);
+
+	const { showToast } = useToast();
+	const customer = useAppSelector((state) => state.customer.customer);
+	const registration = useAppSelector((state) => state.kidashi.registration);
+	const [register, { isLoading }] = useRegisterMutation();
+
+	const handleSubmit = async () => {
+		try {
+			const { status, message, vendor_id } = await register({
+				business_type: registration?.business_type || "",
+				community: registration?.community || "",
+				guarantors: registration?.guarantors || [],
+				business_description: registration?.business_description || "",
+
+				cba_customer_id: "4d324abf-fad5-4a4d-ad67-7fe1736e8a28",
+			}).unwrap();
+
+			if (status) {
+				console.log(vendor_id);
+				navigate("OnboardingSuccess");
+				dispatch(setVendorId(vendor_id));
+			} else {
+				showToast("danger", message);
+			}
+		} catch (error: ErrorResponse | any) {
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
+
+	console.log(registration);
 
 	return (
 		<MainLayout
 			keyboardAvoidingType='scroll-view'
 			rightTitle='Review and Send'
 			backAction={goBack}
+			isLoading={isLoading}
 		>
 			<Stepper steps={3} currentStep={3} />
 
@@ -67,9 +83,11 @@ export default function ReviewDetails({
 
 				<Pad size={8} />
 
-				<Typography title='Mama Bintu’s Kitchen' type='subheading-sb' />
-				<Typography title='Food & Drinks' type='label-r' />
-				<Typography title='Local Restaurant / Catering' type='label-r' />
+				<Typography
+					title={customer?.business_name || ""}
+					type='subheading-sb'
+				/>
+				<Typography title={registration.business_type} type='label-r' />
 
 				<Pad size={8} />
 
@@ -99,26 +117,18 @@ export default function ReviewDetails({
 
 			{activeTab === "Guarantors" ? (
 				<Guarantors
-					guarantors={guarantors}
+					guarantors={registration?.guarantors || []}
 					onEdit={() => navigate("GuarantorDetails")}
 				/>
 			) : (
 				<AboutMyBusiness
-					businessDetails={{
-						businessDescription: "I sell igba ati awo",
-						state: "Kaduna",
-						lga: "Zaria",
-						community: "Kaurna",
-					}}
+					businessDescription={registration?.business_description || ""}
 				/>
 			)}
 
 			<Pad size={40} />
 
-			<Button
-				title='Submit for Review'
-				onPress={() => navigate("OnboardingSuccess")}
-			/>
+			<Button title='Submit for Review' onPress={handleSubmit} />
 
 			<Pad size={100} />
 		</MainLayout>

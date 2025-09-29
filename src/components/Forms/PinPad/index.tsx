@@ -59,8 +59,6 @@ export default function PinPad({
 		const raw = text ?? "";
 		const digits = raw.replace(/\D/g, "");
 
-		console.log("Pastedddd:", digits);
-
 		// Delete path (some keyboards send "" instead of Backspace)
 		if (digits.length === 0) {
 			const next = [...pinArray];

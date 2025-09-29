@@ -1,68 +1,66 @@
+// src/screens/Private/Kidashi/VendorRegistration/VendorInformation/validators.ts
 import { useState } from "react";
 import * as z from "zod";
 
 interface Form {
-	businessCategory: string;
-	community: string;
+	businessType: string;
 	state: string;
 	lga: string;
+	community: string;
 }
 
 interface FormError {
-	businessCategory: string;
-	community: string;
+	businessType: string;
 	state: string;
 	lga: string;
+	community: string;
 }
 
 const defaultForm = {
-	businessCategory: "",
-	community: "",
+	businessType: "",
 	state: "",
 	lga: "",
+	community: "",
 };
 
-const useVendorInformation = (notifier: Function) => {
-	const [businessCategory, setBusinessCategory] = useState<string>("");
-	const [community, setCommunity] = useState<string>("");
+const useVendorInformation = () => {
+	const [businessType, setBusinessType] = useState<string>("");
 	const [state, setState] = useState<string>("");
 	const [lga, setLga] = useState<string>("");
+	const [community, setCommunity] = useState<string>("");
 
-	// Validation schemas
-	const vendorInformationSchema = z.object({
-		businessCategory: z.string().min(1, "Business category is required"),
-		community: z.string().min(1, "Community is required"),
+	const vendorInfoSchema = z.object({
+		businessType: z.string().min(1, "Business type is required"),
 		state: z.string().min(1, "State is required"),
 		lga: z.string().min(1, "LGA is required"),
+		community: z.string().min(1, "Community is required"),
 	});
 
 	const formData = {
-		businessCategory,
-		community,
+		businessType,
 		state,
 		lga,
+		community,
 	};
 
 	const [formErrors, setFormErrors] = useState<FormError>(defaultForm);
 
 	const validateForm = (cb: Function) => {
 		try {
-			vendorInformationSchema.parse(formData);
-			setFormErrors({
-				businessCategory: "",
-				community: "",
-				state: "",
-				lga: "",
-			});
-			cb();
+			vendorInfoSchema.parse(formData);
+			setFormErrors(defaultForm);
+
+			const vendorData = {
+				business_type: businessType,
+				state_id: state,
+				lga_id: lga,
+				community,
+			};
+
+			cb(vendorData);
 		} catch (error) {
 			if (error instanceof z.ZodError) {
-				const errors: Record<keyof Form, string> = {
-					businessCategory: "",
-					community: "",
-					state: "",
-					lga: "",
-				};
+				const errors: Record<keyof Form, string> = defaultForm;
 				error.errors.forEach((err) => {
 					const field = err.path[0];
 					const message = err.message;
@@ -73,18 +71,16 @@ const useVendorInformation = (notifier: Function) => {
 		}
 	};
 
-	const clearFormError = (key: string) =>
-		setFormErrors((errors) => ({ ...errors, [key]: "" }));
-
 	return {
 		formData,
 		formErrors,
-		clearFormError,
 		validateForm,
-		setBusinessCategory,
-		setCommunity,
+		clearFormError: (key: string) =>
+			setFormErrors((errors) => ({ ...errors, [key]: "" })),
+		setBusinessType,
 		setState,
 		setLga,
+		setCommunity,
 	};
 };
 

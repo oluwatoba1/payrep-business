@@ -71,6 +71,8 @@ export default function MobileNumber({
 				type: route.params.userType,
 			}).unwrap();
 
+			console.log(data);
+
 			if (status) {
 				if (data.has_personal_profile) {
 					setHasPersonalProfileModal(true);

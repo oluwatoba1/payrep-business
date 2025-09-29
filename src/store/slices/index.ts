@@ -7,3 +7,4 @@ export {default as TransferSlice} from './transferSlice';
 export {default as TransactionSlice} from './transactionSlice';
 export {default as ServiceSlice} from './serviceSlice';
 export {default as BillSlice} from './billSlice';
+export {default as KidashiSlice} from './kidashiSlice';

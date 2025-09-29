@@ -6,9 +6,12 @@ import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
 import { MainLayout } from "@components/Layout";
 import { Typography, Button, TextInput, Dropdown } from "@components/Forms";
-import { KidashiStackParamList, BottomTabParamList } from "@navigation/types";
+import {
+	KidashiRegistrationStackParamList,
+	BottomTabParamList,
+} from "@navigation/types";
 import useToast from "@hooks/useToast";
-import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
+import { DEFAULT_ERROR_MESSAGE, VENDOR_CATEGORIES } from "@utils/Constants";
 import useVendorInformation from "./validators";
 import Pad from "@components/Pad";
 import {
@@ -16,25 +19,28 @@ import {
 	useFetchStatesQuery,
 } from "@store/apis/generalApi";
 import { Stepper } from "@components/Miscellaneous";
+import { useAppDispatch } from "@store/hooks";
+import { setRegistrationDetails } from "@store/slices/kidashiSlice";
 
 type VendorInformationProps = CompositeScreenProps<
-	StackScreenProps<KidashiStackParamList, "VendorInformation">,
+	StackScreenProps<KidashiRegistrationStackParamList, "VendorInformation">,
 	BottomTabScreenProps<BottomTabParamList, "Home">
 >;
 
 export default function VendorInformation({
 	navigation: { navigate },
 }: VendorInformationProps) {
+	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
 	const {
 		formData,
 		formErrors,
 		validateForm,
-		setCommunity,
-		setBusinessCategory,
+		setBusinessType,
 		setState,
 		setLga,
-	} = useVendorInformation(showToast);
+		setCommunity,
+	} = useVendorInformation();
 
 	const { data: statesData, isLoading: statesLoading } = useFetchStatesQuery();
 
@@ -49,6 +55,18 @@ export default function VendorInformation({
 	const [selectedLga, setSelectedLga] = useState<
 		DefaultDropdownOption | undefined
 	>(undefined);
+	const [selectedCategory, setSelectedCategory] = useState<
+		DefaultDropdownOption | undefined
+	>(undefined);
+
+	const handleSubmit = () => {
+		validateForm(
+			(vendorData: Omit<VendorRegistrationRequest, "cba_customer_id">) => {
+				dispatch(setRegistrationDetails({ ...vendorData }));
+				navigate("VendorItems");
+			}
+		);
+	};
 
 	const _fetchLgas = async () => {
 		try {
@@ -66,10 +84,6 @@ export default function VendorInformation({
 				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
 			);
 		}
-	};
-
-	const submit = async () => {
-		navigate("VendorItems");
 	};
 
 	// Update LGAs when state changes
@@ -106,22 +120,21 @@ export default function VendorInformation({
 
 			<Typography
 				type='heading4-sb'
-				title='Confirm Your Business Information'
+				title='Provide Your Business Information'
 			/>
 			<Typography
 				type='body-r'
-				title='Here’s what we have on your business so far. Take a moment to review and update'
+				title='Take a moment to update your business information'
 			/>
 			<Dropdown
 				label='Category'
-				options={[]}
-				selectedOption={selectedState}
+				options={VENDOR_CATEGORIES}
+				selectedOption={selectedCategory}
 				onSelect={(option) => {
-					setSelectedState(option);
-
-					setSelectedLga(undefined); // Reset LGA when state changes
+					setSelectedCategory(option);
+					setBusinessType(option.value);
 				}}
-				error=''
+				error={formErrors.businessType}
 				isLoading={statesLoading}
 			/>
 
@@ -138,10 +151,10 @@ export default function VendorInformation({
 				selectedOption={selectedState}
 				onSelect={(option) => {
 					setSelectedState(option);
-
+					setState(option.value);
 					setSelectedLga(undefined); // Reset LGA when state changes
 				}}
-				error=''
+				error={formErrors.state}
 				isLoading={statesLoading}
 			/>
 
@@ -159,8 +172,9 @@ export default function VendorInformation({
 				selectedOption={selectedLga}
 				onSelect={(option) => {
 					setSelectedLga(option);
+					setLga(option.value);
 				}}
-				error=''
+				error={formErrors.lga}
 				isLoading={lgasLoading}
 			/>
 
@@ -176,7 +190,7 @@ export default function VendorInformation({
 
 			<Pad size={150} />
 
-			<Button title='Next' onPress={submit} />
+			<Button title='Next' onPress={handleSubmit} />
 		</MainLayout>
 	);
 }

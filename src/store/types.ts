@@ -268,7 +268,7 @@ interface RegisterCredentials {
 	password: string;
 	otp: string;
 	device_id: string;
-  customer_id: string;
+	customer_id: string;
 }
 
 interface RegisterMobileDataResponse {
@@ -333,6 +333,13 @@ interface AuthResponse<Type> {
 	message: string;
 	data: Type;
 }
+
+interface KidashAuthBase {
+	status: boolean;
+	message: string;
+}
+
+type KidashiAuthResponse<Type> = KidashAuthBase & Type;
 
 interface SuccessResponse<Type> {
 	error: boolean;
@@ -839,4 +846,38 @@ interface IStatementRequest {
 	email: string;
 	format: string;
 	signed: boolean;
+}
+
+interface IVendorGuarantor {
+	first_name: string;
+	surname: string;
+	other_name: string;
+	phone: string;
+	relationship: string;
+	nin: string;
+	email: string;
+	state_id: string;
+	lga_id: string;
+	gender: string;
+	dob: string;
+	nationality: string;
+}
+
+interface VendorRegistrationRequest {
+	cba_customer_id: string;
+	business_type: string;
+	community: string;
+	guarantors: IVendorGuarantor[];
+	business_description: string;
+}
+
+interface IKidashi {
+	vendor_id: string;
+	registration: Omit<VendorRegistrationRequest, "cba_customer_id">;
+}
+
+interface CreateTrustCircleRequest {
+	vendor_id: string;
+	circle_name: string;
+	description: string;
 }
