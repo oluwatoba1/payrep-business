@@ -5,7 +5,7 @@ import type {
 	FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
 
-import { RootState } from "..";
+import { RootState, store } from "..";
 import { KIDASHI_URL } from "@utils/Constants";
 import { setCredentials } from "@store/slices/authSlice";
 
@@ -95,6 +95,92 @@ const KidashiApi = createApi({
 				body,
 			}),
 		}),
+		updateLocation: builder.mutation<
+			AuthResponse<null>,
+			LocationCredentials & { cba_customer_id: string }
+		>({
+			query: (body) => {
+				const customerId: string = store.getState().auth.customer?.id || "";
+				return {
+					url: "mobile/location_setup",
+					method: "PUT",
+					body,
+				};
+			},
+		}),
+		updatePep: builder.mutation<
+			AuthResponse<null>,
+			PepCredentials & { cba_customer_id: string }
+		>({
+			query: (body) => {
+				return {
+					url: "woman/mobile/pep",
+					method: "PUT",
+					body,
+				};
+			},
+		}),
+		updateIncome: builder.mutation<
+			AuthResponse<null>,
+			SourceOfIncomeCredentials & { cba_customer_id: string }
+		>({
+			query: (body) => {
+				return {
+					url: "woman/mobile/income",
+					method: "PUT",
+					body,
+				};
+			},
+		}),
+		affirmAttestation: builder.mutation<
+			AuthResponse<null>,
+			{ cba_customer_id: string }
+		>({
+			query: (body) => {
+				return {
+					url: "woman/mobile/attestation",
+					method: "POST",
+					body,
+				};
+			},
+		}),
+		bvnLookup: builder.mutation<
+			AuthResponse<any>,
+			BvnLookupCredentials & { cba_customer_id: string }
+		>({
+			query: (body) => {
+				const customerId: string = store.getState().auth.customer?.id || "";
+				return {
+					url: "woman/mobile/bvn_lookup",
+					method: "POST",
+					body: { ...body, customer: customerId },
+				};
+			},
+		}),
+		ninLookup: builder.mutation<
+			AuthResponse<any>,
+			NinLookupCredentials & { cba_customer_id: string }
+		>({
+			query: (body) => {
+				const customerId: string = store.getState().auth.customer?.id || "";
+				return {
+					url: "woman/mobile/nin_lookup",
+					method: "POST",
+					body: { ...body, customer: customerId },
+				};
+			},
+		}),
+		uploadMeansofIdentification: builder.mutation<AuthResponse<null>, FormData>(
+			{
+				query: (body) => {
+					return {
+						url: "woman/mobile/identification_check",
+						method: "POST",
+						body,
+					};
+				},
+			}
+		),
 	}),
 });
 
