@@ -76,6 +76,7 @@ export type MembersStackParamList = {
 	ReviewAssetRequest: { items: { id: string; name: string; price: string }[] };
 	RepaymentOverview: undefined;
 	RequestSubmitted: undefined;
+	ManageVerfiers: undefined;
 };
 
 export type HomeStackParamList = {

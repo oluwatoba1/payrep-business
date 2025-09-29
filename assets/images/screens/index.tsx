@@ -99,6 +99,7 @@ const ScreenImages = {
 		shieldIcon: require("./Kidashi/MemberDetails/shield.png"),
 		resendIcon: require("./Kidashi/MemberDetails/resend.png"),
 		successGif: require("./Kidashi/MemberDetails/success.gif"),
+		verifiedIcon: require("./Kidashi/MemberDetails/verified.png"),
 	},
 	kidashiMemberRegistration: {
 		success: require("./Kidashi/MemberRegistration/success-icon.png"),

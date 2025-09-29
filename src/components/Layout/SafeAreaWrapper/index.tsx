@@ -1,4 +1,4 @@
-import { View, Image, Pressable } from "react-native";
+import { View, Image, Pressable, ScrollView } from "react-native";
 import React from "react";
 import { styles } from "./style";
 import ScreenImages from "@assets/images/screens";
@@ -11,14 +11,25 @@ interface SafeAreaWrapperProps {
 	children: React.ReactNode;
 	backAction?: () => void;
 	title?: string;
+	canScroll?: boolean;
 }
 
 const SafeAreaWrapper = ({
 	children,
 	backAction,
 	title,
+	canScroll = false,
 }: SafeAreaWrapperProps) => {
 	const navigation = useNavigation();
+
+	const ContentWrapper = canScroll ? ScrollView : View;
+	const contentProps = canScroll
+		? {
+				style: styles.scrollContent,
+				showsVerticalScrollIndicator: false,
+		  }
+		: { style: styles.content };
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.header}>
@@ -31,7 +42,7 @@ const SafeAreaWrapper = ({
 				<Typography title={title || ""} />
 			</View>
 			<Divider gapY={scaleHeight(10)} />
-			{children}
+			<ContentWrapper {...contentProps}>{children}</ContentWrapper>
 		</View>
 	);
 };

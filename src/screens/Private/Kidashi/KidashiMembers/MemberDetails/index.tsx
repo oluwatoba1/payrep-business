@@ -27,7 +27,9 @@ const MemberDetails = ({ navigation: { navigate } }: MemberDetailsProps) => {
 	const [visible, setVisible] = useState(false);
 	return (
 		<SafeAreaWrapper title='Member Details'>
-			<MemberDetailsHeaderComp />
+			<MemberDetailsHeaderComp
+				onOTPManagePress={() => navigate("ManageVerfiers")}
+			/>
 			<MemberDetailsCard navigate={navigate} />
 			<Tab
 				items={["Transactions", "More details", "Account Info"]}
