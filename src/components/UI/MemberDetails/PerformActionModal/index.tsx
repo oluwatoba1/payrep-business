@@ -15,7 +15,8 @@ interface PerformActionModalProps {
 	visible: boolean;
 	onClose: () => void;
 	parent: "MemberDetails" | "TrustCircle";
-	navigate: any;
+	onAddMemberPress?: () => void;
+	onRequestAssetPress?: () => void;
 }
 
 interface ActionCardProps {
@@ -56,7 +57,8 @@ const PerformActionModal = ({
 	visible,
 	onClose,
 	parent,
-	navigate,
+	onAddMemberPress,
+	onRequestAssetPress,
 }: PerformActionModalProps) => {
 	return (
 		<ModalWrapper visible={visible} onClose={onClose}>
@@ -77,7 +79,7 @@ const PerformActionModal = ({
 				icon={ScreenImages.kidashiMemberDetails.boxIcon}
 				onPress={() => {
 					if (parent === "MemberDetails") {
-						navigate("EnterAssetInformation");
+						onRequestAssetPress?.();
 					}
 				}}
 			/>
@@ -91,7 +93,7 @@ const PerformActionModal = ({
 						icon={ScreenImages.kidashiMemberDetails.addTeamIcon}
 						onPress={() => {
 							if (parent === "TrustCircle") {
-								// perform action
+								onAddMemberPress?.();
 							}
 						}}
 					/>

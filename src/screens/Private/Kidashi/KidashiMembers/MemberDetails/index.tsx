@@ -76,7 +76,7 @@ const MemberDetails = ({ navigation: { navigate } }: MemberDetailsProps) => {
 				visible={visible}
 				onClose={() => setVisible(false)}
 				parent='MemberDetails'
-				navigate={navigate}
+				onRequestAssetPress={() => navigate("EnterAssetInformation")}
 			/>
 		</SafeAreaWrapper>
 	);
