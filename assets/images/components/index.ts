@@ -174,6 +174,10 @@ const ComponentImages = {
 		members: require("./KidashiBottomNavigator/members-icon.png"),
 		trustCircles: require("./KidashiBottomNavigator/trust-circles-icon.png"),
 	},
+	kidashiMemberCard: {
+		memberIcon: require("./KidashiMemberCard/member.png"),
+		arrowRightIcon2: require("./KidashiMemberCard/arrow-right-01.png"),
+	},
 };
 
 export default ComponentImages;

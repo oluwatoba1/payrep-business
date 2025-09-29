@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { styles } from "./style";
 import SafeAreaWrapper from "@components/Layout/SafeAreaWrapper";
 import MemberDetailsHeaderComp from "@components/UI/MemberDetails/HeaderComp";
@@ -11,10 +11,11 @@ import Transactions from "@components/UI/MemberDetails/Transactions";
 import Pad from "@components/Pad";
 import { StackScreenProps } from "@react-navigation/stack";
 import { MembersStackParamList } from "@navigation/types";
-import { Image, Pressable } from "react-native";
+import { BackHandler, Image, Pressable } from "react-native";
 import { Typography } from "@components/Forms";
 import ScreenImages from "@assets/images/screens";
 import PerformActionModal from "@components/UI/MemberDetails/PerformActionModal";
+import { useFocusEffect } from "@react-navigation/native";
 
 type TabType = "Transactions" | "More details" | "Account Info";
 
@@ -25,8 +26,25 @@ type MemberDetailsProps = StackScreenProps<
 const MemberDetails = ({ navigation: { navigate } }: MemberDetailsProps) => {
 	const [activeTab, setActiveTab] = useState<TabType>("Transactions");
 	const [visible, setVisible] = useState(false);
+
+	const backAction = () => {
+		navigate("Members");
+		return true; // Prevent default behavior
+	};
+
+	useFocusEffect(
+		useCallback(() => {
+			const backHandler = BackHandler.addEventListener(
+				"hardwareBackPress",
+				backAction
+			);
+
+			return () => backHandler.remove(); // Cleanup
+		}, [])
+	);
+
 	return (
-		<SafeAreaWrapper title='Member Details'>
+		<SafeAreaWrapper title='Member Details' backAction={backAction}>
 			<MemberDetailsHeaderComp
 				onOTPManagePress={() => navigate("ManageVerfiers")}
 			/>

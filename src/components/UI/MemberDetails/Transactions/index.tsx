@@ -219,6 +219,7 @@ const MemberTransactions = ({ navigate }: { navigate: any }) => {
 				<TransactionCard navigate={navigate} transaction={item} />
 			)}
 			style={{ flex: 1 }}
+			showsVerticalScrollIndicator={false}
 		/>
 	);
 };

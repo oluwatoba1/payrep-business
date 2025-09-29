@@ -65,6 +65,7 @@ const ScreenImages = {
 		loanDisbursement: require("./Kidashi/KidashiHome/loan-disbursement.png"),
 		loanRepayment: require("./Kidashi/KidashiHome/loan-repayment.png"),
 		searchIcon: require("./Kidashi/KidashiHome/search-icon.png"),
+		trustCircleDetailsIcon: require("./Kidashi/KidashiHome/trust-circle-details-icon.png"),
 	},
 	kidashiCreateTrustCircles: {
 		headericon: require("./Kidashi/CreateTrustCircle/top-badge.png"),
@@ -103,6 +104,11 @@ const ScreenImages = {
 	},
 	kidashiMemberRegistration: {
 		success: require("./Kidashi/MemberRegistration/success-icon.png"),
+	},
+	kidashiMemberAddition: {
+		noticeIcon: require("./Kidashi/MemberAddition/notice-icon.png"),
+		verifierTrustCircle: require("./Kidashi/MemberAddition/select-verifier-trust-circle.png"),
+		addAnotherMemberIcon: require("./Kidashi/MemberAddition/add-circle.png"),
 	},
 };
 

@@ -123,7 +123,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 			const { status, message, data } = await login({
 				username: !!username ? username : customer?.username || "",
 				password,
-				device_id: DeviceInfo.getDeviceId(),
+				device_id: await DeviceInfo.getUniqueId(),
 				login_type: loginType,
 				signature,
 				signature_payload: payload,

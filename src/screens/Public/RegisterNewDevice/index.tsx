@@ -34,7 +34,7 @@ export default function RegisterNewDevice({
 			const { status, data, message } = await registerDevice({
 				username: route.params.username || "",
 				otp,
-				device_id: DeviceInfo.getDeviceId(),
+				device_id: await DeviceInfo.getUniqueId(),
 				customer_type: route.params.customerType || null,
 			}).unwrap();
 			if (status && !data?.facial_recognition) {
