@@ -44,7 +44,7 @@ export default function CircleName({
 				console.log(payload);
 				const response = await createTrustCircle(payload).unwrap();
 				if (response.status) {
-					navigate("TrustCircleDetails");
+					navigate("TrustCircleDetails", { id: response.circle_id });
 				} else {
 					showToast("danger", response.message);
 				}

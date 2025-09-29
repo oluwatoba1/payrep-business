@@ -16,6 +16,7 @@ import { Typography } from "@components/Forms";
 import ScreenImages from "@assets/images/screens";
 import PerformActionModal from "@components/UI/MemberDetails/PerformActionModal";
 import { useFocusEffect } from "@react-navigation/native";
+import { MainLayout } from "@components/Layout";
 
 type TabType = "Transactions" | "More details" | "Account Info";
 
@@ -23,12 +24,14 @@ type MemberDetailsProps = StackScreenProps<
 	MembersStackParamList,
 	"MemberDetails"
 >;
-const MemberDetails = ({ navigation: { navigate } }: MemberDetailsProps) => {
+const MemberDetails = ({
+	navigation: { navigate, goBack },
+}: MemberDetailsProps) => {
 	const [activeTab, setActiveTab] = useState<TabType>("Transactions");
 	const [visible, setVisible] = useState(false);
 
 	const backAction = () => {
-		navigate("Members");
+		goBack();
 		return true; // Prevent default behavior
 	};
 
@@ -44,7 +47,7 @@ const MemberDetails = ({ navigation: { navigate } }: MemberDetailsProps) => {
 	);
 
 	return (
-		<SafeAreaWrapper title='Member Details' backAction={backAction}>
+		<MainLayout rightTitle='Member Details' backAction={backAction}>
 			<MemberDetailsHeaderComp
 				onOTPManagePress={() => navigate("ManageVerfiers")}
 			/>
@@ -78,7 +81,7 @@ const MemberDetails = ({ navigation: { navigate } }: MemberDetailsProps) => {
 				parent='MemberDetails'
 				navigate={navigate}
 			/>
-		</SafeAreaWrapper>
+		</MainLayout>
 	);
 };
 

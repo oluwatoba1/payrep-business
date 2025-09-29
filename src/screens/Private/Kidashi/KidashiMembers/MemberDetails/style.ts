@@ -1,5 +1,5 @@
 import Colors from "@theme/Colors";
-import { scale } from "@utils/Helpers";
+import { moderateScale, scale, scaleHeight } from "@utils/Helpers";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -10,15 +10,15 @@ export const styles = StyleSheet.create({
 		paddingBottom: scale(100),
 	},
 	performActionButton: {
-		padding: scale(10),
-		paddingHorizontal: scale(16),
+		padding: scaleHeight(10),
+		paddingHorizontal: scaleHeight(16),
 		backgroundColor: Colors.primary["base"],
 		borderRadius: 200,
 		alignItems: "center",
 		justifyContent: "center",
 		marginHorizontal: "auto",
 		position: "absolute",
-		bottom: scale(16),
+		bottom: scaleHeight(16),
 		right: scale(16),
 		flexDirection: "row",
 		gap: scale(8),
@@ -30,11 +30,11 @@ export const styles = StyleSheet.create({
 		shadowRadius: 1,
 	},
 	boltIcon: {
-		width: scale(20),
-		height: scale(20),
+		width: scaleHeight(20),
+		height: scaleHeight(20),
 		resizeMode: "contain",
 	},
 	performActionText: {
-		fontSize: scale(12),
+		fontSize: moderateScale(12),
 	},
 });

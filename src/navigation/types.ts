@@ -60,7 +60,7 @@ export type KidashiHomeStackParamList = {
 
 export type TrustCircleStackParamList = {
 	TrustCircles: undefined;
-	TrustCircleDetails: undefined;
+	TrustCircleDetails: { id: string };
 	CreateTrustCircle: undefined;
 	CircleName: undefined;
 	EnterAccountNumber: undefined;

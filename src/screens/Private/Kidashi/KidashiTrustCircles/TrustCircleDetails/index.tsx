@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { BackHandler, FlatList, Image, View } from "react-native";
+import { BackHandler, FlatList, Image, Pressable, View } from "react-native";
 import {
 	BottomTabNavigationProp,
 	BottomTabScreenProps,
@@ -28,29 +28,17 @@ import KidashiHomeCard, {
 import Tab from "@components/Miscellaneous/Tab";
 import { KidashiMemberItemCard } from "@components/Cards";
 import ScreenImages from "@assets/images/screens";
+import useToast from "@hooks/useToast";
+import { useFetchTrustCircleMutation } from "@store/apis/kidashiApi";
+import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
+import { KidashiDashboardEmptyState } from "@components/Miscellaneous";
+import { KidashiDashboardEmptyStateProps } from "@components/Miscellaneous/KidashiDashboardEmptyState";
 
-const overview: KidashiHomeCardProps["items"] = [
-	{
-		title: "Members",
-		value: "0",
-		backgroundColor: Colors.neutral["50"],
-		titleColor: Colors.neutral["400"],
-		descriptionColor: Colors.black,
-	},
-	{
-		title: "Outstanding",
-		value: "₦0.00",
-		backgroundColor: Colors.success["100"],
-		titleColor: Colors.success["400"],
-		descriptionColor: Colors.success["700"],
-	},
-];
-
-interface IMember {
-	id: string;
-	title: string;
-	subtitle: string;
-}
+const emptyStateData: KidashiDashboardEmptyStateProps = {
+	icon: ScreenImages.kidashiHome.searchIcon,
+	title: "No members",
+	description: "Add members by clicking on the action button below",
+};
 
 type TrustCircleDetailsProps = CompositeScreenProps<
 	StackScreenProps<TrustCircleStackParamList, "TrustCircleDetails">,
@@ -58,19 +46,56 @@ type TrustCircleDetailsProps = CompositeScreenProps<
 >;
 
 export default function TrustCircleDetails({
-	navigation: { navigate, goBack },
+	navigation: { navigate },
+	route,
 }: TrustCircleDetailsProps) {
+	const { showToast } = useToast();
+
+	const [fetchTrustCircle, { isLoading }] = useFetchTrustCircleMutation();
+
 	const { reset } =
 		useNavigation<BottomTabNavigationProp<KidashiBottomTabParamList>>();
 
-	const [members, setMembers] = useState<IMember[]>([
-		{ id: "1", title: "Gambo Salami", subtitle: "090*****1234" },
-		{ id: "2", title: "Susannah Bali", subtitle: "081*****7734" },
-		{ id: "3", title: "Shekinat Sanusi", subtitle: "080*****9934" },
-		{ id: "4", title: "Ruka Abubakar", subtitle: "070*****3334" },
-	]);
+	const [circleDetails, setCircleDetails] = useState<ITrustCircleDetail | null>(
+		null
+	);
+	const [visible, setVisible] = useState<boolean>(false);
 
-	const [selectedMembers, setSelectedMembers] = useState<IMember[]>([]);
+	const options = [
+		circleDetails?.members_count && {
+			label: "Request Asset Finance",
+			sub: "Set up a new group for loans",
+			icon: ScreenImages.kidashiHome.createTrustCircle,
+			onPress: () => navigate("Trust Circles", { screen: "CreateTrustCircle" }),
+		},
+		{
+			label: "Add a New Member",
+			sub: "Create account or add to circle",
+			icon: ScreenImages.kidashiHome.joinKidashi,
+			onPress: () =>
+				navigate("MemberRegistration", { screen: "MemberPhoneNumber" }),
+		},
+	];
+
+	const getCircleDetails = async () => {
+		try {
+			const { status, message, data } = await fetchTrustCircle({
+				id: route.params?.id || "",
+			}).unwrap();
+
+			if (status) {
+				setCircleDetails(data);
+				console.log(data);
+			} else {
+				showToast("danger", message);
+			}
+		} catch (error: ErrorResponse | any) {
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
 
 	const resetAndGoBack = () => {
 		reset({
@@ -78,6 +103,12 @@ export default function TrustCircleDetails({
 			routes: [{ name: "Trust Circles" }],
 		});
 	};
+
+	useFocusEffect(
+		useCallback(() => {
+			getCircleDetails();
+		}, [route.params?.id])
+	);
 
 	useFocusEffect(
 		useCallback(() => {
@@ -92,6 +123,23 @@ export default function TrustCircleDetails({
 			return () => backHandler.remove(); // Cleanup
 		}, [])
 	);
+
+	const overview: KidashiHomeCardProps["items"] = [
+		{
+			title: "Members",
+			value: String(circleDetails?.members_count || 0),
+			backgroundColor: Colors.neutral["50"],
+			titleColor: Colors.neutral["400"],
+			descriptionColor: Colors.black,
+		},
+		{
+			title: "Outstanding",
+			value: "₦0.00",
+			backgroundColor: Colors.success["100"],
+			titleColor: Colors.success["400"],
+			descriptionColor: Colors.success["700"],
+		},
+	];
 
 	return (
 		<MainLayout
@@ -118,7 +166,7 @@ export default function TrustCircleDetails({
 					<Pad size={8} />
 
 					<Typography
-						title='Ladi Cooperative Group'
+						title={circleDetails?.circle_name || ""}
 						type='subheading-sb'
 						color={Colors.neutral["600"]}
 					/>
@@ -132,11 +180,15 @@ export default function TrustCircleDetails({
 			<Pad size={16} />
 
 			<Tab items={["Members"]} value='Members' onTap={() => {}} />
-			<FlatList<IMember>
-				data={members}
+			<FlatList<IWomen>
+				data={circleDetails?.women}
 				renderItem={({ item }) => (
 					<KidashiMemberItemCard
-						{...item}
+						title={`${item.first_name} ${item.surname}`}
+						subtitle={item.mobile_number
+							.split("")
+							.map((c, index) => (index > 2 && index < 7 ? "*" : c))
+							.join("")}
 						onSelect={() =>
 							navigate("KidashiMembers", { screen: "MemberDetails" })
 						}
@@ -149,6 +201,7 @@ export default function TrustCircleDetails({
 					/>
 				)}
 				showsVerticalScrollIndicator={false}
+				ListEmptyComponent={<KidashiDashboardEmptyState {...emptyStateData} />}
 			/>
 		</MainLayout>
 	);

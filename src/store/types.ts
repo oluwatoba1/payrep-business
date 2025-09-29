@@ -903,3 +903,38 @@ interface IVendor {
 	active_trust_circles_count: number;
 	total_women_onboarded: number;
 }
+
+interface ITrustCircle {
+	id: string;
+	circle_name: string;
+	description: string;
+	max_members: number;
+	current_member_count: number;
+	can_add_more_members: boolean;
+	status: string;
+}
+
+interface IWomen {
+	id: string;
+	first_name: string;
+	other_name: string;
+	surname: string;
+	mobile_number: string;
+	account_number: string;
+	loan_amount: string;
+	occupation: string;
+	employment_type: string;
+	image: string;
+	status: string;
+}
+
+interface ITrustCircleDetail {
+	id: string;
+	circle_name: string;
+	description: string;
+	max_members: 0;
+	members_count: 0;
+	status: string;
+	loan_eligibility: boolean;
+	women: IWomen[];
+}

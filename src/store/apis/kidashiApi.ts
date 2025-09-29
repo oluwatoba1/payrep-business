@@ -56,7 +56,7 @@ const KidashiApi = createApi({
 			}),
 		}),
 		createTrustCircle: builder.mutation<
-			KidashiAuthResponse<{}>,
+			KidashiAuthResponse<{ circle_id: string }>,
 			CreateTrustCircleRequest
 		>({
 			query: (body) => ({
@@ -75,6 +75,26 @@ const KidashiApi = createApi({
 				body,
 			}),
 		}),
+		fetchTrustCircles: builder.mutation<
+			AuthResponse<{ circles: ITrustCircle[] }>,
+			{ vendor_id: string }
+		>({
+			query: (body) => ({
+				url: "trust_circle/mobile/fetch",
+				method: "POST",
+				body,
+			}),
+		}),
+		fetchTrustCircle: builder.mutation<
+			AuthResponse<ITrustCircleDetail>,
+			{ id: string }
+		>({
+			query: (body) => ({
+				url: "trust_circle/mobile/get",
+				method: "POST",
+				body,
+			}),
+		}),
 	}),
 });
 
@@ -82,6 +102,8 @@ export const {
 	useRegisterMutation,
 	useCreateTrustCircleMutation,
 	useFetchKidashiVendorMutation,
+	useFetchTrustCirclesMutation,
+	useFetchTrustCircleMutation,
 } = KidashiApi;
 
 export default KidashiApi;

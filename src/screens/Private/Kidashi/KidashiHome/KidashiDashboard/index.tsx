@@ -66,17 +66,17 @@ const dummyTrustCircleData: ITrustCircleItem[] = [
 	{
 		name: "Ladi Cooperative Group",
 		membersCount: 5,
-		totalAmount: `₦${addCommas(5000)}`,
+		totalAmount: "",
 	},
 	{
 		name: "Bayan Dutse Traders Group",
 		membersCount: 8,
-		totalAmount: `₦${addCommas(120000)}`,
+		totalAmount: "",
 	},
 	{
 		name: "Kawo Food Sellers Union",
 		membersCount: 3,
-		totalAmount: `₦${addCommas(3250)}`,
+		totalAmount: "",
 	},
 ];
 
