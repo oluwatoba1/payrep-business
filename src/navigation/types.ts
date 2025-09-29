@@ -46,6 +46,42 @@ export type BottomTabParamList = {
 	Savings: NavigatorScreenParams<SavingsStackParamList>;
 };
 
+export type KidashiBottomTabParamList = {
+	KidashiHome: NavigatorScreenParams<KidashiHomeStackParamList>;
+	"Trust Circles": NavigatorScreenParams<TrustCircleStackParamList>;
+	KidashiMembers: NavigatorScreenParams<MembersStackParamList>;
+};
+
+export type KidashiHomeStackParamList = {
+	KidashiDashboard: undefined;
+	CreateTrustCircles: undefined;
+	CircleName: undefined;
+	MemberRegistration: NavigatorScreenParams<MemberRegistrationStackParamList>;
+};
+
+export type TrustCircleStackParamList = {
+	TrustCircles: undefined;
+	TrustCircleDetails: undefined;
+	CreateTrustCircle: undefined;
+	CircleName: undefined;
+	EnterAccountNumber: undefined;
+	SelectVerifiers: undefined;
+	MemberVerification: undefined;
+	MemberAdditionSuccessScreen: undefined;
+};
+
+export type MembersStackParamList = {
+	Members: undefined;
+	MemberDetails: undefined;
+	TransactionDetails: undefined;
+	Assets: undefined;
+	AssetDetails: { status: string } | undefined;
+	EnterAssetInformation: undefined;
+	ReviewAssetRequest: { items: { id: string; name: string; price: string }[] };
+	RepaymentOverview: undefined;
+	RequestSubmitted: undefined;
+};
+
 export type HomeStackParamList = {
 	Dashboard: undefined;
 	Earnings: undefined;
@@ -79,38 +115,6 @@ export type BillsStackParamList = {
 	BillSuccess: undefined;
 	BillReceipt: undefined;
 	ConfirmBills: undefined;
-};
-
-export type KidashiBottomTabParamList = {
-	KidashiHome: NavigatorScreenParams<KidashiHomeStackParamList>;
-	"Trust Circles": NavigatorScreenParams<TrustCircleStackParamList>;
-	KidashiMembers: NavigatorScreenParams<MembersStackParamList>;
-};
-
-export type KidashiHomeStackParamList = {
-	KidashiDashboard: undefined;
-	KidashiRegistration: NavigatorScreenParams<KidashiRegistrationStackParamList>;
-	MemberRegistration: NavigatorScreenParams<MemberRegistrationStackParamList>;
-};
-
-export type TrustCircleStackParamList = {
-	TrustCircles: undefined;
-	TrustCircleDetails: undefined;
-	CreateTrustCircle: undefined;
-	CircleName: undefined;
-	EnterAccountNumber: undefined;
-	SelectVerifiers: undefined;
-	MemberVerification: undefined;
-	MemberAdditionSuccessScreen: undefined;
-};
-
-export type MembersStackParamList = {
-	Members: undefined;
-	MemberDetails: undefined;
-	TransactionDetails: undefined;
-	Assets: undefined;
-	AssetDetails: { status: string } | undefined;
-	EnterAssetInformation: undefined;
 };
 
 export type KidashiRegistrationStackParamList = {

@@ -8,6 +8,9 @@ import TransactionDetails from "@screens/Private/Kidashi/KidashiMembers/MemberDe
 import AssetDetails from "@screens/Private/Kidashi/KidashiMembers/MemberDetails/Assets/AssetDetails";
 import Assets from "@screens/Private/Kidashi/KidashiMembers/MemberDetails/Assets";
 import EnterAssetInformation from "@screens/Private/Kidashi/KidashiMembers/MemberDetails/Assets/EnterAssetInformation";
+import ReviewAssetRequest from "@screens/Private/Kidashi/KidashiMembers/MemberDetails/Assets/ReviewAssetRequest";
+import RepaymentOverview from "@screens/Private/Kidashi/KidashiMembers/MemberDetails/Assets/RepaymentOverview";
+import RequestSubmitted from "@screens/Private/Kidashi/KidashiMembers/MemberDetails/Assets/RequestSubmitted";
 
 const Stack = createNativeStackNavigator<MembersStackParamList>();
 
@@ -26,6 +29,9 @@ export default function MembersStack() {
 				name='EnterAssetInformation'
 				component={EnterAssetInformation}
 			/>
+			<Stack.Screen name='ReviewAssetRequest' component={ReviewAssetRequest} />
+			<Stack.Screen name='RepaymentOverview' component={RepaymentOverview} />
+			<Stack.Screen name='RequestSubmitted' component={RequestSubmitted} />
 		</Stack.Navigator>
 	);
 }

@@ -94,6 +94,12 @@ const ScreenImages = {
 		boltIcon: require("./Kidashi/MemberDetails/bolt.png"),
 		boxIcon: require("./Kidashi/MemberDetails/box.png"),
 		closeIcon: require("./Kidashi/MemberDetails/close.png"),
+		addCircleIcon: require("./Kidashi/MemberDetails/add-circle.png"),
+		plusIcon: require("./Kidashi/MemberDetails/add-circle.png"),
+		trashIcon: require("./Kidashi/MemberDetails/trash.png"),
+		shieldIcon: require("./Kidashi/MemberDetails/shield.png"),
+		resendIcon: require("./Kidashi/MemberDetails/resend.png"),
+		successGif: require("./Kidashi/MemberDetails/success.gif"),
 	},
 	kidashiMemberRegistration: {
 		success: require("./Kidashi/MemberRegistration/success-icon.png"),
