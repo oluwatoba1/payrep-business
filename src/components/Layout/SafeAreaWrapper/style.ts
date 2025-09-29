@@ -19,4 +19,10 @@ export const styles = StyleSheet.create({
 		height: scale(20),
 		resizeMode: "contain",
 	},
+	content: {
+		flex: 1,
+	},
+	scrollContent: {
+		flex: 1,
+	},
 });
