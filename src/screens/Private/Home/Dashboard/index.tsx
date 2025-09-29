@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
 	Alert,
 	BackHandler,
@@ -26,7 +26,12 @@ import { Typography } from "@components/Forms";
 import IconImages from "@assets/images/appIcons";
 import { addCommas, moderateScale, scaleHeight } from "@utils/Helpers";
 import { DEFAULT_ERROR_MESSAGE, shimmerDelay } from "@utils/Constants";
-import { BottomTabParamList, HomeStackParamList } from "@navigation/types";
+import {
+	BottomTabParamList,
+	HomeStackParamList,
+	KidashiBottomTabParamList,
+	KidashiHomeStackParamList,
+} from "@navigation/types";
 import useToast from "@hooks/useToast";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import {
@@ -44,11 +49,13 @@ import { AccountsModal } from "@components/Modal";
 import { IAction } from "@components/Cards/AccountDetailsCard";
 import ComponentImages from "@assets/images/components";
 import { setCredentials } from "@store/slices/authSlice";
+import { setVendor } from "@store/slices/kidashiSlice";
+import { useFetchKidashiVendorMutation } from "@store/apis/kidashiApi";
 
 type DashboardProps = CompositeScreenProps<
 	CompositeScreenProps<
 		StackScreenProps<HomeStackParamList, "Dashboard">,
-		BottomTabScreenProps<BottomTabParamList, "Home">
+		BottomTabScreenProps<KidashiBottomTabParamList, "KidashiHome">
 	>,
 	CompositeScreenProps<
 		BottomTabScreenProps<BottomTabParamList, "More">,
@@ -65,9 +72,12 @@ export default function Dashboard({
 	const selectedAccount = useAppSelector(
 		(state) => state.account.selectedAccount
 	);
+	const vendor = useAppSelector((state) => state.kidashi.vendor);
 	const { accounts, transactions, disputes } = useAppSelector(
 		(state) => state.account
 	);
+	const [fetchKidashiVendor, { isLoading: isLoadingVendors }] =
+		useFetchKidashiVendorMutation();
 
 	const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 
@@ -143,6 +153,25 @@ export default function Dashboard({
 		}
 	};
 
+	const getVendor = async () => {
+		try {
+			const { status, message, data } = await fetchKidashiVendor({
+				cba_customer_id: customer?.id || "",
+			}).unwrap();
+
+			if (status) {
+				dispatch(setVendor(data));
+			} else {
+				showToast("danger", message);
+			}
+		} catch (error: ErrorResponse | any) {
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
+
 	const fetchTransactions = async (account: string) => {
 		try {
 			const { status, message, data } = await getTransactions({
@@ -199,6 +228,23 @@ export default function Dashboard({
 		});
 	};
 
+	const navigateToKidashi = useCallback(() => {
+		switch (vendor?.status) {
+			case "ACTIVE":
+				navigate("KidashiBottomTabs", {
+					screen: "KidashiHome",
+					params: { screen: "KidashiDashboard" },
+				});
+				break
+
+			default:
+				navigate("KidashiBottomTabs", {
+					screen: "KidashiHome",
+					params: { screen: "KidashiRegistration" },
+				});
+		}
+	}, [vendor?.status]);
+
 	useFocusEffect(
 		useCallback(() => {
 			const backAction = () => {
@@ -224,7 +270,10 @@ export default function Dashboard({
 
 	useFocusEffect(
 		useCallback(() => {
-			customer?.id && fetchAccounts();
+			if (customer?.id) {
+				fetchAccounts();
+				getVendor();
+			}
 		}, [customer, refresher])
 	);
 
@@ -321,22 +370,17 @@ export default function Dashboard({
 			<Pad size={24} />
 
 			<ShimmerPlaceholder
-				visible={!isLoadingAccounts && !isLoadingTransactions}
+				visible={
+					!isLoadingAccounts && !isLoadingTransactions && !isLoadingVendors
+				}
 				delay={shimmerDelay}
 				style={
-					isLoadingTransactions
-						? { height: scaleHeight(100), width: "100%" }
-						: {}
+					isLoadingVendors ? { height: scaleHeight(100), width: "100%" } : {}
 				}
 			>
 				<KidashiCard
 					// onProceed={() => navigate("Home", { screen: "KidashiRegistration" })}
-					onProceed={() =>
-						navigate("KidashiBottomTabs", {
-							screen: "KidashiHome",
-							params: { screen: "KidashiRegistration" },
-						})
-					}
+					onProceed={navigateToKidashi}
 				/>
 			</ShimmerPlaceholder>
 

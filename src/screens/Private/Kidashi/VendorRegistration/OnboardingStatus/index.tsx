@@ -6,18 +6,23 @@ import Pad from "@components/Pad";
 import { Button, Typography } from "@components/Forms";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import { BottomTabParamList, KidashiStackParamList } from "@navigation/types";
+import {
+	BottomTabParamList,
+	KidashiRegistrationStackParamList,
+} from "@navigation/types";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { useCallback, useState } from "react";
+import { useAppSelector } from "@store/hooks";
 
 type OnboardingStatusProps = StackScreenProps<
-	KidashiStackParamList,
+	KidashiRegistrationStackParamList,
 	"OnboardingStatus"
 >;
 
 export default function OnboardingStatus({}: OnboardingStatusProps) {
 	const { reset } =
 		useNavigation<BottomTabNavigationProp<BottomTabParamList>>();
+	const vendor = useAppSelector((state) => state.kidashi.vendor);
 
 	const [status] = useState<"rejected" | "pending">("pending");
 
@@ -60,7 +65,7 @@ export default function OnboardingStatus({}: OnboardingStatusProps) {
 
 				<Typography
 					title={
-						status === "pending"
+						vendor?.status === "PENDING"
 							? "We’re Reviewing Your Request"
 							: "Application Not Approved"
 					}
@@ -71,7 +76,7 @@ export default function OnboardingStatus({}: OnboardingStatusProps) {
 
 				<Typography
 					title={
-						status === "pending"
+						vendor?.status === "PENDING"
 							? "Your application to join the financing program is in progress. Sit tight — we’ll notify you as soon as it’s approved"
 							: "Thanks for your interest in joining Asset Finance. Right now, our program isn’t active in your community — but we’re working on reaching more locations soon"
 					}

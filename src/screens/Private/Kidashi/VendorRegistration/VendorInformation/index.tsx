@@ -44,6 +44,14 @@ export default function VendorInformation({
 
 	const { data: statesData, isLoading: statesLoading } = useFetchStatesQuery();
 
+	// Move Kaduna to the first position if present
+	const sortedStates = statesData?.data
+		? [
+				...statesData.data.filter((s: any) => s.name === "Kaduna"),
+				...statesData.data.filter((s: any) => s.name !== "Kaduna"),
+		  ]
+		: [];
+
 	// Fetch LGAs dynamically
 	const [fetchLgas, { isLoading: lgasLoading }] = useFetchLgasMutation();
 
@@ -143,10 +151,7 @@ export default function VendorInformation({
 			<Dropdown
 				label='State'
 				options={
-					[
-						...statesData.data.filter((s: any) => s.name === "Kaduna"),
-						...statesData.data.filter((s: any) => s.name !== "Kaduna"),
-					].map((option: any) => ({
+					sortedStates.map((option: any) => ({
 						label: option.name,
 						value: option.id,
 					})) || []

@@ -11,14 +11,16 @@ import {
 	OnboardingStatus,
 } from "@screens/Private/Kidashi/VendorRegistration";
 import { KidashiRegistrationStackParamList } from "../types";
+import { useAppSelector } from "@store/hooks";
 
 const Stack = createNativeStackNavigator<KidashiRegistrationStackParamList>();
 
 export default function KidashiRegistrationStack() {
+	const vendor = useAppSelector((state) => state.kidashi.vendor);
 	return (
 		<Stack.Navigator
 			screenOptions={{ headerShown: false }}
-			initialRouteName='KidashiOnboarding'
+			initialRouteName={!vendor ? "KidashiOnboarding" : "OnboardingStatus"}
 		>
 			<Stack.Screen name='VendorInformation' component={VendorInformation} />
 			<Stack.Screen name='KidashiOnboarding' component={KidashiOnboarding} />
