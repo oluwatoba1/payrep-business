@@ -33,6 +33,7 @@ import { useFetchTrustCircleMutation } from "@store/apis/kidashiApi";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import { KidashiDashboardEmptyState } from "@components/Miscellaneous";
 import { KidashiDashboardEmptyStateProps } from "@components/Miscellaneous/KidashiDashboardEmptyState";
+import PerformActionModal from "@components/UI/MemberDetails/PerformActionModal";
 
 const emptyStateData: KidashiDashboardEmptyStateProps = {
 	icon: ScreenImages.kidashiHome.searchIcon,
@@ -42,7 +43,10 @@ const emptyStateData: KidashiDashboardEmptyStateProps = {
 
 type TrustCircleDetailsProps = CompositeScreenProps<
 	StackScreenProps<TrustCircleStackParamList, "TrustCircleDetails">,
-	BottomTabScreenProps<KidashiBottomTabParamList, "KidashiMembers">
+	CompositeScreenProps<
+		BottomTabScreenProps<KidashiBottomTabParamList, "KidashiMembers">,
+		BottomTabScreenProps<KidashiBottomTabParamList, "KidashiHome">
+	>
 >;
 
 export default function TrustCircleDetails({
@@ -60,22 +64,6 @@ export default function TrustCircleDetails({
 		null
 	);
 	const [visible, setVisible] = useState<boolean>(false);
-
-	const options = [
-		circleDetails?.members_count && {
-			label: "Request Asset Finance",
-			sub: "Set up a new group for loans",
-			icon: ScreenImages.kidashiHome.createTrustCircle,
-			onPress: () => navigate("Trust Circles", { screen: "CreateTrustCircle" }),
-		},
-		{
-			label: "Add a New Member",
-			sub: "Create account or add to circle",
-			icon: ScreenImages.kidashiHome.joinKidashi,
-			onPress: () =>
-				navigate("MemberRegistration", { screen: "MemberPhoneNumber" }),
-		},
-	];
 
 	const getCircleDetails = async () => {
 		try {
@@ -182,6 +170,7 @@ export default function TrustCircleDetails({
 			<Tab items={["Members"]} value='Members' onTap={() => {}} />
 			<FlatList<IWomen>
 				data={circleDetails?.women}
+				style={{ flex: 0.8 }}
 				renderItem={({ item }) => (
 					<KidashiMemberItemCard
 						title={`${item.first_name} ${item.surname}`}
@@ -202,6 +191,36 @@ export default function TrustCircleDetails({
 				)}
 				showsVerticalScrollIndicator={false}
 				ListEmptyComponent={<KidashiDashboardEmptyState {...emptyStateData} />}
+			/>
+
+			<Pressable
+				style={styles.performActionButton}
+				onPress={() => setVisible(true)}
+			>
+				<Image
+					source={ScreenImages.kidashiMemberDetails.boltIcon}
+					style={styles.boltIcon}
+				/>
+				<Typography
+					title='Perform an Action'
+					type='body-sb'
+					style={styles.performActionText}
+				/>
+			</Pressable>
+
+			<PerformActionModal
+				visible={visible}
+				onClose={() => setVisible(false)}
+				parent='TrustCircle'
+				onAddMemberPress={() =>
+					navigate("KidashiHome", {
+						screen: "MemberRegistration",
+						params: { screen: "MemberPhoneNumber" },
+					})
+				}
+				onRequestAssetPress={() =>
+					navigate("KidashiMembers", { screen: "EnterAssetInformation" })
+				}
 			/>
 		</MainLayout>
 	);
