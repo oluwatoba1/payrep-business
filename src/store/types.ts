@@ -874,10 +874,32 @@ interface VendorRegistrationRequest {
 interface IKidashi {
 	vendor_id: string;
 	registration: Omit<VendorRegistrationRequest, "cba_customer_id">;
+	vendor: IVendor | null;
 }
 
 interface CreateTrustCircleRequest {
 	vendor_id: string;
 	circle_name: string;
 	description: string;
+}
+
+interface IVendor {
+	id: string;
+	first_name: string;
+	surname: string;
+	other_name: string;
+	phone: string;
+	email: string;
+	business_type: string;
+	business_description: string;
+	address: string;
+	community: string;
+	status: "PENDING" | "ACTIVE" | "INACTIVE" | "SUSPENDED" | "REJECTED";
+	cba_customer_id: string;
+	geo_region: string;
+	state: string;
+	lga: string;
+	country: string;
+	active_trust_circles_count: number;
+	total_women_onboarded: number;
 }

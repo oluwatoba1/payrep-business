@@ -65,9 +65,23 @@ const KidashiApi = createApi({
 				body,
 			}),
 		}),
+		fetchKidashiVendor: builder.mutation<
+			AuthResponse<IVendor>,
+			{ cba_customer_id: string }
+		>({
+			query: (body) => ({
+				url: "vendor/mobile/get_vendor_detail",
+				method: "POST",
+				body,
+			}),
+		}),
 	}),
 });
 
-export const { useRegisterMutation, useCreateTrustCircleMutation } = KidashiApi;
+export const {
+	useRegisterMutation,
+	useCreateTrustCircleMutation,
+	useFetchKidashiVendorMutation,
+} = KidashiApi;
 
 export default KidashiApi;

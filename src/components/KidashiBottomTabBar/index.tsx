@@ -110,11 +110,17 @@ export default function KidashiBottomTabBar({
 			!currentRoute.params
 		)
 			return true;
+
 		const landingScreen = kidashiBottomNavigationRoutesList.includes(
 			(currentRoute.state?.routes[currentRoute.state?.index || 0] as any)?.name
 		);
 
-		return landingScreen;
+		return (
+			landingScreen ||
+			kidashiBottomNavigationRoutesList.includes(
+				(currentRoute.params as any)?.screen
+			)
+		);
 	};
 
 	if (!bottomTabResolver()) return null;

@@ -9,6 +9,7 @@ const initialState: IKidashi = {
 		guarantors: [],
 		business_description: "",
 	},
+	vendor: null,
 };
 
 const KidashiSlice = createSlice({
@@ -27,9 +28,12 @@ const KidashiSlice = createSlice({
 		setVendorId: (state, action: PayloadAction<string>) => {
 			state.vendor_id = action.payload;
 		},
+		setVendor: (state, action: PayloadAction<IVendor>) => {
+			state.vendor = action.payload;
+		},
 	},
 });
 
-export const { setRegistrationDetails, setVendorId } = KidashiSlice.actions;
+export const { setRegistrationDetails, setVendorId, setVendor } = KidashiSlice.actions;
 
 export default KidashiSlice;

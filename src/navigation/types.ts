@@ -54,8 +54,7 @@ export type KidashiBottomTabParamList = {
 
 export type KidashiHomeStackParamList = {
 	KidashiDashboard: undefined;
-	CreateTrustCircles: undefined;
-	CircleName: undefined;
+	KidashiRegistration: undefined;
 	MemberRegistration: NavigatorScreenParams<MemberRegistrationStackParamList>;
 };
 

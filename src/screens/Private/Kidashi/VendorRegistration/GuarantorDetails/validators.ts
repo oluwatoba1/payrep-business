@@ -110,8 +110,10 @@ const useGuarantorDetails = () => {
 
 	const addGuarantor = (guarantorData: IVendorGuarantor) => {
 		setGuarantors([...guarantors, guarantorData]);
-		setGuarantorNumber(guarantorNumber + 1);
-		guarantorNumber !== 2 && clearForm();
+		if (guarantorNumber !== 2) {
+			setGuarantorNumber(guarantorNumber + 1);
+			clearForm();
+		}
 	};
 
 	const validateForm = (cb: (guarantors: IVendorGuarantor[]) => void) => {
@@ -130,15 +132,13 @@ const useGuarantorDetails = () => {
 				state_id: state,
 				lga_id: lga,
 				gender,
-				dob: dateOfBirth??'',
+				dob: dateOfBirth ?? "",
 				nationality: "NG", // Default to Nigeria
 			};
 
 			addGuarantor(guarantorData);
 
-			if (guarantorNumber === 2) {
-				cb([...guarantors, guarantorData]);
-			}
+			cb([...guarantors, guarantorData]);
 		} catch (error) {
 			console.log(error);
 			if (error instanceof z.ZodError) {
@@ -156,6 +156,7 @@ const useGuarantorDetails = () => {
 	return {
 		formData,
 		formErrors,
+		guarantors,
 		guarantorNumber,
 		validateForm,
 		clearFormError: (key: string) =>

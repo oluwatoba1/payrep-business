@@ -25,7 +25,7 @@ import {
 } from "@store/apis/generalApi";
 import useGuarantorDetails from "./validators";
 import { Stepper } from "@components/Miscellaneous";
-import { useAppDispatch } from "@store/hooks";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { setRegistrationDetails } from "@store/slices/kidashiSlice";
 
 type GuarantorDetailsProps = CompositeScreenProps<
@@ -37,6 +37,9 @@ export default function GuarantorDetails({
 	navigation: { navigate },
 }: GuarantorDetailsProps) {
 	const dispatch = useAppDispatch();
+	const vendorGuarantors = useAppSelector(
+		(state) => state.kidashi.registration.guarantors
+	);
 	const { showToast } = useToast();
 	const {
 		formData,
@@ -50,6 +53,7 @@ export default function GuarantorDetails({
 		setState,
 		setLga,
 		setEmail,
+		guarantors,
 		guarantorNumber,
 		setNin,
 		setRelationship,
@@ -57,6 +61,12 @@ export default function GuarantorDetails({
 
 	const { data: statesData, isLoading: statesLoading } = useFetchStatesQuery();
 
+	const sortedStates = statesData?.data
+		? [
+				...statesData.data.filter((s: any) => s.name === "Kaduna"),
+				...statesData.data.filter((s: any) => s.name !== "Kaduna"),
+		  ]
+		: [];
 	// Fetch LGAs dynamically
 	const [fetchLgas, { isLoading: lgasLoading }] = useFetchLgasMutation();
 
@@ -103,7 +113,7 @@ export default function GuarantorDetails({
 			setSelectedRelationship(undefined);
 			setDateOfBirth(undefined);
 			dispatch(setRegistrationDetails({ guarantors }));
-			navigate("ReviewDetails");
+			guarantors.length === 2 && navigate("ReviewDetails");
 		});
 	};
 
@@ -129,6 +139,10 @@ export default function GuarantorDetails({
 		}, [])
 	);
 
+	const gurantorDetails = !vendorGuarantors.length
+		? vendorGuarantors
+		: guarantors;
+
 	return (
 		<MainLayout
 			keyboardAvoidingType='scroll-view'
@@ -152,7 +166,10 @@ export default function GuarantorDetails({
 					label='First Name'
 					placeholder='e.g John'
 					onChangeText={setFirstName}
-					value={formData.firstName}
+					value={
+						gurantorDetails[guarantorNumber - 1]?.first_name ||
+						formData.firstName
+					}
 					error={formErrors.firstName}
 				/>
 
@@ -162,7 +179,9 @@ export default function GuarantorDetails({
 					label='Last Name'
 					placeholder='e.g Doe'
 					onChangeText={setLastName}
-					value={formData.lastName}
+					value={
+						gurantorDetails[guarantorNumber - 1]?.surname || formData.lastName
+					}
 					error={formErrors.lastName}
 				/>
 
@@ -171,7 +190,7 @@ export default function GuarantorDetails({
 				<Dropdown
 					label='State'
 					options={
-						statesData?.data.map((option: any) => ({
+						sortedStates.map((option: any) => ({
 							label: option.name,
 							value: option.id,
 						})) || []
@@ -211,8 +230,8 @@ export default function GuarantorDetails({
 				<Dropdown
 					label='Gender'
 					options={[
-						{ label: "Male", value: "male" },
-						{ label: "Female", value: "female" },
+						{ label: "Male", value: "Male" },
+						{ label: "Female", value: "Female" },
 					]}
 					selectedOption={selectedGender}
 					onSelect={(option) => {
@@ -229,7 +248,9 @@ export default function GuarantorDetails({
 					label='Phone Number'
 					keyboardType='numeric'
 					placeholder='Ex: 8000000000'
-					value={formData.phoneNumber}
+					value={
+						gurantorDetails[guarantorNumber - 1]?.phone || formData.phoneNumber
+					}
 					onChangeText={setPhoneNumber}
 					maxLength={11}
 					error={formErrors.phoneNumber}
@@ -249,8 +270,9 @@ export default function GuarantorDetails({
 					label='Email'
 					placeholder='e.g. zababubakarr@gmail.com'
 					onChangeText={setEmail}
-					value={formData.email}
+					value={gurantorDetails[guarantorNumber - 1]?.email || formData.email}
 					error={formErrors.email}
+					autoCapitalize='none'
 				/>
 
 				<Pad size={12} />
@@ -261,7 +283,7 @@ export default function GuarantorDetails({
 					placeholder='Ex: 12345678901'
 					maxLength={11} // adjust if NIN length differs
 					onChangeText={setNin}
-					value={formData.nin}
+					value={gurantorDetails[guarantorNumber - 1]?.nin || formData.nin}
 					error={formErrors.nin}
 				/>
 

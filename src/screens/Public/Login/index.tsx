@@ -118,8 +118,6 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 		payload?: string,
 		customerType: string | null = null
 	) => {
-		console.log("----device-----", await DeviceInfo.getUniqueId());
-		console.log("----device type-----", await DeviceInfo.getUniqueId());
 		setLoginType(loginType);
 		try {
 			const { status, message, data } = await login({
