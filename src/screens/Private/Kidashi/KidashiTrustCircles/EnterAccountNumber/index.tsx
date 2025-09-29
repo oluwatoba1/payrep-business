@@ -13,6 +13,7 @@ import ComponentImages from "@assets/images/components";
 import styles from "./styles";
 import Colors from "@theme/Colors";
 import ScreenImages from "@assets/images/screens";
+import { useGetAccountsMutation } from "@store/apis/accountApi";
 
 type EnterAccountNumberProps = StackScreenProps<
 	TrustCircleStackParamList,
@@ -24,19 +25,35 @@ export default function EnterAccountNumber({
 }: EnterAccountNumberProps) {
 	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
+	const { formData, formErrors, validateForm, setIdNumber, clearFormError } =
+		useBvnVerificationValidation();
 
-	const {
-		formData: { idNumber }, // we can rename this to `idNumber` if you want generic
-		setIdNumber, // same here, it’s just storing whichever number is typed
-		formErrors,
-		validateForm,
-	} = useBvnVerificationValidation();
+	const [getAccounts, { data: accounts, isLoading: isLoadingAccounts }] =
+		useGetAccountsMutation();
 
 	const [showAccountContainer, setShowAccountContainer] =
 		useState<boolean>(false);
 
 	// Submit dynamically depending on ID type
 	const submit = async () => {};
+
+	const fetchAccounts = async () => {
+		validateForm(async () => {
+			await getAccounts({ account_number: formData.idNumber })
+				.unwrap()
+				.then((res) => {
+					if (res.status) {
+						console.log(res.data);
+					} else {
+						showToast("danger", res.message);
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+					showToast("danger", err.message);
+				});
+		});
+	};
 
 	return (
 		<MainLayout backAction={goBack} keyboardAvoidingType='scroll-view'>
@@ -55,14 +72,20 @@ export default function EnterAccountNumber({
 				keyboardType='numeric'
 				placeholder='e.g 0123456789'
 				maxLength={11} // adjust if NIN length differs
-				onChangeText={setIdNumber}
-				value={idNumber}
+				onChangeText={(text) => {
+					setIdNumber(text);
+					clearFormError("idNumber");
+				}}
+				value={formData.idNumber}
 				error={formErrors.idNumber}
 				rightNode={
-					<Pressable onPress={() => setShowAccountContainer(true)}>
+					<Pressable
+						onPress={() => fetchAccounts()}
+						disabled={isLoadingAccounts}
+					>
 						<Row alignItems='center' gap={6}>
 							<Typography
-								title='Search'
+								title={isLoadingAccounts ? "Searching..." : "Search"}
 								type='label-sb'
 								color={Colors.danger["700"]}
 							/>
