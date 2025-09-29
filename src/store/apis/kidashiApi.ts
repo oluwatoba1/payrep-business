@@ -181,6 +181,21 @@ const KidashiApi = createApi({
 				},
 			}
 		),
+		addMemberToTrustCircle: builder.mutation<
+			AuthResponse<null>,
+			{
+				initiating_vendor_id: string;
+				woman_id: string;
+				trust_circle_id: string;
+				selected_voters?: string[];
+			}
+		>({
+			query: (body) => ({
+				url: "trust_circle/mobile/propose-member",
+				method: "POST",
+				body,
+			}),
+		}),
 	}),
 });
 
@@ -190,6 +205,7 @@ export const {
 	useFetchKidashiVendorMutation,
 	useFetchTrustCirclesMutation,
 	useFetchTrustCircleMutation,
+	useAddMemberToTrustCircleMutation,
 } = KidashiApi;
 
 export default KidashiApi;

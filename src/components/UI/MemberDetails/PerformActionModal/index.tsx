@@ -86,7 +86,6 @@ const PerformActionModal = ({
 
 			{parent === "TrustCircle" && (
 				<>
-					<Divider gapY={scaleHeight(16)} />
 					<ActionCard
 						title='Add a Member'
 						subTitle='Add a new member to this Trust Circle'

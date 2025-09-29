@@ -34,6 +34,8 @@ import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import { KidashiDashboardEmptyState } from "@components/Miscellaneous";
 import { KidashiDashboardEmptyStateProps } from "@components/Miscellaneous/KidashiDashboardEmptyState";
 import PerformActionModal from "@components/UI/MemberDetails/PerformActionModal";
+import { setTrustCircleDetails } from "@store/slices/kidashiSlice";
+import { useAppDispatch } from "@store/hooks";
 
 const emptyStateData: KidashiDashboardEmptyStateProps = {
 	icon: ScreenImages.kidashiHome.searchIcon,
@@ -54,6 +56,7 @@ export default function TrustCircleDetails({
 	route,
 }: TrustCircleDetailsProps) {
 	const { showToast } = useToast();
+	const dispatch = useAppDispatch();
 
 	const [fetchTrustCircle, { isLoading }] = useFetchTrustCircleMutation();
 
@@ -73,6 +76,7 @@ export default function TrustCircleDetails({
 
 			if (status) {
 				setCircleDetails(data);
+				dispatch(setTrustCircleDetails(data));
 				console.log(data);
 			} else {
 				showToast("danger", message);
@@ -84,6 +88,8 @@ export default function TrustCircleDetails({
 			);
 		}
 	};
+
+	// console.log(circleDetails);
 
 	const resetAndGoBack = () => {
 		reset({
