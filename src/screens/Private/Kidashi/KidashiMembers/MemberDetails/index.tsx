@@ -79,7 +79,7 @@ const MemberDetails = ({
 				visible={visible}
 				onClose={() => setVisible(false)}
 				parent='MemberDetails'
-				navigate={navigate}
+				onRequestAssetPress={() => navigate("EnterAssetInformation")}
 			/>
 		</MainLayout>
 	);
