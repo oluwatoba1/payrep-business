@@ -143,7 +143,10 @@ export default function VendorInformation({
 			<Dropdown
 				label='State'
 				options={
-					statesData?.data.map((option: any) => ({
+					[
+						...statesData.data.filter((s: any) => s.name === "Kaduna"),
+						...statesData.data.filter((s: any) => s.name !== "Kaduna"),
+					].map((option: any) => ({
 						label: option.name,
 						value: option.id,
 					})) || []

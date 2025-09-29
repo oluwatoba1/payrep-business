@@ -50,6 +50,7 @@ export default function GuarantorDetails({
 		setState,
 		setLga,
 		setEmail,
+		guarantorNumber,
 		setNin,
 		setRelationship,
 	} = useGuarantorDetails();
@@ -96,6 +97,11 @@ export default function GuarantorDetails({
 	const handleSubmit = () => {
 		validateForm((guarantors) => {
 			console.log(guarantors);
+			setSelectedGender(undefined);
+			setSelectedState(undefined);
+			setSelectedLga(undefined);
+			setSelectedRelationship(undefined);
+			setDateOfBirth(undefined);
 			dispatch(setRegistrationDetails({ guarantors }));
 			navigate("ReviewDetails");
 		});
@@ -132,7 +138,10 @@ export default function GuarantorDetails({
 
 			<Pad size={20} />
 
-			<Typography type='heading4-sb' title='Guarantor Details #1' />
+			<Typography
+				type='heading4-sb'
+				title={`Guarantor Details #${guarantorNumber}`}
+			/>
 			<Typography
 				type='body-r'
 				title='Provide the details of a trusted guarantor. This helps us confirm credibility and support your application review'

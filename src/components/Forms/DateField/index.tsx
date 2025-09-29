@@ -26,7 +26,7 @@ export default function DateField({
 	onDateChange,
 	error = "",
 }: CustomDatePickerProps) {
-	const [date, setDate] = useState<Date | undefined>();
+	const [date, setDate] = useState<Date | undefined>(undefined);
 	const [show, setShow] = useState(false);
 
 	const handleChange = (_: any, selectedDate?: Date) => {
@@ -34,7 +34,7 @@ export default function DateField({
 
 		if (selectedDate) {
 			setDate(selectedDate);
-			onDateChange(formatDate(selectedDate));
+			selectedDate && onDateChange(formatDate(selectedDate));
 		}
 	};
 
