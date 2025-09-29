@@ -14,7 +14,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 interface PerformActionModalProps {
 	visible: boolean;
 	onClose: () => void;
-	parent: "MemberDetails";
+	parent: "MemberDetails" | "TrustCircle";
 	navigate: any;
 }
 
@@ -81,6 +81,22 @@ const PerformActionModal = ({
 					}
 				}}
 			/>
+
+			{parent === "TrustCircle" && (
+				<>
+					<Divider gapY={scaleHeight(16)} />
+					<ActionCard
+						title='Add a Member'
+						subTitle='Add a new member to this Trust Circle'
+						icon={ScreenImages.kidashiMemberDetails.addTeamIcon}
+						onPress={() => {
+							if (parent === "TrustCircle") {
+								// perform action
+							}
+						}}
+					/>
+				</>
+			)}
 		</ModalWrapper>
 	);
 };

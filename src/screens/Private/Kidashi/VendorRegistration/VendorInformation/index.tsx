@@ -144,8 +144,8 @@ export default function VendorInformation({
 				label='State'
 				options={
 					[
-						...statesData.data.filter((s: any) => s.name === "Kaduna"),
-						...statesData.data.filter((s: any) => s.name !== "Kaduna"),
+						...(statesData?.data ?? []).filter((s: any) => s.name === "Kaduna"),
+						...(statesData?.data ?? []).filter((s: any) => s.name !== "Kaduna"),
 					].map((option: any) => ({
 						label: option.name,
 						value: option.id,
