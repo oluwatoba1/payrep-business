@@ -18,7 +18,10 @@ import Pad from "@components/Pad";
 import { DEFAULT_ERROR_MESSAGE, RESEND_COUNTDOWN } from "@utils/Constants";
 import useToast from "@hooks/useToast";
 import useVerifyMobileValidation from "./validator";
-import { useVerifyMobileNumberMutation } from "@store/apis/authApi";
+import {
+	useRegisterEmailMutation,
+	useVerifyMobileNumberMutation,
+} from "@store/apis/authApi";
 import Colors from "@theme/Colors";
 import { useRegisterWomanEmailMutation } from "@store/apis/kidashiApi";
 
@@ -37,7 +40,7 @@ export default function MemberEmailVerification({
 		formData: { otp },
 		setOtp,
 	} = useVerifyMobileValidation();
-	const [registerEmail, { isLoading }] = useRegisterWomanEmailMutation();
+	const [registerEmail, { isLoading }] = useRegisterEmailMutation();
 	const [verifyMobileNumber, { isLoading: isResending }] =
 		useVerifyMobileNumberMutation();
 

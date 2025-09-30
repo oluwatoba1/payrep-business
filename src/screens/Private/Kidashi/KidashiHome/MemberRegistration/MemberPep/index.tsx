@@ -32,7 +32,7 @@ export default function MemberPep({
 }: MemberPepProps) {
 	const { showToast } = useToast();
 
-	const [updatePep, { isLoading }] = useUpdateWomanPepMutation();
+	const [updatePep, { isLoading }] = useUpdatePepMutation();
 
 	const customerId = useAppSelector(
 		(state) => state.auth.registration.customer_id
@@ -52,7 +52,6 @@ export default function MemberPep({
 		try {
 			const { status, message } = await updatePep({
 				pep: value === "yes",
-				cba_customer_id: customerId,
 			}).unwrap();
 			if (status) {
 				navigate("MemberSourceOfIncome");

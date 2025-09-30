@@ -96,6 +96,16 @@ const KidashiApi = createApi({
 				body,
 			}),
 		}),
+		onboardWoman: builder.mutation<
+			AuthResponse<null>,
+			{ vendor_cba_customer_id: string; woman_cba_customer_id: string }
+		>({
+			query: (body) => ({
+				url: "woman/mobile/onboarding/create",
+				method: "POST",
+				body,
+			}),
+		}),
 		registerWomanEmail: builder.mutation<
 			AuthResponse<null>,
 			Partial<RegisterCredentials>
@@ -247,6 +257,7 @@ export const {
 	useFetchKidashiVendorMutation,
 	useFetchTrustCirclesMutation,
 	useFetchTrustCircleMutation,
+	useOnboardWomanMutation,
 	useVerifyWomanMobileNumberMutation,
 	useVerifyWomanEmailMutation,
 	useRegisterWomanEmailMutation,

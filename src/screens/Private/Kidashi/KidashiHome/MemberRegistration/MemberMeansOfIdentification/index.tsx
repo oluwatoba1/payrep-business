@@ -38,7 +38,7 @@ export default function MemberMeansOfIdentification({
 		useDocumentValidation(showToast);
 
 	const [uploadMeansofIdentification, { isLoading }] =
-		useWomanUploadMeansofIdentificationMutation();
+		useUploadMeansofIdentificationMutation();
 
 	const customerId = useAppSelector(
 		(state) => state.auth.registration.customer_id
@@ -54,7 +54,6 @@ export default function MemberMeansOfIdentification({
 		});
 		fd.append("document_class", "identification");
 		fd.append("document_type", formData.documentType);
-		fd.append("cba_customer_id", customerId);
 
 		try {
 			const { status, message } = await uploadMeansofIdentification(

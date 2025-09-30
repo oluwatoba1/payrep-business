@@ -31,6 +31,10 @@ import {
 	useWomanBvnLookupMutation,
 	useWomanNinLookupMutation,
 } from "@store/apis/kidashiApi";
+import {
+	useBvnLookupMutation,
+	useNinLookupMutation,
+} from "@store/apis/complianceApi";
 
 interface IKycData {
 	customer: string;
@@ -59,10 +63,6 @@ export default function MemberMeansOfVerification({
 	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
 
-	const customerId = useAppSelector(
-		(state) => state.auth.registration.customer_id
-	);
-
 	const {
 		formData: { idNumber }, // we can rename this to `idNumber` if you want generic
 		setIdNumber, // same here, it’s just storing whichever number is typed
@@ -70,8 +70,8 @@ export default function MemberMeansOfVerification({
 		validateForm,
 	} = useBvnVerificationValidation();
 
-	const [bvnLookup, { isLoading: isBvnLoading }] = useWomanBvnLookupMutation();
-	const [ninLookup, { isLoading: isNinLoading }] = useWomanNinLookupMutation();
+	const [bvnLookup, { isLoading: isBvnLoading }] = useBvnLookupMutation();
+	const [ninLookup, { isLoading: isNinLoading }] = useNinLookupMutation();
 
 	const [kycData, setKycData] = useState<IKycData>({
 		customer: "",
@@ -97,13 +97,8 @@ export default function MemberMeansOfVerification({
 	const submit = async () => {
 		try {
 			if (selectedOption.value === "bvn") {
-				console.log({
-					bvn: idNumber,
-					cba_customer_id: customerId,
-				});
 				const { status, message, data } = await bvnLookup({
 					bvn: idNumber,
-					cba_customer_id: customerId,
 				}).unwrap();
 				if (status && data) {
 					delete data.image;
@@ -119,7 +114,6 @@ export default function MemberMeansOfVerification({
 			} else if (selectedOption.value === "nin") {
 				const { status, message, data } = await ninLookup({
 					nin: idNumber,
-					cba_customer_id: customerId,
 				}).unwrap();
 				if (status && data) {
 					delete data.image;

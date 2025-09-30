@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Image, Pressable, View } from "react-native";
+import { useCallback, useState, useEffect } from "react";
+import { BackHandler, Image, Pressable, View } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 
 import useAccountNumberValidation from "./validator";
@@ -17,6 +17,7 @@ import { useGetAccountsMutation } from "@store/apis/accountApi";
 import { useAddMemberToTrustCircleMutation } from "@store/apis/kidashiApi";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import { setSelectedAccountDetails } from "@store/slices/kidashiSlice";
+import { useFocusEffect } from "@react-navigation/native";
 
 type EnterAccountNumberProps = StackScreenProps<
 	TrustCircleStackParamList,
@@ -110,6 +111,22 @@ export default function EnterAccountNumber({
 				});
 		});
 	};
+
+	const backAction = () => {
+		goBack();
+		return true; // Prevent default behavior
+	};
+
+	useFocusEffect(
+		useCallback(() => {
+			const backHandler = BackHandler.addEventListener(
+				"hardwareBackPress",
+				backAction
+			);
+
+			return () => backHandler.remove(); // Cleanup
+		}, [])
+	);
 
 	return (
 		<MainLayout backAction={goBack} keyboardAvoidingType='scroll-view'>

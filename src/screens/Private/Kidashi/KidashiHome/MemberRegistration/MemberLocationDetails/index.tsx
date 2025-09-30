@@ -42,7 +42,7 @@ export default function MemberLocationDetails({
 	} = useLocationValidation();
 	const { showToast } = useToast();
 
-	const [updateLocation, { isLoading }] = useUpdateWomanLocationMutation();
+	const [updateLocation, { isLoading }] = useUpdateLocationMutation();
 
 	// Fetch states and countries
 	const { data: statesData, isLoading: statesLoading } = useFetchStatesQuery();
@@ -51,10 +51,6 @@ export default function MemberLocationDetails({
 
 	// Fetch LGAs dynamically
 	const [fetchLgas, { isLoading: lgasLoading }] = useFetchLgasMutation();
-
-	const customerId = useAppSelector(
-		(state) => state.auth.registration.customer_id
-	);
 
 	// Local states for dropdown selections
 	const [selectedState, setSelectedState] = useState<
@@ -74,7 +70,6 @@ export default function MemberLocationDetails({
 				country: formData.country,
 				lga: formData.lga,
 				residential_address: formData.residentialAddress,
-				cba_customer_id: customerId,
 			}).unwrap();
 			if (status) {
 				navigate("MemberMeansOfIdentification");
@@ -220,16 +215,6 @@ export default function MemberLocationDetails({
 			<TextInput
 				label='Address'
 				placeholder='Enter your address'
-				onChangeText={setResidentialAddress}
-				value={formData.residentialAddress}
-				error={formErrors.residentialAddress}
-			/>
-
-			<Pad />
-
-			<TextInput
-				label='Community'
-				placeholder='Enter community'
 				onChangeText={setResidentialAddress}
 				value={formData.residentialAddress}
 				error={formErrors.residentialAddress}

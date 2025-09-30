@@ -17,7 +17,10 @@ import { DEFAULT_ERROR_MESSAGE, RESEND_COUNTDOWN } from "@utils/Constants";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import useToast from "@hooks/useToast";
 import useVerifyMobileValidation from "./validators";
-import { useVerifyMobileNumberMutation } from "@store/apis/authApi";
+import {
+	useRegisterMobileNumberMutation,
+	useVerifyMobileNumberMutation,
+} from "@store/apis/authApi";
 import Colors from "@theme/Colors";
 import { useRegisterWomanMobileNumberMutation } from "@store/apis/kidashiApi";
 import { setRegistrationDetails } from "@store/slices/authSlice";
@@ -42,7 +45,7 @@ export default function MemberPhoneNumberVerification({
 		useVerifyMobileNumberMutation();
 
 	const [registerMobileNumber, { isLoading }] =
-		useRegisterWomanMobileNumberMutation();
+		useRegisterMobileNumberMutation();
 
 	const mobileNumber = useAppSelector(
 		(state) => state.auth.registration.mobileNumber
@@ -61,7 +64,7 @@ export default function MemberPhoneNumberVerification({
 		try {
 			const { status, message, data } = await registerMobileNumber({
 				mobile_number: mobileNumber,
-				type: "corporate",
+				type: "individual",
 				otp,
 			}).unwrap();
 			if (status) {

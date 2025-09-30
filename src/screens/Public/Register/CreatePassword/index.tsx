@@ -6,13 +6,14 @@ import DeviceInfo from "react-native-device-info";
 import { MainLayout } from "@components/Layout";
 import { Button, TextInput, Typography } from "@components/Forms";
 import { PublicNavigatorParamList } from "@navigation/types";
-import { useAppSelector } from "@store/hooks";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { mainRegisterStyles } from "../styles";
 import { useRegisterPasswordMutation } from "@store/apis/authApi";
 import useRegisterPasswordValidation from "./validator";
 import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import { useFocusEffect } from "@react-navigation/native";
+import { setRegistrationDetails } from "@store/slices/authSlice";
 
 type CreatePasswordProps = StackScreenProps<
 	PublicNavigatorParamList,
@@ -22,6 +23,7 @@ type CreatePasswordProps = StackScreenProps<
 export default function CreatePassword({
 	navigation: { navigate, goBack },
 }: CreatePasswordProps) {
+	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
 	const {
 		formErrors,
@@ -59,6 +61,13 @@ export default function CreatePassword({
 				customer_id,
 			}).unwrap();
 			if (status) {
+				dispatch(
+					setRegistrationDetails({
+						mobileNumber: "",
+						email: "",
+						customer_id: "",
+					})
+				);
 				navigate("SuccessMessage", {
 					title: "Success!",
 					subTitle: "Well done! You have successfully created your account.",

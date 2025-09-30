@@ -20,6 +20,7 @@ import Colors from "@theme/Colors";
 import { useVerifyWomanEmailMutation } from "@store/apis/kidashiApi";
 import { setRegistrationDetails } from "@store/slices/authSlice";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
+import { useVerifyEmailMutation } from "@store/apis/authApi";
 
 type MemberEmailProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberEmail">,
@@ -37,7 +38,7 @@ export default function MemberEmail({
 		validateForm,
 		setEmail,
 	} = useRegisterEmailValidation();
-	const [verifyEmail, { isLoading }] = useVerifyWomanEmailMutation();
+	const [verifyEmail, { isLoading }] = useVerifyEmailMutation();
 
 	const { mobileNumber, customer_id } = useAppSelector(
 		(state) => state.auth.registration

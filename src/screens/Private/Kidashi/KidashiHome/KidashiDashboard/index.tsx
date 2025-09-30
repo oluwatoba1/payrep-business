@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FlatList, Image, Pressable, Text } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps } from "@react-navigation/native";
@@ -29,6 +29,10 @@ import {
 	MemberTransactionCard,
 } from "@components/UI/TrustCircle/Cards";
 import { IMemberTransaction } from "@components/UI/TrustCircle/Cards/MemberTransactionCard";
+import { useAppSelector } from "@store/hooks";
+import { useOnboardWomanMutation } from "@store/apis/kidashiApi";
+import useToast from "@hooks/useToast";
+import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 
 const overview: KidashiHomeCardProps["items"] = [
 	{
@@ -117,6 +121,10 @@ export default function KidashiDashboard({
 	const [activeTab, setActiveTab] = useState<TabType>("Top Performing");
 	const [showBottomSheet, setShowBottomSheet] = useState(false);
 
+	const { showToast } = useToast();
+	const customer = useAppSelector((state) => state.customer.customer);
+	const [onboardWoman] = useOnboardWomanMutation();
+
 	const options = [
 		{
 			label: "Create a Trust Circle",
@@ -132,6 +140,28 @@ export default function KidashiDashboard({
 				navigate("MemberRegistration", { screen: "MemberPhoneNumber" }),
 		},
 	];
+
+	const registerWoman = async () => {
+		try {
+			const { status, message } = await onboardWoman({
+				vendor_cba_customer_id: customer?.id || "",
+				woman_cba_customer_id: "e0d8775f-45d0-4ba3-9442-039dca3948d4",
+			}).unwrap();
+			if (status) {
+				showToast("success", "Success");
+			}
+		} catch (error: ErrorResponse | any) {
+			console.log(error);
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
+
+	useEffect(() => {
+		registerWoman();
+	}, []);
 
 	return (
 		<KidashiLayout
