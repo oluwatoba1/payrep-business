@@ -83,7 +83,7 @@ export default function EnterAccountNumber({
 				.catch((err) => {
 					console.log(err);
 					// remove this after testing
-					navigate("MemberAdditionSuccessScreen");
+					// navigate("MemberAdditionSuccessScreen");
 					showToast("danger", err.data.message || DEFAULT_ERROR_MESSAGE);
 				});
 		}
