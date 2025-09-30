@@ -48,7 +48,7 @@ export default function Members({
 				onSearch={() => {}}
 				placeholder='Phone, Account no or NIN'
 			/>
-			<Button title='Add Member' onPress={() => navigate("MemberDetails")} />
+			{/* <Button title='Add Member' onPress={() => navigate("MemberDetails")} /> */}
 			<KidashiDashboardEmptyState {...emptyStateData} />
 		</KidashiLayout>
 	);

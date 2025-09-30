@@ -78,10 +78,6 @@ const ReviewAssetRequest = ({ navigation, route }: ReviewAssetRequestProps) => {
 						<Typography title='Date' type='label-r' />
 						<Typography title={today} type='body-sb' />
 					</View>
-					<View style={[styles.row, styles.dividerBottom]}>
-						<Typography title='Trust Circle' type='label-r' />
-						<Typography title='Ladi Cooperative Group' type='body-sb' />
-					</View>
 
 					<Row
 						alignItems='center'

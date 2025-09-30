@@ -184,7 +184,10 @@ export default function TrustCircleDetails({
 							.map((c, index) => (index > 2 && index < 7 ? "*" : c))
 							.join("")}
 						onSelect={() =>
-							navigate("KidashiMembers", { screen: "MemberDetails" })
+							navigate("KidashiMembers", {
+								screen: "MemberDetails",
+								params: { id: item.id },
+							})
 						}
 						rightNode={
 							<Image

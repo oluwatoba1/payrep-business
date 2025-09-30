@@ -930,6 +930,26 @@ interface IWomen {
 	status: string;
 }
 
+interface IWomanDetails {
+	woman_id: string;
+	first_name: string;
+	other_name: string;
+	surname: string;
+	mobile_number: string;
+	account_number: string;
+	email: string;
+	date: string;
+	start_date: string;
+	end_date: string;
+	trust_circle_id: string;
+	vendor_id: string;
+	state_id: string;
+	lga_id: string;
+	country_id: string;
+	repayment_status: string;
+	status: string;
+}
+
 interface ITrustCircleDetail {
 	id: string;
 	circle_name: string;
