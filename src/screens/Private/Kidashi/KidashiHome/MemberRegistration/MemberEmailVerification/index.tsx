@@ -18,11 +18,9 @@ import Pad from "@components/Pad";
 import { DEFAULT_ERROR_MESSAGE, RESEND_COUNTDOWN } from "@utils/Constants";
 import useToast from "@hooks/useToast";
 import useVerifyMobileValidation from "./validator";
-import {
-	useRegisterEmailMutation,
-	useVerifyMobileNumberMutation,
-} from "@store/apis/authApi";
+import { useVerifyMobileNumberMutation } from "@store/apis/authApi";
 import Colors from "@theme/Colors";
+import { useRegisterWomanEmailMutation } from "@store/apis/kidashiApi";
 
 type MemberEmailVerificationProps = StackScreenProps<
 	MemberRegistrationStackParamList,
@@ -35,11 +33,11 @@ export default function MemberEmailVerification({
 	const { showToast } = useToast();
 	const {
 		formErrors,
-		formData: { otp },
 		validateForm,
+		formData: { otp },
 		setOtp,
 	} = useVerifyMobileValidation();
-	const [registerEmail, { isLoading }] = useRegisterEmailMutation();
+	const [registerEmail, { isLoading }] = useRegisterWomanEmailMutation();
 	const [verifyMobileNumber, { isLoading: isResending }] =
 		useVerifyMobileNumberMutation();
 
@@ -174,10 +172,7 @@ export default function MemberEmailVerification({
 
 			<Pad size={176} />
 
-			<Button
-				title='Continue'
-				onPress={() => navigate("MemberMeansOfVerification")}
-			/>
+			<Button title='Continue' onPress={() => validateForm(submit)} />
 		</MainLayout>
 	);
 }

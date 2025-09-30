@@ -19,6 +19,7 @@ const customBaseQuery: BaseQueryFn<
 		prepareHeaders(headers, { getState }) {
 			headers.set("Content-Type", "application/json");
 			const { token } = (getState() as RootState).auth.credentials;
+			console.log(token);
 			if (token) {
 				headers.set("Authorization", `Bearer ${token}`);
 			}
@@ -95,7 +96,47 @@ const KidashiApi = createApi({
 				body,
 			}),
 		}),
-		updateLocation: builder.mutation<
+		registerWomanEmail: builder.mutation<
+			AuthResponse<null>,
+			Partial<RegisterCredentials>
+		>({
+			query: (body) => ({
+				url: "woman/mobile/register_email",
+				method: "POST",
+				body,
+			}),
+		}),
+		verifyWomanEmail: builder.mutation<
+			AuthResponse<null>,
+			Partial<RegisterCredentials>
+		>({
+			query: (body) => ({
+				url: "woman/mobile/verify_email",
+				method: "POST",
+				body,
+			}),
+		}),
+		registerWomanMobileNumber: builder.mutation<
+			AuthResponse<{ customer_id: string }>,
+			Partial<RegisterCredentials>
+		>({
+			query: (body) => ({
+				url: "woman/mobile/register_mobile",
+				method: "POST",
+				body,
+			}),
+		}),
+		verifyWomanMobileNumber: builder.mutation<
+			AuthResponse<RegisterMobileDataResponse>,
+			Partial<RegisterCredentials>
+		>({
+			query: (body) => ({
+				url: "woman/mobile/verify_mobile",
+				method: "POST",
+				body,
+			}),
+		}),
+		updateWomanLocation: builder.mutation<
 			AuthResponse<null>,
 			LocationCredentials & { cba_customer_id: string }
 		>({
@@ -103,36 +144,36 @@ const KidashiApi = createApi({
 				const customerId: string = store.getState().auth.customer?.id || "";
 				return {
 					url: "mobile/location_setup",
-					method: "PUT",
+					method: "POST",
 					body,
 				};
 			},
 		}),
-		updatePep: builder.mutation<
+		updateWomanPep: builder.mutation<
 			AuthResponse<null>,
 			PepCredentials & { cba_customer_id: string }
 		>({
 			query: (body) => {
 				return {
 					url: "woman/mobile/pep",
-					method: "PUT",
+					method: "POST",
 					body,
 				};
 			},
 		}),
-		updateIncome: builder.mutation<
+		updateWomanIncome: builder.mutation<
 			AuthResponse<null>,
 			SourceOfIncomeCredentials & { cba_customer_id: string }
 		>({
 			query: (body) => {
 				return {
 					url: "woman/mobile/income",
-					method: "PUT",
+					method: "POST",
 					body,
 				};
 			},
 		}),
-		affirmAttestation: builder.mutation<
+		affirmWomanAttestation: builder.mutation<
 			AuthResponse<null>,
 			{ cba_customer_id: string }
 		>({
@@ -144,7 +185,7 @@ const KidashiApi = createApi({
 				};
 			},
 		}),
-		bvnLookup: builder.mutation<
+		womanBvnLookup: builder.mutation<
 			AuthResponse<any>,
 			BvnLookupCredentials & { cba_customer_id: string }
 		>({
@@ -157,7 +198,7 @@ const KidashiApi = createApi({
 				};
 			},
 		}),
-		ninLookup: builder.mutation<
+		womanNinLookup: builder.mutation<
 			AuthResponse<any>,
 			NinLookupCredentials & { cba_customer_id: string }
 		>({
@@ -170,17 +211,18 @@ const KidashiApi = createApi({
 				};
 			},
 		}),
-		uploadMeansofIdentification: builder.mutation<AuthResponse<null>, FormData>(
-			{
-				query: (body) => {
-					return {
-						url: "woman/mobile/identification_check",
-						method: "POST",
-						body,
-					};
-				},
-			}
-		),
+		womanUploadMeansofIdentification: builder.mutation<
+			AuthResponse<null>,
+			FormData
+		>({
+			query: (body) => {
+				return {
+					url: "woman/mobile/identification_check",
+					method: "POST",
+					body,
+				};
+			},
+		}),
 		addMemberToTrustCircle: builder.mutation<
 			AuthResponse<null>,
 			{
@@ -205,6 +247,17 @@ export const {
 	useFetchKidashiVendorMutation,
 	useFetchTrustCirclesMutation,
 	useFetchTrustCircleMutation,
+	useVerifyWomanMobileNumberMutation,
+	useVerifyWomanEmailMutation,
+	useRegisterWomanEmailMutation,
+	useRegisterWomanMobileNumberMutation,
+	useUpdateWomanIncomeMutation,
+	useUpdateWomanLocationMutation,
+	useAffirmWomanAttestationMutation,
+	useUpdateWomanPepMutation,
+	useWomanBvnLookupMutation,
+	useWomanNinLookupMutation,
+	useWomanUploadMeansofIdentificationMutation,
 	useAddMemberToTrustCircleMutation,
 } = KidashiApi;
 

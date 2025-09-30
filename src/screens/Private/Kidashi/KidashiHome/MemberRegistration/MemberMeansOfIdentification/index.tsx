@@ -19,6 +19,8 @@ import { useUploadMeansofIdentificationMutation } from "@store/apis/complianceAp
 import useDocumentValidation from "./validators";
 import { chunkArray } from "@utils/Helpers";
 import styles from "./styles";
+import { useWomanUploadMeansofIdentificationMutation } from "@store/apis/kidashiApi";
+import { useAppSelector } from "@store/hooks";
 
 type MemberMeansOfIdentificationProps = CompositeScreenProps<
 	StackScreenProps<
@@ -36,7 +38,11 @@ export default function MemberMeansOfIdentification({
 		useDocumentValidation(showToast);
 
 	const [uploadMeansofIdentification, { isLoading }] =
-		useUploadMeansofIdentificationMutation();
+		useWomanUploadMeansofIdentificationMutation();
+
+	const customerId = useAppSelector(
+		(state) => state.auth.registration.customer_id
+	);
 
 	const submit = async () => {
 		const fd = new FormData();
@@ -48,6 +54,7 @@ export default function MemberMeansOfIdentification({
 		});
 		fd.append("document_class", "identification");
 		fd.append("document_type", formData.documentType);
+		fd.append("cba_customer_id", customerId);
 
 		try {
 			const { status, message } = await uploadMeansofIdentification(
@@ -128,7 +135,7 @@ export default function MemberMeansOfIdentification({
 				notifier={(message) => showToast("warning", message)}
 			/>
 
-			<Button title='Submit ID Card' onPress={() => navigate("MemberPep")} />
+			<Button title='Submit ID Card' onPress={() => validateForm(submit)} />
 			<Pad size={40} />
 		</MainLayout>
 	);

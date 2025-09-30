@@ -55,7 +55,7 @@ export default function MemberFaceCaptureVerification({
 	const { showToast } = useToast();
 	const bvnData = useAppSelector((state) => state.compliance.bvnData);
 	const ninData = useAppSelector((state) => state.compliance.ninData);
-	const userId = useAppSelector((state) => state.auth.customer?.id);
+	const userId = useAppSelector((state) => state.auth.registration.customer_id);
 	const customer = useAppSelector((state) => state.customer.customer);
 
 	const [verificationCheck, { isLoading }] = useVerificationCheckMutation();
@@ -202,10 +202,7 @@ export default function MemberFaceCaptureVerification({
 
 			<Pad size={100} />
 
-			<Button
-				title='Start Face Capture'
-				onPress={() => navigate("MemberLocationDetails")}
-			/>
+			<Button title='Start Face Capture' onPress={onSubmit} />
 		</MainLayout>
 	);
 }

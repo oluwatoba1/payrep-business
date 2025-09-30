@@ -20,6 +20,7 @@ import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import { useAppSelector } from "@store/hooks";
 import Pad from "@components/Pad";
+import { useUpdateWomanIncomeMutation } from "@store/apis/kidashiApi";
 
 type MemberSourceOfIncomeProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberSourceOfIncome">,
@@ -29,7 +30,9 @@ type MemberSourceOfIncomeProps = CompositeScreenProps<
 export default function MemberSourceOfIncome({
 	navigation: { navigate },
 }: MemberSourceOfIncomeProps) {
-	const customerType = useAppSelector((state) => state.customer.customer?.type);
+	const customerId = useAppSelector(
+		(state) => state.auth.registration.customer_id
+	);
 	const {
 		formData,
 		formErrors,
@@ -38,7 +41,7 @@ export default function MemberSourceOfIncome({
 		setAnnualIncome,
 		setEmploymentType,
 	} = useSourceOfIncomeValidation();
-	const [updateIncome, { isLoading }] = useUpdateIncomeMutation();
+	const [updateIncome, { isLoading }] = useUpdateWomanIncomeMutation();
 	const { showToast } = useToast();
 
 	const [selectedOccupation, setSelectedOccupation] = useState<
@@ -57,8 +60,10 @@ export default function MemberSourceOfIncome({
 				occupation: formData.occupation,
 				annual_income: formData.annualIncome,
 				employment_type: formData.employmentType,
+				cba_customer_id: customerId,
 			}).unwrap();
 			if (status) {
+				navigate("MemberAttestation");
 			} else {
 				showToast("danger", message);
 			}
@@ -146,10 +151,7 @@ export default function MemberSourceOfIncome({
 				/>
 			</View>
 			<Pad size={40} />
-			<Button
-				title='Save and Continue'
-				onPress={() => navigate("MemberAttestation")}
-			/>
+			<Button title='Save and Continue' onPress={() => validateForm(submit)} />
 		</MainLayout>
 	);
 }

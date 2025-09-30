@@ -176,7 +176,6 @@ export default function TrustCircleDetails({
 			<Tab items={["Members"]} value='Members' onTap={() => {}} />
 			<FlatList<IWomen>
 				data={circleDetails?.women}
-				style={{ flex: 0.8 }}
 				renderItem={({ item }) => (
 					<KidashiMemberItemCard
 						title={`${item.first_name} ${item.surname}`}
