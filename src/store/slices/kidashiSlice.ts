@@ -9,7 +9,9 @@ const initialState: IKidashi = {
 		guarantors: [],
 		business_description: "",
 	},
+	circle_details: null,
 	vendor: null,
+	selected_account: null,
 	memberDetails: null,
 };
 
@@ -32,6 +34,18 @@ const KidashiSlice = createSlice({
 		setVendor: (state, action: PayloadAction<IVendor>) => {
 			state.vendor = action.payload;
 		},
+		setTrustCircleDetails: (
+			state,
+			action: PayloadAction<ITrustCircleDetail>
+		) => {
+			state.circle_details = action.payload;
+		},
+		setSelectedAccountDetails: (
+			state,
+			action: PayloadAction<iWomanAccount>
+		) => {
+			state.selected_account = action.payload;
+		},
 		setMemberDetails: (state, action: PayloadAction<IWomanDetails>) => {
 			state.memberDetails = action.payload;
 		},
@@ -42,6 +56,8 @@ export const {
 	setRegistrationDetails,
 	setVendorId,
 	setVendor,
+	setTrustCircleDetails,
+	setSelectedAccountDetails,
 	setMemberDetails,
 } = KidashiSlice.actions;
 

@@ -253,6 +253,31 @@ const KidashiApi = createApi({
 				};
 			},
 		}),
+		addMemberToTrustCircle: builder.mutation<
+			AuthResponse<null>,
+			{
+				initiating_vendor_id: string;
+				woman_id: string;
+				trust_circle_id: string;
+				selected_voters?: string[];
+			}
+		>({
+			query: (body) => ({
+				url: "trust_circle/mobile/propose-member",
+				method: "POST",
+				body,
+			}),
+		}),
+		getWomanDetails: builder.mutation<
+			AuthResponse<IWomanDetails>,
+			{ cba_customer_id: string }
+		>({
+			query: (body) => ({
+				url: "woman/mobile/basic_details",
+				method: "POST",
+				body,
+			}),
+		}),
 	}),
 });
 
@@ -276,6 +301,8 @@ export const {
 	useWomanBvnLookupMutation,
 	useWomanNinLookupMutation,
 	useWomanUploadMeansofIdentificationMutation,
+	useAddMemberToTrustCircleMutation,
+	useGetWomanDetailsMutation,
 } = KidashiApi;
 
 export default KidashiApi;
