@@ -22,6 +22,7 @@ import styles from "./styles";
 import Colors from "@theme/Colors";
 import { useAppSelector } from "@store/hooks";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { useAffirmWomanAttestationMutation } from "@store/apis/kidashiApi";
 
 type MemberAttestationProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberAttestation">,
@@ -33,7 +34,11 @@ export default function MemberAttestation({
 }: MemberAttestationProps) {
 	const { showToast } = useToast();
 	const customer = useAppSelector((state) => state.customer.customer);
-	const [affirmAttestation, { isLoading }] = useAffirmAttestationMutation();
+	const customerId = useAppSelector(
+		(state) => state.auth.registration.customer_id
+	);
+	const [affirmAttestation, { isLoading }] =
+		useAffirmWomanAttestationMutation();
 	const [getAttestion, { isLoading: isLoadingAttestation }] =
 		useGetAttestationMutation();
 
@@ -71,7 +76,9 @@ export default function MemberAttestation({
 			return;
 		}
 		try {
-			const { status, message } = await affirmAttestation().unwrap();
+			const { status, message } = await affirmAttestation({
+				cba_customer_id: customerId,
+			}).unwrap();
 			if (status) {
 				navigate("MemberSuccessScreen");
 			} else {
@@ -139,11 +146,7 @@ export default function MemberAttestation({
 
 			<Pad size={30} />
 
-			<Button
-				title='Submit'
-				onPress={() => navigate("MemberSuccessScreen")}
-				disabled={!isChecked}
-			/>
+			<Button title='Submit' onPress={submit} disabled={!isChecked} />
 		</MainLayout>
 	);
 }

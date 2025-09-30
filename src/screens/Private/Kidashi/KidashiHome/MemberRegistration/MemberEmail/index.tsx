@@ -11,13 +11,15 @@ import {
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import useRegisterEmailValidation from "./validator";
 import useToast from "@hooks/useToast";
-import { useVerifyEmailMutation } from "@store/apis/authApi";
 import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import Pad from "@components/Pad";
 import ComponentImages from "@assets/images/components";
 import styles from "../styles";
 import Colors from "@theme/Colors";
+import { useVerifyWomanEmailMutation } from "@store/apis/kidashiApi";
+import { setRegistrationDetails } from "@store/slices/authSlice";
+import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 
 type MemberEmailProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberEmail">,
@@ -35,16 +37,26 @@ export default function MemberEmail({
 		validateForm,
 		setEmail,
 	} = useRegisterEmailValidation();
-	const [verifyEmail, { isLoading }] = useVerifyEmailMutation();
+	const [verifyEmail, { isLoading }] = useVerifyWomanEmailMutation();
 
-	const mobileNumber = useAppSelector(
-		(state) => state.auth.registration.mobileNumber
+	const { mobileNumber, customer_id } = useAppSelector(
+		(state) => state.auth.registration
 	);
 
-	const submit = async () => {};
-
-	const handleSkip = () => {
-		navigate("MemberMeansOfVerification");
+	const submit = async () => {
+		try {
+			const { status } = await verifyEmail({ email }).unwrap();
+			if (status) {
+				dispatch(setRegistrationDetails({ mobileNumber, email, customer_id }));
+				navigate("MemberEmailVerification");
+			}
+		} catch (error: any) {
+			console.log(error);
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
 	};
 
 	const backAction = () => {
@@ -79,10 +91,7 @@ export default function MemberEmail({
 
 			<Pad />
 
-			<Button
-				title='Continue'
-				onPress={() => navigate("MemberEmailVerification")}
-			/>
+			<Button title='Continue' onPress={() => validateForm(submit)} />
 
 			<Pad size={24} />
 

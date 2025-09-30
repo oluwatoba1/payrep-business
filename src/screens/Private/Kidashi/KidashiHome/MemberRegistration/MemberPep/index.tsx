@@ -14,6 +14,8 @@ import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import Pad from "@components/Pad";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { useUpdateWomanPepMutation } from "@store/apis/kidashiApi";
+import { useAppSelector } from "@store/hooks";
 
 const OPTIONS = [
 	{ label: "Yes", value: "yes" },
@@ -30,7 +32,11 @@ export default function MemberPep({
 }: MemberPepProps) {
 	const { showToast } = useToast();
 
-	const [updatePep, { isLoading }] = useUpdatePepMutation();
+	const [updatePep, { isLoading }] = useUpdateWomanPepMutation();
+
+	const customerId = useAppSelector(
+		(state) => state.auth.registration.customer_id
+	);
 
 	const [selectedValue, setSelectedValue] = useState<
 		DefaultDropdownOption | undefined
@@ -46,6 +52,7 @@ export default function MemberPep({
 		try {
 			const { status, message } = await updatePep({
 				pep: value === "yes",
+				cba_customer_id: customerId,
 			}).unwrap();
 			if (status) {
 				navigate("MemberSourceOfIncome");
@@ -102,10 +109,7 @@ export default function MemberPep({
 
 			<Pad size={40} />
 
-			<Button
-				title='Save and Continue'
-				onPress={() => navigate("MemberSourceOfIncome")}
-			/>
+			<Button title='Save and Continue' onPress={submit} />
 		</MainLayout>
 	);
 }

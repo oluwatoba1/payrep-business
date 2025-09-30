@@ -24,6 +24,7 @@ import styles from "../styles";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import Colors from "@theme/Colors";
+import { useVerifyWomanMobileNumberMutation } from "@store/apis/kidashiApi";
 
 type MemberPhoneNumberProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberPhoneNumber">,
@@ -41,7 +42,8 @@ export default function MemberPhoneNumber({
 		validateForm,
 		setMobileNumber,
 	} = useRegisterMobileValidation();
-	const [verifyMobileNumber, { isLoading }] = useVerifyMobileNumberMutation();
+	const [verifyMobileNumber, { isLoading }] =
+		useVerifyWomanMobileNumberMutation();
 	const [clonePersonalProfile, { isLoading: isCloning }] =
 		useClonePersonalProfileMutation();
 
@@ -56,12 +58,33 @@ export default function MemberPhoneNumber({
 			case "NEW_USER":
 				navigate("MemberPhoneNumberVerification");
 				break;
+
 			case "MOBILE_NUMBER_REGISTRATION":
 				navigate("MemberEmail");
 				break;
 
 			case "EMAIL_REGISTRATION":
 				navigate("MemberMeansOfVerification");
+				break;
+
+			case "BVN_VERIFICATION":
+				navigate("MemberLocationDetails");
+				break;
+
+			case "ADDRESS_REGISTRATION":
+				navigate("MemberMeansOfIdentification");
+				break;
+
+			case "IDENTIFICATION_REGISTRATION":
+				navigate("MemberPep");
+				break;
+
+			case "PEP_IDENTIFICATION":
+				navigate("MemberSourceOfIncome");
+				break;
+
+			case "SOURCE_OF_INCOME":
+				navigate("MemberAttestation");
 				break;
 
 			default:
@@ -73,7 +96,7 @@ export default function MemberPhoneNumber({
 		try {
 			const { status, data, message } = await verifyMobileNumber({
 				mobile_number: mobileNumber.padStart(11, "0"),
-				type: "corporate",
+				type: "individual",
 			}).unwrap();
 
 			if (status) {
@@ -89,6 +112,7 @@ export default function MemberPhoneNumber({
 						customer_id: data.customer_id || "",
 					})
 				);
+
 				if (data.stage == "NEW_USER") {
 					navigate("MemberPhoneNumberVerification");
 					return;
@@ -153,10 +177,7 @@ export default function MemberPhoneNumber({
 
 			<Pad size={176} />
 
-			<Button
-				title='Continue'
-				onPress={() => navigate("MemberPhoneNumberVerification")}
-			/>
+			<Button title='Continue' onPress={() => validateForm(submit)} />
 
 			<Pad size={360} />
 

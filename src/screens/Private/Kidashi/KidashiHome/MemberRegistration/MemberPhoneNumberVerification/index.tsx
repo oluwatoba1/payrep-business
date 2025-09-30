@@ -14,14 +14,13 @@ import PinPad from "@components/Forms/PinPad";
 import Pad from "@components/Pad";
 import { formatCountdown } from "@utils/Helpers";
 import { DEFAULT_ERROR_MESSAGE, RESEND_COUNTDOWN } from "@utils/Constants";
-import { useAppSelector } from "@store/hooks";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
 import useToast from "@hooks/useToast";
 import useVerifyMobileValidation from "./validators";
-import {
-	useRegisterMobileNumberMutation,
-	useVerifyMobileNumberMutation,
-} from "@store/apis/authApi";
+import { useVerifyMobileNumberMutation } from "@store/apis/authApi";
 import Colors from "@theme/Colors";
+import { useRegisterWomanMobileNumberMutation } from "@store/apis/kidashiApi";
+import { setRegistrationDetails } from "@store/slices/authSlice";
 
 type MemberPhoneNumberVerificationProps = StackScreenProps<
 	MemberRegistrationStackParamList,
@@ -31,6 +30,7 @@ type MemberPhoneNumberVerificationProps = StackScreenProps<
 export default function MemberPhoneNumberVerification({
 	navigation: { navigate, goBack },
 }: MemberPhoneNumberVerificationProps) {
+	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
 	const {
 		formErrors,
@@ -42,7 +42,7 @@ export default function MemberPhoneNumberVerification({
 		useVerifyMobileNumberMutation();
 
 	const [registerMobileNumber, { isLoading }] =
-		useRegisterMobileNumberMutation();
+		useRegisterWomanMobileNumberMutation();
 
 	const mobileNumber = useAppSelector(
 		(state) => state.auth.registration.mobileNumber
@@ -59,12 +59,19 @@ export default function MemberPhoneNumberVerification({
 	const submit = async () => {
 		setLoadingTitle("Verifying OTP");
 		try {
-			const { status, message } = await registerMobileNumber({
+			const { status, message, data } = await registerMobileNumber({
 				mobile_number: mobileNumber,
 				type: "corporate",
 				otp,
 			}).unwrap();
 			if (status) {
+				dispatch(
+					setRegistrationDetails({
+						mobileNumber,
+						email: "",
+						customer_id: data?.customer_id || "",
+					})
+				);
 				navigate("MemberEmail");
 				return;
 			}
@@ -178,7 +185,7 @@ export default function MemberPhoneNumberVerification({
 
 			<Pad size={176} />
 
-			<Button title='Continue' onPress={() => navigate("MemberEmail")} />
+			<Button title='Continue' onPress={() => validateForm(submit)} />
 		</MainLayout>
 	);
 }

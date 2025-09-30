@@ -13,11 +13,8 @@ import {
 } from "@components/Forms";
 import { MainLayout, Row } from "@components/Layout";
 import Pad from "@components/Pad";
-import {
-	useBvnLookupMutation,
-	useNinLookupMutation,
-} from "@store/apis/complianceApi";
-import { useAppDispatch } from "@store/hooks";
+
+import { useAppDispatch, useAppSelector } from "@store/hooks";
 import useToast from "@hooks/useToast";
 import { useCallback, useState } from "react";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
@@ -30,6 +27,10 @@ import {
 import ComponentImages from "@assets/images/components";
 import styles from "../styles";
 import Colors from "@theme/Colors";
+import {
+	useWomanBvnLookupMutation,
+	useWomanNinLookupMutation,
+} from "@store/apis/kidashiApi";
 
 interface IKycData {
 	customer: string;
@@ -53,10 +54,14 @@ type MemberMeansOfVerificationProps = CompositeScreenProps<
 >;
 
 export default function MemberMeansOfVerification({
-	navigation: { navigate, canGoBack, goBack },
+	navigation: { navigate },
 }: MemberMeansOfVerificationProps) {
 	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
+
+	const customerId = useAppSelector(
+		(state) => state.auth.registration.customer_id
+	);
 
 	const {
 		formData: { idNumber }, // we can rename this to `idNumber` if you want generic
@@ -65,8 +70,8 @@ export default function MemberMeansOfVerification({
 		validateForm,
 	} = useBvnVerificationValidation();
 
-	const [bvnLookup, { isLoading: isBvnLoading }] = useBvnLookupMutation();
-	const [ninLookup, { isLoading: isNinLoading }] = useNinLookupMutation();
+	const [bvnLookup, { isLoading: isBvnLoading }] = useWomanBvnLookupMutation();
+	const [ninLookup, { isLoading: isNinLoading }] = useWomanNinLookupMutation();
 
 	const [kycData, setKycData] = useState<IKycData>({
 		customer: "",
@@ -92,8 +97,13 @@ export default function MemberMeansOfVerification({
 	const submit = async () => {
 		try {
 			if (selectedOption.value === "bvn") {
+				console.log({
+					bvn: idNumber,
+					cba_customer_id: customerId,
+				});
 				const { status, message, data } = await bvnLookup({
 					bvn: idNumber,
+					cba_customer_id: customerId,
 				}).unwrap();
 				if (status && data) {
 					delete data.image;
@@ -109,6 +119,7 @@ export default function MemberMeansOfVerification({
 			} else if (selectedOption.value === "nin") {
 				const { status, message, data } = await ninLookup({
 					nin: idNumber,
+					cba_customer_id: customerId,
 				}).unwrap();
 				if (status && data) {
 					delete data.image;
@@ -123,6 +134,7 @@ export default function MemberMeansOfVerification({
 				}
 			}
 		} catch (error: ErrorResponse | any) {
+			console.log(error);
 			showToast(
 				"danger",
 				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
@@ -269,10 +281,7 @@ export default function MemberMeansOfVerification({
 
 			<Pad size={100} />
 
-			<Button
-				title='Next'
-				onPress={() => navigate("MemberFaceCaptureVerification")}
-			/>
+			<Button title='Next' onPress={() => validateForm(submit)} />
 		</MainLayout>
 	);
 }

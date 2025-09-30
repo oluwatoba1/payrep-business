@@ -20,6 +20,8 @@ import {
 } from "@navigation/types";
 import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
+import { useUpdateWomanLocationMutation } from "@store/apis/kidashiApi";
+import { useAppSelector } from "@store/hooks";
 
 type MemberLocationDetailsProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberLocationDetails">,
@@ -40,7 +42,7 @@ export default function MemberLocationDetails({
 	} = useLocationValidation();
 	const { showToast } = useToast();
 
-	const [updateLocation, { isLoading }] = useUpdateLocationMutation();
+	const [updateLocation, { isLoading }] = useUpdateWomanLocationMutation();
 
 	// Fetch states and countries
 	const { data: statesData, isLoading: statesLoading } = useFetchStatesQuery();
@@ -49,6 +51,10 @@ export default function MemberLocationDetails({
 
 	// Fetch LGAs dynamically
 	const [fetchLgas, { isLoading: lgasLoading }] = useFetchLgasMutation();
+
+	const customerId = useAppSelector(
+		(state) => state.auth.registration.customer_id
+	);
 
 	// Local states for dropdown selections
 	const [selectedState, setSelectedState] = useState<
@@ -68,6 +74,7 @@ export default function MemberLocationDetails({
 				country: formData.country,
 				lga: formData.lga,
 				residential_address: formData.residentialAddress,
+				cba_customer_id: customerId,
 			}).unwrap();
 			if (status) {
 				navigate("MemberMeansOfIdentification");
@@ -230,10 +237,7 @@ export default function MemberLocationDetails({
 
 			<Pad size={40} />
 
-			<Button
-				title='Save'
-				onPress={() => navigate("MemberMeansOfIdentification")}
-			/>
+			<Button title='Save' onPress={submit} />
 		</MainLayout>
 	);
 }

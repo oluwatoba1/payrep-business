@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		marginHorizontal: "auto",
 		position: "absolute",
-		bottom: scaleHeight(60),
+		bottom: scaleHeight(120),
 		right: scale(16),
 		flexDirection: "row",
 		gap: scale(8),
