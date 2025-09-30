@@ -876,6 +876,7 @@ interface IKidashi {
 	registration: Omit<VendorRegistrationRequest, "cba_customer_id">;
 	vendor: IVendor | null;
 	memberDetails: IWomanDetails | null;
+	assetRequest: Partial<IAssetRequest>;
 }
 
 interface CreateTrustCircleRequest {
@@ -971,4 +972,11 @@ interface IAssetRequest {
 		price: string;
 	}[];
 	otp: string;
+}
+
+interface OtpRequest {
+	purpose: "ASSET_REQUEST";
+	recipient: string;
+	subject_id: string;
+	channel: "sms";
 }

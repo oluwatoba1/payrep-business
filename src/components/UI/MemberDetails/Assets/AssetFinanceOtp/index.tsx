@@ -14,15 +14,17 @@ interface AssetFinanceOtpProps {
 	visible: boolean;
 	onClose: () => void;
 	onVerify: () => void;
+	otp: string;
+	setOtp: (otp: string) => void;
 }
 
 const AssetFinanceOtp = ({
 	visible,
 	onClose,
 	onVerify,
+	otp,
+	setOtp,
 }: AssetFinanceOtpProps) => {
-	const [otp, setOtp] = useState("");
-
 	const maskedPhone = useMemo(() => {
 		const phone = "09012341234";
 		return `${phone.slice(0, 3)}**** ${phone.slice(-4)}`;

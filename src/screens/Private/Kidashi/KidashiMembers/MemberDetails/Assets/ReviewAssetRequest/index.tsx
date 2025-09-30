@@ -12,6 +12,8 @@ import ScreenImages from "@assets/images/screens";
 import Divider from "@components/Miscellaneous/Divider";
 import { ScrollView } from "react-native-gesture-handler";
 import Pad from "@components/Pad";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { setAssetRequest } from "@store/slices/kidashiSlice";
 
 type ReviewAssetRequestProps = NativeStackScreenProps<
 	MembersStackParamList,
@@ -22,7 +24,10 @@ const ReviewAssetRequest = ({
 	navigation: { navigate, goBack },
 	route,
 }: ReviewAssetRequestProps) => {
+	const dispatch = useAppDispatch();
 	const items = route.params?.items || [];
+
+	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
 
 	const total = useMemo(() => {
 		return items.reduce((sum, it) => sum + (parseFloat(it.price) || 0), 0);
@@ -43,6 +48,11 @@ const ReviewAssetRequest = ({
 			year: "numeric",
 		});
 	}, []);
+
+	const proceed = () => {
+		dispatch(setAssetRequest({ items_requested: items, value: String(total) }));
+		navigate("RepaymentOverview");
+	};
 
 	return (
 		<MainLayout rightTitle='Review Asset Request'>
@@ -71,7 +81,12 @@ const ReviewAssetRequest = ({
 					<Divider gapY={scaleHeight(12)} />
 					<View style={styles.row}>
 						<Typography title='Member Name' type='label-r' />
-						<Typography title='Zainab Abubakar' type='body-sb' />
+						<Typography
+							title={`${memberDetails?.first_name || ""} ${
+								memberDetails?.surname || ""
+							}`}
+							type='body-sb'
+						/>
 					</View>
 					<View style={styles.row}>
 						<Typography title='Date' type='label-r' />
@@ -114,7 +129,7 @@ const ReviewAssetRequest = ({
 			</Row>
 
 			<Pad size={scaleHeight(16)} />
-			<Button title='Continue' onPress={() => navigate("RepaymentOverview")} />
+			<Button title='Continue' onPress={proceed} />
 		</MainLayout>
 	);
 };
