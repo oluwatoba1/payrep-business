@@ -116,10 +116,7 @@ const KidashiApi = createApi({
 				body,
 			}),
 		}),
-		createAsset: builder.mutation<
-			AuthResponse<IWomanDetails>,
-			IAssetRequest
-		>({
+		createAsset: builder.mutation<AuthResponse<IWomanDetails>, IAssetRequest>({
 			query: (body) => ({
 				url: "asset/mobile/create_asset",
 				method: "POST",
@@ -269,7 +266,7 @@ const KidashiApi = createApi({
 			}),
 		}),
 		getWomanDetails: builder.mutation<
-			AuthResponse<IWomanDetails>,
+			AuthResponse<iWomanMemberDetails>,
 			{ cba_customer_id: string }
 		>({
 			query: (body) => ({

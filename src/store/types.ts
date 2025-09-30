@@ -984,3 +984,21 @@ interface IAssetRequest {
 	}[];
 	otp: string;
 }
+
+interface iWomanMemberDetails {
+	account_number: string;
+	cba_customer_id: string;
+	country_id: string;
+	email: string;
+	first_name: string;
+	lga_id: string;
+	mobile_number: string;
+	other_name: string;
+	repayment_status: string;
+	state_id: string;
+	status: string;
+	surname: string;
+	trust_circle_id: string;
+	vendor_id: string;
+	id: string;
+}
