@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { styles } from "./style";
 import SafeAreaWrapper from "@components/Layout/SafeAreaWrapper";
 import MemberDetailsHeaderComp from "@components/UI/MemberDetails/HeaderComp";
@@ -17,6 +17,9 @@ import ScreenImages from "@assets/images/screens";
 import PerformActionModal from "@components/UI/MemberDetails/PerformActionModal";
 import { useFocusEffect } from "@react-navigation/native";
 import { MainLayout } from "@components/Layout";
+import { useGetMemberDetailsMutation } from "@store/apis/kidashiApi";
+import useToast from "@hooks/useToast";
+import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 
 type TabType = "Transactions" | "More details" | "Account Info";
 
@@ -26,14 +29,48 @@ type MemberDetailsProps = StackScreenProps<
 >;
 const MemberDetails = ({
 	navigation: { navigate, goBack },
+	route,
 }: MemberDetailsProps) => {
+	const { showToast } = useToast();
+	const [getMemberDetails, { isLoading }] = useGetMemberDetailsMutation();
+
 	const [activeTab, setActiveTab] = useState<TabType>("Transactions");
-	const [visible, setVisible] = useState(false);
+	const [visible, setVisible] = useState<boolean>(false);
+	const [memberDetails, setMemberDetails] = useState<IWomanDetails | null>(
+		null
+	);
+
+	const fetchDetails = async () => {
+		try {
+			const { status, message, data } = await getMemberDetails({
+				cba_customer_id:
+					route.params.id || "e0d8775f-45d0-4ba3-9442-039dca3948d4",
+			}).unwrap();
+			if (status) {
+				setMemberDetails(data);
+			} else {
+				showToast("danger", message);
+				goBack();
+			}
+		} catch (error: ErrorResponse | any) {
+			console.log(error);
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
+
+	useEffect(() => {
+		fetchDetails();
+	}, [route.params.id]);
 
 	const backAction = () => {
 		goBack();
 		return true; // Prevent default behavior
 	};
+
+	// e0d8775f-45d0-4ba3-9442-039dca3948d4
 
 	useFocusEffect(
 		useCallback(() => {
@@ -47,7 +84,11 @@ const MemberDetails = ({
 	);
 
 	return (
-		<MainLayout rightTitle='Member Details' backAction={backAction}>
+		<MainLayout
+			rightTitle='Member Details'
+			backAction={backAction}
+			isLoading={isLoading}
+		>
 			<MemberDetailsHeaderComp
 				onOTPManagePress={() => navigate("ManageVerfiers")}
 			/>
@@ -59,8 +100,8 @@ const MemberDetails = ({
 			/>
 			<Pad size={16} />
 			{activeTab === "Transactions" && <Transactions navigate={navigate} />}
-			{activeTab === "More details" && <MoreDetails />}
-			{activeTab === "Account Info" && <AccountInfo />}
+			{activeTab === "More details" && <MoreDetails details={memberDetails} />}
+			{activeTab === "Account Info" && <AccountInfo details={memberDetails} />}
 			<Pressable
 				style={styles.performActionButton}
 				onPress={() => setVisible(true)}

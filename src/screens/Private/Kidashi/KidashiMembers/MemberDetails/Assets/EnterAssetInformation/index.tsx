@@ -69,7 +69,7 @@ const EnterAssetInformation = ({ navigation }: EnterAssetInformationProps) => {
 	};
 
 	return (
-		<SafeAreaWrapper>
+		<MainLayout>
 			<Pad size={20} />
 			<Typography title='Enter Asset Information' style={styles.screenTitle} />
 			<Typography
@@ -172,7 +172,7 @@ const EnterAssetInformation = ({ navigation }: EnterAssetInformationProps) => {
 					})
 				}
 			/>
-		</SafeAreaWrapper>
+		</MainLayout>
 	);
 };
 

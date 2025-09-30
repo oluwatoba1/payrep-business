@@ -29,21 +29,25 @@ const NameContainer = ({ name, gender }: NameContainerProps) => {
 	);
 };
 
-const MoreDetails = () => {
+interface MoreDetailsProps {
+	details: IWomanDetails | null;
+}
+
+const MoreDetails = ({ details }: MoreDetailsProps) => {
 	const data = [
-		{ label: "Email", value: "m****@example.com" },
+		{ label: "Email", value: details?.email || "" },
 		{
 			label: "Phone",
-			value: "080********",
+			value: details?.mobile_number || "",
 		},
-		{ label: "NIN", value: "12***8901" },
-		{ label: "Date of Birth", value: "**/**/**78" },
-		{ label: "State", value: "Lagos" },
-		{ label: "LGA", value: "Lagos" },
+		{ label: "NIN", value: "" },
+		{ label: "Date of Birth", value: "" },
+		{ label: "State", value: details?.state_id || "" },
+		{ label: "LGA", value: details?.lga_id || "" },
 	];
 
 	return (
-		<ScrollView style={{ flex: 1 }}>
+		<View>
 			{/* Upper section */}
 			{data.map((item) => (
 				<View key={item.label}>
@@ -57,7 +61,7 @@ const MoreDetails = () => {
 			<Pad size={16} />
 
 			{/* Next of Kin */}
-			<Typography title='Next of Kin' type='heading-sb' />
+			{/* <Typography title='Next of Kin' type='heading-sb' />
 			<Pad size={16} />
 			<View style={styles.nextOfKinContainer}>
 				<NameContainer name='Aminat Abubakar' gender='Female' />
@@ -73,8 +77,8 @@ const MoreDetails = () => {
 					))}
 				</View>
 			</View>
-			<Pad size={16} />
-			<View style={styles.nextOfKinContainer}>
+			<Pad size={16} /> */}
+			{/* <View style={styles.nextOfKinContainer}>
 				<NameContainer name='Zainab Abubakar' gender='Female' />
 				<View style={styles.nextOfKinItem}>
 					{data.map((item) => (
@@ -87,8 +91,8 @@ const MoreDetails = () => {
 						</View>
 					))}
 				</View>
-			</View>
-		</ScrollView>
+			</View> */}
+		</View>
 	);
 };
 
