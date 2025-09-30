@@ -12,6 +12,7 @@ import styles from "./styles";
 import Colors from "@theme/Colors";
 import { MAIN_LAYOUT_HORIZONTAL_PADDING, width } from "@utils/Constants";
 import { scale } from "@utils/Helpers";
+import { useAppSelector } from "@store/hooks";
 
 type MemberAdditionSuccessScreenProps = StackScreenProps<
 	TrustCircleStackParamList,
@@ -21,8 +22,14 @@ type MemberAdditionSuccessScreenProps = StackScreenProps<
 export default function MemberAdditionSuccessScreen({
 	navigation: { navigate },
 }: MemberAdditionSuccessScreenProps) {
+	const circle_details = useAppSelector(
+		(state) => state.kidashi.circle_details
+	);
+	const selected_account = useAppSelector(
+		(state) => state.kidashi.selected_account
+	);
 	const backAction = () => {
-		navigate("TrustCircleDetails");
+		navigate("TrustCircleDetails", { id: circle_details?.id || "" });
 		return true; // Prevent default behavior
 	};
 
@@ -56,7 +63,7 @@ export default function MemberAdditionSuccessScreen({
 				<Pad size={8} />
 
 				<Typography
-					title='Zainab Abubakar has been added to Ladi Cooperative Group'
+					title={`${selected_account?.customer__first_name} ${selected_account?.customer__other_name} ${selected_account?.customer__surname} has been added to ${circle_details?.circle_name}`}
 					type='label-r'
 					color={Colors.neutral["300"]}
 				/>
@@ -66,12 +73,15 @@ export default function MemberAdditionSuccessScreen({
 				<View style={styles.accountContainer}>
 					<Row alignItems='center' justifyContent='space-between'>
 						<Typography title='Account number' type='label-r' />
-						<Typography title='0123456789' type='body-b' />
+						<Typography
+							title={selected_account?.account_number || ""}
+							type='body-b'
+						/>
 					</Row>
-					<Row alignItems='center' justifyContent='space-between'>
+					{/* <Row alignItems='center' justifyContent='space-between'>
 						<Typography title='Tier Type' type='label-r' />
-						<Typography title='Tier 1' type='body-b' />
-					</Row>
+						<Typography title={circle_details?.tier_type || ""} type='body-b' />
+					</Row> */}
 				</View>
 
 				<Pad size={16} />
@@ -89,7 +99,9 @@ export default function MemberAdditionSuccessScreen({
 					containerStyle={{
 						width: width - 2 * scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
 					}}
-					onPress={() => navigate("TrustCircleDetails")}
+					onPress={() =>
+						navigate("TrustCircleDetails", { id: circle_details?.id || "" })
+					}
 				/>
 
 				<Pad size={24} />

@@ -1,18 +1,25 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { BackHandler, Image, Pressable, View } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 
-import useBvnVerificationValidation from "./validator";
+import useAccountNumberValidation from "./validator";
 import { Button, TextInput, Typography } from "@components/Forms";
 import { MainLayout, Row } from "@components/Layout";
 import Pad from "@components/Pad";
-import { useAppDispatch } from "@store/hooks";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
 import useToast from "@hooks/useToast";
 import { TrustCircleStackParamList } from "@navigation/types";
 import ComponentImages from "@assets/images/components";
 import styles from "./styles";
 import Colors from "@theme/Colors";
 import ScreenImages from "@assets/images/screens";
+import { useGetAccountsMutation } from "@store/apis/accountApi";
+import {
+	useAddMemberToTrustCircleMutation,
+	useGetWomanDetailsMutation,
+} from "@store/apis/kidashiApi";
+import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
+import { setSelectedAccountDetails } from "@store/slices/kidashiSlice";
 import { useFocusEffect } from "@react-navigation/native";
 
 type EnterAccountNumberProps = StackScreenProps<
@@ -25,19 +32,110 @@ export default function EnterAccountNumber({
 }: EnterAccountNumberProps) {
 	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
-
 	const {
-		formData: { idNumber }, // we can rename this to `idNumber` if you want generic
-		setIdNumber, // same here, it’s just storing whichever number is typed
+		formData,
 		formErrors,
 		validateForm,
-	} = useBvnVerificationValidation();
+		setAccountNumber,
+		clearFormError,
+	} = useAccountNumberValidation();
+	const circle_details = useAppSelector(
+		(state) => state.kidashi.circle_details
+	);
+	// console.log({ circle_details });
+
+	const [getAccounts, { isLoading: isLoadingAccounts }] =
+		useGetAccountsMutation();
+	const [
+		addMemberToTrustCircle,
+		{ isLoading: isLoadingAddMemberToTrustCircle },
+	] = useAddMemberToTrustCircleMutation();
+	const [getWomanDetails, { isLoading: isLoadingWomanDetails }] =
+		useGetWomanDetailsMutation();
+	const vendor_id = useAppSelector((state) => state.kidashi.vendor?.id);
+	const selected_account = useAppSelector(
+		(state) => state.kidashi.selected_account
+	);
 
 	const [showAccountContainer, setShowAccountContainer] =
 		useState<boolean>(false);
 
+	// Auto-fetch account when number reaches 10 digits
+	useEffect(() => {
+		if (formData.accountNumber.length === 10) {
+			fetchAccounts();
+		}
+	}, [formData.accountNumber]);
+
+	// console.log({ selected_account });
+
+	const fetchWomanDetails = async (id: string) => {
+		await getWomanDetails({
+			cba_customer_id: id,
+		})
+			.unwrap()
+			.then((res) => {
+				if (res.status) {
+					console.log({ woman_details: res.data });
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+				showToast("danger", err.data.message || DEFAULT_ERROR_MESSAGE);
+			});
+	};
+
 	// Submit dynamically depending on ID type
-	const submit = async () => {};
+	const submit = async () => {
+		if (circle_details?.members_count && circle_details?.members_count >= 3) {
+			navigate("SelectVerifiers");
+		} else {
+			const payload = {
+				initiating_vendor_id: vendor_id || "",
+				woman_id: selected_account?.customer_id || "",
+				trust_circle_id: circle_details?.id || "",
+			};
+			console.log({ payload });
+			await addMemberToTrustCircle(payload)
+				.unwrap()
+				.then((res) => {
+					if (res.status) {
+						navigate("MemberAdditionSuccessScreen");
+					} else {
+						showToast("danger", res.message || DEFAULT_ERROR_MESSAGE);
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+					// remove this after testing
+					// navigate("MemberAdditionSuccessScreen");
+					showToast("danger", err.data.message || DEFAULT_ERROR_MESSAGE);
+				});
+		}
+	};
+
+	const fetchAccounts = async () => {
+		validateForm(async () => {
+			setShowAccountContainer(false);
+			await getAccounts({ account_number: formData.accountNumber })
+				.unwrap()
+				.then((res) => {
+					if (res.status) {
+						const account = res.data[0] as unknown as iWomanAccount;
+						console.log({ account });
+						fetchWomanDetails(account.customer_id);
+						setShowAccountContainer(true);
+						dispatch(setSelectedAccountDetails(account));
+					} else {
+						showToast("danger", res.message || DEFAULT_ERROR_MESSAGE);
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+					showToast("danger", err.data.message || DEFAULT_ERROR_MESSAGE);
+				});
+		});
+	};
 
 	const backAction = () => {
 		goBack();
@@ -71,15 +169,21 @@ export default function EnterAccountNumber({
 				label='Account Number'
 				keyboardType='numeric'
 				placeholder='e.g 0123456789'
-				maxLength={11} // adjust if NIN length differs
-				onChangeText={setIdNumber}
-				value={idNumber}
-				error={formErrors.idNumber}
+				maxLength={15} // allow up to 15 digits
+				onChangeText={(text) => {
+					setAccountNumber(text);
+					clearFormError("accountNumber");
+				}}
+				value={formData.accountNumber}
+				error={formErrors.accountNumber}
 				rightNode={
-					<Pressable onPress={() => setShowAccountContainer(true)}>
+					<Pressable
+						onPress={() => fetchAccounts()}
+						disabled={isLoadingAccounts}
+					>
 						<Row alignItems='center' gap={6}>
 							<Typography
-								title='Search'
+								title={isLoadingAccounts ? "Searching..." : "Search"}
 								type='label-sb'
 								color={Colors.danger["700"]}
 							/>
@@ -109,19 +213,19 @@ export default function EnterAccountNumber({
 								style={styles.skipIcon}
 							/>
 							<Typography
-								title='Zainab Abubakar'
+								title={`${selected_account?.customer__first_name} ${selected_account?.customer__other_name} ${selected_account?.customer__surname}`}
 								type='body-sb'
 								color={Colors.neutral["600"]}
 							/>
 						</Row>
 
-						<Row alignItems='center' gap={7}>
+						{/* <Row alignItems='center' gap={7}>
 							<Typography
-								title='Tier 1'
+								title={accountData?.customer__email}
 								type='label-sb'
 								color={Colors.primary["600"]}
 							/>
-						</Row>
+						</Row> */}
 					</Row>
 				</View>
 			) : null}
@@ -129,8 +233,13 @@ export default function EnterAccountNumber({
 			<Pad size={100} />
 
 			<Button
-				title='Add Member to Trust Circle'
-				onPress={() => navigate("SelectVerifiers")}
+				title={
+					isLoadingAddMemberToTrustCircle
+						? "Adding Member..."
+						: "Add Member to Trust Circle"
+				}
+				onPress={() => submit()}
+				disabled={!showAccountContainer || isLoadingAddMemberToTrustCircle}
 			/>
 		</MainLayout>
 	);

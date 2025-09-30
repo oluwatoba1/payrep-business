@@ -2,33 +2,36 @@ import { useState } from "react";
 import * as z from "zod";
 
 interface Form {
-	idNumber: string;
+	accountNumber: string;
 }
 
-const useKycVerificationValidation = () => {
-	const [idNumber, setIdNumber] = useState<string>("");
+const useAccountNumberValidation = () => {
+	const [accountNumber, setAccountNumber] = useState<string>("");
 
 	// Validation schemas
-	const idNumberValidationSchema = z.object({
-		idNumber: z
+	const accountNumberValidationSchema = z.object({
+		accountNumber: z
 			.string()
-			.regex(/\d{11}$/, { message: "Enter a valid id number" }),
+			.min(10, { message: "Account number must be at least 10 digits" })
+			.regex(/^\d{10,}$/, {
+				message: "Account number must contain only digits",
+			}),
 	});
 
 	const formData = {
-		idNumber,
+		accountNumber,
 	};
 
-	const [formErrors, setFormErrors] = useState<Form>({ idNumber: "" });
+	const [formErrors, setFormErrors] = useState<Form>({ accountNumber: "" });
 
 	const validateForm = (cb: Function) => {
 		try {
-			idNumberValidationSchema.parse(formData);
-			setFormErrors({ idNumber: "" });
+			accountNumberValidationSchema.parse(formData);
+			setFormErrors({ accountNumber: "" });
 			cb();
 		} catch (error) {
 			if (error instanceof z.ZodError) {
-				const errors: Record<keyof Form, string> = { idNumber: "" };
+				const errors: Record<keyof Form, string> = { accountNumber: "" };
 				error.errors.forEach((err) => {
 					const field = err.path[0];
 					const message = err.message;
@@ -47,8 +50,8 @@ const useKycVerificationValidation = () => {
 		formErrors,
 		clearFormError,
 		validateForm,
-		setIdNumber,
+		setAccountNumber,
 	};
 };
 
-export default useKycVerificationValidation;
+export default useAccountNumberValidation;
