@@ -273,7 +273,7 @@ const KidashiApi = createApi({
 			}),
 		}),
 		getWomanDetails: builder.mutation<
-			AuthResponse<IWomanDetails>,
+			AuthResponse<iWomanMemberDetails>,
 			{ cba_customer_id: string }
 		>({
 			query: (body) => ({

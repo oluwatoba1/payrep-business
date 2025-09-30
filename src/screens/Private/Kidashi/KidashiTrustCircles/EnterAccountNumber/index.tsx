@@ -59,7 +59,9 @@ export default function EnterAccountNumber({
 
 	const [showAccountContainer, setShowAccountContainer] =
 		useState<boolean>(false);
-
+	const [woman_details, setWomanDetails] = useState<iWomanMemberDetails | null>(
+		null
+	);
 	// Auto-fetch account when number reaches 10 digits
 	useEffect(() => {
 		if (formData.accountNumber.length === 10) {
@@ -77,6 +79,7 @@ export default function EnterAccountNumber({
 			.then((res) => {
 				if (res.status) {
 					console.log({ woman_details: res.data });
+					setWomanDetails(res.data as iWomanMemberDetails);
 				}
 			})
 			.catch((err) => {
@@ -90,9 +93,10 @@ export default function EnterAccountNumber({
 		if (circle_details?.members_count && circle_details?.members_count >= 3) {
 			navigate("SelectVerifiers");
 		} else {
+			console.log({ woman_details });
 			const payload = {
 				initiating_vendor_id: vendor_id || "",
-				woman_id: selected_account?.customer_id || "",
+				woman_id: woman_details?.id || "",
 				trust_circle_id: circle_details?.id || "",
 			};
 			console.log({ payload });
@@ -169,7 +173,7 @@ export default function EnterAccountNumber({
 				label='Account Number'
 				keyboardType='numeric'
 				placeholder='e.g 0123456789'
-				maxLength={15} // allow up to 15 digits
+				maxLength={10}
 				onChangeText={(text) => {
 					setAccountNumber(text);
 					clearFormError("accountNumber");

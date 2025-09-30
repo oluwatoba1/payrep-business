@@ -159,9 +159,9 @@ export default function KidashiDashboard({
 		}
 	};
 
-	useEffect(() => {
-		registerWoman();
-	}, []);
+	// useEffect(() => {
+	// 	registerWoman();
+	// }, []);
 
 	return (
 		<KidashiLayout
