@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Image, Pressable, View } from "react-native";
+import { useCallback, useState } from "react";
+import { BackHandler, Image, Pressable, View } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 
 import useBvnVerificationValidation from "./validator";
@@ -13,6 +13,7 @@ import ComponentImages from "@assets/images/components";
 import styles from "./styles";
 import Colors from "@theme/Colors";
 import ScreenImages from "@assets/images/screens";
+import { useFocusEffect } from "@react-navigation/native";
 
 type EnterAccountNumberProps = StackScreenProps<
 	TrustCircleStackParamList,
@@ -37,6 +38,22 @@ export default function EnterAccountNumber({
 
 	// Submit dynamically depending on ID type
 	const submit = async () => {};
+
+	const backAction = () => {
+		goBack();
+		return true; // Prevent default behavior
+	};
+
+	useFocusEffect(
+		useCallback(() => {
+			const backHandler = BackHandler.addEventListener(
+				"hardwareBackPress",
+				backAction
+			);
+
+			return () => backHandler.remove(); // Cleanup
+		}, [])
+	);
 
 	return (
 		<MainLayout backAction={goBack} keyboardAvoidingType='scroll-view'>
