@@ -2,7 +2,7 @@ import { Image, ScrollView, View } from "react-native";
 import React, { useMemo, useState } from "react";
 import SafeAreaWrapper from "@components/Layout/SafeAreaWrapper";
 import { Button, Typography } from "@components/Forms";
-import { Row } from "@components/Layout";
+import { MainLayout, Row } from "@components/Layout";
 import { styles } from "./style";
 import Colors from "@theme/Colors";
 import { scale, scaleHeight } from "@utils/Helpers";
@@ -10,15 +10,27 @@ import Divider from "@components/Miscellaneous/Divider";
 import ScreenImages from "@assets/images/screens";
 import Pad from "@components/Pad";
 import AssetFinanceOtp from "@components/UI/MemberDetails/Assets/AssetFinanceOtp";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MembersStackParamList } from "@navigation/types";
+import { StackScreenProps } from "@react-navigation/stack";
+import { useCreateAssetMutation } from "@store/apis/kidashiApi";
+import useToast from "@hooks/useToast";
+import { useAppSelector } from "@store/hooks";
+import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 
-type ReviewAssetRequestProps = NativeStackScreenProps<
+type ReviewAssetRequestProps = StackScreenProps<
 	MembersStackParamList,
 	"RepaymentOverview"
 >;
 
-const RepaymentOverview = ({ navigation, route }: ReviewAssetRequestProps) => {
+const RepaymentOverview = ({
+	navigation: { navigate },
+	route,
+}: ReviewAssetRequestProps) => {
+	const { showToast } = useToast();
+	const [createAsset, { isLoading }] = useCreateAssetMutation();
+
+	const vendor = useAppSelector((state) => state.kidashi.vendor);
+
 	const [showOtpModal, setShowOtpModal] = useState(false);
 	const totalCost = 46000;
 	const interestRatePercent = 5;
@@ -47,8 +59,32 @@ const RepaymentOverview = ({ navigation, route }: ReviewAssetRequestProps) => {
 		})}`;
 	};
 
+	const submit = async () => {
+		try {
+			const { status, message } = await createAsset({
+				vendor_id: vendor?.id || "",
+				woman_id: "",
+				loan_product_id: "9c9628ed-bdb1-40f2-a216-ea6b871f7d75",
+				value: "",
+				markup: "",
+				items_requested: [],
+				otp: "string",
+			}).unwrap();
+			if (status) {
+				navigate("RequestSubmitted");
+			} else {
+				showToast("danger", message);
+			}
+		} catch (error: ErrorResponse | any) {
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
+
 	return (
-		<SafeAreaWrapper title='Review Payment Terms'>
+		<MainLayout rightTitle='Review Payment Terms' isLoading={isLoading}>
 			<ScrollView>
 				<View>
 					<View style={styles.boxIconContainer}>
@@ -159,9 +195,9 @@ const RepaymentOverview = ({ navigation, route }: ReviewAssetRequestProps) => {
 			<AssetFinanceOtp
 				visible={showOtpModal}
 				onClose={() => setShowOtpModal(false)}
-				onVerify={() => navigation.navigate("RequestSubmitted")}
+				onVerify={submit}
 			/>
-		</SafeAreaWrapper>
+		</MainLayout>
 	);
 };
 

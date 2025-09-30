@@ -20,6 +20,8 @@ import { MainLayout } from "@components/Layout";
 import { useGetMemberDetailsMutation } from "@store/apis/kidashiApi";
 import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { setMemberDetails } from "@store/slices/kidashiSlice";
 
 type TabType = "Transactions" | "More details" | "Account Info";
 
@@ -31,14 +33,14 @@ const MemberDetails = ({
 	navigation: { navigate, goBack },
 	route,
 }: MemberDetailsProps) => {
+	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
 	const [getMemberDetails, { isLoading }] = useGetMemberDetailsMutation();
 
+	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
+
 	const [activeTab, setActiveTab] = useState<TabType>("Transactions");
 	const [visible, setVisible] = useState<boolean>(false);
-	const [memberDetails, setMemberDetails] = useState<IWomanDetails | null>(
-		null
-	);
 
 	const fetchDetails = async () => {
 		try {
@@ -47,7 +49,7 @@ const MemberDetails = ({
 					route.params.id || "e0d8775f-45d0-4ba3-9442-039dca3948d4",
 			}).unwrap();
 			if (status) {
-				setMemberDetails(data);
+				dispatch(setMemberDetails(data));
 			} else {
 				showToast("danger", message);
 				goBack();

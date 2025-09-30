@@ -12,6 +12,7 @@ const initialState: IKidashi = {
 	circle_details: null,
 	vendor: null,
 	selected_account: null,
+	memberDetails: null,
 };
 
 const KidashiSlice = createSlice({
@@ -45,6 +46,9 @@ const KidashiSlice = createSlice({
 		) => {
 			state.selected_account = action.payload;
 		},
+		setMemberDetails: (state, action: PayloadAction<IWomanDetails>) => {
+			state.memberDetails = action.payload;
+		},
 	},
 });
 
@@ -54,6 +58,7 @@ export const {
 	setVendor,
 	setTrustCircleDetails,
 	setSelectedAccountDetails,
+	setMemberDetails,
 } = KidashiSlice.actions;
 
 export default KidashiSlice;

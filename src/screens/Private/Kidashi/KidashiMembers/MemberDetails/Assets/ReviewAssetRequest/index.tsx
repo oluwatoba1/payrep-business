@@ -2,7 +2,7 @@ import { Image, View } from "react-native";
 import React, { useMemo } from "react";
 import SafeAreaWrapper from "@components/Layout/SafeAreaWrapper";
 import { Button, Typography } from "@components/Forms";
-import { Row } from "@components/Layout";
+import { MainLayout, Row } from "@components/Layout";
 import { scale, scaleHeight } from "@utils/Helpers";
 import Colors from "@theme/Colors";
 import { styles } from "./style";
@@ -18,7 +18,10 @@ type ReviewAssetRequestProps = NativeStackScreenProps<
 	"ReviewAssetRequest"
 >;
 
-const ReviewAssetRequest = ({ navigation, route }: ReviewAssetRequestProps) => {
+const ReviewAssetRequest = ({
+	navigation: { navigate, goBack },
+	route,
+}: ReviewAssetRequestProps) => {
 	const items = route.params?.items || [];
 
 	const total = useMemo(() => {
@@ -42,7 +45,7 @@ const ReviewAssetRequest = ({ navigation, route }: ReviewAssetRequestProps) => {
 	}, []);
 
 	return (
-		<SafeAreaWrapper title='Review Asset Request'>
+		<MainLayout rightTitle='Review Asset Request'>
 			<View>
 				<View style={styles.boxIconContainer}>
 					<Image
@@ -66,10 +69,6 @@ const ReviewAssetRequest = ({ navigation, route }: ReviewAssetRequestProps) => {
 						style={styles.sectionTitle}
 					/>
 					<Divider gapY={scaleHeight(12)} />
-					<View style={styles.row}>
-						<Typography title='Request ID' type='label-r' />
-						<Typography title='#2329230347' type='body-sb' />
-					</View>
 					<View style={styles.row}>
 						<Typography title='Member Name' type='label-r' />
 						<Typography title='Zainab Abubakar' type='body-sb' />
@@ -115,11 +114,8 @@ const ReviewAssetRequest = ({ navigation, route }: ReviewAssetRequestProps) => {
 			</Row>
 
 			<Pad size={scaleHeight(16)} />
-			<Button
-				title='Continue'
-				onPress={() => navigation.navigate("RepaymentOverview")}
-			/>
-		</SafeAreaWrapper>
+			<Button title='Continue' onPress={() => navigate("RepaymentOverview")} />
+		</MainLayout>
 	);
 };
 

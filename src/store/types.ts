@@ -877,6 +877,7 @@ interface IKidashi {
 	vendor: IVendor | null;
 	circle_details: ITrustCircleDetail | null;
 	selected_account: iWomanAccount | null;
+	memberDetails: IWomanDetails | null;
 }
 
 interface CreateTrustCircleRequest {
@@ -969,4 +970,17 @@ interface iWomanAccount {
 	customer__email: string;
 	customer_id: string;
 	account_number: string;
+}
+
+interface IAssetRequest {
+	vendor_id: string;
+	woman_id: string;
+	loan_product_id: string;
+	value: string;
+	markup: string;
+	items_requested: {
+		name: string;
+		price: string;
+	}[];
+	otp: string;
 }
