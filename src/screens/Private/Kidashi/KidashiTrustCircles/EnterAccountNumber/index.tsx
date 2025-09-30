@@ -14,7 +14,10 @@ import styles from "./styles";
 import Colors from "@theme/Colors";
 import ScreenImages from "@assets/images/screens";
 import { useGetAccountsMutation } from "@store/apis/accountApi";
-import { useAddMemberToTrustCircleMutation } from "@store/apis/kidashiApi";
+import {
+	useAddMemberToTrustCircleMutation,
+	useGetWomanDetailsMutation,
+} from "@store/apis/kidashiApi";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import { setSelectedAccountDetails } from "@store/slices/kidashiSlice";
 import { useFocusEffect } from "@react-navigation/native";
@@ -47,6 +50,8 @@ export default function EnterAccountNumber({
 		addMemberToTrustCircle,
 		{ isLoading: isLoadingAddMemberToTrustCircle },
 	] = useAddMemberToTrustCircleMutation();
+	const [getWomanDetails, { isLoading: isLoadingWomanDetails }] =
+		useGetWomanDetailsMutation();
 	const vendor_id = useAppSelector((state) => state.kidashi.vendor?.id);
 	const selected_account = useAppSelector(
 		(state) => state.kidashi.selected_account
@@ -62,6 +67,24 @@ export default function EnterAccountNumber({
 		}
 	}, [formData.accountNumber]);
 
+	// console.log({ selected_account });
+
+	const fetchWomanDetails = async (id: string) => {
+		await getWomanDetails({
+			cba_customer_id: id,
+		})
+			.unwrap()
+			.then((res) => {
+				if (res.status) {
+					console.log({ woman_details: res.data });
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+				showToast("danger", err.data.message || DEFAULT_ERROR_MESSAGE);
+			});
+	};
+
 	// Submit dynamically depending on ID type
 	const submit = async () => {
 		if (circle_details?.members_count && circle_details?.members_count >= 3) {
@@ -72,6 +95,7 @@ export default function EnterAccountNumber({
 				woman_id: selected_account?.customer_id || "",
 				trust_circle_id: circle_details?.id || "",
 			};
+			console.log({ payload });
 			await addMemberToTrustCircle(payload)
 				.unwrap()
 				.then((res) => {
@@ -97,10 +121,11 @@ export default function EnterAccountNumber({
 				.unwrap()
 				.then((res) => {
 					if (res.status) {
+						const account = res.data[0] as unknown as iWomanAccount;
+						console.log({ account });
+						fetchWomanDetails(account.customer_id);
 						setShowAccountContainer(true);
-						dispatch(
-							setSelectedAccountDetails(res.data[0] as unknown as iWomanAccount)
-						);
+						dispatch(setSelectedAccountDetails(account));
 					} else {
 						showToast("danger", res.message || DEFAULT_ERROR_MESSAGE);
 					}

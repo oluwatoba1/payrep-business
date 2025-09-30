@@ -3,7 +3,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
-import { Typography } from "@components/Forms";
+import { Button, Typography } from "@components/Forms";
 import { KidashiLayout } from "@components/Layout";
 import ScreenImages from "@assets/images/screens";
 import Colors from "@theme/Colors";
@@ -24,6 +24,7 @@ import { ActivityIndicator, FlatList } from "react-native";
 import { TrustCircleItemCard } from "@components/UI/TrustCircle/Cards";
 import { ITrustCircleItem } from "@components/UI/TrustCircle/Cards/TrustCircleItemCard";
 import Pad from "@components/Pad";
+import MemberDetails from "../../KidashiMembers/MemberDetails";
 
 type TrustCirclesProps = CompositeScreenProps<
 	StackScreenProps<TrustCircleStackParamList, "TrustCircles">,
