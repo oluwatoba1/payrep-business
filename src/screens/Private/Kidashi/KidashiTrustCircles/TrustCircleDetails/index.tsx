@@ -82,6 +82,7 @@ export default function TrustCircleDetails({
 				showToast("danger", message);
 			}
 		} catch (error: ErrorResponse | any) {
+			console.log(error);
 			showToast(
 				"danger",
 				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE

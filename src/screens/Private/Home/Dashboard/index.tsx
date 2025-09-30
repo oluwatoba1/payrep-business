@@ -160,6 +160,7 @@ export default function Dashboard({
 			}).unwrap();
 
 			if (status) {
+				console.log(data);
 				dispatch(setVendor(data));
 			} else {
 				showToast("danger", message);
@@ -235,7 +236,7 @@ export default function Dashboard({
 					screen: "KidashiHome",
 					params: { screen: "KidashiDashboard" },
 				});
-				break
+				break;
 
 			default:
 				navigate("KidashiBottomTabs", {

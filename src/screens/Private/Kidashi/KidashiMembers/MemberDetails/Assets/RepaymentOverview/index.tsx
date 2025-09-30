@@ -36,6 +36,8 @@ const RepaymentOverview = ({
 		(state) => state.kidashi
 	);
 
+	console.log("====>>>", vendor);
+
 	const [showOtpModal, setShowOtpModal] = useState(false);
 	const [otp, setOtp] = useState<string>("");
 
