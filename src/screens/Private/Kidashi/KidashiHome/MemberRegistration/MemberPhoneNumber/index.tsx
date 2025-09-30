@@ -43,7 +43,7 @@ export default function MemberPhoneNumber({
 		setMobileNumber,
 	} = useRegisterMobileValidation();
 	const [verifyMobileNumber, { isLoading }] =
-		useVerifyWomanMobileNumberMutation();
+		useVerifyMobileNumberMutation();
 	const [clonePersonalProfile, { isLoading: isCloning }] =
 		useClonePersonalProfileMutation();
 

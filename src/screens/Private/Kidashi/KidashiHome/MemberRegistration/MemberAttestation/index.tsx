@@ -22,7 +22,10 @@ import styles from "./styles";
 import Colors from "@theme/Colors";
 import { useAppSelector } from "@store/hooks";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { useAffirmWomanAttestationMutation } from "@store/apis/kidashiApi";
+import {
+	useAffirmWomanAttestationMutation,
+	useOnboardWomanMutation,
+} from "@store/apis/kidashiApi";
 
 type MemberAttestationProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberAttestation">,
@@ -34,11 +37,11 @@ export default function MemberAttestation({
 }: MemberAttestationProps) {
 	const { showToast } = useToast();
 	const customer = useAppSelector((state) => state.customer.customer);
-	const customerId = useAppSelector(
+	const womanCustomerId = useAppSelector(
 		(state) => state.auth.registration.customer_id
 	);
-	const [affirmAttestation, { isLoading }] =
-		useAffirmWomanAttestationMutation();
+	const [affirmAttestation, { isLoading }] = useAffirmAttestationMutation();
+	const [onboardWoman, { isLoading: isOnboarding }] = useOnboardWomanMutation();
 	const [getAttestion, { isLoading: isLoadingAttestation }] =
 		useGetAttestationMutation();
 
@@ -62,11 +65,28 @@ export default function MemberAttestation({
 			}).unwrap();
 			if (status && data) {
 				setAgreementHtml(formatAttestation(data));
+			}
+		} catch (error: ErrorResponse | any) {
+			// fail silently
+		}
+	};
+
+	const registerWoman = async () => {
+		try {
+			const { status, message } = await onboardWoman({
+				vendor_cba_customer_id: customer?.id || "",
+				woman_cba_customer_id: womanCustomerId,
+			}).unwrap();
+			if (status) {
+				navigate("MemberSuccessScreen");
 			} else {
 				showToast("danger", message);
 			}
 		} catch (error: ErrorResponse | any) {
-			// fail silently
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
 		}
 	};
 
@@ -76,11 +96,9 @@ export default function MemberAttestation({
 			return;
 		}
 		try {
-			const { status, message } = await affirmAttestation({
-				cba_customer_id: customerId,
-			}).unwrap();
+			const { status, message } = await affirmAttestation().unwrap();
 			if (status) {
-				navigate("MemberSuccessScreen");
+				registerWoman();
 			} else {
 				showToast("danger", message);
 			}
@@ -114,7 +132,7 @@ export default function MemberAttestation({
 
 	return (
 		<MainLayout
-			isLoading={isLoading}
+			isLoading={isLoading || isOnboarding}
 			keyboardAvoidingType='scroll-view'
 			backAction={backAction}
 		>

@@ -41,7 +41,7 @@ export default function MemberSourceOfIncome({
 		setAnnualIncome,
 		setEmploymentType,
 	} = useSourceOfIncomeValidation();
-	const [updateIncome, { isLoading }] = useUpdateWomanIncomeMutation();
+	const [updateIncome, { isLoading }] = useUpdateIncomeMutation();
 	const { showToast } = useToast();
 
 	const [selectedOccupation, setSelectedOccupation] = useState<
@@ -60,7 +60,6 @@ export default function MemberSourceOfIncome({
 				occupation: formData.occupation,
 				annual_income: formData.annualIncome,
 				employment_type: formData.employmentType,
-				cba_customer_id: customerId,
 			}).unwrap();
 			if (status) {
 				navigate("MemberAttestation");

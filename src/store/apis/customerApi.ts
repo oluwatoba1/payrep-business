@@ -47,9 +47,12 @@ const CustomerApi = createApi({
   endpoints: builder => ({
     updateLocation: builder.mutation<AuthResponse<null>, LocationCredentials>({
       query: body => {
-        const customerId: string = store.getState().auth.customer?.id || '';
+        const customerId: string = store.getState().auth.customer?.id || "";
+				const womanCustomerId: string =
+					store.getState().auth.registration.customer_id || "";
+				const id = !!womanCustomerId ? womanCustomerId : customerId;
         return {
-          url: `mobile/location/${customerId}`,
+          url: `mobile/location/${id}`,
           method: 'PUT',
           body,
         };
@@ -57,9 +60,12 @@ const CustomerApi = createApi({
     }),
     updatePep: builder.mutation<AuthResponse<null>, PepCredentials>({
       query: body => {
-        const customerId: string = store.getState().auth.customer?.id || '';
+        const customerId: string = store.getState().auth.customer?.id || "";
+				const womanCustomerId: string =
+					store.getState().auth.registration.customer_id || "";
+				const id = !!womanCustomerId ? womanCustomerId : customerId;
         return {
-          url: `mobile/pep/${customerId}`,
+          url: `mobile/pep/${id}`,
           method: 'PUT',
           body,
         };
@@ -70,9 +76,12 @@ const CustomerApi = createApi({
       SourceOfIncomeCredentials
     >({
       query: body => {
-        const customerId: string = store.getState().auth.customer?.id || '';
+        const customerId: string = store.getState().auth.customer?.id || "";
+				const womanCustomerId: string =
+					store.getState().auth.registration.customer_id || "";
+				const id = !!womanCustomerId ? womanCustomerId : customerId;
         return {
-          url: `mobile/income/${customerId}`,
+          url: `mobile/income/${id}`,
           method: 'PUT',
           body,
         };
@@ -104,11 +113,13 @@ const CustomerApi = createApi({
     affirmAttestation: builder.mutation<AuthResponse<null>, void>({
       query: body => {
         const customerId: string = store.getState().auth.customer?.id || '';
+        const womanCustomerId: string = store.getState().auth.registration.customer_id || '';
+        const id = !!womanCustomerId ? womanCustomerId: customerId;
         return {
-          url: `mobile/attestation/${customerId}`,
-          method: 'POST',
-          body,
-        };
+					url: `mobile/attestation/${id}`,
+					method: "POST",
+					body,
+				};
       },
     }),
     submitBusinessTierRequirements: builder.mutation<
