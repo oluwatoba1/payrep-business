@@ -875,6 +875,7 @@ interface IKidashi {
 	vendor_id: string;
 	registration: Omit<VendorRegistrationRequest, "cba_customer_id">;
 	vendor: IVendor | null;
+	memberDetails: IWomanDetails | null;
 }
 
 interface CreateTrustCircleRequest {
@@ -957,4 +958,17 @@ interface ITrustCircleDetail {
 	status: string;
 	loan_eligibility: boolean;
 	women: IWomen[];
+}
+
+interface IAssetRequest {
+	vendor_id: string;
+	woman_id: string;
+	loan_product_id: string;
+	value: string;
+	markup: string;
+	items_requested: {
+		name: string;
+		price: string;
+	}[];
+	otp: string;
 }

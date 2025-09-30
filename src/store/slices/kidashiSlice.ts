@@ -10,6 +10,7 @@ const initialState: IKidashi = {
 		business_description: "",
 	},
 	vendor: null,
+	memberDetails: null,
 };
 
 const KidashiSlice = createSlice({
@@ -31,9 +32,17 @@ const KidashiSlice = createSlice({
 		setVendor: (state, action: PayloadAction<IVendor>) => {
 			state.vendor = action.payload;
 		},
+		setMemberDetails: (state, action: PayloadAction<IWomanDetails>) => {
+			state.memberDetails = action.payload;
+		},
 	},
 });
 
-export const { setRegistrationDetails, setVendorId, setVendor } = KidashiSlice.actions;
+export const {
+	setRegistrationDetails,
+	setVendorId,
+	setVendor,
+	setMemberDetails,
+} = KidashiSlice.actions;
 
 export default KidashiSlice;

@@ -116,6 +116,16 @@ const KidashiApi = createApi({
 				body,
 			}),
 		}),
+		createAsset: builder.mutation<
+			AuthResponse<IWomanDetails>,
+			IAssetRequest
+		>({
+			query: (body) => ({
+				url: "asset/mobile/create_asset",
+				method: "POST",
+				body,
+			}),
+		}),
 		registerWomanEmail: builder.mutation<
 			AuthResponse<null>,
 			Partial<RegisterCredentials>
@@ -254,6 +264,7 @@ export const {
 	useFetchTrustCircleMutation,
 	useOnboardWomanMutation,
 	useGetMemberDetailsMutation,
+	useCreateAssetMutation,
 	useVerifyWomanMobileNumberMutation,
 	useVerifyWomanEmailMutation,
 	useRegisterWomanEmailMutation,
