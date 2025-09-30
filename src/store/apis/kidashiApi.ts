@@ -123,6 +123,13 @@ const KidashiApi = createApi({
 				body,
 			}),
 		}),
+		generateOtp: builder.mutation<AuthResponse<null>, OtpRequest>({
+			query: (body) => ({
+				url: "asset/mobile/create_asset",
+				method: "POST",
+				body,
+			}),
+		}),
 		registerWomanEmail: builder.mutation<
 			AuthResponse<null>,
 			Partial<RegisterCredentials>
@@ -287,6 +294,7 @@ export const {
 	useOnboardWomanMutation,
 	useGetMemberDetailsMutation,
 	useCreateAssetMutation,
+	useGenerateOtpMutation,
 	useVerifyWomanMobileNumberMutation,
 	useVerifyWomanEmailMutation,
 	useRegisterWomanEmailMutation,

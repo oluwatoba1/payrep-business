@@ -13,6 +13,10 @@ const initialState: IKidashi = {
 	vendor: null,
 	selected_account: null,
 	memberDetails: null,
+	assetRequest: {
+		items_requested: [],
+		value: "0",
+	},
 };
 
 const KidashiSlice = createSlice({
@@ -49,6 +53,9 @@ const KidashiSlice = createSlice({
 		setMemberDetails: (state, action: PayloadAction<IWomanDetails>) => {
 			state.memberDetails = action.payload;
 		},
+		setAssetRequest: (state, action: PayloadAction<Partial<IAssetRequest>>) => {
+			state.assetRequest = action.payload;
+		},
 	},
 });
 
@@ -59,6 +66,7 @@ export const {
 	setTrustCircleDetails,
 	setSelectedAccountDetails,
 	setMemberDetails,
+	setAssetRequest,
 } = KidashiSlice.actions;
 
 export default KidashiSlice;

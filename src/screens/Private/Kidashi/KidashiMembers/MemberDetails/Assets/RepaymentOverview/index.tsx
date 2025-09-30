@@ -12,7 +12,10 @@ import Pad from "@components/Pad";
 import AssetFinanceOtp from "@components/UI/MemberDetails/Assets/AssetFinanceOtp";
 import { MembersStackParamList } from "@navigation/types";
 import { StackScreenProps } from "@react-navigation/stack";
-import { useCreateAssetMutation } from "@store/apis/kidashiApi";
+import {
+	useCreateAssetMutation,
+	useGenerateOtpMutation,
+} from "@store/apis/kidashiApi";
 import useToast from "@hooks/useToast";
 import { useAppSelector } from "@store/hooks";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
@@ -24,14 +27,18 @@ type ReviewAssetRequestProps = StackScreenProps<
 
 const RepaymentOverview = ({
 	navigation: { navigate },
-	route,
 }: ReviewAssetRequestProps) => {
 	const { showToast } = useToast();
 	const [createAsset, { isLoading }] = useCreateAssetMutation();
+	const [generateOtp] = useGenerateOtpMutation();
 
-	const vendor = useAppSelector((state) => state.kidashi.vendor);
+	const { vendor, memberDetails, assetRequest } = useAppSelector(
+		(state) => state.kidashi
+	);
 
 	const [showOtpModal, setShowOtpModal] = useState(false);
+	const [otp, setOtp] = useState<string>("");
+
 	const totalCost = 46000;
 	const interestRatePercent = 5;
 	const interestAmount = 1380;
@@ -59,16 +66,39 @@ const RepaymentOverview = ({
 		})}`;
 	};
 
+	const getOtp = async () => {
+		try {
+			const { status, message } = await generateOtp({
+				purpose: "ASSET_REQUEST",
+				recipient: memberDetails?.mobile_number || "",
+				subject_id: vendor?.id || "",
+				channel: "sms",
+			}).unwrap();
+			if (status) {
+				navigate("RequestSubmitted");
+			} else {
+				showToast("danger", message);
+			}
+		} catch (error: ErrorResponse | any) {
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
+
 	const submit = async () => {
 		try {
 			const { status, message } = await createAsset({
 				vendor_id: vendor?.id || "",
-				woman_id: "",
+				woman_id: memberDetails?.woman_id || "",
 				loan_product_id: "9c9628ed-bdb1-40f2-a216-ea6b871f7d75",
-				value: "",
-				markup: "",
-				items_requested: [],
-				otp: "string",
+				value: assetRequest.value || "0",
+				markup: String(
+					(interestRatePercent / 100) * Number(assetRequest.value || "0")
+				),
+				items_requested: assetRequest?.items_requested || [],
+				otp,
 			}).unwrap();
 			if (status) {
 				navigate("RequestSubmitted");
@@ -191,11 +221,16 @@ const RepaymentOverview = ({
 				</View>
 			</ScrollView>
 			<Divider gapY={scaleHeight(16)} gapX={scale(-16)} />
-			<Button title='Agree & Continue' onPress={() => setShowOtpModal(true)} />
+			<Button
+				title='Agree & Continue'
+				onPress={() => [setShowOtpModal(true), getOtp()]}
+			/>
 			<AssetFinanceOtp
 				visible={showOtpModal}
 				onClose={() => setShowOtpModal(false)}
 				onVerify={submit}
+				otp={otp}
+				setOtp={setOtp}
 			/>
 		</MainLayout>
 	);

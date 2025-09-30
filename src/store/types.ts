@@ -878,6 +878,7 @@ interface IKidashi {
 	circle_details: ITrustCircleDetail | null;
 	selected_account: iWomanAccount | null;
 	memberDetails: IWomanDetails | null;
+	assetRequest: Partial<IAssetRequest>;
 }
 
 interface CreateTrustCircleRequest {
@@ -983,6 +984,13 @@ interface IAssetRequest {
 		price: string;
 	}[];
 	otp: string;
+}
+
+interface OtpRequest {
+	purpose: "ASSET_REQUEST";
+	recipient: string;
+	subject_id: string;
+	channel: "sms";
 }
 
 interface iWomanMemberDetails {
