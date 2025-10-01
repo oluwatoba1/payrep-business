@@ -50,6 +50,7 @@ const MemberDetails = ({
 				cba_customer_id: route.params.id,
 			}).unwrap();
 			if (status) {
+				console.log({ data });
 				dispatch(setMemberDetails(data));
 			} else {
 				showToast("danger", message);
@@ -86,12 +87,16 @@ const MemberDetails = ({
 		}, [])
 	);
 
+	console.log({ memberDetails });
+
 	return (
 		<SafeAreaWrapper backAction={backAction} title='Member Details'>
 			<MemberDetailsHeaderComp
 				onOTPManagePress={() => navigate("ManageVerfiers")}
+				userName={`${memberDetails?.first_name} ${memberDetails?.surname}`}
+				status={memberDetails?.status}
 			/>
-			<MemberDetailsCard navigate={navigate} />
+			<MemberDetailsCard navigate={navigate} memberDetails={memberDetails} />
 			<Tab
 				items={["Transactions", "More details", "Account Info"]}
 				value={activeTab}
@@ -120,6 +125,7 @@ const MemberDetails = ({
 				onClose={() => setVisible(false)}
 				parent='MemberDetails'
 				onRequestAssetPress={() => navigate("EnterAssetInformation")}
+				onAddMemberPress={() => navigate("EnterAssetInformation")}
 			/>
 		</SafeAreaWrapper>
 	);

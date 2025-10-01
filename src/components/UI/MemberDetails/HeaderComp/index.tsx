@@ -9,12 +9,14 @@ interface MemberDetailsHeaderCompProps {
 	userName?: string;
 	balance?: string;
 	onOTPManagePress?: () => void;
+	status?: string;
 }
 
 const MemberDetailsHeaderComp = ({
-	userName = "Zainab Abubakar",
+	userName,
 	balance = "₦0.00",
 	onOTPManagePress,
+	status,
 }: MemberDetailsHeaderCompProps) => {
 	return (
 		<View style={styles.container}>
@@ -29,34 +31,40 @@ const MemberDetailsHeaderComp = ({
 
 			{/* User Name */}
 			<View style={styles.userNameContainer}>
-				<Typography title={userName} type='heading-sb' color={Colors.black} />
+				<Typography
+					title={userName || ""}
+					type='heading-sb'
+					color={Colors.black}
+				/>
 			</View>
 
 			{/* OTP Status Bar */}
-			<TouchableOpacity
-				style={styles.otpStatusBar}
-				onPress={onOTPManagePress}
-				activeOpacity={0.7}
-			>
-				<View style={styles.otpStatusContent}>
-					<Image
-						source={ScreenImages.kidashiMemberDetails.infoIcon}
-						style={styles.infoIcon}
-						resizeMode='contain'
-					/>
-					<Typography
-						title='OTP pend ing to join circle: Tap to manage verifiers'
-						type='label-r'
-						color={Colors.cardColor.brown[200]}
-						style={styles.otpText}
-					/>
-					<Image
-						source={ScreenImages.kidashiMemberDetails.arrowRightIcon}
-						style={styles.arrowIcon}
-						resizeMode='contain'
-					/>
-				</View>
-			</TouchableOpacity>
+			{status === "PENDING" && (
+				<TouchableOpacity
+					style={styles.otpStatusBar}
+					onPress={onOTPManagePress}
+					activeOpacity={0.7}
+				>
+					<View style={styles.otpStatusContent}>
+						<Image
+							source={ScreenImages.kidashiMemberDetails.infoIcon}
+							style={styles.infoIcon}
+							resizeMode='contain'
+						/>
+						<Typography
+							title='OTP pend ing to join circle: Tap to manage verifiers'
+							type='label-r'
+							color={Colors.cardColor.brown[200]}
+							style={styles.otpText}
+						/>
+						<Image
+							source={ScreenImages.kidashiMemberDetails.arrowRightIcon}
+							style={styles.arrowIcon}
+							resizeMode='contain'
+						/>
+					</View>
+				</TouchableOpacity>
+			)}
 
 			{/* Balance Section */}
 			<View style={styles.balanceContainer}>

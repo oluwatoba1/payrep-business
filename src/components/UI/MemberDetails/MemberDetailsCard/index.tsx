@@ -81,8 +81,10 @@ const AssetsCard = ({ navigate }: { navigate: (screen: string) => void }) => {
 
 const MemberDetailsCard = ({
 	navigate,
+	memberDetails,
 }: {
 	navigate: (screen: string) => void;
+	memberDetails: IWomanDetails | null;
 }) => {
 	return (
 		<View>

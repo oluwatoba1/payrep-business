@@ -55,7 +55,7 @@ const ReviewAssetRequest = ({
 	};
 
 	return (
-		<MainLayout rightTitle='Review Asset Request'>
+		<SafeAreaWrapper title='Review Asset Request'>
 			<View>
 				<View style={styles.boxIconContainer}>
 					<Image
@@ -130,7 +130,7 @@ const ReviewAssetRequest = ({
 
 			<Pad size={scaleHeight(16)} />
 			<Button title='Continue' onPress={proceed} />
-		</MainLayout>
+		</SafeAreaWrapper>
 	);
 };
 

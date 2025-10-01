@@ -930,6 +930,7 @@ interface IWomen {
 	employment_type: string;
 	image: string;
 	status: string;
+	cba_customer_id: string;
 }
 
 interface IWomanDetails {
@@ -950,6 +951,9 @@ interface IWomanDetails {
 	country_id: string;
 	repayment_status: string;
 	status: string;
+	lga: string;
+	nin: string;
+	state: string;
 }
 
 interface ITrustCircleDetail {

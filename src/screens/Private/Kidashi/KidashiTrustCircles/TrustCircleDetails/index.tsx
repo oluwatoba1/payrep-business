@@ -77,7 +77,6 @@ export default function TrustCircleDetails({
 			if (status) {
 				setCircleDetails(data);
 				dispatch(setTrustCircleDetails(data));
-				console.log(data);
 			} else {
 				showToast("danger", message);
 			}
@@ -185,10 +184,10 @@ export default function TrustCircleDetails({
 							.map((c, index) => (index > 2 && index < 7 ? "*" : c))
 							.join("")}
 						onSelect={() => {
-							// console.log(item);
+							console.log(item);
 							navigate("KidashiMembers", {
 								screen: "MemberDetails",
-								params: { id: item.id },
+								params: { id: item.cba_customer_id },
 							});
 						}}
 						rightNode={
