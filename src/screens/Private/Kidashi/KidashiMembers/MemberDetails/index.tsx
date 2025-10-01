@@ -120,12 +120,13 @@ const MemberDetails = ({
 					style={styles.performActionText}
 				/>
 			</Pressable>
+			{/* */}
 			<PerformActionModal
 				visible={visible}
 				onClose={() => setVisible(false)}
 				parent='MemberDetails'
 				onRequestAssetPress={() => navigate("EnterAssetInformation")}
-				onAddMemberPress={() => navigate("EnterAssetInformation")}
+				// onAddMemberPress={() => navigate("")}
 			/>
 		</SafeAreaWrapper>
 	);

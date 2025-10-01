@@ -954,6 +954,9 @@ interface IWomanDetails {
 	lga: string;
 	nin: string;
 	state: string;
+	maximum_balance: string;
+	tier: string;
+	dob: string;
 }
 
 interface ITrustCircleDetail {

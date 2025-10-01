@@ -39,12 +39,12 @@ const AccountInfo = ({ details }: AccountInfoProps) => {
 			<Divider gapY={scaleHeight(10)} />
 			<Row>
 				<Typography title='Account Tier' type='body-r' />
-				<Typography title='' type='body-r' />
+				<Typography title={details?.tier || ""} type='body-r' />
 			</Row>
 			<Divider gapY={scaleHeight(10)} />
 			<Row>
 				<Typography title='Maximum Balance' type='body-r' />
-				<Typography title='' type='body-r' />
+				<Typography title={details?.maximum_balance || ""} type='body-r' />
 			</Row>
 		</View>
 	);

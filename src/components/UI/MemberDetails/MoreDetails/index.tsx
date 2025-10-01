@@ -3,7 +3,7 @@ import React from "react";
 import { Row } from "@components/Layout";
 import { Typography } from "@components/Forms";
 import Divider from "@components/Miscellaneous/Divider";
-import { scaleHeight } from "@utils/Helpers";
+import { formatDateTime, scaleHeight } from "@utils/Helpers";
 import { ScrollView } from "react-native-gesture-handler";
 import ScreenImages from "@assets/images/screens";
 import { styles } from "./style";
@@ -41,7 +41,10 @@ const MoreDetails = ({ details }: MoreDetailsProps) => {
 			value: details?.mobile_number || "",
 		},
 		{ label: "NIN", value: details?.nin || "" },
-		{ label: "Date of Birth", value: "" },
+		{
+			label: "Date of Birth",
+			value: formatDateTime(details?.dob || "").date || "",
+		},
 		{ label: "State", value: details?.state || "" },
 		{ label: "LGA", value: details?.lga || "" },
 	];

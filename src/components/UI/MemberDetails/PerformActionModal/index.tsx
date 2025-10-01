@@ -78,9 +78,7 @@ const PerformActionModal = ({
 				subTitle='Apply for asset support'
 				icon={ScreenImages.kidashiMemberDetails.boxIcon}
 				onPress={() => {
-					if (parent === "MemberDetails") {
-						onRequestAssetPress?.();
-					}
+					onRequestAssetPress?.();
 				}}
 			/>
 
@@ -91,9 +89,7 @@ const PerformActionModal = ({
 						subTitle='Add a new member to this Trust Circle'
 						icon={ScreenImages.kidashiMemberDetails.addTeamIcon}
 						onPress={() => {
-							if (parent === "TrustCircle") {
-								onAddMemberPress?.();
-							}
+							onAddMemberPress?.();
 						}}
 					/>
 				</>
