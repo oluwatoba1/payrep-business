@@ -70,7 +70,6 @@ export default function MemberMeansOfVerification({
 		validateForm,
 	} = useBvnVerificationValidation();
 
-	const [bvnLookup, { isLoading: isBvnLoading }] = useBvnLookupMutation();
 	const [ninLookup, { isLoading: isNinLoading }] = useNinLookupMutation();
 
 	const [kycData, setKycData] = useState<IKycData>({
@@ -86,46 +85,24 @@ export default function MemberMeansOfVerification({
 		email: "",
 	});
 
-	const [selectedOption, setSelectedOption] = useState({
-		label: "",
-		value: "",
-	});
-
 	const [showIsThisYouModal, setShowIsThisYouModal] = useState<boolean>(false);
 
 	// Submit dynamically depending on ID type
 	const submit = async () => {
 		try {
-			if (selectedOption.value === "bvn") {
-				const { status, message, data } = await bvnLookup({
-					bvn: idNumber,
-				}).unwrap();
-				if (status && data) {
-					delete data.image;
-					setKycData({
-						...data,
-						bvn: idNumber,
-						phoneNumber: data.phone_number1,
-					});
-					setShowIsThisYouModal(true);
-				} else {
-					showToast("danger", message);
-				}
-			} else if (selectedOption.value === "nin") {
-				const { status, message, data } = await ninLookup({
+			const { status, message, data } = await ninLookup({
+				nin: idNumber,
+			}).unwrap();
+			if (status && data) {
+				delete data.image;
+				setKycData({
+					...data,
 					nin: idNumber,
-				}).unwrap();
-				if (status && data) {
-					delete data.image;
-					setKycData({
-						...data,
-						nin: idNumber,
-						phoneNumber: data.phone_number, // depends on API shape
-					});
-					setShowIsThisYouModal(true);
-				} else {
-					showToast("danger", message);
-				}
+					phoneNumber: data.phone_number, // depends on API shape
+				});
+				setShowIsThisYouModal(true);
+			} else {
+				showToast("danger", message);
 			}
 		} catch (error: ErrorResponse | any) {
 			console.log(error);
@@ -139,57 +116,18 @@ export default function MemberMeansOfVerification({
 	// Proceed also depends on ID type
 	const proceed = () => {
 		setShowIsThisYouModal(false);
-		if (selectedOption.value === "bvn") {
-			dispatch(
-				updateNinData({
-					firstName: "",
-					lastName: "",
-					middleName: "",
-					dob: "",
-					nin: "",
-					gender: "",
-					email: "",
-					phoneNumber: "",
-				})
-			);
-			dispatch(
-				updateBvnData({
-					firstName: kycData.first_name,
-					lastName: kycData.last_name,
-					middleName: kycData.middle_name,
-					dob: kycData.dob,
-					bvn: kycData.bvn!,
-					gender: kycData.gender,
-					email: kycData.email,
-					phoneNumber: kycData.phoneNumber,
-				})
-			);
-		} else if (selectedOption.value === "nin") {
-			dispatch(
-				updateBvnData({
-					firstName: "",
-					lastName: "",
-					middleName: "",
-					dob: "",
-					bvn: "",
-					gender: "",
-					email: "",
-					phoneNumber: "",
-				})
-			);
-			dispatch(
-				updateNinData({
-					firstName: kycData.first_name,
-					lastName: kycData.last_name,
-					middleName: kycData.middle_name,
-					dob: kycData.dob,
-					nin: kycData.nin!,
-					gender: kycData.gender,
-					email: kycData.email,
-					phoneNumber: kycData.phoneNumber,
-				})
-			);
-		}
+		dispatch(
+			updateNinData({
+				firstName: kycData.first_name,
+				lastName: kycData.last_name,
+				middleName: kycData.middle_name,
+				dob: kycData.dob,
+				nin: kycData.nin!,
+				gender: kycData.gender,
+				email: kycData.email,
+				phoneNumber: kycData.phoneNumber,
+			})
+		);
 
 		navigate("MemberFaceCaptureVerification");
 	};
@@ -212,7 +150,7 @@ export default function MemberMeansOfVerification({
 
 	return (
 		<MainLayout
-			isLoading={isBvnLoading || isNinLoading}
+			isLoading={isNinLoading}
 			backAction={backAction}
 			keyboardAvoidingType='scroll-view'
 		>
@@ -231,26 +169,10 @@ export default function MemberMeansOfVerification({
 				type='label-sb'
 			/>
 
-			<Dropdown
-				label='ID Type'
-				options={[
-					{ label: "BVN", value: "bvn" },
-					{ label: "NIN", value: "nin" },
-				]}
-				selectedOption={selectedOption}
-				onSelect={setSelectedOption}
-			/>
-
 			<TextInput
-				label={
-					selectedOption.value === "bvn"
-						? "BVN (Dial *565*0# to retrieve your BVN)"
-						: "NIN (Dial *346# to retrieve your NIN)"
-				}
+				label='NIN (Dial *346# to retrieve your NIN)'
 				keyboardType='numeric'
-				placeholder={
-					selectedOption.value === "bvn" ? "Ex: 22222222222" : "Ex: 12345678901"
-				}
+				placeholder='Ex: 12345678901'
 				maxLength={11} // adjust if NIN length differs
 				onChangeText={setIdNumber}
 				value={idNumber}

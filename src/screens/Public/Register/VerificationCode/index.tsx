@@ -15,7 +15,7 @@ import { mainRegisterStyles } from "../styles";
 import Pad from "@components/Pad";
 import { formatCountdown } from "@utils/Helpers";
 import { DEFAULT_ERROR_MESSAGE, RESEND_COUNTDOWN } from "@utils/Constants";
-import { useAppSelector } from "@store/hooks";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
 import useToast from "@hooks/useToast";
 import useVerifyMobileValidation from "./validators";
 import {
@@ -34,6 +34,7 @@ export default function VerificationCode({
 	navigation: { navigate, goBack },
 	route,
 }: VerificationCodeProps) {
+	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
 	const customerId = useAppSelector(
 		(state) => state.auth.registration.customer_id
@@ -71,11 +72,13 @@ export default function VerificationCode({
 				otp,
 			}).unwrap();
 			if (status) {
-				setRegistrationDetails({
-					mobileNumber: mobileNumber.padStart(11, "0"),
-					email: "",
-					customer_id: data?.customer_id || "",
-				});
+				dispatch(
+					setRegistrationDetails({
+						mobileNumber: mobileNumber.padStart(11, "0"),
+						email: "",
+						customer_id: data?.customer_id || "",
+					})
+				);
 				navigate("EmailAddress");
 				return;
 			}

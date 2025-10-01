@@ -125,7 +125,7 @@ const KidashiApi = createApi({
 		}),
 		generateOtp: builder.mutation<AuthResponse<null>, OtpRequest>({
 			query: (body) => ({
-				url: "asset/mobile/create_asset",
+				url: "asset/mobile/generate_otp",
 				method: "POST",
 				body,
 			}),
@@ -135,7 +135,7 @@ const KidashiApi = createApi({
 			Partial<RegisterCredentials>
 		>({
 			query: (body) => ({
-				url: "woman/mobile/register_email",
+				url: "woman/mobile/generate_otp",
 				method: "POST",
 				body,
 			}),
