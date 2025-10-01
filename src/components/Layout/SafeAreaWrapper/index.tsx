@@ -12,6 +12,7 @@ interface SafeAreaWrapperProps {
 	backAction?: () => void;
 	title?: string;
 	canScroll?: boolean;
+	isLoading?: boolean;
 }
 
 const SafeAreaWrapper = ({
@@ -19,6 +20,7 @@ const SafeAreaWrapper = ({
 	backAction,
 	title,
 	canScroll = false,
+	isLoading = false,
 }: SafeAreaWrapperProps) => {
 	const navigation = useNavigation();
 

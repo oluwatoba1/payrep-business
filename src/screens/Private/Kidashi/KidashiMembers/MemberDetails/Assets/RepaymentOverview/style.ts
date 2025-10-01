@@ -14,8 +14,8 @@ export const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 	screenSubTitle: {
-		fontSize: scale(14),
-		color: Colors.gray["600"],
+		fontSize: scale(12),
+		color: Colors.gray["400"],
 		lineHeight: scale(20),
 		marginBottom: scaleHeight(12),
 		textAlign: "center",

@@ -40,11 +40,13 @@ const MoreDetails = ({ details }: MoreDetailsProps) => {
 			label: "Phone",
 			value: details?.mobile_number || "",
 		},
-		{ label: "NIN", value: "" },
+		{ label: "NIN", value: details?.nin || "" },
 		{ label: "Date of Birth", value: "" },
-		{ label: "State", value: details?.state_id || "" },
-		{ label: "LGA", value: details?.lga_id || "" },
+		{ label: "State", value: details?.state || "" },
+		{ label: "LGA", value: details?.lga || "" },
 	];
+
+	// console.log(details);
 
 	return (
 		<View>

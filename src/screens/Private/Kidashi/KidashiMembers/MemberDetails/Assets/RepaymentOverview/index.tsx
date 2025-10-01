@@ -116,7 +116,7 @@ const RepaymentOverview = ({
 	};
 
 	return (
-		<MainLayout rightTitle='Review Payment Terms' isLoading={isLoading}>
+		<SafeAreaWrapper title='Review Payment Terms' isLoading={isLoading}>
 			<ScrollView>
 				<View>
 					<View style={styles.boxIconContainer}>
@@ -234,7 +234,7 @@ const RepaymentOverview = ({
 				otp={otp}
 				setOtp={setOtp}
 			/>
-		</MainLayout>
+		</SafeAreaWrapper>
 	);
 };
 
