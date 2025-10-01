@@ -42,11 +42,12 @@ const MemberDetails = ({
 	const [activeTab, setActiveTab] = useState<TabType>("Transactions");
 	const [visible, setVisible] = useState<boolean>(false);
 
+	// console.log(route.params.id);
+
 	const fetchDetails = async () => {
 		try {
 			const { status, message, data } = await getMemberDetails({
-				cba_customer_id:
-					route.params.id || "e0d8775f-45d0-4ba3-9442-039dca3948d4",
+				cba_customer_id: route.params.id,
 			}).unwrap();
 			if (status) {
 				dispatch(setMemberDetails(data));
@@ -86,11 +87,7 @@ const MemberDetails = ({
 	);
 
 	return (
-		<MainLayout
-			rightTitle='Member Details'
-			backAction={backAction}
-			isLoading={isLoading}
-		>
+		<SafeAreaWrapper backAction={backAction} title='Member Details'>
 			<MemberDetailsHeaderComp
 				onOTPManagePress={() => navigate("ManageVerfiers")}
 			/>
@@ -124,7 +121,7 @@ const MemberDetails = ({
 				parent='MemberDetails'
 				onRequestAssetPress={() => navigate("EnterAssetInformation")}
 			/>
-		</MainLayout>
+		</SafeAreaWrapper>
 	);
 };
 

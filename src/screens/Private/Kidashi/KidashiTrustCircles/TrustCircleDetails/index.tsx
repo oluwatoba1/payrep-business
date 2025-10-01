@@ -184,12 +184,13 @@ export default function TrustCircleDetails({
 							.split("")
 							.map((c, index) => (index > 2 && index < 7 ? "*" : c))
 							.join("")}
-						onSelect={() =>
+						onSelect={() => {
+							// console.log(item);
 							navigate("KidashiMembers", {
 								screen: "MemberDetails",
 								params: { id: item.id },
-							})
-						}
+							});
+						}}
 						rightNode={
 							<Image
 								source={ComponentImages.kidashiMemberCard.arrowRightIcon2}

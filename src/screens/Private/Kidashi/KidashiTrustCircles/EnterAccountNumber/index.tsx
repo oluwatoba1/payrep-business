@@ -78,8 +78,8 @@ export default function EnterAccountNumber({
 			.unwrap()
 			.then((res) => {
 				if (res.status) {
-					console.log({ woman_details: res.data });
 					setWomanDetails(res.data as iWomanMemberDetails);
+					setShowAccountContainer(true);
 				}
 			})
 			.catch((err) => {
@@ -93,13 +93,11 @@ export default function EnterAccountNumber({
 		if (circle_details?.members_count && circle_details?.members_count >= 3) {
 			navigate("SelectVerifiers");
 		} else {
-			console.log({ woman_details });
 			const payload = {
 				initiating_vendor_id: vendor_id || "",
 				woman_id: woman_details?.id || "",
 				trust_circle_id: circle_details?.id || "",
 			};
-			console.log({ payload });
 			await addMemberToTrustCircle(payload)
 				.unwrap()
 				.then((res) => {
@@ -126,9 +124,7 @@ export default function EnterAccountNumber({
 				.then((res) => {
 					if (res.status) {
 						const account = res.data[0] as unknown as iWomanAccount;
-						console.log({ account });
 						fetchWomanDetails(account.customer_id);
-						setShowAccountContainer(true);
 						dispatch(setSelectedAccountDetails(account));
 					} else {
 						showToast("danger", res.message || DEFAULT_ERROR_MESSAGE);
@@ -187,7 +183,11 @@ export default function EnterAccountNumber({
 					>
 						<Row alignItems='center' gap={6}>
 							<Typography
-								title={isLoadingAccounts ? "Searching..." : "Search"}
+								title={
+									isLoadingAccounts || isLoadingWomanDetails
+										? "Searching..."
+										: "Search"
+								}
 								type='label-sb'
 								color={Colors.danger["700"]}
 							/>
