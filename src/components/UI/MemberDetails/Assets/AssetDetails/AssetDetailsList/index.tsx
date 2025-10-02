@@ -22,7 +22,7 @@ interface AssetDetailListProps {
 	time?: string;
 	items?: AssetDetailItem[];
 	total?: string;
-	status?: Status;
+	status?: AssetStatus;
 }
 
 const AssetDetailList = ({
@@ -32,7 +32,6 @@ const AssetDetailList = ({
 	time = "",
 	items = [],
 	total = "",
-	status,
 }: AssetDetailListProps) => {
 	return (
 		<View style={styles.container}>

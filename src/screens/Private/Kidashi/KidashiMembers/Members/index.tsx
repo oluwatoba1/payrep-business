@@ -93,7 +93,6 @@ export default function Members({
 								.map((c, index) => (index > 2 && index < 7 ? "*" : c))
 								.join("")}
 							onSelect={() => {
-								console.log(item);
 								navigate("MemberDetails", { id: item.cba_customer_id });
 							}}
 							rightNode={

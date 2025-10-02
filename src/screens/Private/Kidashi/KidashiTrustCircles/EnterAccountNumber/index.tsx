@@ -28,7 +28,7 @@ type EnterAccountNumberProps = StackScreenProps<
 >;
 
 export default function EnterAccountNumber({
-	navigation: { navigate, goBack },
+	navigation: { navigate, goBack, reset },
 }: EnterAccountNumberProps) {
 	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
@@ -142,11 +142,16 @@ export default function EnterAccountNumber({
 		return true; // Prevent default behavior
 	};
 
+	const resetAndGoBack = () => {
+		navigate("TrustCircles");
+		return true;
+	};
+
 	useFocusEffect(
 		useCallback(() => {
 			const backHandler = BackHandler.addEventListener(
 				"hardwareBackPress",
-				backAction
+				resetAndGoBack
 			);
 
 			return () => backHandler.remove(); // Cleanup
@@ -154,7 +159,7 @@ export default function EnterAccountNumber({
 	);
 
 	return (
-		<MainLayout backAction={goBack} keyboardAvoidingType='scroll-view'>
+		<MainLayout backAction={resetAndGoBack} keyboardAvoidingType='scroll-view'>
 			<Pad size={16} />
 
 			<Typography title='Enter Account Number' type='heading-sb' />

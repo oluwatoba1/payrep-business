@@ -15,6 +15,7 @@ type RequestProps = NativeStackScreenProps<
 >;
 
 const RequestSubmitted = ({ navigation }: RequestProps) => {
+	// const memberDetails = use
 	return (
 		<View style={styles.container}>
 			<View style={styles.iconRow}>
@@ -40,15 +41,15 @@ const RequestSubmitted = ({ navigation }: RequestProps) => {
 			<Typography title='Request Sent for Processing' style={styles.title} />
 			<Typography
 				title='The asset finance request has been submitted. Once approved, you’ll need to accept or reject the payment schedule.'
-				type='body-sr'
+				type='body-r'
 				style={styles.subtitle}
 			/>
 
 			<Divider gapY={scaleHeight(20)} />
 
 			<Button
-				title='View Request Details'
-				onPress={() => navigation.navigate("AssetDetails")}
+				title='Return'
+				onPress={() => navigation.navigate("MemberDetails", { id: "" })}
 				containerStyle={{ width: "100%" }}
 			/>
 		</View>

@@ -22,6 +22,14 @@ import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { setMemberDetails } from "@store/slices/kidashiSlice";
+import { KidashiDashboardEmptyState } from "@components/Miscellaneous";
+import { KidashiDashboardEmptyStateProps } from "@components/Miscellaneous/KidashiDashboardEmptyState";
+
+const emptyStateData: KidashiDashboardEmptyStateProps = {
+	icon: ScreenImages.kidashiHome.noTrustCircles,
+	title: "Your transactions will show here",
+	description: "No record of member's transaction available",
+};
 
 type TabType = "Transactions" | "More details" | "Account Info";
 
@@ -50,7 +58,9 @@ const MemberDetails = ({
 				cba_customer_id: route.params.id,
 			}).unwrap();
 			if (status) {
-				dispatch(setMemberDetails(data));
+				dispatch(
+					setMemberDetails({ ...data, cba_customer_id: route.params.id })
+				);
 			} else {
 				showToast("danger", message);
 				goBack();
@@ -69,7 +79,7 @@ const MemberDetails = ({
 	}, [route.params.id]);
 
 	const backAction = () => {
-		goBack();
+		navigate("Members");
 		return true; // Prevent default behavior
 	};
 
@@ -98,12 +108,7 @@ const MemberDetails = ({
 				status={memberDetails?.status}
 			/>
 			<MemberDetailsCard
-				onAssetPress={() =>
-					navigate("Assets", {
-						id: memberDetails?.id || "",
-						username: memberDetails?.first_name + " " + memberDetails?.surname,
-					})
-				}
+				onAssetPress={() => navigate("Assets")}
 				memberDetails={memberDetails}
 			/>
 			<Tab
@@ -112,7 +117,10 @@ const MemberDetails = ({
 				onTap={(value) => setActiveTab(value as TabType)}
 			/>
 			<Pad size={16} />
-			{activeTab === "Transactions" && <Transactions navigate={navigate} />}
+			{/* {activeTab === "Transactions" && <Transactions navigate={navigate} />} */}
+			{activeTab === "Transactions" && (
+				<KidashiDashboardEmptyState {...emptyStateData} />
+			)}
 			{activeTab === "More details" && <MoreDetails details={memberDetails} />}
 			{activeTab === "Account Info" && <AccountInfo details={memberDetails} />}
 			<Pressable

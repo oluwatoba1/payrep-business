@@ -184,7 +184,6 @@ export default function TrustCircleDetails({
 							.map((c, index) => (index > 2 && index < 7 ? "*" : c))
 							.join("")}
 						onSelect={() => {
-							console.log(item);
 							navigate("KidashiMembers", {
 								screen: "MemberDetails",
 								params: { id: item.cba_customer_id },

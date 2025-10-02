@@ -13,22 +13,23 @@ import { useGetAllAssetsMutation } from "@store/apis/kidashiApi";
 import useToast from "@hooks/useToast";
 import EmptyState from "@components/Miscellaneous/EmptyState";
 import ScreenImages from "@assets/images/screens";
+import { useAppSelector } from "@store/hooks";
 
 type KidashiMembersProps = CompositeScreenProps<
 	StackScreenProps<MembersStackParamList, "Assets">,
 	BottomTabScreenProps<HomeStackParamList, "Dashboard">
 >;
 
-const Assets = ({ navigation, route }: KidashiMembersProps) => {
-	const [activeTab, setActiveTab] = useState<AssetStatus>("REQUESTED");
-	const username = route.params?.username ?? "";
-	const id = route.params?.id ?? "";
+const Assets = ({ navigation }: KidashiMembersProps) => {
+	const [activeTab, setActiveTab] = useState<string>("Ongoing");
+	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
+
 	const { showToast } = useToast();
 	const [getAllAssets, { isLoading }] = useGetAllAssetsMutation();
 	const [assets, setAssets] = useState<IAsset[]>([]);
 
 	const fetchAssets = async () => {
-		getAllAssets({ filters: { woman_id: id } })
+		getAllAssets({ filters: { woman_id: memberDetails?.id || '' } })
 			.unwrap()
 			.then((res) => {
 				setAssets(res.data);
@@ -41,10 +42,17 @@ const Assets = ({ navigation, route }: KidashiMembersProps) => {
 
 	useEffect(() => {
 		fetchAssets();
-	}, [id]);
+	}, [memberDetails?.id]);
 
 	return (
-		<SafeAreaWrapper title={`Assets for ${username || "Member"}`}>
+		<SafeAreaWrapper
+			title={`Assets for ${memberDetails?.first_name || "Woman"}`}
+			backAction={() =>
+				navigation.navigate("MemberDetails", {
+					id: memberDetails?.cba_customer_id || "",
+				})
+			}
+		>
 			<Tab
 				items={["REQUESTED", "ALL"]}
 				onTap={(value) => setActiveTab(value.toUpperCase() as AssetStatus)}

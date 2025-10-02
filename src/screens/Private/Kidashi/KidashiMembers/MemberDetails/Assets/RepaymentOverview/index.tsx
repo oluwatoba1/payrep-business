@@ -183,29 +183,7 @@ const RepaymentOverview = ({
 							dividerColor={Colors.gray[300]}
 							gapX={-20}
 						/>
-						<Typography title='Payment Dates' type='body-sb' />
-						<Row justifyContent='space-between'>
-							<View style={{ flex: 1 }}>
-								<Typography title='Installment #1' type='label-r' />
-								<Typography
-									title={formatDate(installment1Date)}
-									type='body-b'
-								/>
-							</View>
-							<View style={{ width: scale(16) }} />
-							<View style={{ flex: 1 }}>
-								<Typography title='Installment #2' type='label-r' />
-								<Typography
-									title={formatDate(installment2Date)}
-									type='body-b'
-								/>
-							</View>
-						</Row>
-						<Divider
-							gapY={scaleHeight(16)}
-							dividerColor={Colors.gray[300]}
-							gapX={-20}
-						/>
+
 						<View>
 							<Typography title='Total Cost' type='body-sb' />
 							<Typography title={formatCurrency(totalCost)} type='body-b' />
