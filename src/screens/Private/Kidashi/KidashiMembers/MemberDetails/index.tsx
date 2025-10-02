@@ -50,7 +50,6 @@ const MemberDetails = ({
 				cba_customer_id: route.params.id,
 			}).unwrap();
 			if (status) {
-				console.log({ data });
 				dispatch(setMemberDetails(data));
 			} else {
 				showToast("danger", message);
