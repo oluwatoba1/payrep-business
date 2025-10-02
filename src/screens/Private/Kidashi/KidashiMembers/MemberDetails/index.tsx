@@ -92,7 +92,9 @@ const MemberDetails = ({
 		<SafeAreaWrapper backAction={backAction} title='Member Details'>
 			<MemberDetailsHeaderComp
 				onOTPManagePress={() => navigate("ManageVerfiers")}
-				userName={`${memberDetails?.first_name} ${memberDetails?.surname}`}
+				userName={`${memberDetails?.first_name || ""} ${
+					memberDetails?.surname || ""
+				}`}
 				status={memberDetails?.status}
 			/>
 			<MemberDetailsCard navigate={navigate} memberDetails={memberDetails} />

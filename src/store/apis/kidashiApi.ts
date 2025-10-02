@@ -292,7 +292,7 @@ const KidashiApi = createApi({
 			}
 		>({
 			query: (body) => ({
-				url: "woman/mobile/search",
+				url: "woman/mobile/fetch_women",
 				method: "POST",
 				body,
 			}),
