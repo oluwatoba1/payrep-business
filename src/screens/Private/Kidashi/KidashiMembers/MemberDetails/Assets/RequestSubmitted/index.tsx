@@ -8,6 +8,8 @@ import Divider from "@components/Miscellaneous/Divider";
 import Colors from "@theme/Colors";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MembersStackParamList } from "@navigation/types";
+import MemberDetails from "../..";
+import { useAppSelector } from "@store/hooks";
 
 type RequestProps = NativeStackScreenProps<
 	MembersStackParamList,
@@ -15,7 +17,7 @@ type RequestProps = NativeStackScreenProps<
 >;
 
 const RequestSubmitted = ({ navigation }: RequestProps) => {
-	// const memberDetails = use
+	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
 	return (
 		<View style={styles.container}>
 			<View style={styles.iconRow}>
@@ -49,7 +51,11 @@ const RequestSubmitted = ({ navigation }: RequestProps) => {
 
 			<Button
 				title='Return'
-				onPress={() => navigation.navigate("MemberDetails", { id: "" })}
+				onPress={() =>
+					navigation.navigate("MemberDetails", {
+						id: memberDetails?.cba_customer_id || "",
+					})
+				}
 				containerStyle={{ width: "100%" }}
 			/>
 		</View>

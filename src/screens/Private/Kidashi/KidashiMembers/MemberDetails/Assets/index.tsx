@@ -1,10 +1,10 @@
-import { View, Text } from "react-native";
-import React, { useEffect, useState } from "react";
+import { View, Text, BackHandler } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
 import SafeAreaWrapper from "@components/Layout/SafeAreaWrapper";
 import Tab from "@components/Miscellaneous/Tab";
 import Pad from "@components/Pad";
 import AssetList from "@components/UI/MemberDetails/Assets/AssetList";
-import { CompositeScreenProps } from "@react-navigation/native";
+import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { HomeStackParamList, MembersStackParamList } from "@navigation/types";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
@@ -21,7 +21,7 @@ type KidashiMembersProps = CompositeScreenProps<
 >;
 
 const Assets = ({ navigation }: KidashiMembersProps) => {
-	const [activeTab, setActiveTab] = useState<string>("Ongoing");
+	const [activeTab, setActiveTab] = useState<string>("REQUESTED");
 	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
 
 	const { showToast } = useToast();
@@ -29,7 +29,7 @@ const Assets = ({ navigation }: KidashiMembersProps) => {
 	const [assets, setAssets] = useState<IAsset[]>([]);
 
 	const fetchAssets = async () => {
-		getAllAssets({ filters: { woman_id: memberDetails?.id || '' } })
+		getAllAssets({ filters: { woman_id: memberDetails?.id || "" } })
 			.unwrap()
 			.then((res) => {
 				setAssets(res.data);
@@ -44,14 +44,28 @@ const Assets = ({ navigation }: KidashiMembersProps) => {
 		fetchAssets();
 	}, [memberDetails?.id]);
 
+	const backAction = () => {
+		navigation.navigate("MemberDetails", {
+			id: memberDetails?.cba_customer_id || "",
+		});
+		return true; // Prevent default behavior
+	};
+
+	useFocusEffect(
+		useCallback(() => {
+			const backHandler = BackHandler.addEventListener(
+				"hardwareBackPress",
+				backAction
+			);
+
+			return () => backHandler.remove(); // Cleanup
+		}, [])
+	);
+
 	return (
 		<SafeAreaWrapper
 			title={`Assets for ${memberDetails?.first_name || "Woman"}`}
-			backAction={() =>
-				navigation.navigate("MemberDetails", {
-					id: memberDetails?.cba_customer_id || "",
-				})
-			}
+			backAction={backAction}
 		>
 			<Tab
 				items={["REQUESTED", "ALL"]}
@@ -66,12 +80,8 @@ const Assets = ({ navigation }: KidashiMembersProps) => {
 					title='No assets found'
 				/>
 			)}
-			{activeTab === "REQUESTED" && (
-				<AssetList status='REQUESTED' assets={assets} navigation={navigation} />
-			)}
-			{activeTab === "ALL" && (
-				<AssetList assets={assets} navigation={navigation} />
-			)}
+
+			<AssetList status={activeTab} assets={assets} navigation={navigation} />
 		</SafeAreaWrapper>
 	);
 };

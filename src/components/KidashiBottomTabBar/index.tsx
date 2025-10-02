@@ -97,6 +97,7 @@ export default function KidashiBottomTabBar({
 		"KidashiDashboard",
 		"TrustCircles",
 		"KidashiMembers",
+		"Members",
 	];
 
 	const bottomTabResolver = (): boolean => {

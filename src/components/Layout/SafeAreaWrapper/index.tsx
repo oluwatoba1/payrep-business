@@ -1,4 +1,4 @@
-import { View, Image, Pressable, ScrollView } from "react-native";
+import { View, Image, Pressable, ScrollView, Keyboard } from "react-native";
 import React from "react";
 import { styles } from "./style";
 import ScreenImages from "@assets/images/screens";
@@ -6,6 +6,7 @@ import { Typography } from "@components/Forms";
 import { useNavigation } from "@react-navigation/native";
 import Divider from "@components/Miscellaneous/Divider";
 import { scaleHeight } from "@utils/Helpers";
+import LogoLoader from "../LogoLoader";
 
 interface SafeAreaWrapperProps {
 	children: React.ReactNode;
@@ -33,7 +34,14 @@ const SafeAreaWrapper = ({
 		: { style: styles.content };
 
 	return (
-		<View style={styles.container}>
+		<View
+			onStartShouldSetResponder={() => {
+				Keyboard.dismiss();
+				return false;
+			}}
+			style={styles.container}
+		>
+			<LogoLoader isLoading={isLoading} title='' />
 			<View style={styles.header}>
 				<Pressable onPress={backAction || (() => navigation.goBack())}>
 					<Image

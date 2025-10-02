@@ -77,14 +77,13 @@ const AssetDetails = ({
 							? `₦ ${assetDetails.value.toLocaleString()}`
 							: undefined
 					}
-					reference={assetDetails?.id}
+					reference={assetDetails?.product_code || ""}
 				/>
 				<AssetStatusCard status={assetDetails?.status || "ALL"} />
 				<AssetDetailList
 					memberName={`${assetDetails?.woman__first_name ?? ""} ${
 						assetDetails?.woman__surname ?? ""
 					}`.trim()}
-					trustCircle={assetDetails?.product_code ?? ""}
 					date={assetDetails?.created_at?.split("T")[0]}
 					time={assetDetails?.created_at?.split("T")[1]?.slice(0, 5)}
 					items={(assetDetails?.items_requested ?? []).map((it) => ({

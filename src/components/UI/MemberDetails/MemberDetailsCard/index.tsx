@@ -38,7 +38,7 @@ const OutstandingCard = () => {
 			/>
 
 			<Typography
-				title={formatCurrency(10)}
+				title={formatCurrency(0)}
 				type='body-sb'
 				color={Colors.black}
 			/>

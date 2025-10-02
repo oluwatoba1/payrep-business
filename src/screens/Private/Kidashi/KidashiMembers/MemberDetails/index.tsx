@@ -28,7 +28,7 @@ import { KidashiDashboardEmptyStateProps } from "@components/Miscellaneous/Kidas
 const emptyStateData: KidashiDashboardEmptyStateProps = {
 	icon: ScreenImages.kidashiHome.noTrustCircles,
 	title: "Your transactions will show here",
-	description: "No record of member's transaction available",
+	description: "No record of member's transactions available",
 };
 
 type TabType = "Transactions" | "More details" | "Account Info";

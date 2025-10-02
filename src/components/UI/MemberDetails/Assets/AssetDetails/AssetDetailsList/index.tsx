@@ -58,16 +58,6 @@ const AssetDetailList = ({
 					<Divider gapY={scaleHeight(8)} />
 
 					<View style={styles.detailRow}>
-						<Typography
-							title='Trust Circle'
-							type='body-r'
-							color={Colors.gray[400]}
-						/>
-						<Typography title={trustCircle} type='body-sb' />
-					</View>
-					<Divider gapY={scaleHeight(8)} />
-
-					<View style={styles.detailRow}>
 						<Typography title='Date' type='body-r' color={Colors.gray[400]} />
 						<Typography title={date} type='body-sb' />
 					</View>
