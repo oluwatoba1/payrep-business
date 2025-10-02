@@ -13,6 +13,7 @@ import {
 } from "@components/Miscellaneous";
 import { KidashiDashboardEmptyStateProps } from "@components/Miscellaneous/KidashiDashboardEmptyState";
 import { HomeStackParamList, MembersStackParamList } from "@navigation/types";
+import { useSearchWomanMutation } from "@store/apis/kidashiApi";
 
 type KidashiMembersProps = CompositeScreenProps<
 	StackScreenProps<MembersStackParamList, "Members">,
@@ -23,6 +24,8 @@ export default function Members({
 	navigation: { navigate },
 }: KidashiMembersProps) {
 	const [searchText, setSearchText] = useState("");
+	const [searchWoman, { isLoading: isLoadingSearchWoman }] =
+		useSearchWomanMutation();
 
 	const emptyStateData: KidashiDashboardEmptyStateProps = {
 		icon: ScreenImages.kidashiHome.searchIcon,

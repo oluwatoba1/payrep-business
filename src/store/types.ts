@@ -934,7 +934,7 @@ interface IWomen {
 }
 
 interface IWomanDetails {
-	woman_id: string;
+	id: string;
 	first_name: string;
 	other_name: string;
 	surname: string;
@@ -954,6 +954,9 @@ interface IWomanDetails {
 	lga: string;
 	nin: string;
 	state: string;
+	maximum_balance: string;
+	tier: string;
+	dob: string;
 }
 
 interface ITrustCircleDetail {
