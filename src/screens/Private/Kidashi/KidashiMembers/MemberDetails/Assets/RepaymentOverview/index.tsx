@@ -115,6 +115,9 @@ const RepaymentOverview = ({
 				"danger",
 				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
 			);
+		} finally {
+			setShowOtpModal(false);
+			setOtp("");
 		}
 	};
 

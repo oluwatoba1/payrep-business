@@ -1,38 +1,30 @@
 import Colors from "@theme/Colors";
 
-export const getStatusColor = (status: string) => {
+export const getStatusColor = (status: AssetStatus) => {
 	switch (status) {
-		case "ongoing":
+		case "REQUESTED":
 			return {
 				backgroundColor: Colors.primary[100],
 				color: Colors.cardColor.brown["200"],
 			};
-		case "approved":
+		case "APPROVED":
 			return {
 				backgroundColor: Colors.success[50],
 				color: Colors.success["base"],
 			};
-		case "pending approval":
+		case "QUERIED":
 			return {
 				backgroundColor: Colors.primary[100],
 				color: Colors.cardColor.brown["200"],
 			};
-		case "denied":
+
+		case "FAILED":
 			return {
-				backgroundColor: Colors.danger[100],
+				backgroundColor: Colors.danger[50],
 				color: Colors.danger["base"],
 			};
-		case "repaid":
-			return {
-				backgroundColor: Colors.success[50],
-				color: Colors.success["base"],
-			};
-		case "cancelled":
-			return {
-				backgroundColor: Colors.neutral[50],
-				color: Colors.neutral["base"],
-			};
-		case "rejected":
+
+		case "REJECTED":
 			return {
 				backgroundColor: Colors.pink[50],
 				color: Colors.pink[200],

@@ -46,12 +46,12 @@ const OutstandingCard = () => {
 	);
 };
 
-const AssetsCard = ({ navigate }: { navigate: (screen: string) => void }) => {
+const AssetsCard = ({ onAssetPress }: { onAssetPress: () => void }) => {
 	const isOngoing = true;
 	return (
 		<Pressable
 			onPress={() => {
-				navigate("Assets");
+				onAssetPress();
 			}}
 			style={[styles.card, { backgroundColor: Colors.neutral["50"] }]}
 		>
@@ -80,17 +80,18 @@ const AssetsCard = ({ navigate }: { navigate: (screen: string) => void }) => {
 };
 
 const MemberDetailsCard = ({
-	navigate,
+	onAssetPress,
 	memberDetails,
 }: {
-	navigate: (screen: string) => void;
 	memberDetails: IWomanDetails | null;
+	onAssetPress: () => void;
 }) => {
+	// console.log(memberDetails);
 	return (
 		<View>
 			<Divider gapY={scaleHeight(10)} gapX={scale(-10)} />
 			<Row containerStyle={styles.cardContainer}>
-				<AssetsCard navigate={navigate} />
+				<AssetsCard onAssetPress={onAssetPress} />
 				<OutstandingCard />
 			</Row>
 			<Divider gapY={scaleHeight(10)} gapX={scale(-10)} />

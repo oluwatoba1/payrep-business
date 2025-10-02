@@ -97,7 +97,15 @@ const MemberDetails = ({
 				}`}
 				status={memberDetails?.status}
 			/>
-			<MemberDetailsCard navigate={navigate} memberDetails={memberDetails} />
+			<MemberDetailsCard
+				onAssetPress={() =>
+					navigate("Assets", {
+						id: memberDetails?.id || "",
+						username: memberDetails?.first_name + " " + memberDetails?.surname,
+					})
+				}
+				memberDetails={memberDetails}
+			/>
 			<Tab
 				items={["Transactions", "More details", "Account Info"]}
 				value={activeTab}

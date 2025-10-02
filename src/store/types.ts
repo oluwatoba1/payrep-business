@@ -1017,3 +1017,35 @@ interface iWomanMemberDetails {
 	vendor_id: string;
 	id: string;
 }
+
+interface IAsset {
+	id: string;
+	created_at: string;
+	items_requested: { name: string; price: string }[];
+	loan_id: string | null;
+	markup: number;
+	name: string | null;
+	product_code: string | null;
+	status: AssetStatus;
+	value: number;
+	vendor__first_name?: string;
+	vendor__id?: string;
+	vendor__surname?: string;
+	woman__first_name?: string;
+	woman__id?: string;
+	woman__surname?: string;
+	asset_id?: string;
+	vendor_id?: string;
+	woman_id?: string;
+	date?: string;
+	start_date?: string;
+	end_date?: string;
+}
+
+type AssetStatus =
+	| "REQUESTED"
+	| "QUERIED"
+	| "APPROVED"
+	| "REJECTED"
+	| "FAILED"
+	| "ALL";

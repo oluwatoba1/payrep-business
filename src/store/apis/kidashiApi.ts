@@ -297,6 +297,23 @@ const KidashiApi = createApi({
 				body,
 			}),
 		}),
+		getAllAssets: builder.mutation<AuthResponse<IAsset[]>, { filters: any }>({
+			query: (body) => ({
+				url: "asset/mobile/fetch_assets",
+				method: "POST",
+				body,
+			}),
+		}),
+		getAssetDetails: builder.mutation<
+			AuthResponse<IAsset>,
+			{ asset_id?: string; loan_id?: string }
+		>({
+			query: (body) => ({
+				url: "asset/mobile/get_asset",
+				method: "POST",
+				body,
+			}),
+		}),
 	}),
 });
 
@@ -324,6 +341,8 @@ export const {
 	useAddMemberToTrustCircleMutation,
 	useGetWomanDetailsMutation,
 	useSearchWomanMutation,
+	useGetAllAssetsMutation,
+	useGetAssetDetailsMutation,
 } = KidashiApi;
 
 export default KidashiApi;
