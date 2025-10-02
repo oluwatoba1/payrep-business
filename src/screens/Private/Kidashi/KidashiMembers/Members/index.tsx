@@ -22,6 +22,7 @@ import { KidashiMemberItemCard } from "@components/Cards";
 import { useAppSelector } from "@store/hooks";
 import { scale } from "@utils/Helpers";
 import { StyleSheet } from "react-native";
+import { styles } from "./styles";
 
 type KidashiMembersProps = CompositeScreenProps<
 	StackScreenProps<MembersStackParamList, "Members">,
@@ -112,10 +113,3 @@ export default function Members({
 		</KidashiLayout>
 	);
 }
-
-const styles = StyleSheet.create({
-	proceedToMemberIcon: {
-		width: scale(20),
-		height: scale(20),
-	},
-});
