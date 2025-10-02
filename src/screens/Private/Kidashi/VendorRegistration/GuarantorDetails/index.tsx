@@ -54,6 +54,7 @@ export default function GuarantorDetails({
 		setLga,
 		setEmail,
 		guarantors,
+		setGuarantors,
 		guarantorNumber,
 		setNin,
 		setRelationship,
@@ -85,6 +86,7 @@ export default function GuarantorDetails({
 		DefaultDropdownOption | undefined
 	>(undefined);
 	const [agreed, setAgreed] = useState<boolean>(false);
+	const [clearDateField, setClearDateField] = useState<boolean>(false);
 
 	const _fetchLgas = async () => {
 		try {
@@ -112,6 +114,7 @@ export default function GuarantorDetails({
 			setSelectedLga(undefined);
 			setSelectedRelationship(undefined);
 			setDateOfBirth(undefined);
+			setClearDateField(true);
 			dispatch(setRegistrationDetails({ guarantors }));
 			guarantors.length === 2 && navigate("ReviewDetails");
 		});
@@ -146,7 +149,7 @@ export default function GuarantorDetails({
 	return (
 		<MainLayout
 			keyboardAvoidingType='scroll-view'
-			backAction={() => navigate("VendorItems")}
+			backAction={() => [setGuarantors([]), navigate("VendorItems")]}
 		>
 			<Stepper steps={3} currentStep={3} />
 
@@ -247,7 +250,7 @@ export default function GuarantorDetails({
 					type='phone'
 					label='Phone Number'
 					keyboardType='numeric'
-					placeholder='Ex: 8000000000'
+					placeholder='Ex: 08012345678'
 					value={
 						gurantorDetails[guarantorNumber - 1]?.phone || formData.phoneNumber
 					}
@@ -262,6 +265,7 @@ export default function GuarantorDetails({
 					label='Date of Birth'
 					onDateChange={setDateOfBirth}
 					error={formErrors.dateOfBirth}
+					clearDateField={clearDateField}
 				/>
 
 				<Pad size={12} />

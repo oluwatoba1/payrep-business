@@ -160,16 +160,13 @@ export default function Dashboard({
 			}).unwrap();
 
 			if (status) {
-				console.log(data);
 				dispatch(setVendor(data));
-			} else {
-				showToast("danger", message);
 			}
 		} catch (error: ErrorResponse | any) {
-			showToast(
-				"danger",
-				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
-			);
+			// showToast(
+			// 	"danger",
+			// 	error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			// );
 		}
 	};
 
