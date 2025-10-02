@@ -3,13 +3,14 @@ import { IconButton, TextInput, Typography } from "@components/Forms";
 import { Row } from "@components/Layout";
 import Colors from "@theme/Colors";
 import styles from "./styles";
-import { Image } from "react-native";
+import { ActivityIndicator, Image } from "react-native";
 
 interface SearchContainerProps {
 	searchText: string;
 	setSearchText: (text: string) => void;
 	onSearch: () => void;
 	placeholder: string;
+	isLoading?: boolean;
 }
 
 export default function SearchContainer({
@@ -17,6 +18,7 @@ export default function SearchContainer({
 	setSearchText,
 	onSearch,
 	placeholder,
+	isLoading,
 }: SearchContainerProps) {
 	return (
 		<Row gap={8} alignItems='center' containerStyle={styles.searchContainer}>
@@ -39,16 +41,25 @@ export default function SearchContainer({
 					) : null
 				}
 			/>
-			<IconButton containerStyle={styles.searchButton} onPress={onSearch}>
+
+			<IconButton
+				containerStyle={styles.searchButton}
+				onPress={onSearch}
+				disabled={isLoading}
+			>
 				<Image
 					source={ScreenImages.kidashiHome.searchIcon}
 					style={styles.searchIcon}
 				/>
-				<Typography
-					title='Search'
-					type='body-sb'
-					color={Colors.danger["700"]}
-				/>
+				{isLoading ? (
+					<ActivityIndicator />
+				) : (
+					<Typography
+						title='Search'
+						type='body-sb'
+						color={Colors.danger["700"]}
+					/>
+				)}
 			</IconButton>
 		</Row>
 	);
