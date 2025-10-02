@@ -36,8 +36,6 @@ const RepaymentOverview = ({
 		(state) => state.kidashi
 	);
 
-	console.log("====>>>", vendor);
-
 	const [showOtpModal, setShowOtpModal] = useState(false);
 	const [otp, setOtp] = useState<string>("");
 
@@ -73,7 +71,7 @@ const RepaymentOverview = ({
 		try {
 			const { status, message } = await generateOtp({
 				purpose: "ASSET_REQUEST",
-				recipient: memberDetails?.mobile_number || "",
+				recipient: memberDetails?.phone || "",
 				subject_id: vendor?.id || "",
 				channel: "sms",
 			}).unwrap();
