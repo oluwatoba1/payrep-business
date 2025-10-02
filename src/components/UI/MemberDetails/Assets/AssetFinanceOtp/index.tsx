@@ -133,7 +133,6 @@ const AssetFinanceOtp = ({
 				onPress={handleVerify}
 				disabled={otp.length !== 4}
 			/>
-			<Pad size={10} />
 		</ModalWrapper>
 	);
 };

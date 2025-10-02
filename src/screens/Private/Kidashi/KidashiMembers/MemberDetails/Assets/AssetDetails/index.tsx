@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import SafeAreaWrapper from "@components/Layout/SafeAreaWrapper";
 import AssetDetailsHeader from "@components/UI/MemberDetails/Assets/AssetDetails/AssetDetailsHeader";
@@ -12,32 +12,62 @@ import { Button } from "@components/Forms";
 import CancelRequestModal from "@components/UI/MemberDetails/Assets/AssetDetails/CancelRequestModal";
 import { StackScreenProps } from "@react-navigation/stack";
 import { MembersStackParamList } from "@navigation/types";
-export type Status =
-	| "approved"
-	| "pending approval"
-	| "rejected"
-	| "ongoing"
-	| "denied"
-	| "repaid"
-	| "cancelled";
+import { useGetAssetDetailsMutation } from "@store/apis/kidashiApi";
+
 type AssetDetailsProps = StackScreenProps<
 	MembersStackParamList,
 	"AssetDetails"
 >;
 
 const AssetDetails = ({ route }: AssetDetailsProps) => {
-	const status: Status =
-		(route?.params?.status as Status) ?? "pending approval";
+	const asset_id = route?.params?.asset_id ?? "";
 	const [cancelRequestModalVisible, setCancelRequestModalVisible] =
 		useState(false);
+	const [getAssetDetails, { isLoading }] = useGetAssetDetailsMutation();
+	const [assetDetails, setAssetDetails] = useState<IAsset | null>(null);
+	const fetchAssetDetails = async () => {
+		const { status, data } = await getAssetDetails({
+			asset_id,
+		}).unwrap();
+		if (status) {
+			setAssetDetails(data);
+		}
+	};
+	useEffect(() => {
+		if (asset_id) fetchAssetDetails();
+	}, [asset_id]);
 	return (
 		<SafeAreaWrapper title='Asset Details'>
 			<ScrollView showsVerticalScrollIndicator={false}>
-				<AssetDetailsHeader />
-				<AssetStatusCard status={status} />
-				<AssetDetailList status={status} />
+				<AssetDetailsHeader
+					amount={
+						assetDetails
+							? `₦ ${assetDetails.value.toLocaleString()}`
+							: undefined
+					}
+					reference={assetDetails?.id}
+				/>
+				<AssetStatusCard status={assetDetails?.status || "ALL"} />
+				<AssetDetailList
+					memberName={`${assetDetails?.woman__first_name ?? ""} ${
+						assetDetails?.woman__surname ?? ""
+					}`.trim()}
+					trustCircle={assetDetails?.product_code ?? ""}
+					date={assetDetails?.created_at?.split("T")[0]}
+					time={assetDetails?.created_at?.split("T")[1]?.slice(0, 5)}
+					items={(assetDetails?.items_requested ?? []).map((it) => ({
+						name: it.name,
+						amount: `₦ ${Number(it.price).toLocaleString()}`,
+					}))}
+					total={
+						assetDetails
+							? `₦ ${assetDetails.value.toLocaleString()}`
+							: undefined
+					}
+					status={assetDetails?.status || "ALL"}
+				/>
 			</ScrollView>
-			{status === "pending approval" && (
+			{assetDetails?.status === "REQUESTED" && (
 				<Button
 					title='Cancel Request'
 					containerStyle={styles.rejectedCardContainer}

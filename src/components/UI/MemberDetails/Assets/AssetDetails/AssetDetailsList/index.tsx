@@ -26,16 +26,12 @@ interface AssetDetailListProps {
 }
 
 const AssetDetailList = ({
-	memberName = "Zainab Abubakar",
-	trustCircle = "Ladi Cooperative Group",
-	date = "15 August 2025",
-	time = "10:45 AM",
-	items = [
-		{ name: "Packaged Rice & Beans", amount: "₦ 25,000.00" },
-		{ name: "Palm Oil & Groundnut Oil", amount: "₦ 13,000.00" },
-		{ name: "Fresh Vegetables", amount: "₦ 8,000.00" },
-	],
-	total = "₦ 46,000.00",
+	memberName = "",
+	trustCircle = "",
+	date = "",
+	time = "",
+	items = [],
+	total = "",
 	status,
 }: AssetDetailListProps) => {
 	return (

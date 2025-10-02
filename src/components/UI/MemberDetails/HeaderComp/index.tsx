@@ -39,7 +39,7 @@ const MemberDetailsHeaderComp = ({
 			</View>
 
 			{/* OTP Status Bar */}
-			{status === "PENDING" && (
+			{status === "INACTIVE" && (
 				<TouchableOpacity
 					style={styles.otpStatusBar}
 					onPress={onOTPManagePress}

@@ -71,10 +71,10 @@ export type TrustCircleStackParamList = {
 
 export type MembersStackParamList = {
 	Members: undefined;
-	MemberDetails: {id: string};
+	MemberDetails: { id: string };
 	TransactionDetails: undefined;
-	Assets: undefined;
-	AssetDetails: { status: string } | undefined;
+	Assets: { id: string; username: string };
+	AssetDetails: { asset_id: string } | undefined;
 	EnterAssetInformation: undefined;
 	ReviewAssetRequest: { items: { id: string; name: string; price: string }[] };
 	RepaymentOverview: undefined;

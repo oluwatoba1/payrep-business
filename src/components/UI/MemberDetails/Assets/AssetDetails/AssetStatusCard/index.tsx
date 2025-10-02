@@ -8,7 +8,6 @@ import ProgressBar from "@components/Forms/ProgressBar";
 import Colors from "@theme/Colors";
 import { scaleHeight, scale } from "@utils/Helpers";
 import Pad from "@components/Pad";
-import { Status } from "@screens/Private/Kidashi/KidashiMembers/MemberDetails/Assets/AssetDetails";
 
 const OngoingCard = () => {
 	return (
@@ -208,7 +207,7 @@ const RejectedCard = () => {
 	);
 };
 
-const AssetStatusCard = ({ status }: { status: Status }) => {
+const AssetStatusCard = ({ status }: { status: AssetStatus }) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.assetStatusContainerView}>
@@ -225,10 +224,10 @@ const AssetStatusCard = ({ status }: { status: Status }) => {
 				/>
 			</View>
 			<Pad size={scaleHeight(8)} />
-			{status === "approved" && <ApprovedCard />}
-			{status === "ongoing" && <OngoingCard />}
-			{status === "denied" && <DeniedCard />}
-			{status === "rejected" && <RejectedCard />}
+			{status === "APPROVED" && <ApprovedCard />}
+			{status === "REQUESTED" && <OngoingCard />}
+			{status === "REJECTED" && <DeniedCard />}
+			{status === "FAILED" && <RejectedCard />}
 		</View>
 	);
 };
