@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
@@ -13,6 +13,7 @@ interface CustomDatePickerProps {
 	label: string;
 	onDateChange: (date: string) => void;
 	error?: string;
+	clearDateField?: boolean;
 }
 
 function formatDate(date: Date): string {
@@ -25,6 +26,7 @@ export default function DateField({
 	label,
 	onDateChange,
 	error = "",
+	clearDateField = false,
 }: CustomDatePickerProps) {
 	const [date, setDate] = useState<Date | undefined>(undefined);
 	const [show, setShow] = useState(false);
@@ -37,6 +39,10 @@ export default function DateField({
 			selectedDate && onDateChange(formatDate(selectedDate));
 		}
 	};
+
+	useEffect(() => {
+		clearDateField && setDate(undefined);
+	}, [clearDateField]);
 
 	return (
 		<View style={styles.container}>

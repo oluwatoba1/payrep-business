@@ -156,6 +156,7 @@ const useGuarantorDetails = () => {
 	return {
 		formData,
 		formErrors,
+		setGuarantors,
 		guarantors,
 		guarantorNumber,
 		validateForm,
