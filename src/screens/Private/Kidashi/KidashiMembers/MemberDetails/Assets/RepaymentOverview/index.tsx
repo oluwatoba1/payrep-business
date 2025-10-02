@@ -77,7 +77,7 @@ const RepaymentOverview = ({
 				channel: "sms",
 			}).unwrap();
 			if (status) {
-				navigate("RequestSubmitted");
+				showToast("success", "OTP has been sent to member");
 			} else {
 				showToast("danger", message);
 			}
