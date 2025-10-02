@@ -45,7 +45,7 @@ const AccountInfo = ({ details }: AccountInfoProps) => {
 			<Row>
 				<Typography title='Maximum Balance' type='body-r' />
 				<Typography
-					title={`${addCommas(details?.maximum_balance || 0)}` || ""}
+					title={`₦${addCommas(details?.maximum_balance || 0)}` || ""}
 					type='body-r'
 				/>
 			</Row>

@@ -114,7 +114,7 @@ export default function GuarantorDetails({
 			setSelectedLga(undefined);
 			setSelectedRelationship(undefined);
 			setDateOfBirth(undefined);
-			setClearDateField(true);
+
 			dispatch(setRegistrationDetails({ guarantors }));
 			guarantors.length === 2 && navigate("ReviewDetails");
 		});
@@ -251,9 +251,7 @@ export default function GuarantorDetails({
 					label='Phone Number'
 					keyboardType='numeric'
 					placeholder='Ex: 08012345678'
-					value={
-						gurantorDetails[guarantorNumber - 1]?.phone || formData.phoneNumber
-					}
+					value={formData.phoneNumber}
 					onChangeText={setPhoneNumber}
 					maxLength={11}
 					error={formErrors.phoneNumber}
@@ -265,7 +263,6 @@ export default function GuarantorDetails({
 					label='Date of Birth'
 					onDateChange={setDateOfBirth}
 					error={formErrors.dateOfBirth}
-					clearDateField={clearDateField}
 				/>
 
 				<Pad size={12} />
@@ -274,7 +271,7 @@ export default function GuarantorDetails({
 					label='Email'
 					placeholder='e.g. zababubakarr@gmail.com'
 					onChangeText={setEmail}
-					value={gurantorDetails[guarantorNumber - 1]?.email || formData.email}
+					value={formData.email}
 					error={formErrors.email}
 					autoCapitalize='none'
 				/>
@@ -287,7 +284,7 @@ export default function GuarantorDetails({
 					placeholder='Ex: 12345678901'
 					maxLength={11} // adjust if NIN length differs
 					onChangeText={setNin}
-					value={gurantorDetails[guarantorNumber - 1]?.nin || formData.nin}
+					value={formData.nin}
 					error={formErrors.nin}
 				/>
 
