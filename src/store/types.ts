@@ -938,7 +938,7 @@ interface IWomanDetails {
 	first_name: string;
 	other_name: string;
 	surname: string;
-	phone: string;
+	mobile_number: string;
 	account_number: string;
 	email: string;
 	date: string;

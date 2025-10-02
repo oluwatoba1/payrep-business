@@ -70,7 +70,7 @@ const RepaymentOverview = ({
 		try {
 			const { status, message } = await generateOtp({
 				purpose: "ASSET_REQUEST",
-				recipient: memberDetails?.phone || "",
+				recipient: memberDetails?.mobile_number || "",
 				subject_id: vendor?.id || "",
 				channel: "sms",
 			}).unwrap();
@@ -231,6 +231,7 @@ const RepaymentOverview = ({
 				onVerify={submit}
 				otp={otp}
 				setOtp={setOtp}
+				phone={memberDetails?.mobile_number || ""}
 			/>
 		</SafeAreaWrapper>
 	);
