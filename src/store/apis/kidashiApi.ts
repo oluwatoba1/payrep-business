@@ -323,6 +323,7 @@ export const {
 	useWomanUploadMeansofIdentificationMutation,
 	useAddMemberToTrustCircleMutation,
 	useGetWomanDetailsMutation,
+	useSearchWomanMutation,
 } = KidashiApi;
 
 export default KidashiApi;

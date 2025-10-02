@@ -87,7 +87,7 @@ const MemberDetails = ({
 		}, [])
 	);
 
-	console.log({ memberDetails });
+	// console.log({ memberDetails });
 
 	return (
 		<SafeAreaWrapper backAction={backAction} title='Member Details'>

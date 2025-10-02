@@ -74,7 +74,7 @@ const AssetFinanceOtp = ({
 
 			<Pad size={scaleHeight(8)} />
 
-			<PinPad pin={otp} onInput={setOtp} codeLength={6} />
+			<PinPad pin={otp} onInput={setOtp} codeLength={4} />
 
 			<Pad size={scaleHeight(8)} />
 
@@ -123,7 +123,7 @@ const AssetFinanceOtp = ({
 					<Button
 						title='Verify'
 						onPress={handleVerify}
-						disabled={otp.length !== 6}
+						disabled={otp.length !== 4}
 					/>
 				</View>
 			</Row>

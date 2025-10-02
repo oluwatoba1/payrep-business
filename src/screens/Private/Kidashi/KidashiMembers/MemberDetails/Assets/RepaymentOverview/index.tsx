@@ -71,7 +71,7 @@ const RepaymentOverview = ({
 		try {
 			const { status, message } = await generateOtp({
 				purpose: "ASSET_REQUEST",
-				recipient: memberDetails?.phone || "",
+				recipient: memberDetails?.mobile_number || "",
 				subject_id: vendor?.id || "",
 				channel: "sms",
 			}).unwrap();
@@ -91,10 +91,11 @@ const RepaymentOverview = ({
 	};
 
 	const submit = async () => {
+		console.log("====>>>", "submit", memberDetails);
 		try {
 			const { status, message } = await createAsset({
 				vendor_id: vendor?.id || "",
-				woman_id: memberDetails?.woman_id || "",
+				woman_id: memberDetails?.id || "",
 				loan_product_code: "Asset001",
 				value: assetRequest.value || "0",
 				markup: String(
@@ -109,6 +110,7 @@ const RepaymentOverview = ({
 				showToast("danger", message);
 			}
 		} catch (error: ErrorResponse | any) {
+			console.log("====>>>", "Submit error", error);
 			showToast(
 				"danger",
 				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
