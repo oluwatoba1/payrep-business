@@ -980,7 +980,7 @@ interface iWomanAccount {
 interface IAssetRequest {
 	vendor_id: string;
 	woman_id: string;
-	loan_product_code: string;
+	product_code: string;
 	value: string;
 	markup: string;
 	items_requested: {
