@@ -16,6 +16,7 @@ interface AssetFinanceOtpProps {
 	onVerify: () => void;
 	otp: string;
 	setOtp: (otp: string) => void;
+	phone: string;
 }
 
 const AssetFinanceOtp = ({
@@ -24,9 +25,9 @@ const AssetFinanceOtp = ({
 	onVerify,
 	otp,
 	setOtp,
+	phone,
 }: AssetFinanceOtpProps) => {
 	const maskedPhone = useMemo(() => {
-		const phone = "09012341234";
 		return `${phone.slice(0, 3)}**** ${phone.slice(-4)}`;
 	}, []);
 
@@ -111,7 +112,7 @@ const AssetFinanceOtp = ({
 
 			<Pad size={scaleHeight(12)} />
 
-			<Row gap={12}>
+			{/* <Row gap={12}>
 				<View style={{ flex: 1 }}>
 					<Button
 						title='Complete Later'
@@ -126,7 +127,12 @@ const AssetFinanceOtp = ({
 						disabled={otp.length !== 4}
 					/>
 				</View>
-			</Row>
+			</Row> */}
+			<Button
+				title='Verify'
+				onPress={handleVerify}
+				disabled={otp.length !== 4}
+			/>
 			<Pad size={10} />
 		</ModalWrapper>
 	);

@@ -236,6 +236,7 @@ const RepaymentOverview = ({
 				onVerify={submit}
 				otp={otp}
 				setOtp={setOtp}
+				phone={memberDetails?.mobile_number || ""}
 			/>
 		</SafeAreaWrapper>
 	);
