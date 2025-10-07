@@ -62,6 +62,7 @@ export default function MemberEmailVerification({
 				email,
 				mobile_number: mobileNumber,
 				otp,
+				type: "individual",
 			}).unwrap();
 			if (status) {
 				navigate("MemberMeansOfVerification");
