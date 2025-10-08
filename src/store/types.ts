@@ -230,6 +230,18 @@ interface ChangePasswordCredentials {
 	new_password: string;
 }
 
+interface ChangePinCredentials {
+	customer_id: string;
+	current_pin: string;
+	new_pin: string;
+}
+
+interface ResetPinCredentials {
+	customer_id: string;
+	verification_id: string;
+	new_pin: string;
+}
+
 interface RegisterDeviceCredentials {
 	username: string;
 	otp: string;

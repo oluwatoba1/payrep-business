@@ -199,6 +199,10 @@ export type MoreStackParamList = {
 		disputeId: string;
 	};
 	AddAccount: undefined;
+	ChangePin: undefined;
+	OtpVerification: undefined;
+	PinChangeFacialVerification: undefined;
+	NewPin: { verification_id: string };
 };
 
 export type SupportStackParamList = {

@@ -30,6 +30,10 @@ import {
 	ListDisputesScreen,
 	ViewDisputeScreen,
 	AddAccount,
+	ChangePin,
+	OtpVerification,
+	PinChangeFacialVerification,
+	NewPin,
 } from "../../screens/Private/More";
 
 const Stack = createNativeStackNavigator<MoreStackParamList>();
@@ -88,6 +92,13 @@ export default function MoreStackNavigator() {
 			<Stack.Screen name='ListDisputesScreen' component={ListDisputesScreen} />
 			<Stack.Screen name='ViewDisputeScreen' component={ViewDisputeScreen} />
 			<Stack.Screen name='AddAccount' component={AddAccount} />
+			<Stack.Screen name='ChangePin' component={ChangePin} />
+			<Stack.Screen name='OtpVerification' component={OtpVerification} />
+			<Stack.Screen
+				name='PinChangeFacialVerification'
+				component={PinChangeFacialVerification}
+			/>
+			<Stack.Screen name='NewPin' component={NewPin} />
 		</Stack.Navigator>
 	);
 }
