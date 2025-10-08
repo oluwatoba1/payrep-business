@@ -166,6 +166,7 @@ export default function KidashiDashboard({
 	return (
 		<KidashiLayout
 			rightAction={() => navigate("Dashboard")}
+			goToNotification={() => navigate("KidashiNotifications")}
 			headerFooter={
 				<Row
 					alignItems='center'

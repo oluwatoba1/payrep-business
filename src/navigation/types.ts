@@ -56,6 +56,7 @@ export type KidashiHomeStackParamList = {
 	KidashiDashboard: undefined;
 	KidashiRegistration: undefined;
 	MemberRegistration: NavigatorScreenParams<MemberRegistrationStackParamList>;
+	KidashiNotifications: undefined;
 };
 
 export type TrustCircleStackParamList = {

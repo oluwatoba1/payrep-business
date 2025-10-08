@@ -68,6 +68,8 @@ const MemberDetails = ({
 		fetchDetails();
 	}, [route.params.id]);
 
+	console.log({ memberDetails });
+
 	const backAction = () => {
 		goBack();
 		return true; // Prevent default behavior
