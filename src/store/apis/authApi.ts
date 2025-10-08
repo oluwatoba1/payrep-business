@@ -92,6 +92,20 @@ const AuthApi = createApi({
 				body,
 			}),
 		}),
+		pinChange: builder.mutation<AuthResponse<null>, ChangePinCredentials>({
+			query: (body) => ({
+				url: "auth/mobile/change_pin",
+				method: "POST",
+				body,
+			}),
+		}),
+		resetPin: builder.mutation<AuthResponse<null>, ResetPinCredentials>({
+			query: (body) => ({
+				url: "auth/mobile/reset_pin",
+				method: "POST",
+				body,
+			}),
+		}),
 		deactivateAccount: builder.mutation<
 			AuthResponse<null>,
 			DeactivateAccountCredentials
@@ -203,6 +217,8 @@ export const {
 	useInitiatePasswordResetMutation,
 	usePasswordResetMutation,
 	usePasswordChangeMutation,
+	usePinChangeMutation,
+	useResetPinMutation,
 	useDeactivateAccountMutation,
 	useRegisterEmailMutation,
 	useVerifyEmailMutation,
