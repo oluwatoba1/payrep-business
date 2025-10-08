@@ -22,7 +22,7 @@ type CircleNameProps = StackScreenProps<
 export default function CircleName({
 	navigation: { navigate, goBack },
 }: CircleNameProps) {
-	const vendor_id = useAppSelector((state) => state.kidashi.vendor_id);
+	const vendor = useAppSelector((state) => state.kidashi.vendor);
 	const { showToast } = useToast();
 	const [createTrustCircle, { isLoading }] = useCreateTrustCircleMutation();
 	const {
@@ -37,7 +37,7 @@ export default function CircleName({
 		validateForm(async () => {
 			try {
 				const payload = {
-					vendor_id,
+					vendor_id: vendor?.id || "",
 					circle_name: circleName,
 					description: "",
 				};

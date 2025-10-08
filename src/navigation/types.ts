@@ -74,7 +74,7 @@ export type MembersStackParamList = {
 	Members: undefined;
 	MemberDetails: { id: string };
 	TransactionDetails: undefined;
-	Assets: { id: string; username: string };
+	Assets: undefined;
 	AssetDetails: { asset_id: string } | undefined;
 	EnterAssetInformation: undefined;
 	ReviewAssetRequest: { items: { id: string; name: string; price: string }[] };

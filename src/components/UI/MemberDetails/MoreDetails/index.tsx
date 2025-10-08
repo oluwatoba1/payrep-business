@@ -35,18 +35,18 @@ interface MoreDetailsProps {
 
 const MoreDetails = ({ details }: MoreDetailsProps) => {
 	const data = [
-		{ label: "Email", value: details?.email || "" },
+		{ label: "Email", value: details?.email || "-" },
 		{
 			label: "Phone",
-			value: details?.mobile_number || "",
+			value: details?.mobile_number || "-",
 		},
-		{ label: "NIN", value: details?.nin || "" },
+		{ label: "NIN", value: details?.nin || "-" },
 		{
 			label: "Date of Birth",
-			value: formatDateTime(details?.dob || "").date || "",
+			value: formatDateTime(details?.dob || "").date || "-",
 		},
-		{ label: "State", value: details?.state || "" },
-		{ label: "LGA", value: details?.lga || "" },
+		{ label: "State", value: details?.state || "-" },
+		{ label: "LGA", value: details?.lga || "-" },
 	];
 
 	// console.log(details);

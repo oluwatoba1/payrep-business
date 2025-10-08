@@ -128,7 +128,11 @@ const AssetList = ({
 			/>
 			<Divider gapY={scaleHeight(16)} />
 			<FlatList
-				data={status ? assets.filter((item) => item.status === status) : assets}
+				data={
+					status === "REQUESTED"
+						? assets.filter((item) => item.status === status)
+						: assets
+				}
 				renderItem={({ item }) => (
 					<AssetCard asset={item} navigation={navigation} />
 				)}

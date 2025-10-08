@@ -1,5 +1,5 @@
 import Colors from "@theme/Colors";
-import { scale } from "@utils/Helpers";
+import { moderateScale, scale, scaleHeight } from "@utils/Helpers";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -13,15 +13,16 @@ export const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	copyIcon: {
-		width: scale(16),
-		height: scale(16),
+		width: scaleHeight(16),
+		height: scaleHeight(16),
 	},
 	copyIconPressable: {
 		flexDirection: "row",
 		gap: scale(4),
 		backgroundColor: Colors.white,
-		padding: scale(4),
-		borderRadius: scale(8),
+		paddingVertical: scaleHeight(4),
+		paddingHorizontal: scale(10),
+		borderRadius: moderateScale(20),
 		alignItems: "center",
 		justifyContent: "center",
 		shadowColor: Colors.black,

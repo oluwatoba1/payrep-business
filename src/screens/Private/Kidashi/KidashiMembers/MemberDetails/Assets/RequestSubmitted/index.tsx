@@ -8,6 +8,8 @@ import Divider from "@components/Miscellaneous/Divider";
 import Colors from "@theme/Colors";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MembersStackParamList } from "@navigation/types";
+import MemberDetails from "../..";
+import { useAppSelector } from "@store/hooks";
 
 type RequestProps = NativeStackScreenProps<
 	MembersStackParamList,
@@ -15,6 +17,7 @@ type RequestProps = NativeStackScreenProps<
 >;
 
 const RequestSubmitted = ({ navigation }: RequestProps) => {
+	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
 	return (
 		<View style={styles.container}>
 			<View style={styles.iconRow}>
@@ -40,15 +43,19 @@ const RequestSubmitted = ({ navigation }: RequestProps) => {
 			<Typography title='Request Sent for Processing' style={styles.title} />
 			<Typography
 				title='The asset finance request has been submitted. Once approved, you’ll need to accept or reject the payment schedule.'
-				type='body-sr'
+				type='body-r'
 				style={styles.subtitle}
 			/>
 
 			<Divider gapY={scaleHeight(20)} />
 
 			<Button
-				title='View Request Details'
-				onPress={() => navigation.navigate("AssetDetails")}
+				title='Return'
+				onPress={() =>
+					navigation.navigate("MemberDetails", {
+						id: memberDetails?.cba_customer_id || "",
+					})
+				}
 				containerStyle={{ width: "100%" }}
 			/>
 		</View>

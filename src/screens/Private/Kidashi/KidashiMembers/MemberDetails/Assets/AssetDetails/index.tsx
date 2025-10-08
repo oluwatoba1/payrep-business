@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { ScrollView } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { BackHandler, ScrollView } from "react-native";
 import SafeAreaWrapper from "@components/Layout/SafeAreaWrapper";
 import AssetDetailsHeader from "@components/UI/MemberDetails/Assets/AssetDetails/AssetDetailsHeader";
 import AssetStatusCard from "@components/UI/MemberDetails/Assets/AssetDetails/AssetStatusCard";
@@ -14,12 +14,24 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { MembersStackParamList } from "@navigation/types";
 import { useGetAssetDetailsMutation } from "@store/apis/kidashiApi";
 
+import { useFocusEffect } from "@react-navigation/native";
+export type Status =
+	| "approved"
+	| "pending approval"
+	| "rejected"
+	| "ongoing"
+	| "denied"
+	| "repaid"
+	| "cancelled";
 type AssetDetailsProps = StackScreenProps<
 	MembersStackParamList,
 	"AssetDetails"
 >;
 
-const AssetDetails = ({ route }: AssetDetailsProps) => {
+const AssetDetails = ({
+	navigation: { navigate },
+	route,
+}: AssetDetailsProps) => {
 	const asset_id = route?.params?.asset_id ?? "";
 	const [cancelRequestModalVisible, setCancelRequestModalVisible] =
 		useState(false);
@@ -36,8 +48,28 @@ const AssetDetails = ({ route }: AssetDetailsProps) => {
 	useEffect(() => {
 		if (asset_id) fetchAssetDetails();
 	}, [asset_id]);
+
+	const backAction = () => {
+		navigate("Assets");
+		return true; // Prevent default behavior
+	};
+
+	useFocusEffect(
+		useCallback(() => {
+			const backHandler = BackHandler.addEventListener(
+				"hardwareBackPress",
+				backAction
+			);
+
+			return () => backHandler.remove(); // Cleanup
+		}, [])
+	);
+
 	return (
-		<SafeAreaWrapper title='Asset Details'>
+		<SafeAreaWrapper
+			title='Asset Details'
+			backAction={() => navigate("Assets")}
+		>
 			<ScrollView showsVerticalScrollIndicator={false}>
 				<AssetDetailsHeader
 					amount={
@@ -45,14 +77,13 @@ const AssetDetails = ({ route }: AssetDetailsProps) => {
 							? `₦ ${assetDetails.value.toLocaleString()}`
 							: undefined
 					}
-					reference={assetDetails?.id}
+					reference={assetDetails?.product_code || ""}
 				/>
 				<AssetStatusCard status={assetDetails?.status || "ALL"} />
 				<AssetDetailList
 					memberName={`${assetDetails?.woman__first_name ?? ""} ${
 						assetDetails?.woman__surname ?? ""
 					}`.trim()}
-					trustCircle={assetDetails?.product_code ?? ""}
 					date={assetDetails?.created_at?.split("T")[0]}
 					time={assetDetails?.created_at?.split("T")[1]?.slice(0, 5)}
 					items={(assetDetails?.items_requested ?? []).map((it) => ({

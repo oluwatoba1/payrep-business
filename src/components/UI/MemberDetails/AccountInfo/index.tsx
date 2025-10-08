@@ -6,7 +6,7 @@ import { Typography } from "@components/Forms";
 import { styles } from "./style";
 import IconImages from "@assets/images/appIcons";
 import Divider from "@components/Miscellaneous/Divider";
-import { scaleHeight } from "@utils/Helpers";
+import { addCommas, scaleHeight } from "@utils/Helpers";
 
 interface AccountInfoProps {
 	details: IWomanDetails | null;
@@ -25,7 +25,7 @@ const AccountInfo = ({ details }: AccountInfoProps) => {
 		<View>
 			<Row>
 				<Typography title='Account Number' type='body-r' />
-				<View style={styles.accountNumberContainer}>
+				<Row gap={8} alignItems='center'>
 					<Pressable
 						onPress={() => copyToClipboard(details?.account_number || "")}
 						style={styles.copyIconPressable}
@@ -34,7 +34,7 @@ const AccountInfo = ({ details }: AccountInfoProps) => {
 						<Typography title='Copy' type='body-r' />
 					</Pressable>
 					<Typography title={details?.account_number || ""} type='body-r' />
-				</View>
+				</Row>
 			</Row>
 			<Divider gapY={scaleHeight(10)} />
 			<Row>
@@ -44,7 +44,10 @@ const AccountInfo = ({ details }: AccountInfoProps) => {
 			<Divider gapY={scaleHeight(10)} />
 			<Row>
 				<Typography title='Maximum Balance' type='body-r' />
-				<Typography title={details?.maximum_balance || ""} type='body-r' />
+				<Typography
+					title={`₦${addCommas(details?.maximum_balance || 0)}` || ""}
+					type='body-r'
+				/>
 			</Row>
 		</View>
 	);

@@ -49,6 +49,14 @@ export default function MemberLocationDetails({
 	const { data: countriesData, isLoading: countriesLoading } =
 		useFetchCountriesQuery();
 
+	// Move Kaduna to the first position if present
+	const sortedStates = statesData?.data
+		? [
+				...statesData.data.filter((s: any) => s.name === "Kaduna"),
+				...statesData.data.filter((s: any) => s.name !== "Kaduna"),
+		  ]
+		: [];
+
 	// Fetch LGAs dynamically
 	const [fetchLgas, { isLoading: lgasLoading }] = useFetchLgasMutation();
 
@@ -175,7 +183,7 @@ export default function MemberLocationDetails({
 			<Dropdown
 				label='State'
 				options={
-					statesData?.data.map((option: any) => ({
+					sortedStates.map((option: any) => ({
 						label: option.name,
 						value: option.id,
 					})) || []

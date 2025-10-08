@@ -213,11 +213,7 @@ export default function KidashiDashboard({
 			/>
 
 			<FlatList<ITrustCircleItem | IMemberTransaction>
-				data={
-					activeTab === "Recent Transactions"
-						? dummyMemberTransactionData
-						: dummyTrustCircleData
-				}
+				data={[]}
 				renderItem={({ item, index }) =>
 					activeTab === "Recent Transactions" ? (
 						<MemberTransactionCard

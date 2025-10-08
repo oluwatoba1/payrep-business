@@ -1,10 +1,10 @@
-import { View, Text } from "react-native";
-import React, { useEffect, useState } from "react";
+import { View, Text, BackHandler } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
 import SafeAreaWrapper from "@components/Layout/SafeAreaWrapper";
 import Tab from "@components/Miscellaneous/Tab";
 import Pad from "@components/Pad";
 import AssetList from "@components/UI/MemberDetails/Assets/AssetList";
-import { CompositeScreenProps } from "@react-navigation/native";
+import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { HomeStackParamList, MembersStackParamList } from "@navigation/types";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
@@ -13,22 +13,23 @@ import { useGetAllAssetsMutation } from "@store/apis/kidashiApi";
 import useToast from "@hooks/useToast";
 import EmptyState from "@components/Miscellaneous/EmptyState";
 import ScreenImages from "@assets/images/screens";
+import { useAppSelector } from "@store/hooks";
 
 type KidashiMembersProps = CompositeScreenProps<
 	StackScreenProps<MembersStackParamList, "Assets">,
 	BottomTabScreenProps<HomeStackParamList, "Dashboard">
 >;
 
-const Assets = ({ navigation, route }: KidashiMembersProps) => {
-	const [activeTab, setActiveTab] = useState<AssetStatus>("REQUESTED");
-	const username = route.params?.username ?? "";
-	const id = route.params?.id ?? "";
+const Assets = ({ navigation }: KidashiMembersProps) => {
+	const [activeTab, setActiveTab] = useState<string>("REQUESTED");
+	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
+
 	const { showToast } = useToast();
 	const [getAllAssets, { isLoading }] = useGetAllAssetsMutation();
 	const [assets, setAssets] = useState<IAsset[]>([]);
 
 	const fetchAssets = async () => {
-		getAllAssets({ filters: { woman_id: id } })
+		getAllAssets({ filters: { woman_id: memberDetails?.id || "" } })
 			.unwrap()
 			.then((res) => {
 				setAssets(res.data);
@@ -41,10 +42,31 @@ const Assets = ({ navigation, route }: KidashiMembersProps) => {
 
 	useEffect(() => {
 		fetchAssets();
-	}, [id]);
+	}, [memberDetails?.id]);
+
+	const backAction = () => {
+		navigation.navigate("MemberDetails", {
+			id: memberDetails?.cba_customer_id || "",
+		});
+		return true; // Prevent default behavior
+	};
+
+	useFocusEffect(
+		useCallback(() => {
+			const backHandler = BackHandler.addEventListener(
+				"hardwareBackPress",
+				backAction
+			);
+
+			return () => backHandler.remove(); // Cleanup
+		}, [])
+	);
 
 	return (
-		<SafeAreaWrapper title={`Assets for ${username || "Member"}`}>
+		<SafeAreaWrapper
+			title={`Assets for ${memberDetails?.first_name || "Woman"}`}
+			backAction={backAction}
+		>
 			<Tab
 				items={["REQUESTED", "ALL"]}
 				onTap={(value) => setActiveTab(value.toUpperCase() as AssetStatus)}
@@ -58,12 +80,8 @@ const Assets = ({ navigation, route }: KidashiMembersProps) => {
 					title='No assets found'
 				/>
 			)}
-			{activeTab === "REQUESTED" && (
-				<AssetList status='REQUESTED' assets={assets} navigation={navigation} />
-			)}
-			{activeTab === "ALL" && (
-				<AssetList assets={assets} navigation={navigation} />
-			)}
+
+			<AssetList status={activeTab} assets={assets} navigation={navigation} />
 		</SafeAreaWrapper>
 	);
 };

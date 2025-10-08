@@ -74,10 +74,6 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 	const [loginType, setLoginType] = useState<"password" | "biometrics">(
 		"password"
 	);
-	const [showSelectProfileModal, setShowSelectProfileModal] =
-		useState<boolean>(false);
-	const [profiles, setProfiles] = useState<ICustomerInfo[]>([]);
-	const [customerType, setCustomerType] = useState<string | null>(null);
 
 	const prepUserDetails = async ({
 		status,
@@ -115,8 +111,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 	const handleLogin = async (
 		loginType: "password" | "biometrics",
 		signature?: string,
-		payload?: string,
-		customerType: string | null = null
+		payload?: string
 	) => {
 		setLoginType(loginType);
 		try {
@@ -127,17 +122,11 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 				login_type: loginType,
 				signature,
 				signature_payload: payload,
-				customer_type: customerType,
+				customer_type: "corporate",
 			}).unwrap();
 
 			if (data?.is_new_device) {
 				setShowRegisterDeviceModal(true);
-				return;
-			}
-
-			if (data?.has_multiple_profile) {
-				setShowSelectProfileModal(true);
-				setProfiles(data.customers);
 				return;
 			}
 
@@ -182,7 +171,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 		}
 	};
 
-	const handleBiometricLogin = async (customerType: string | null = null) => {
+	const handleBiometricLogin = async () => {
 		const rnBiometrics = new ReactNativeBiometrics();
 
 		try {
@@ -206,7 +195,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 			});
 
 			if (success && signature) {
-				handleLogin("biometrics", signature, payload, customerType);
+				handleLogin("biometrics", signature, payload);
 			}
 		} catch (error) {
 			showToast("danger", "An error occurred during biometric login");
@@ -220,7 +209,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 				type: "corporate",
 			}).unwrap();
 			if (status) {
-				navigate("RegisterNewDevice", { username, customerType });
+				navigate("RegisterNewDevice", { username, customerType: "corporate" });
 			}
 		} catch (error: any) {
 			showToast(
@@ -303,18 +292,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 				onClose={() => setShowRegisterDeviceModal(false)}
 				onProceed={sendOtp}
 			/>
-			<SelectProfileModal
-				showModal={showSelectProfileModal}
-				onClose={() => setShowSelectProfileModal(false)}
-				profiles={profiles}
-				onSelectProfile={(profile) => {
-					setShowSelectProfileModal(false);
-					setCustomerType(profile.type);
-					loginType === "biometrics"
-						? handleBiometricLogin(profile.type)
-						: handleLogin("password", undefined, undefined, profile.type);
-				}}
-			/>
+
 			<Row justifyContent='center' containerStyle={styles.logoContainer}>
 				<Image
 					source={IconImages.logo.payrepBlackWithText}
@@ -394,7 +372,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 					{biometricAvailable ? (
 						<TouchableOpacity
 							style={styles.biometricsContainer}
-							onPress={() => handleBiometricLogin(null)}
+							onPress={handleBiometricLogin}
 						>
 							<Image
 								source={

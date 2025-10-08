@@ -22,7 +22,7 @@ interface AssetDetailListProps {
 	time?: string;
 	items?: AssetDetailItem[];
 	total?: string;
-	status?: Status;
+	status?: AssetStatus;
 }
 
 const AssetDetailList = ({
@@ -32,7 +32,6 @@ const AssetDetailList = ({
 	time = "",
 	items = [],
 	total = "",
-	status,
 }: AssetDetailListProps) => {
 	return (
 		<View style={styles.container}>
@@ -55,16 +54,6 @@ const AssetDetailList = ({
 							color={Colors.gray[400]}
 						/>
 						<Typography title={memberName} type='body-sb' />
-					</View>
-					<Divider gapY={scaleHeight(8)} />
-
-					<View style={styles.detailRow}>
-						<Typography
-							title='Trust Circle'
-							type='body-r'
-							color={Colors.gray[400]}
-						/>
-						<Typography title={trustCircle} type='body-sb' />
 					</View>
 					<Divider gapY={scaleHeight(8)} />
 

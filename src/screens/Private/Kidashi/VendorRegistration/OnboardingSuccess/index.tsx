@@ -12,6 +12,7 @@ import {
 import { StackScreenProps } from "@react-navigation/stack";
 import {
 	BottomTabParamList,
+	HomeStackParamList,
 	KidashiBottomTabParamList,
 	KidashiRegistrationStackParamList,
 } from "@navigation/types";
@@ -23,7 +24,7 @@ import { useCallback } from "react";
 
 type OnboardingSuccessProps = CompositeScreenProps<
 	StackScreenProps<KidashiRegistrationStackParamList, "OnboardingSuccess">,
-	BottomTabScreenProps<KidashiBottomTabParamList, "KidashiHome">
+	BottomTabScreenProps<BottomTabParamList, "Home">
 >;
 
 export default function OnboardingSuccess({
@@ -45,7 +46,7 @@ export default function OnboardingSuccess({
 				},
 			],
 		});
-		navigate("KidashiHome", { screen: "KidashiDashboard" });
+		navigate("Home", { screen: "Dashboard" });
 		return true;
 	};
 
