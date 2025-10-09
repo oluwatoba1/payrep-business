@@ -1,3 +1,4 @@
+import Colors from "@theme/Colors";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -52,5 +53,46 @@ export const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		paddingVertical: 80,
+	},
+
+	// Modal styles
+	loadingContainer: {
+		paddingVertical: 40,
+	},
+	detailsHeaderRow: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		marginBottom: 12,
+	},
+	modalTitle: {
+		fontSize: 18,
+		fontWeight: "700",
+	},
+	closeIcon: {
+		width: 20,
+		height: 20,
+	},
+	detailsInfoWrapper: {
+		marginBottom: 12,
+	},
+	detailsDateText: {
+		color: Colors.neutral[400],
+		fontSize: 12,
+	},
+	messageCard: {
+		backgroundColor: "#fff",
+		borderWidth: 1,
+		borderColor: "#E5E7EB",
+		borderRadius: 12,
+		padding: 16,
+	},
+	messageTitle: {
+		fontWeight: "600",
+		marginBottom: 8,
+	},
+	messageText: {
+		fontSize: 16,
+		lineHeight: 22,
 	},
 });
