@@ -42,9 +42,15 @@ const customBaseQuery: BaseQueryFn<
 	return result;
 };
 
+const TAGS = {
+	MemberDetails: "MemberDetails",
+	Asset: "Assets",
+};
+
 const KidashiApi = createApi({
 	reducerPath: "kidashiApi",
 	baseQuery: customBaseQuery,
+	tagTypes: Object.values(TAGS),
 	endpoints: (builder) => ({
 		register: builder.mutation<
 			KidashiAuthResponse<{ vendor_id: string }>,
@@ -105,6 +111,7 @@ const KidashiApi = createApi({
 				method: "POST",
 				body,
 			}),
+			invalidatesTags: [TAGS.MemberDetails],
 		}),
 		getMemberDetails: builder.mutation<
 			AuthResponse<IWomanDetails>,
@@ -122,6 +129,7 @@ const KidashiApi = createApi({
 				method: "POST",
 				body,
 			}),
+			invalidatesTags: [TAGS.MemberDetails, TAGS.Asset],
 		}),
 		generateOtp: builder.mutation<AuthResponse<null>, OtpRequest>({
 			query: (body) => ({
@@ -314,6 +322,36 @@ const KidashiApi = createApi({
 				body,
 			}),
 		}),
+		fetchNotifications: builder.mutation<
+			AuthResponse<any>,
+			{ filters?: any; count?: number }
+		>({
+			query: (body) => ({
+				url: "notification/mobile/in_app/fetch/",
+				method: "POST",
+				body,
+			}),
+		}),
+		getNotificationDetail: builder.mutation<
+			AuthResponse<any>,
+			{ notification_id: string }
+		>({
+			query: (body) => ({
+				url: "notification/mobile/in_app/detail/",
+				method: "POST",
+				body,
+			}),
+		}),
+		updateNotification: builder.mutation<
+			AuthResponse<null>,
+			{ notification_id: string; is_read: boolean }
+		>({
+			query: (body) => ({
+				url: "notification/mobile/in_app/update/",
+				method: "POST",
+				body,
+			}),
+		}),
 	}),
 });
 
@@ -343,6 +381,9 @@ export const {
 	useSearchWomanMutation,
 	useGetAllAssetsMutation,
 	useGetAssetDetailsMutation,
+	useFetchNotificationsMutation,
+	useGetNotificationDetailMutation,
+	useUpdateNotificationMutation,
 } = KidashiApi;
 
 export default KidashiApi;

@@ -46,14 +46,21 @@ const OutstandingCard = () => {
 	);
 };
 
-const AssetsCard = ({ onAssetPress }: { onAssetPress: () => void }) => {
-	const isOngoing = true;
+const AssetsCard = ({
+	onAssetPress,
+	ongoingAssetCount,
+}: {
+	onAssetPress: () => void;
+	ongoingAssetCount: number;
+}) => {
+	const isOngoing = ongoingAssetCount > 0;
 	return (
 		<Pressable
 			onPress={() => {
 				onAssetPress();
 			}}
 			style={[styles.card, { backgroundColor: Colors.neutral["50"] }]}
+			// disabled={!isOngoing}
 		>
 			<Typography
 				title='Assets'
@@ -62,9 +69,9 @@ const AssetsCard = ({ onAssetPress }: { onAssetPress: () => void }) => {
 			/>
 			<Row>
 				<Row gap={scale(4)}>
-					<View style={styles.dot} />
+					{isOngoing && <View style={styles.dot} />}
 					<Typography
-						title={isOngoing ? "2 Ongoing" : "0"}
+						title={isOngoing ? `${ongoingAssetCount} Ongoing` : "0"}
 						type='body-sb'
 						color={Colors.black}
 					/>
@@ -91,7 +98,10 @@ const MemberDetailsCard = ({
 		<View>
 			<Divider gapY={scaleHeight(10)} gapX={scale(-10)} />
 			<Row containerStyle={styles.cardContainer}>
-				<AssetsCard onAssetPress={onAssetPress} />
+				<AssetsCard
+					onAssetPress={onAssetPress}
+					ongoingAssetCount={memberDetails?.ongoing_asset_count || 0}
+				/>
 				<OutstandingCard />
 			</Row>
 			<Divider gapY={scaleHeight(10)} gapX={scale(-10)} />

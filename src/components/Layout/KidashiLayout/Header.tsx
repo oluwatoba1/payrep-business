@@ -14,6 +14,7 @@ interface KidashiHeaderProps {
 	rightNode?: ReactNode;
 	rightAction?: () => void;
 	headerFooter?: ReactNode;
+	goToNotifications: () => void;
 }
 
 export default function KidashiHeader({
@@ -21,6 +22,7 @@ export default function KidashiHeader({
 	rightNode,
 	rightAction = () => {},
 	headerFooter,
+	goToNotifications,
 }: KidashiHeaderProps) {
 	return (
 		<LinearGradient
@@ -42,7 +44,10 @@ export default function KidashiHeader({
 					rightNode
 				) : (
 					<Row alignItems='center' gap={8}>
-						<Pressable style={styles.bellIconContainer}>
+						<Pressable
+							onPress={goToNotifications}
+							style={styles.bellIconContainer}
+						>
 							<Image
 								source={ComponentImages.kidashiLayout.bellIcon}
 								style={styles.bellIcon}

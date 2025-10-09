@@ -970,6 +970,7 @@ interface IWomanDetails {
 	maximum_balance: string;
 	tier: string;
 	dob: string;
+	ongoing_asset_count: number;
 }
 
 interface ITrustCircleDetail {
@@ -1062,3 +1063,15 @@ type AssetStatus =
 	| "REJECTED"
 	| "FAILED"
 	| "ALL";
+
+interface INotification {
+	id: string;
+	cba_customer_id: string;
+	event_type: string;
+	title: string;
+	message: string;
+	metadata: string;
+	is_read: boolean;
+	created_at: string;
+	updated_at: string;
+}
