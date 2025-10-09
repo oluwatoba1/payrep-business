@@ -10,8 +10,6 @@ import Colors from "@theme/Colors";
 import ProgressBar from "@components/Forms/ProgressBar";
 import Pad from "@components/Pad";
 import { getStatusColor } from "./utll";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { MembersStackParamList } from "@navigation/types";
 
 const TapReview = () => {
 	return (

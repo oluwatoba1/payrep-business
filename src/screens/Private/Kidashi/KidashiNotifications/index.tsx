@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
 	View,
 	Text,
@@ -6,11 +6,17 @@ import {
 	Image,
 	TouchableOpacity,
 	StyleSheet,
+	RefreshControl,
 } from "react-native";
 import SafeAreaWrapper from "@components/Layout/SafeAreaWrapper";
 import ScreenImages from "@assets/images/screens";
 import Divider from "@components/Miscellaneous/Divider";
 import { Row } from "@components/Layout";
+import { useFetchNotificationsMutation } from "@store/apis/kidashiApi";
+import { useFocusEffect } from "@react-navigation/native";
+import EmptyState from "@components/Miscellaneous/EmptyState";
+import { styles } from "./style";
+import { formatDateTime } from "@utils/Helpers";
 
 const notifications = [
 	{
@@ -36,7 +42,7 @@ const notifications = [
 	},
 ];
 
-const NotificationItem = ({ item }: any) => (
+const NotificationItem = ({ item }: { item: INotification }) => (
 	<TouchableOpacity activeOpacity={0.8}>
 		<Row>
 			<View style={styles.avatarContainer}>
@@ -50,17 +56,17 @@ const NotificationItem = ({ item }: any) => (
 				<Text style={styles.title} numberOfLines={1}>
 					{item.title}
 				</Text>
-				<Text style={styles.subtitle}>{item.subtitle}</Text>
+				<Text style={styles.subtitle}>{item.message}</Text>
 			</View>
 			<View>
 				<Row justifyContent='flex-end' gap={8} alignItems='center'>
-					{item.unread && <View style={styles.dot} />}
+					{!item.is_read && <View style={styles.dot} />}
 					<Image
 						source={ScreenImages.kidashiMemberDetails.chevronRightIcon}
 						style={styles.chevronIcon}
 					/>
 				</Row>
-				<Text style={styles.time}>{item.time}</Text>
+				<Text style={styles.time}>{formatDateTime(item.created_at).date}</Text>
 			</View>
 		</Row>
 		<Divider gapY={20} />
@@ -68,65 +74,53 @@ const NotificationItem = ({ item }: any) => (
 );
 
 const NotificationIndex = () => {
+	const [fetchNotifications, { data, isLoading, error }] =
+		useFetchNotificationsMutation();
+	const [notifications, setNotifications] = useState<INotification[]>([]);
+	const getNotifications = async () => {
+		fetchNotifications({
+			filters: {},
+		})
+			.unwrap()
+			.then((res) => {
+				if (res.status) {
+					setNotifications(res.data);
+				} else {
+					console.log(res.message);
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	useFocusEffect(
+		useCallback(() => {
+			getNotifications();
+		}, [])
+	);
 	return (
 		<SafeAreaWrapper title='Notifications'>
+			{notifications.length < 1 && (
+				<View style={styles.emptyContainer}>
+					<EmptyState
+						icon={ScreenImages.kidashiMemberDetails.searchIcon}
+						title='No notifications'
+						description='You have no notifications'
+					/>
+				</View>
+			)}
 			<FlatList
 				data={notifications}
 				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => <NotificationItem item={item} />}
 				contentContainerStyle={{ paddingVertical: 8 }}
+				refreshControl={
+					<RefreshControl refreshing={isLoading} onRefresh={getNotifications} />
+				}
 			/>
 		</SafeAreaWrapper>
 	);
 };
 
 export default NotificationIndex;
-
-const styles = StyleSheet.create({
-	avatarContainer: {
-		width: 42,
-		height: 42,
-		borderRadius: 21,
-		backgroundColor: "#EDE9FE",
-		alignItems: "center",
-		justifyContent: "center",
-		marginRight: 12,
-	},
-	avatar: {
-		width: 24,
-		height: 24,
-		tintColor: "#5B21B6",
-		resizeMode: "contain",
-	},
-	textContainer: {
-		flex: 1,
-	},
-	title: {
-		fontSize: 14,
-		fontWeight: "600",
-		color: "#111827",
-		marginBottom: 2,
-	},
-	subtitle: {
-		fontSize: 13,
-		color: "#6B7280",
-	},
-
-	dot: {
-		width: 8,
-		height: 8,
-		borderRadius: 4,
-		backgroundColor: "#EF4444",
-	},
-	time: {
-		fontSize: 12,
-		color: "#9CA3AF",
-		marginLeft: 54, // aligns with text start
-		marginBottom: 6,
-	},
-	chevronIcon: {
-		width: 24,
-		height: 24,
-		resizeMode: "contain",
-	},
-});
