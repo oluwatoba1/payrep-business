@@ -156,6 +156,25 @@ const AuthApi = createApi({
 				body,
 			}),
 		}),
+		sendOtp: builder.mutation<AuthResponse<null>, Partial<RegisterCredentials>>(
+			{
+				query: (body) => ({
+					url: "customer/mobile/send_otp",
+					method: "POST",
+					body,
+				}),
+			}
+		),
+		verifyOtp: builder.mutation<
+			AuthResponse<null>,
+			Partial<RegisterCredentials>
+		>({
+			query: (body) => ({
+				url: "customer/mobile/verify_otp",
+				method: "POST",
+				body,
+			}),
+		}),
 		verifyDevice: builder.mutation<
 			AuthResponse<null>,
 			Partial<RegisterCredentials>
@@ -226,6 +245,8 @@ export const {
 	useDeviceRegistrationLogCheckMutation,
 	useRegisterMobileNumberMutation,
 	useVerifyMobileNumberMutation,
+	useSendOtpMutation,
+	useVerifyOtpMutation,
 	useRegisterPasswordMutation,
 	useRegisterBiometricsMutation,
 	useRegisterDeviceMutation,

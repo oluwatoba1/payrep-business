@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { View } from "react-native";
+import { useCallback, useState } from "react";
+import { BackHandler, View } from "react-native";
 
 import { Typography } from "@components/Forms";
 import { MainLayout } from "@components/Layout";
@@ -15,6 +15,7 @@ import ReactNativeBiometrics from "react-native-biometrics";
 import { persistAppState } from "@utils/Helpers";
 import { updateAppstate } from "@store/slices/appSlice";
 import useToast from "@hooks/useToast";
+import { useFocusEffect } from "@react-navigation/native";
 
 type SecuritySettingsProps = StackScreenProps<
 	MoreStackParamList,
@@ -22,7 +23,7 @@ type SecuritySettingsProps = StackScreenProps<
 >;
 
 export default function SecuritySettings({
-	navigation: { navigate, goBack },
+	navigation: { navigate },
 }: SecuritySettingsProps) {
 	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
@@ -84,7 +85,7 @@ export default function SecuritySettings({
 		},
 		{
 			id: "2",
-			title: "Change Transaction Pin",
+			title: "Change Pin",
 			profileIcon: ComponentImages.ProfileIcons.NotificationIcon,
 			rightIcon: ComponentImages.ProfileIcons.ArrowRightIcon,
 			navigate: () => navigate("ChangePin"),
@@ -93,7 +94,7 @@ export default function SecuritySettings({
 		},
 		{
 			id: "3",
-			title: "Reset Transaction Pin",
+			title: "Reset Pin",
 			profileIcon: ComponentImages.ProfileIcons.NotificationIcon,
 			rightIcon: ComponentImages.ProfileIcons.ArrowRightIcon,
 			navigate: () => navigate("OtpVerification"),
@@ -111,8 +112,25 @@ export default function SecuritySettings({
 				handleRegisterBiometrics(!!appState?.enableBiometrics),
 		},
 	];
+
+	const backAction = () => {
+		navigate("Profile");
+		return true; // Prevent default behavior
+	};
+
+	useFocusEffect(
+		useCallback(() => {
+			const backHandler = BackHandler.addEventListener(
+				"hardwareBackPress",
+				backAction
+			);
+
+			return () => backHandler.remove(); // Cleanup
+		}, [])
+	);
+
 	return (
-		<MainLayout backAction={goBack}>
+		<MainLayout backAction={backAction}>
 			<View>
 				<Typography title='Security Settings' type='heading4-sb' />
 				<View>
