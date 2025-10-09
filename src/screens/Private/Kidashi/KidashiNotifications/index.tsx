@@ -75,12 +75,13 @@ const NotificationIndex = () => {
 			getNotifications();
 		}, [])
 	);
+
 	return (
 		<SafeAreaWrapper title='Notifications'>
 			{notifications.length < 1 && (
 				<View style={styles.emptyContainer}>
 					<EmptyState
-						icon={ScreenImages.kidashiMemberDetails.searchIcon}
+						icon={ScreenImages.kidashiHome.bellIcon}
 						title='No notifications'
 						description='You have no notifications'
 					/>
