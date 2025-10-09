@@ -1070,7 +1070,7 @@ interface INotification {
 	event_type: string;
 	title: string;
 	message: string;
-	metadata: string;
+	metadata?: Record<string, any>;
 	is_read: boolean;
 	created_at: string;
 	updated_at: string;

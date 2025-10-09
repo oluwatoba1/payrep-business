@@ -6,6 +6,7 @@ import { KidashiDashboard } from "@screens/Private/Kidashi/KidashiHome";
 import MemberRegistrationStack from "./MemberRegistration";
 import KidashiRegistrationStack from "./KidashiRegistrationStack";
 import NotificationIndex from "@screens/Private/Kidashi/KidashiNotifications";
+import KidashiNotificationDetails from "@screens/Private/Kidashi/KidashiNotifications/Details";
 
 const Stack = createNativeStackNavigator<KidashiHomeStackParamList>();
 
@@ -25,6 +26,11 @@ export default function HomeStack() {
 				component={MemberRegistrationStack}
 			/>
 			<Stack.Screen name='KidashiNotifications' component={NotificationIndex} />
+			<Stack.Screen
+				name='KidashiNotificationDetails'
+				component={KidashiNotificationDetails}
+				options={{ presentation: "modal" }}
+			/>
 		</Stack.Navigator>
 	);
 }

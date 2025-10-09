@@ -1,12 +1,5 @@
 import { NavigatorScreenParams } from "@react-navigation/native";
 
-interface INotification {
-	title: string;
-	description: string;
-	time: string;
-	read: boolean;
-}
-
 export type PublicNavigatorParamList = {
 	Splashscreen: undefined;
 	Onboarding: undefined;
@@ -57,6 +50,7 @@ export type KidashiHomeStackParamList = {
 	KidashiRegistration: undefined;
 	MemberRegistration: NavigatorScreenParams<MemberRegistrationStackParamList>;
 	KidashiNotifications: undefined;
+	KidashiNotificationDetails: { notification_id: string };
 };
 
 export type TrustCircleStackParamList = {
