@@ -18,30 +18,6 @@ import EmptyState from "@components/Miscellaneous/EmptyState";
 import { styles } from "./style";
 import { formatDateTime } from "@utils/Helpers";
 
-const notifications = [
-	{
-		id: "1",
-		title: "New Member joined Ladi Coop...",
-		subtitle: "Zainab Abubakar",
-		time: "16 Sep at 10:32 am",
-		unread: true,
-	},
-	{
-		id: "2",
-		title: "New Trust Circle Created",
-		subtitle: "Kaduna Market Women",
-		time: "15 Sep at 4:12 pm",
-		unread: true,
-	},
-	{
-		id: "3",
-		title: "Funding Successful",
-		subtitle: "₦20,000 credited to Hauwa Ibr...",
-		time: "15 Sep at 2:08 pm",
-		unread: true,
-	},
-];
-
 const NotificationItem = ({ item }: { item: INotification }) => (
 	<TouchableOpacity activeOpacity={0.8}>
 		<Row>
