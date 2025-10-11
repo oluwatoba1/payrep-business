@@ -16,7 +16,7 @@ import { BOTTOM_TAB_CONTAINER_HEIGHT } from "@utils/Constants";
 interface MainLayoutProps {
 	showHeader?: boolean;
 	headerFooter?: ReactNode;
-	goToNotification: () => void;
+	goToNotification?: () => void;
 	children: ReactNode;
 	backgroundColor?: string;
 	leftNode?: ReactNode;
@@ -95,7 +95,7 @@ export default function MainLayout({
 	hasBottomTabBar = false,
 	isRefreshing = false,
 	onRefresh,
-	goToNotification,
+	goToNotification = () => {},
 }: MainLayoutProps) {
 	return (
 		<View

@@ -84,7 +84,7 @@ const KidashiApi = createApi({
 		}),
 		fetchTrustCircles: builder.mutation<
 			AuthResponse<{ circles: ITrustCircle[] }>,
-			{ vendor_id: string }
+			{ vendor_id: string; search: string }
 		>({
 			query: (body) => ({
 				url: "trust_circle/mobile/fetch",

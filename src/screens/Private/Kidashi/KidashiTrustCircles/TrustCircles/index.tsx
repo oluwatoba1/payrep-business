@@ -52,6 +52,7 @@ export default function TrustCircles({
 		try {
 			const { status, message, data } = await fetchTrustCircles({
 				vendor_id: vendor?.id || "",
+				search: searchText,
 			}).unwrap();
 
 			if (status) {
@@ -88,7 +89,7 @@ export default function TrustCircles({
 			<SearchContainer
 				searchText={searchText}
 				setSearchText={setSearchText}
-				onSearch={() => {}}
+				onSearch={_fetchTrustCircles}
 				placeholder='Search'
 			/>
 			<Pad size={10} />
