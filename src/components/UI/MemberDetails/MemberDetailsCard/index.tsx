@@ -17,7 +17,7 @@ interface CardProps {
 	isOutstanding?: boolean;
 }
 
-const OutstandingCard = () => {
+const OutstandingCard = ({ outstanding }: { outstanding: string }) => {
 	const isNegative = true;
 	return (
 		<Pressable
@@ -38,7 +38,7 @@ const OutstandingCard = () => {
 			/>
 
 			<Typography
-				title={formatCurrency(0)}
+				title={formatCurrency(Number(outstanding || 0))}
 				type='body-sb'
 				color={Colors.black}
 			/>
@@ -102,7 +102,9 @@ const MemberDetailsCard = ({
 					onAssetPress={onAssetPress}
 					ongoingAssetCount={memberDetails?.ongoing_asset_count || 0}
 				/>
-				<OutstandingCard />
+				<OutstandingCard
+					outstanding={memberDetails?.loan_summary?.total_outstanding || "0"}
+				/>
 			</Row>
 			<Divider gapY={scaleHeight(10)} gapX={scale(-10)} />
 		</View>
