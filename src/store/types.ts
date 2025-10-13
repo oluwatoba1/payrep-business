@@ -971,6 +971,11 @@ interface IWomanDetails {
 	tier: string;
 	dob: string;
 	ongoing_asset_count: number;
+	loan_summary: {
+		total_outstanding: string;
+		running_loans: number;
+		processing_loans: number;
+	};
 }
 
 interface ITrustCircleDetail {
@@ -1034,23 +1039,34 @@ interface iWomanMemberDetails {
 
 interface IAsset {
 	id: string;
-	created_at: string;
-	items_requested: { name: string; price: string }[];
-	loan_id: string | null;
-	markup: number;
 	name: string | null;
-	product_code: string | null;
-	status: AssetStatus;
 	value: number;
-	vendor__first_name?: string;
-	vendor__id?: string;
-	vendor__surname?: string;
+	markup: number;
+	status: AssetStatus; // e.g., "FAILED" | "PENDING" | "ONGOING" | "COMPLETED"
+	loan_id: string | null;
+	product_code: string | null;
+	created_at: string;
+	reject_reason?: string | null;
+
+	items_requested: {
+		name: string;
+		price: string;
+	}[];
+
+	// Woman details
+	woman_id?: string;
 	woman__first_name?: string;
-	woman__id?: string;
 	woman__surname?: string;
+	woman__trust_circle__circle_name?: string;
+
+	// Vendor details
+	vendor__id?: string;
+	vendor__first_name?: string;
+	vendor__surname?: string;
+
+	// Legacy / additional optional fields
 	asset_id?: string;
 	vendor_id?: string;
-	woman_id?: string;
 	date?: string;
 	start_date?: string;
 	end_date?: string;

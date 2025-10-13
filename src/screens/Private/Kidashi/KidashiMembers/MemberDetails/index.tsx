@@ -78,14 +78,10 @@ const MemberDetails = ({
 		fetchDetails();
 	}, [route.params.id]);
 
-	console.log({ memberDetails });
-
 	const backAction = () => {
 		navigate("Members");
 		return true; // Prevent default behavior
 	};
-
-	// e0d8775f-45d0-4ba3-9442-039dca3948d4
 
 	useFocusEffect(
 		useCallback(() => {
