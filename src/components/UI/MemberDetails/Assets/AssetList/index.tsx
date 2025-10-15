@@ -33,7 +33,6 @@ const AssetCard = ({
 	asset: IAsset;
 	navigation: any;
 }) => {
-	// console.log(asset);
 	return (
 		<Pressable
 			onPress={() =>

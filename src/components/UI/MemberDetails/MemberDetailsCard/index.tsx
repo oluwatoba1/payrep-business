@@ -93,7 +93,6 @@ const MemberDetailsCard = ({
 	memberDetails: IWomanDetails | null;
 	onAssetPress: () => void;
 }) => {
-	// console.log(memberDetails);
 	return (
 		<View>
 			<Divider gapY={scaleHeight(10)} gapX={scale(-10)} />

@@ -73,7 +73,7 @@ export default function Dashboard({
 		(state) => state.account.selectedAccount
 	);
 	const vendor = useAppSelector((state) => state.kidashi.vendor);
-	console.log({ vendor });
+
 	const { accounts, transactions, disputes } = useAppSelector(
 		(state) => state.account
 	);

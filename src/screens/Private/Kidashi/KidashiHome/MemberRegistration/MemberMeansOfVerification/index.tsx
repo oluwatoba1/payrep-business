@@ -101,8 +101,6 @@ export default function MemberMeansOfVerification({
 					bvn: idNumber,
 				}).unwrap();
 				if (status && data) {
-					console.log("-----", data);
-
 					setKycData({
 						...data,
 						bvn: idNumber,

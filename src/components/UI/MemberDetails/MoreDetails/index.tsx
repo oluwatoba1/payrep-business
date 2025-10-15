@@ -49,8 +49,6 @@ const MoreDetails = ({ details }: MoreDetailsProps) => {
 		{ label: "LGA", value: details?.lga || "-" },
 	];
 
-	// console.log(details);
-
 	return (
 		<View>
 			{/* Upper section */}

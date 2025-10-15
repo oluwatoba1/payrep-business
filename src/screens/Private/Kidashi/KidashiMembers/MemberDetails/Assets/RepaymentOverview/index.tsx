@@ -67,7 +67,6 @@ const RepaymentOverview = ({
 	};
 
 	const getOtp = async () => {
-		console.log("====>>>", "getOtp", memberDetails);
 		try {
 			const { status, message } = await generateOtp({
 				purpose: "ASSET_REQUEST",
@@ -75,14 +74,13 @@ const RepaymentOverview = ({
 				subject_id: vendor?.id || "",
 				channel: "sms",
 			}).unwrap();
-			console.log("====>>>", "generateOtp", status, message);
+
 			if (status) {
 				showToast("success", "OTP has been sent to member");
 			} else {
 				showToast("danger", message);
 			}
 		} catch (error: ErrorResponse | any) {
-			console.log("====>>>", "error", error);
 			showToast(
 				"danger",
 				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
