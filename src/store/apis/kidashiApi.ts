@@ -102,6 +102,43 @@ const KidashiApi = createApi({
 				body,
 			}),
 		}),
+		validateVote: builder.mutation<
+			AuthResponse<null>,
+			{ vote_id: string; otp: string }[]
+		>({
+			query: (body) => ({
+				url: "trust_circle/mobile/vote/validate",
+				method: "POST",
+				body,
+			}),
+		}),
+		addVote: builder.mutation<
+			AuthResponse<null>,
+			{ vote_id: string; voter_id: string }
+		>({
+			query: (body) => ({
+				url: "trust_circle/mobile/vote/add",
+				method: "POST",
+				body,
+			}),
+		}),
+		removeVote: builder.mutation<AuthResponse<null>, { vote_id: string }>({
+			query: (body) => ({
+				url: "trust_circle/mobile/vote/remove",
+				method: "POST",
+				body,
+			}),
+		}),
+		fetchVotes: builder.mutation<
+			AuthResponse<IVerifier[]>,
+			{ trust_circle_id: string; candidate_member: string }
+		>({
+			query: (body) => ({
+				url: "trust_circle/mobile/vote/fetch",
+				method: "POST",
+				body,
+			}),
+		}),
 		onboardWoman: builder.mutation<
 			AuthResponse<null>,
 			{ vendor_cba_customer_id: string; woman_cba_customer_id: string }
@@ -384,6 +421,10 @@ export const {
 	useFetchNotificationsMutation,
 	useGetNotificationDetailMutation,
 	useUpdateNotificationMutation,
+	useValidateVoteMutation,
+	useAddVoteMutation,
+	useRemoveVoteMutation,
+	useFetchVotesMutation,
 } = KidashiApi;
 
 export default KidashiApi;

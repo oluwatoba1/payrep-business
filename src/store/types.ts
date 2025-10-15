@@ -1013,7 +1013,7 @@ interface IAssetRequest {
 }
 
 interface OtpRequest {
-	purpose: "ASSET_REQUEST";
+	purpose: "ASSET_REQUEST" | "VOTER_VALIDATION";
 	recipient: string;
 	subject_id: string;
 	channel: "sms";
@@ -1088,6 +1088,26 @@ interface INotification {
 	message: string;
 	metadata?: Record<string, any>;
 	is_read: boolean;
+	created_at: string;
+	updated_at: string;
+}
+
+interface IVerifier {
+	id: string;
+	trust_circle_id: string;
+	trust_circle__circle_name: string;
+	candidate_member_id: string;
+	candidate_member__first_name: string;
+	candidate_member__surname: string;
+	initiating_vendor_id: string;
+	initiating_vendor__first_name: string;
+	initiating_vendor__surname: string;
+	voter_id: string;
+	voter__first_name: string;
+	voter__surname: string;
+	voter__mobile_number: string;
+	status: "PENDING" | "APPROVED" | "REJECTED";
+	completed_at: string;
 	created_at: string;
 	updated_at: string;
 }

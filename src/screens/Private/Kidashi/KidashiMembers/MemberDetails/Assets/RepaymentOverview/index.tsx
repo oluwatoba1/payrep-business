@@ -49,8 +49,6 @@ const RepaymentOverview = ({
 
 	const startDate = useMemo(() => new Date(2025, 8, 20), []);
 	const endDate = useMemo(() => new Date(2025, 9, 31), []);
-	const installment1Date = useMemo(() => new Date(2025, 9, 4), []);
-	const installment2Date = useMemo(() => new Date(2025, 9, 18), []);
 
 	const formatDate = (date: Date) =>
 		date.toLocaleDateString("en-GB", {
@@ -89,7 +87,6 @@ const RepaymentOverview = ({
 	};
 
 	const submit = async () => {
-		console.log("====>>>", "submit", memberDetails);
 		try {
 			const { status, message } = await createAsset({
 				vendor_id: vendor?.id || "",
@@ -108,7 +105,6 @@ const RepaymentOverview = ({
 				showToast("danger", message);
 			}
 		} catch (error: ErrorResponse | any) {
-			console.log("====>>>", "Submit error", error);
 			showToast(
 				"danger",
 				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE

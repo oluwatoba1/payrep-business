@@ -1,5 +1,5 @@
 import { View, Image, Pressable } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SafeAreaWrapper from "@components/Layout/SafeAreaWrapper";
 import ScreenImages from "@assets/images/screens";
 import {
@@ -17,108 +17,109 @@ import Divider from "@components/Miscellaneous/Divider";
 import { Badge } from "@components/Cards";
 import { IconButton } from "@components/Forms";
 import { ModalWrapper } from "@components/Modal";
+import {
+	useAddVoteMutation,
+	useFetchVotesMutation,
+	useGenerateOtpMutation,
+	useGetWomanDetailsMutation,
+	useRemoveVoteMutation,
+	useValidateVoteMutation,
+} from "@store/apis/kidashiApi";
+import { useAppSelector } from "@store/hooks";
+import useToast from "@hooks/useToast";
+import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
+import { useGetAccountsMutation } from "@store/apis/accountApi";
 
 interface Verifier {
 	id: string;
 	name: string;
 	phone: string;
-	status: "pending" | "verified";
+	status: "PENDING" | "APPROVED" | "REJECTED";
+}
+
+interface EnterVerifierOTPModalProps {
+	visible: boolean;
+	onClose: () => void;
+	otp: string;
+	setOtp: (otp: string) => void;
+	handleVerify: () => void;
+	handleResend: () => void;
+	handleRemove: () => void;
 }
 
 const EnterVerifierOTPModal = ({
 	visible,
 	onClose,
-}: {
-	visible: boolean;
-	onClose: () => void;
-}) => {
-	const [otp, setOtp] = useState("");
+	otp,
+	setOtp,
+	handleVerify,
+	handleResend,
+	handleRemove,
+}: EnterVerifierOTPModalProps) => (
+	<ModalWrapper visible={visible} onClose={onClose}>
+		<Row justifyContent='flex-end'>
+			<Pressable onPress={onClose} hitSlop={10}>
+				<Image
+					source={ScreenImages.kidashiMemberDetails.closeIcon}
+					style={styles.modalCloseIcon}
+				/>
+			</Pressable>
+		</Row>
 
-	const handleVerify = () => {
-		if (otp.length === 6) {
-			// TODO: Implement verification logic
-			console.log("Verifying OTP:", otp);
-			onClose();
-		}
-	};
-
-	const handleResend = () => {
-		// TODO: Implement resend logic
-		console.log("Resending OTP");
-	};
-
-	const handleRemove = () => {
-		// TODO: Implement remove verifier logic
-		console.log("Removing verifier");
-		onClose();
-	};
-
-	return (
-		<ModalWrapper visible={visible} onClose={onClose}>
-			<Row justifyContent='flex-end'>
-				<Pressable onPress={onClose} hitSlop={10}>
+		<View style={styles.otpModalContent}>
+			<View style={styles.iconsContainer}>
+				<View style={styles.centerIconContainer}>
 					<Image
-						source={ScreenImages.kidashiMemberDetails.closeIcon}
-						style={styles.modalCloseIcon}
+						source={ScreenImages.kidashiMemberDetails.shieldIcon}
+						style={styles.shieldIcon}
+					/>
+				</View>
+			</View>
+
+			<Typography title='Enter Verifier Code' style={styles.otpModalTitle} />
+			<Typography
+				title='Ask the selected member for their OTP and enter it below to confirm verification'
+				type='body-sr'
+				style={styles.otpModalSubtitle}
+			/>
+
+			<PinPad pin={otp} onInput={setOtp} codeLength={6} />
+
+			<Button
+				title='Verify'
+				onPress={handleVerify}
+				disabled={otp.length !== 6}
+				containerStyle={styles.verifyButton}
+			/>
+
+			<Row justifyContent='space-between' containerStyle={styles.actionRow}>
+				<Pressable onPress={handleResend} style={styles.actionButton}>
+					<Typography
+						title='Resend otp'
+						type='body-sb'
+						style={styles.resendText}
+					/>
+					<Image
+						source={ScreenImages.kidashiMemberDetails.resendIcon}
+						style={styles.actionIcon}
+					/>
+				</Pressable>
+
+				<Pressable onPress={handleRemove} style={styles.actionButton}>
+					<Image
+						source={ScreenImages.kidashiMemberDetails.trashIcon}
+						style={styles.actionIcon}
+					/>
+					<Typography
+						title='Remove Verifier'
+						type='body-sb'
+						style={styles.removeText}
 					/>
 				</Pressable>
 			</Row>
-
-			<View style={styles.otpModalContent}>
-				<View style={styles.iconsContainer}>
-					<View style={styles.centerIconContainer}>
-						<Image
-							source={ScreenImages.kidashiMemberDetails.shieldIcon}
-							style={styles.shieldIcon}
-						/>
-					</View>
-				</View>
-
-				<Typography title='Enter Verifier Code' style={styles.otpModalTitle} />
-				<Typography
-					title='Ask the selected member for their OTP and enter it below to confirm verification'
-					type='body-sr'
-					style={styles.otpModalSubtitle}
-				/>
-
-				<PinPad pin={otp} onInput={setOtp} codeLength={6} />
-
-				<Button
-					title='Verify'
-					onPress={handleVerify}
-					disabled={otp.length !== 6}
-					containerStyle={styles.verifyButton}
-				/>
-
-				<Row justifyContent='space-between' containerStyle={styles.actionRow}>
-					<Pressable onPress={handleResend} style={styles.actionButton}>
-						<Typography
-							title='Resend otp'
-							type='body-sb'
-							style={styles.resendText}
-						/>
-						<Image
-							source={ScreenImages.kidashiMemberDetails.resendIcon}
-							style={styles.actionIcon}
-						/>
-					</Pressable>
-
-					<Pressable onPress={handleRemove} style={styles.actionButton}>
-						<Image
-							source={ScreenImages.kidashiMemberDetails.trashIcon}
-							style={styles.actionIcon}
-						/>
-						<Typography
-							title='Remove Verifier'
-							type='body-sb'
-							style={styles.removeText}
-						/>
-					</Pressable>
-				</Row>
-			</View>
-		</ModalWrapper>
-	);
-};
+		</View>
+	</ModalWrapper>
+);
 
 const GenerateOTPModal = ({
 	visible,
@@ -162,51 +163,179 @@ const GenerateOTPModal = ({
 };
 
 const ManageVerfiers = () => {
-	const [searchText, setSearchText] = useState("");
-	const [foundAccount, setFoundAccount] = useState<{
-		name: string;
-		accountNumber: string;
-	} | null>(null);
+	const { showToast } = useToast();
+	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
+
+	const [validateVote] = useValidateVoteMutation();
+	const [addVote] = useAddVoteMutation();
+	const [removeVote] = useRemoveVoteMutation();
+	const [fetchVotes, { isLoading: isLoadingVotes }] = useFetchVotesMutation();
+	const [generateOtp] = useGenerateOtpMutation();
+	const [getAccounts] = useGetAccountsMutation();
+	const [getWomanDetails] = useGetWomanDetailsMutation();
 	const [showOTPModal, setShowOTPModal] = useState(false);
 	const [showGenerateOTPModal, setShowGenerateOTPModal] = useState(false);
+	const [refresh, setRefresh] = useState(new Date().toISOString());
+	const [accountNumber, setAccountNumber] = useState<string>("");
+	const [voter, setVoter] = useState<iWomanMemberDetails | null>(null);
+	const [votes, setVotes] = useState<IVerifier[]>([]);
+	const [vote, setVote] = useState<IVerifier | null>(null);
+	const [otp, setOtp] = useState<string>("");
 
-	const verifiers: Verifier[] = [
-		{
-			id: "1",
-			name: "Aisha Bello",
-			phone: "090**** 1234",
-			status: "pending",
-		},
-		{
-			id: "2",
-			name: "Dorcas Danjuma",
-			phone: "081**** 4321",
-			status: "verified",
-		},
-	];
+	const fetchVoter = async (id: string) => {
+		try {
+			const { status, message, data } = await getWomanDetails({
+				cba_customer_id: id,
+			}).unwrap();
 
-	const handleSearch = () => {
-		if (searchText.trim()) {
-			// Simulate finding an account
-			setFoundAccount({
-				name: "Kande Ibrahim",
-				accountNumber: searchText,
-			});
+			if (status) {
+				setVoter(data as iWomanMemberDetails);
+				return;
+			}
+			showToast("danger", message);
+		} catch (error: any) {
+			showToast("danger", error.data.message || DEFAULT_ERROR_MESSAGE);
 		}
 	};
 
-	const handleGenerateOTP = () => {
-		setShowGenerateOTPModal(true);
+	const fetchAccounts = async () => {
+		try {
+			const { status, message, data } = await getAccounts({
+				account_number: accountNumber,
+			}).unwrap();
+
+			if (status) {
+				const account = data[0] as unknown as iWomanAccount;
+				fetchVoter(account.customer_id);
+			} else {
+				showToast("danger", message || DEFAULT_ERROR_MESSAGE);
+			}
+		} catch (error: any) {
+			showToast(
+				"danger",
+				error.message || error.data.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
 	};
 
-	const handleVerifierPress = (verifier: Verifier) => {
-		if (verifier.status === "pending") {
+	const getOtp = async () => {
+		try {
+			const { status, message } = await generateOtp({
+				purpose: "VOTER_VALIDATION",
+				recipient: voter?.mobile_number || "",
+				subject_id: voter?.mobile_number || "",
+				channel: "sms",
+			}).unwrap();
+
+			if (status) {
+				setShowGenerateOTPModal(true);
+			} else {
+				showToast("danger", message);
+			}
+		} catch (error: ErrorResponse | any) {
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
+
+	const retrieveVotes = async () => {
+		try {
+			const { status, message, data } = await fetchVotes({
+				trust_circle_id: memberDetails?.trust_circle_id || "",
+				candidate_member: memberDetails?.id || "",
+			}).unwrap();
+			if (status) {
+				setVotes(data);
+			} else {
+				showToast("danger", message);
+			}
+		} catch (error: ErrorResponse | any) {
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
+
+	const _validateVote = async () => {
+		try {
+			const { status, message } = await validateVote([
+				{
+					vote_id: vote?.id || "",
+					otp,
+				},
+			]).unwrap();
+			if (status) {
+				getOtp();
+				setRefresh(new Date().toISOString());
+			} else {
+				showToast("danger", message);
+			}
+		} catch (error: ErrorResponse | any) {
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
+
+	const _addVote = async () => {
+		try {
+			const { status, message } = await addVote({
+				vote_id: vote?.id || "",
+				voter_id: voter?.id || "",
+			}).unwrap();
+			if (status) {
+				getOtp();
+				setRefresh(new Date().toISOString());
+			} else {
+				showToast("danger", message);
+			}
+		} catch (error: ErrorResponse | any) {
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
+
+	const _removeVote = async () => {
+		try {
+			const { status, message } = await removeVote({
+				vote_id: vote?.id || "",
+			}).unwrap();
+			if (status) {
+				setRefresh(new Date().toISOString());
+			} else {
+				showToast("danger", message);
+			}
+		} catch (error: ErrorResponse | any) {
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
+
+	const handleVerifierPress = (verifier: IVerifier) => {
+		if (verifier.status === "PENDING") {
 			setShowOTPModal(true);
+			setVote(verifier);
 		}
 	};
+
+	useEffect(() => {
+		retrieveVotes();
+	}, [refresh]);
 
 	return (
-		<SafeAreaWrapper canScroll title='Manage Verifiers'>
+		<SafeAreaWrapper
+			canScroll
+			title='Manage Verifiers'
+			isLoading={isLoadingVotes}
+		>
 			<View style={styles.container}>
 				<View style={styles.headerSection}>
 					<View style={styles.iconContainer}>
@@ -242,15 +371,16 @@ const ManageVerfiers = () => {
 
 				<TextInput
 					label='Account Number'
-					value={searchText}
-					onChangeText={setSearchText}
+					value={accountNumber}
+					onChangeText={setAccountNumber}
 					placeholder='e.g., 0123456789 (Account no)'
 					placeholderTextColor={Colors.gray["400"]}
 					keyboardType='numeric'
+					maxLength={10}
 					rightNode={
-						searchText ? (
+						accountNumber ? (
 							<Pressable
-								onPress={handleSearch}
+								onPress={fetchAccounts}
 								style={styles.searchButtonContainer}
 							>
 								<Typography
@@ -267,7 +397,7 @@ const ManageVerfiers = () => {
 					}
 				/>
 
-				{foundAccount && (
+				{voter && (
 					<View style={styles.accountFoundSection}>
 						<Typography
 							title='Account found:'
@@ -281,12 +411,15 @@ const ManageVerfiers = () => {
 										source={ScreenImages.kidashiMemberDetails.infoRedIcon}
 										style={styles.infoRedIcon}
 									/>
-									<Typography title={foundAccount.name} type='body-sb' />
+									<Typography
+										title={`${voter?.first_name || ""} ${voter?.surname || ""}`}
+										type='body-sb'
+									/>
 								</Row>
 								<Radio label='' value={true} onPress={() => {}} />
 							</Row>
 						</View>
-						<Button title='Generate OTP' onPress={handleGenerateOTP} />
+						<Button title='Generate OTP' onPress={_addVote} />
 					</View>
 				)}
 
@@ -298,11 +431,11 @@ const ManageVerfiers = () => {
 						style={styles.sectionTitle}
 					/>
 					<Divider gapY={scaleHeight(16)} gapX={scale(-16)} />
-					{verifiers.map((verifier) => (
-						<View key={verifier.id}>
+					{votes.map((vote) => (
+						<View key={vote.id}>
 							<Pressable
 								style={styles.verifierItem}
-								onPress={() => handleVerifierPress(verifier)}
+								onPress={() => handleVerifierPress(vote)}
 							>
 								<View style={styles.avatarPlaceholder}>
 									<Image
@@ -312,8 +445,13 @@ const ManageVerfiers = () => {
 								</View>
 								<View style={styles.verifierInfo}>
 									<Row alignItems='center' gap={8} justifyContent='flex-start'>
-										<Typography title={verifier.name} type='body-sb' />
-										{verifier.status === "pending" ? (
+										<Typography
+											title={`${vote.voter__first_name || ""} ${
+												vote.voter__surname || ""
+											}`}
+											type='body-sb'
+										/>
+										{vote.status === "PENDING" ? (
 											<Badge type='pending' />
 										) : (
 											<Image
@@ -323,7 +461,7 @@ const ManageVerfiers = () => {
 										)}
 									</Row>
 									<Typography
-										title={verifier.phone}
+										title={vote.voter__mobile_number || ""}
 										type='body-r'
 										color={Colors.gray["600"]}
 										style={styles.phoneText}
@@ -346,6 +484,11 @@ const ManageVerfiers = () => {
 			<EnterVerifierOTPModal
 				visible={showOTPModal}
 				onClose={() => setShowOTPModal(false)}
+				otp={otp}
+				setOtp={setOtp}
+				handleVerify={_validateVote}
+				handleResend={getOtp}
+				handleRemove={_removeVote}
 			/>
 		</SafeAreaWrapper>
 	);
