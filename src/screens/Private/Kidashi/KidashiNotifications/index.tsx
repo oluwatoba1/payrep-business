@@ -109,6 +109,7 @@ const NotificationIndex = () => {
 				markAsRead(notification_id);
 			}
 		} catch (e) {
+			// console.log(e);
 			// noop
 		} finally {
 			setIsDetailLoading(false);
@@ -116,7 +117,9 @@ const NotificationIndex = () => {
 	};
 
 	const markAsRead = async (notification_id: string) =>
-		updateNotification({ notification_id, is_read: true }).unwrap();
+		updateNotification({ notification_id, is_read: true })
+			.unwrap()
+			.then(() => getNotifications());
 
 	return (
 		<SafeAreaWrapper title='Notifications'>
