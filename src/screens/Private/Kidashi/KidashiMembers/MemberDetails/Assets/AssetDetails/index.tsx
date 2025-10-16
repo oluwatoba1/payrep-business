@@ -67,8 +67,6 @@ const AssetDetails = ({
 		}, [])
 	);
 
-	console.log({ assetDetails });
-
 	return (
 		<SafeAreaWrapper
 			title='Asset Details'
