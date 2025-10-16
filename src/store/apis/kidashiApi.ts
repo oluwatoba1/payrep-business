@@ -350,7 +350,7 @@ const KidashiApi = createApi({
 			}),
 		}),
 		getAssetDetails: builder.mutation<
-			AuthResponse<IAsset>,
+			AuthResponse<iAssetDetails>,
 			{ asset_id?: string; loan_id?: string }
 		>({
 			query: (body) => ({

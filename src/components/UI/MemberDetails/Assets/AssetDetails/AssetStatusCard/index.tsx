@@ -9,16 +9,81 @@ import Colors from "@theme/Colors";
 import { scaleHeight, scale } from "@utils/Helpers";
 import Pad from "@components/Pad";
 
-const OngoingCard = () => {
+// Helper functions for formatting
+const formatCurrency = (amount: number): string => {
+	return new Intl.NumberFormat("en-NG", {
+		style: "currency",
+		currency: "NGN",
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 0,
+	}).format(amount);
+};
+
+const formatDate = (dateString: string): string => {
+	const date = new Date(dateString);
+	return date.toLocaleDateString("en-GB", {
+		day: "numeric",
+		month: "short",
+		year: "numeric",
+	});
+};
+
+const calculateDuration = (startDate: string, endDate: string): string => {
+	const start = new Date(startDate);
+	const end = new Date(endDate);
+	const diffTime = Math.abs(end.getTime() - start.getTime());
+	const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+	if (diffDays < 30) {
+		return `${diffDays} days`;
+	} else if (diffDays < 365) {
+		const months = Math.round(diffDays / 30);
+		return `${months} month${months > 1 ? "s" : ""}`;
+	} else {
+		const years = Math.round(diffDays / 365);
+		return `${years} year${years > 1 ? "s" : ""}`;
+	}
+};
+
+const OngoingCard = ({ asset }: { asset: iAssetDetails | null }) => {
+	const metrics = asset?.metrics;
+	const progress = metrics?.repayment_progress || 0;
+	const amountPaid = metrics?.amount_repaid || 0;
+	const amountRemaining = metrics?.amount_unpaid || 0;
+
+	// Calculate total installments (assuming 14-day intervals)
+	const totalDays = metrics
+		? Math.ceil(
+				(new Date(metrics.maturity_date).getTime() -
+					new Date(metrics.disbursement_date).getTime()) /
+					(1000 * 60 * 60 * 24)
+		  )
+		: 0;
+	const totalInstallments = Math.ceil(totalDays / 14);
+	const completedInstallments = Math.floor(
+		(progress / 100) * totalInstallments
+	);
+
 	return (
 		<View style={styles.ongoingCardContainer}>
 			<View style={styles.ongoingCardProgressContainer}>
 				<Row>
 					<Typography title='Progress' type='body-r' style={styles.cardLabel} />
-					<Typography title='2 of 5' type='body-r' style={styles.cardLabel} />
+					<Typography
+						title={
+							metrics
+								? `${completedInstallments} of ${totalInstallments}`
+								: "N/A"
+						}
+						type='body-r'
+						style={styles.cardLabel}
+					/>
 				</Row>
 				<Pad size={scaleHeight(4)} />
-				<ProgressBar color={Colors.cardColor.brown["200"]} progress={30} />
+				<ProgressBar
+					color={Colors.cardColor.brown["200"]}
+					progress={progress}
+				/>
 			</View>
 			<View style={styles.ongoingCardDetailsContainer}>
 				<Row>
@@ -35,12 +100,12 @@ const OngoingCard = () => {
 				</Row>
 				<Row>
 					<Typography
-						title='N200,000'
+						title={metrics ? formatCurrency(amountPaid) : "N/A"}
 						type='body-b'
 						style={styles.cardAmount}
 					/>
 					<Typography
-						title='N100,000'
+						title={metrics ? formatCurrency(amountRemaining) : "N/A"}
 						type='body-r'
 						style={styles.cardAmount}
 					/>
@@ -50,14 +115,20 @@ const OngoingCard = () => {
 	);
 };
 
-const ApprovedCard = () => {
+const ApprovedCard = ({ asset }: { asset: iAssetDetails | null }) => {
+	const metrics = asset?.metrics;
+
+	const duration = metrics
+		? calculateDuration(metrics.disbursement_date, metrics.maturity_date)
+		: "N/A";
+
 	return (
 		<View style={styles.approvedCardContainer}>
 			<View style={styles.approvedCardHeaderContainer}>
 				<Row>
 					<Typography title='Schedule' type='body-r' style={styles.cardLabel} />
 					<Typography
-						title='Duration: 1 month'
+						title={`Duration: ${duration}`}
 						type='body-r'
 						style={styles.cardLabel}
 					/>
@@ -70,16 +141,16 @@ const ApprovedCard = () => {
 					type='body-r'
 					style={styles.cardLabel}
 				/>
-				<Typography
-					title='N5,250 every 14 days (includes 5% interest)'
-					type='body-r'
-					style={styles.cardLabel2}
-				/>
+				<Typography title={"N/A"} type='body-r' style={styles.cardLabel2} />
 			</View>
 			<View style={styles.approvedCardDetailsContainer}>
 				<Typography title='Start Date' type='body-r' style={styles.cardLabel} />
 				<Typography
-					title='20 Sept 2025'
+					title={
+						metrics?.disbursement_date
+							? formatDate(metrics.disbursement_date)
+							: "N/A"
+					}
 					type='body-r'
 					style={styles.cardLabel2}
 				/>
@@ -87,7 +158,9 @@ const ApprovedCard = () => {
 			<View style={styles.approvedCardDetailsContainer}>
 				<Typography title='End Date' type='body-r' style={styles.cardLabel} />
 				<Typography
-					title='15 Nov 2025'
+					title={
+						metrics?.maturity_date ? formatDate(metrics.maturity_date) : "N/A"
+					}
 					type='body-r'
 					style={styles.cardLabel2}
 				/>
@@ -96,7 +169,10 @@ const ApprovedCard = () => {
 	);
 };
 
-const DeniedCard = () => {
+const DeniedCard = ({ asset }: { asset: iAssetDetails | null }) => {
+	const assetData = asset?.asset;
+	const rejectReason = assetData?.reject_reason || "N/A";
+
 	return (
 		<View style={styles.deniedCardContainer}>
 			{/* Header Section */}
@@ -122,7 +198,7 @@ const DeniedCard = () => {
 			{/* Message Body */}
 			<View style={styles.deniedCardBody}>
 				<Typography
-					title='Application denied because the requested amount exceeds the eligible financing limit'
+					title={rejectReason}
 					type='body-r'
 					color={Colors.gray[600]}
 					style={styles.deniedMessage}
@@ -132,7 +208,13 @@ const DeniedCard = () => {
 	);
 };
 
-const RejectedCard = () => {
+const RejectedCard = ({ asset }: { asset: iAssetDetails | null }) => {
+	const metrics = asset?.metrics;
+
+	const duration = metrics
+		? calculateDuration(metrics.disbursement_date, metrics.maturity_date)
+		: "N/A";
+
 	return (
 		<View style={styles.rejectedCardContainer}>
 			{/* Header Section */}
@@ -145,7 +227,7 @@ const RejectedCard = () => {
 						style={styles.rejectedHeaderLabel}
 					/>
 					<Typography
-						title='Duration: 1 month'
+						title={`Duration: ${duration}`}
 						type='body-r'
 						color={Colors.gray[600]}
 						style={styles.rejectedHeaderValue}
@@ -164,7 +246,7 @@ const RejectedCard = () => {
 						style={styles.rejectedLabel}
 					/>
 					<Typography
-						title='₦5,250 every 14 days (includes 5% interest)'
+						title={"N/A"}
 						type='body-r'
 						color={Colors.black}
 						style={styles.rejectedValue}
@@ -180,7 +262,11 @@ const RejectedCard = () => {
 						style={styles.rejectedLabel}
 					/>
 					<Typography
-						title='20 Sept 2025'
+						title={
+							metrics?.disbursement_date
+								? formatDate(metrics.disbursement_date)
+								: "N/A"
+						}
 						type='body-r'
 						color={Colors.black}
 						style={styles.rejectedValue}
@@ -196,7 +282,9 @@ const RejectedCard = () => {
 						style={styles.rejectedLabel}
 					/>
 					<Typography
-						title='15 Nov 2025'
+						title={
+							metrics?.maturity_date ? formatDate(metrics.maturity_date) : "N/A"
+						}
 						type='body-r'
 						color={Colors.black}
 						style={styles.rejectedValue}
@@ -207,7 +295,13 @@ const RejectedCard = () => {
 	);
 };
 
-const AssetStatusCard = ({ status }: { status: AssetStatus }) => {
+const AssetStatusCard = ({
+	status,
+	asset,
+}: {
+	status: AssetStatus;
+	asset: iAssetDetails | null;
+}) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.assetStatusContainerView}>
@@ -224,10 +318,10 @@ const AssetStatusCard = ({ status }: { status: AssetStatus }) => {
 				/>
 			</View>
 			<Pad size={scaleHeight(8)} />
-			{status === "APPROVED" && <ApprovedCard />}
-			{status === "REQUESTED" && <OngoingCard />}
-			{status === "REJECTED" && <DeniedCard />}
-			{status === "FAILED" && <RejectedCard />}
+			{status === "APPROVED" && <ApprovedCard asset={asset} />}
+			{status === "REQUESTED" && <OngoingCard asset={asset} />}
+			{status === "REJECTED" && <DeniedCard asset={asset} />}
+			{status === "FAILED" && <RejectedCard asset={asset} />}
 		</View>
 	);
 };

@@ -36,15 +36,15 @@ const AssetDetails = ({
 	const [cancelRequestModalVisible, setCancelRequestModalVisible] =
 		useState(false);
 	const [getAssetDetails, { isLoading }] = useGetAssetDetailsMutation();
-	const [assetDetails, setAssetDetails] = useState<IAsset | null>(null);
+	const [assetDetails, setAssetDetails] = useState<iAssetDetails | null>(null);
 	// console.log(asset_id);
 	const fetchAssetDetails = async () => {
-		const { status, data } = await getAssetDetails({
+		const res = await getAssetDetails({
 			asset_id,
 		}).unwrap();
-		if (status) {
-			console.log(data);
-			setAssetDetails(data);
+		// console.log({ res });
+		if (res.status) {
+			setAssetDetails(res.data);
 		}
 	};
 	useEffect(() => {
@@ -67,7 +67,7 @@ const AssetDetails = ({
 		}, [])
 	);
 
-	// console.log({ assetDetails });
+	console.log({ assetDetails });
 
 	return (
 		<SafeAreaWrapper
@@ -78,31 +78,34 @@ const AssetDetails = ({
 				<AssetDetailsHeader
 					amount={
 						assetDetails
-							? `₦ ${assetDetails.value.toLocaleString()}`
+							? `₦ ${assetDetails?.asset?.value.toLocaleString()}`
 							: undefined
 					}
-					reference={assetDetails?.product_code || ""}
+					reference={assetDetails?.asset?.product_code || ""}
 				/>
-				<AssetStatusCard status={assetDetails?.status || "ALL"} />
+				<AssetStatusCard
+					status={assetDetails?.asset?.status || "ALL"}
+					asset={assetDetails}
+				/>
 				<AssetDetailList
-					memberName={`${assetDetails?.woman__first_name ?? ""} ${
-						assetDetails?.woman__surname ?? ""
+					memberName={`${assetDetails?.asset?.woman__first_name ?? ""} ${
+						assetDetails?.asset?.woman__surname ?? ""
 					}`.trim()}
-					date={assetDetails?.created_at?.split("T")[0]}
-					time={assetDetails?.created_at?.split("T")[1]?.slice(0, 5)}
-					items={(assetDetails?.items_requested ?? []).map((it) => ({
+					date={assetDetails?.asset?.created_at?.split("T")[0]}
+					time={assetDetails?.asset?.created_at?.split("T")[1]?.slice(0, 5)}
+					items={(assetDetails?.asset?.items_requested ?? []).map((it) => ({
 						name: it.name,
 						amount: `₦ ${Number(it.price).toLocaleString()}`,
 					}))}
 					total={
 						assetDetails
-							? `₦ ${assetDetails.value.toLocaleString()}`
+							? `₦ ${assetDetails?.asset?.value.toLocaleString()}`
 							: undefined
 					}
-					status={assetDetails?.status || "ALL"}
+					status={assetDetails?.asset?.status || "ALL"}
 				/>
 			</ScrollView>
-			{assetDetails?.status === "REQUESTED" && (
+			{assetDetails?.asset?.status === "REQUESTED" && (
 				<Button
 					title='Cancel Request'
 					containerStyle={styles.rejectedCardContainer}
