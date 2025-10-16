@@ -97,7 +97,7 @@ export const BASE_URL = APP_CONFIG[APP_MODE].BASE_URL;
 export const KIDASHI_URL = APP_CONFIG[APP_MODE].KIDASHI_URL;
 export const QOREID_CLIENT_ID = APP_CONFIG[APP_MODE].QOREID_CLIENT_ID;
 console.log("BASE_URL:---------------------", BASE_URL);
-console.log("KBASE_URL:----------------------", KIDASHI_URL);
+console.log("KBASE_URL:---------------------------", KIDASHI_URL);
 export const DEFAULT_ERROR_MESSAGE = "Something went wrong, contact support";
 
 export const IDCardTypes = [
