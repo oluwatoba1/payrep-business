@@ -83,13 +83,11 @@ const AssetCard = ({
 					</Row>
 					<Pad size={scaleHeight(2)} />
 					<Row gap={scale(8)}>
-						{asset.status === "REQUESTED" && (
-							<ProgressBar
-								progress={10}
-								color={Colors.cardColor.brown["200"]}
-							/>
-						)}
-						{asset.status === "APPROVED" && <TapReview />}
+						<ProgressBar
+							progress={asset.metrics?.repayment_progress || 0}
+							color={Colors.cardColor.brown["200"]}
+						/>
+						{/* {asset.status === "APPROVED" && <TapReview />} */}
 
 						<Typography
 							title={formatDateTime(asset.created_at).date || ""}

@@ -39,32 +39,35 @@ const MemberDetailsHeaderComp = ({
 			</View>
 
 			{/* OTP Status Bar */}
-			{status === "INACTIVE" && (
-				<TouchableOpacity
-					style={styles.otpStatusBar}
-					onPress={onOTPManagePress}
-					activeOpacity={0.7}
-				>
-					<View style={styles.otpStatusContent}>
-						<Image
-							source={ScreenImages.kidashiMemberDetails.infoIcon}
-							style={styles.infoIcon}
-							resizeMode='contain'
-						/>
-						<Typography
-							title='OTP pend ing to join circle: Tap to manage verifiers'
-							type='label-r'
-							color={Colors.cardColor.brown[200]}
-							style={styles.otpText}
-						/>
-						<Image
-							source={ScreenImages.kidashiMemberDetails.arrowRightIcon}
-							style={styles.arrowIcon}
-							resizeMode='contain'
-						/>
-					</View>
-				</TouchableOpacity>
-			)}
+
+			<TouchableOpacity
+				style={styles.otpStatusBar}
+				onPress={onOTPManagePress}
+				activeOpacity={0.7}
+			>
+				<View style={styles.otpStatusContent}>
+					<Image
+						source={ScreenImages.kidashiMemberDetails.infoIcon}
+						style={styles.infoIcon}
+						resizeMode='contain'
+					/>
+					<Typography
+						title={
+							status === "INACTIVE"
+								? "OTP pending to join circle: Tap to manage verifiers"
+								: "OTP verified"
+						}
+						type='label-r'
+						color={Colors.cardColor.brown[200]}
+						style={styles.otpText}
+					/>
+					<Image
+						source={ScreenImages.kidashiMemberDetails.arrowRightIcon}
+						style={styles.arrowIcon}
+						resizeMode='contain'
+					/>
+				</View>
+			</TouchableOpacity>
 
 			{/* Balance Section */}
 			<View style={styles.balanceContainer}>

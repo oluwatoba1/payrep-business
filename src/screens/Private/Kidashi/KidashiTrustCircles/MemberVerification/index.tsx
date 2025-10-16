@@ -1,14 +1,22 @@
+import { useEffect, useState } from "react";
+import { Image, View } from "react-native";
+
 import { Button, IconButton, PinPad, Typography } from "@components/Forms";
 import { MainLayout, Row } from "@components/Layout";
 import Pad from "@components/Pad";
 import { TrustCirclePill } from "@components/UI";
-import { Image, View } from "react-native";
 import styles from "./styles";
 import ComponentImages from "@assets/images/components";
 import { StackScreenProps } from "@react-navigation/stack";
 import { TrustCircleStackParamList } from "@navigation/types";
 import Colors from "@theme/Colors";
-import { useState } from "react";
+import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
+import useToast from "@hooks/useToast";
+import {
+	useFetchVotesMutation,
+	useValidateVoteMutation,
+} from "@store/apis/kidashiApi";
+import { useAppSelector } from "@store/hooks";
 
 type MemberVerificationProps = StackScreenProps<
 	TrustCircleStackParamList,
@@ -18,11 +26,76 @@ type MemberVerificationProps = StackScreenProps<
 export default function MemberVerification({
 	navigation: { navigate },
 }: MemberVerificationProps) {
-	const [otp1, setOtp1] = useState<string>("");
-	const [otp2, setOtp2] = useState<string>("");
-	const [otp3, setOtp3] = useState<string>("");
+	const { showToast } = useToast();
+
+	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
+	const circle_details = useAppSelector(
+		(state) => state.kidashi.circle_details
+	);
+
+	const [fetchVotes, { isLoading: isLoadingVotes }] = useFetchVotesMutation();
+	const [validateVote, { isLoading: isLoadingValidateVote }] =
+		useValidateVoteMutation();
+
+	const [votes, setVotes] = useState<{ vote_id: string; otp: string }[]>([]);
+	const [voters, setVoters] = useState<IVerifier[]>([]);
+
+	const updateVote = (index: number, otp: string) => {
+		const updatedVotes = [...votes];
+		updatedVotes[index].otp = otp;
+		setVotes(updatedVotes);
+	};
+
+	const retrieveVotes = async () => {
+		try {
+			const { status, message, data } = await fetchVotes({
+				trust_circle_id: circle_details?.id || "",
+				candidate_member: memberDetails?.id || "",
+			}).unwrap();
+			if (status) {
+				setVoters(data);
+				setVotes(
+					data.map((voter: IVerifier) => ({
+						vote_id: voter.id,
+						otp: "",
+					}))
+				);
+			} else {
+				showToast("danger", message);
+			}
+		} catch (error: ErrorResponse | any) {
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
+
+	const _validateVote = async () => {
+		try {
+			const { status, message } = await validateVote({ votes }).unwrap();
+			if (status) {
+				navigate("MemberAdditionSuccessScreen");
+			} else {
+				showToast("danger", message);
+			}
+		} catch (error: ErrorResponse | any) {
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
+
+	useEffect(() => {
+		retrieveVotes();
+	}, []);
+
 	return (
-		<MainLayout keyboardAvoidingType='scroll-view'>
+		<MainLayout
+			keyboardAvoidingType='scroll-view'
+			isLoading={isLoadingVotes || isLoadingValidateVote}
+		>
 			<Pad size={16} />
 
 			<Typography title='Member Verification' type='heading-sb' />
@@ -33,36 +106,23 @@ export default function MemberVerification({
 
 			<Pad size={24} />
 
-			<View style={styles.verifierContainer}>
-				<TrustCirclePill
-					icon={ComponentImages.kidashiMemberCard.memberIcon}
-					title='Aisha Bello'
-				/>
+			{voters.map((voter, index) => (
+				<View key={voter.id} style={styles.verifierContainer}>
+					<TrustCirclePill
+						icon={ComponentImages.kidashiMemberCard.memberIcon}
+						title={`${voter.voter__first_name} ${voter.voter__surname}`}
+					/>
 
-				<Pad />
+					<Pad />
 
-				<PinPad pin={otp1} onInput={setOtp1} codeLength={6} error='' />
-			</View>
-			<View style={styles.verifierContainer}>
-				<TrustCirclePill
-					icon={ComponentImages.kidashiMemberCard.memberIcon}
-					title='Dorcas Danjuma'
-				/>
-
-				<Pad />
-
-				<PinPad pin={otp2} onInput={setOtp2} codeLength={6} error='' />
-			</View>
-			<View style={styles.verifierContainer}>
-				<TrustCirclePill
-					icon={ComponentImages.kidashiMemberCard.memberIcon}
-					title='Kande Ibrahim'
-				/>
-
-				<Pad />
-
-				<PinPad pin={otp3} onInput={setOtp3} codeLength={6} error='' />
-			</View>
+					<PinPad
+						pin={votes[index]?.otp || ""}
+						onInput={(otp) => updateVote(index, otp)}
+						codeLength={4}
+						error=''
+					/>
+				</View>
+			))}
 
 			<Pad size={120} />
 
@@ -82,10 +142,7 @@ export default function MemberVerification({
 
 			<Pad size={20} />
 
-			<Button
-				title='Continue'
-				onPress={() => navigate("MemberAdditionSuccessScreen")}
-			/>
+			<Button title='Continue' onPress={_validateVote} />
 		</MainLayout>
 	);
 }

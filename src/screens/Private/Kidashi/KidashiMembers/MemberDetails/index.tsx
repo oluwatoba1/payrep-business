@@ -16,7 +16,7 @@ import { Typography } from "@components/Forms";
 import ScreenImages from "@assets/images/screens";
 import PerformActionModal from "@components/UI/MemberDetails/PerformActionModal";
 import { useFocusEffect } from "@react-navigation/native";
-import { MainLayout } from "@components/Layout";
+
 import { useGetMemberDetailsMutation } from "@store/apis/kidashiApi";
 import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";

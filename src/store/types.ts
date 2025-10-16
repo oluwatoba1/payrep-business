@@ -956,7 +956,7 @@ interface IWomanDetails {
 	date: string;
 	start_date: string;
 	end_date: string;
-	trust_circle_id: string;
+	trust_circle: string;
 	cba_customer_id: string;
 	vendor_id: string;
 	state_id: string;
@@ -1070,6 +1070,9 @@ interface IAsset {
 	date?: string;
 	start_date?: string;
 	end_date?: string;
+	metrics: {
+		repayment_progress: number; // e.g., 0 to 100
+	}
 }
 
 type AssetStatus =

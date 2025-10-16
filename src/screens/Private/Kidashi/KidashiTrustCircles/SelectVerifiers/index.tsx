@@ -9,32 +9,78 @@ import ScreenImages from "@assets/images/screens";
 import Colors from "@theme/Colors";
 import styles from "./styles";
 import { KidashiMemberItemCard } from "@components/Cards";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TrustCirclePill } from "@components/UI";
+import { useAppSelector } from "@store/hooks";
+import useToast from "@hooks/useToast";
+import {
+	useAddMemberToTrustCircleMutation,
+	useSearchWomanMutation,
+} from "@store/apis/kidashiApi";
+import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 
 type SelectVerifiersProps = StackScreenProps<
 	TrustCircleStackParamList,
 	"SelectVerifiers"
 >;
 
-interface IMember {
-	id: string;
-	title: string;
-	subtitle: string;
-}
-
 export default function SelectVerifiers({
 	navigation: { navigate, goBack },
 }: SelectVerifiersProps) {
-	const [members, setMembers] = useState<IMember[]>([
-		{ id: "1", title: "Gambo Salami", subtitle: "090*****1234" },
-		{ id: "2", title: "Susannah Bali", subtitle: "081*****7734" },
-		{ id: "3", title: "Shekinat Sanusi", subtitle: "080*****9934" },
-		{ id: "4", title: "Ruka Abubakar", subtitle: "070*****3334" },
-	]);
-	const [selectedMembers, setSelectedMembers] = useState<IMember[]>([]);
+	const { showToast } = useToast();
 
-	const onSelect = (item: IMember) => {
+	const [addMemberToTrustCircle, { isLoading }] =
+		useAddMemberToTrustCircleMutation();
+	const [searchWoman, { isLoading: isLoadingSearchWoman }] =
+		useSearchWomanMutation();
+
+	const circle_details = useAppSelector(
+		(state) => state.kidashi.circle_details
+	);
+	const vendor_id = useAppSelector((state) => state.kidashi.vendor?.id);
+	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
+
+	const [selectedMembers, setSelectedMembers] = useState<iWomanMemberDetails[]>(
+		[]
+	);
+
+	const [members, setMembers] = useState<iWomanMemberDetails[]>([]);
+
+	const fetchWomen = async () => {
+		await searchWoman({
+			trust_circle_id: circle_details?.id || "",
+		})
+			.unwrap()
+			.then((res) => {
+				if (res.status) {
+					setMembers(res.data);
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+				showToast("danger", err.data.message || DEFAULT_ERROR_MESSAGE);
+			});
+	};
+
+	const submit = async () => {
+		try {
+			const { status, message } = await addMemberToTrustCircle({
+				initiating_vendor_id: vendor_id || "",
+				woman_id: memberDetails?.id || "",
+				trust_circle_id: circle_details?.id || "",
+				selected_voters: selectedMembers.map((member) => member.id),
+			}).unwrap();
+			if (status) {
+				navigate("MemberVerification");
+			} else {
+				showToast("danger", message || DEFAULT_ERROR_MESSAGE);
+			}
+		} catch (error: any) {
+			showToast("danger", error.data.message || DEFAULT_ERROR_MESSAGE);
+		}
+	};
+
+	const onSelect = (item: iWomanMemberDetails) => {
 		const member = selectedMembers.find((member) => member.id === item.id);
 		if (member) {
 			setSelectedMembers(
@@ -44,8 +90,17 @@ export default function SelectVerifiers({
 		}
 		setSelectedMembers([...selectedMembers, item]);
 	};
+
+	useEffect(() => {
+		fetchWomen();
+	}, [circle_details?.id]);
+
 	return (
-		<MainLayout backAction={goBack} keyboardAvoidingType='view'>
+		<MainLayout
+			backAction={goBack}
+			keyboardAvoidingType='view'
+			isLoading={isLoading}
+		>
 			<Pad size={16} />
 
 			<Typography title='Select Verifiers' type='heading-sb' />
@@ -72,24 +127,26 @@ export default function SelectVerifiers({
 					/>
 				</View>
 
-				<FlatList<IMember>
+				<FlatList<iWomanMemberDetails>
 					data={[...new Set([...selectedMembers, ...members])]}
 					renderItem={({ item }) => (
 						<KidashiMemberItemCard
-							{...item}
+							title={`${item.first_name} ${item.surname}`}
+							subtitle={item.mobile_number}
 							isSelected={
 								!!selectedMembers.find((member) => member.id === item.id)
 							}
 							onSelect={() => onSelect(item)}
 						/>
 					)}
+					keyExtractor={(item) => item.id}
 					showsVerticalScrollIndicator={false}
 				/>
 			</View>
 
 			<Pad size={30} />
 
-			<Button title='Continue' onPress={() => navigate("MemberVerification")} />
+			<Button title='Continue' onPress={submit} />
 		</MainLayout>
 	);
 }

@@ -16,10 +16,14 @@ import ScreenImages from "@assets/images/screens";
 import { useGetAccountsMutation } from "@store/apis/accountApi";
 import {
 	useAddMemberToTrustCircleMutation,
+	useGetMemberDetailsMutation,
 	useGetWomanDetailsMutation,
 } from "@store/apis/kidashiApi";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
-import { setSelectedAccountDetails } from "@store/slices/kidashiSlice";
+import {
+	setMemberDetails,
+	setSelectedAccountDetails,
+} from "@store/slices/kidashiSlice";
 import { useFocusEffect } from "@react-navigation/native";
 
 type EnterAccountNumberProps = StackScreenProps<
@@ -42,16 +46,15 @@ export default function EnterAccountNumber({
 	const circle_details = useAppSelector(
 		(state) => state.kidashi.circle_details
 	);
-	// console.log({ circle_details });
+	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
 
+	const [getMemberDetails, { isLoading }] = useGetMemberDetailsMutation();
 	const [getAccounts, { isLoading: isLoadingAccounts }] =
 		useGetAccountsMutation();
 	const [
 		addMemberToTrustCircle,
 		{ isLoading: isLoadingAddMemberToTrustCircle },
 	] = useAddMemberToTrustCircleMutation();
-	const [getWomanDetails, { isLoading: isLoadingWomanDetails }] =
-		useGetWomanDetailsMutation();
 	const vendor_id = useAppSelector((state) => state.kidashi.vendor?.id);
 	const selected_account = useAppSelector(
 		(state) => state.kidashi.selected_account
@@ -59,9 +62,6 @@ export default function EnterAccountNumber({
 
 	const [showAccountContainer, setShowAccountContainer] =
 		useState<boolean>(false);
-	const [woman_details, setWomanDetails] = useState<iWomanMemberDetails | null>(
-		null
-	);
 	// Auto-fetch account when number reaches 10 digits
 	useEffect(() => {
 		if (formData.accountNumber.length === 10) {
@@ -69,50 +69,47 @@ export default function EnterAccountNumber({
 		}
 	}, [formData.accountNumber]);
 
-	// console.log({ selected_account });
-
 	const fetchWomanDetails = async (id: string) => {
-		await getWomanDetails({
-			cba_customer_id: id,
-		})
-			.unwrap()
-			.then((res) => {
-				if (res.status) {
-					setWomanDetails(res.data as iWomanMemberDetails);
-					setShowAccountContainer(true);
-				}
-			})
-			.catch((err) => {
-				console.log(err);
-				showToast("danger", err.data.message || DEFAULT_ERROR_MESSAGE);
-			});
+		try {
+			const { status, message, data } = await getMemberDetails({
+				cba_customer_id: id,
+			}).unwrap();
+			if (status) {
+				setShowAccountContainer(true);
+				dispatch(setMemberDetails({ ...data, cba_customer_id: id }));
+			} else {
+				showToast("danger", message);
+				goBack();
+			}
+		} catch (error: ErrorResponse | any) {
+			console.log(error);
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
 	};
 
 	// Submit dynamically depending on ID type
 	const submit = async () => {
-		if (circle_details?.members_count && circle_details?.members_count >= 3) {
-			navigate("SelectVerifiers");
-		} else {
-			const payload = {
+		try {
+			const { status, message, data } = await addMemberToTrustCircle({
 				initiating_vendor_id: vendor_id || "",
-				woman_id: woman_details?.id || "",
+				woman_id: memberDetails?.id || "",
 				trust_circle_id: circle_details?.id || "",
-			};
-			await addMemberToTrustCircle(payload)
-				.unwrap()
-				.then((res) => {
-					if (res.status) {
-						navigate("MemberAdditionSuccessScreen");
-					} else {
-						showToast("danger", res.message || DEFAULT_ERROR_MESSAGE);
-					}
-				})
-				.catch((err) => {
-					console.log(err);
-					// remove this after testing
-					// navigate("MemberAdditionSuccessScreen");
-					showToast("danger", err.data.message || DEFAULT_ERROR_MESSAGE);
-				});
+			}).unwrap();
+
+			if (data?.verifier_required) {
+				navigate("SelectVerifiers");
+				return;
+			}
+			if (status) {
+				navigate("MemberAdditionSuccessScreen");
+			} else {
+				showToast("danger", message || DEFAULT_ERROR_MESSAGE);
+			}
+		} catch (error: any) {
+			showToast("danger", error.data.message || DEFAULT_ERROR_MESSAGE);
 		}
 	};
 
@@ -135,11 +132,6 @@ export default function EnterAccountNumber({
 					showToast("danger", err.data.message || DEFAULT_ERROR_MESSAGE);
 				});
 		});
-	};
-
-	const backAction = () => {
-		goBack();
-		return true; // Prevent default behavior
 	};
 
 	const resetAndGoBack = () => {
@@ -189,9 +181,7 @@ export default function EnterAccountNumber({
 						<Row alignItems='center' gap={6}>
 							<Typography
 								title={
-									isLoadingAccounts || isLoadingWomanDetails
-										? "Searching..."
-										: "Search"
+									isLoadingAccounts || isLoading ? "Searching..." : "Search"
 								}
 								type='label-sb'
 								color={Colors.danger["700"]}
@@ -227,14 +217,6 @@ export default function EnterAccountNumber({
 								color={Colors.neutral["600"]}
 							/>
 						</Row>
-
-						{/* <Row alignItems='center' gap={7}>
-							<Typography
-								title={accountData?.customer__email}
-								type='label-sb'
-								color={Colors.primary["600"]}
-							/>
-						</Row> */}
 					</Row>
 				</View>
 			) : null}

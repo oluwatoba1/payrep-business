@@ -82,8 +82,8 @@ android {
         applicationId "com.shinobi.payrepbusiness"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 13
-        versionName "0.1.3"
+        versionCode 16
+        versionName "0.1.6"
     }
     signingConfigs {
         debug {

@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { StackScreenProps } from "@react-navigation/stack";
-import { CompositeScreenProps } from "@react-navigation/native";
+import {
+	CompositeScreenProps,
+	useFocusEffect,
+	useNavigation,
+} from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { FlatList, Image } from "react-native";
+import { BackHandler, FlatList, Image } from "react-native";
 
 import { Button, Typography } from "@components/Forms";
 import { KidashiLayout } from "@components/Layout";
@@ -14,19 +18,24 @@ import {
 	SearchContainer,
 } from "@components/Miscellaneous";
 import { KidashiDashboardEmptyStateProps } from "@components/Miscellaneous/KidashiDashboardEmptyState";
-import { HomeStackParamList, MembersStackParamList } from "@navigation/types";
+import {
+	BottomTabParamList,
+	HomeStackParamList,
+	KidashiBottomTabParamList,
+	MembersStackParamList,
+} from "@navigation/types";
 import { useSearchWomanMutation } from "@store/apis/kidashiApi";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import useToast from "@hooks/useToast";
 import { KidashiMemberItemCard } from "@components/Cards";
-import { useAppSelector } from "@store/hooks";
-import { scale } from "@utils/Helpers";
-import { StyleSheet } from "react-native";
 import { styles } from "./styles";
 
 type KidashiMembersProps = CompositeScreenProps<
 	StackScreenProps<MembersStackParamList, "Members">,
-	BottomTabScreenProps<HomeStackParamList, "Dashboard">
+	CompositeScreenProps<
+		BottomTabScreenProps<KidashiBottomTabParamList, "KidashiHome">,
+		BottomTabScreenProps<HomeStackParamList, "Dashboard">
+	>
 >;
 
 export default function Members({
@@ -61,7 +70,21 @@ export default function Members({
 			});
 	};
 
-	// console.log(isLoadingSearchWoman);
+	const backAction = () => {
+		navigate("KidashiHome", { screen: "KidashiDashboard" });
+		return true; // Prevent default behavior
+	};
+
+	useFocusEffect(
+		useCallback(() => {
+			const backHandler = BackHandler.addEventListener(
+				"hardwareBackPress",
+				backAction
+			);
+
+			return () => backHandler.remove(); // Cleanup
+		}, [])
+	);
 
 	return (
 		<KidashiLayout

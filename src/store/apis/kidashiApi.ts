@@ -84,7 +84,7 @@ const KidashiApi = createApi({
 		}),
 		fetchTrustCircles: builder.mutation<
 			AuthResponse<{ circles: ITrustCircle[] }>,
-			{ vendor_id: string; search: string }
+			{ filters: { vendor_id: string }; search: string }
 		>({
 			query: (body) => ({
 				url: "trust_circle/mobile/fetch",
@@ -104,7 +104,7 @@ const KidashiApi = createApi({
 		}),
 		validateVote: builder.mutation<
 			AuthResponse<null>,
-			{ vote_id: string; otp: string }[]
+			{ votes: { vote_id: string; otp: string }[] }
 		>({
 			query: (body) => ({
 				url: "trust_circle/mobile/vote/validate",
@@ -131,7 +131,7 @@ const KidashiApi = createApi({
 		}),
 		fetchVotes: builder.mutation<
 			AuthResponse<IVerifier[]>,
-			{ trust_circle_id: string; candidate_member: string }
+			{ trust_circle_id: string | null; candidate_member: string }
 		>({
 			query: (body) => ({
 				url: "trust_circle/mobile/vote/fetch",
@@ -303,7 +303,7 @@ const KidashiApi = createApi({
 			},
 		}),
 		addMemberToTrustCircle: builder.mutation<
-			AuthResponse<null>,
+			AuthResponse<{ verifier_required: boolean }>,
 			{
 				initiating_vendor_id: string;
 				woman_id: string;
