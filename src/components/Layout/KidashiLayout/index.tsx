@@ -29,6 +29,7 @@ interface MainLayoutProps {
 	hasBottomTabBar?: boolean;
 	isRefreshing?: boolean;
 	onRefresh?: () => void;
+	notificationCount?: number;
 }
 interface KeyboardAvoiderProps {
 	type: "scroll-view" | "view";
@@ -96,6 +97,7 @@ export default function MainLayout({
 	isRefreshing = false,
 	onRefresh,
 	goToNotification = () => {},
+	notificationCount = 0,
 }: MainLayoutProps) {
 	return (
 		<View
@@ -119,6 +121,7 @@ export default function MainLayout({
 						rightAction={rightAction}
 						headerFooter={headerFooter}
 						goToNotifications={goToNotification}
+						notificationCount={notificationCount}
 					/>
 				) : null}
 				<View style={styles.childrenContainer}>{children}</View>

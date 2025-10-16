@@ -15,6 +15,7 @@ interface KidashiHeaderProps {
 	rightAction?: () => void;
 	headerFooter?: ReactNode;
 	goToNotifications: () => void;
+	notificationCount?: number;
 }
 
 export default function KidashiHeader({
@@ -23,6 +24,7 @@ export default function KidashiHeader({
 	rightAction = () => {},
 	headerFooter,
 	goToNotifications,
+	notificationCount = 0,
 }: KidashiHeaderProps) {
 	return (
 		<LinearGradient
@@ -52,6 +54,16 @@ export default function KidashiHeader({
 								source={ComponentImages.kidashiLayout.bellIcon}
 								style={styles.bellIcon}
 							/>
+							{notificationCount > 0 ? (
+								<View style={styles.notificationBadge}>
+									<Typography
+										title={`${
+											notificationCount > 99 ? "99+" : notificationCount
+										}`}
+										style={styles.notificationBadgeText}
+									/>
+								</View>
+							) : null}
 						</Pressable>
 						<Pressable onPress={rightAction} style={styles.returnHomeContainer}>
 							<Row alignItems='center' gap={7}>
