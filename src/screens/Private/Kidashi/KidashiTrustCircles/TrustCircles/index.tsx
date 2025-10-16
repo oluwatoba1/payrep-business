@@ -51,7 +51,9 @@ export default function TrustCircles({
 	const _fetchTrustCircles = async () => {
 		try {
 			const { status, message, data } = await fetchTrustCircles({
-				vendor_id: vendor?.id || "",
+				filters: {
+					vendor_id: vendor?.id || "",
+				},
 				search: searchText,
 			}).unwrap();
 
