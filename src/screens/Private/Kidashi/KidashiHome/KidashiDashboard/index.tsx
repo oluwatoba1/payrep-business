@@ -30,7 +30,10 @@ import {
 } from "@components/UI/TrustCircle/Cards";
 import { IMemberTransaction } from "@components/UI/TrustCircle/Cards/MemberTransactionCard";
 import { useAppSelector } from "@store/hooks";
-import { useOnboardWomanMutation } from "@store/apis/kidashiApi";
+import {
+	useFetchNotificationsMutation,
+	useOnboardWomanMutation,
+} from "@store/apis/kidashiApi";
 import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 
@@ -120,10 +123,12 @@ export default function KidashiDashboard({
 }: KidashiDashboardProps) {
 	const [activeTab, setActiveTab] = useState<TabType>("Top Performing");
 	const [showBottomSheet, setShowBottomSheet] = useState(false);
+	const [notificationCount, setNotificationCount] = useState<number>(0);
 
 	const { showToast } = useToast();
 	const customer = useAppSelector((state) => state.customer.customer);
 	const [onboardWoman] = useOnboardWomanMutation();
+	const [fetchNotifications] = useFetchNotificationsMutation();
 
 	const options = [
 		{
@@ -140,6 +145,21 @@ export default function KidashiDashboard({
 				navigate("MemberRegistration", { screen: "MemberPhoneNumber" }),
 		},
 	];
+
+	useEffect(() => {
+		const getUnreadCount = async () => {
+			try {
+				const res = await fetchNotifications({ filters: {} }).unwrap();
+				if (res?.status && Array.isArray(res?.data)) {
+					const unread = res.data.filter((n: any) => !n?.is_read).length;
+					setNotificationCount(unread);
+				}
+			} catch (e) {
+				// noop
+			}
+		};
+		getUnreadCount();
+	}, [fetchNotifications]);
 
 	const registerWoman = async () => {
 		try {
@@ -166,6 +186,7 @@ export default function KidashiDashboard({
 		<KidashiLayout
 			rightAction={() => navigate("Dashboard")}
 			goToNotification={() => navigate("KidashiNotifications")}
+			notificationCount={notificationCount}
 			headerFooter={
 				<Row
 					alignItems='center'
