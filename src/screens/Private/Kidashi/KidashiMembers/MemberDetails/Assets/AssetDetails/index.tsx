@@ -37,11 +37,13 @@ const AssetDetails = ({
 		useState(false);
 	const [getAssetDetails, { isLoading }] = useGetAssetDetailsMutation();
 	const [assetDetails, setAssetDetails] = useState<IAsset | null>(null);
+	// console.log(asset_id);
 	const fetchAssetDetails = async () => {
 		const { status, data } = await getAssetDetails({
 			asset_id,
 		}).unwrap();
 		if (status) {
+			console.log(data);
 			setAssetDetails(data);
 		}
 	};
