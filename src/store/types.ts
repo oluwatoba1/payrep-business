@@ -1116,6 +1116,20 @@ interface INotification {
 	updated_at: string;
 }
 
+interface iAssetDetails {
+	asset: IAsset;
+	metrics: iAssetMetrics;
+}
+
+interface iAssetMetrics {
+	amount_repaid: number;
+	amount_unpaid: number;
+	disbursement_date: string;
+	maturity_date: string;
+	principal_balance_left: number;
+	repayment_progress: number;
+}
+
 interface IVerifier {
 	id: string;
 	trust_circle_id: string;

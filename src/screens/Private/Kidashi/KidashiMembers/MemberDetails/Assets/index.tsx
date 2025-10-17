@@ -62,6 +62,8 @@ const Assets = ({ navigation }: KidashiMembersProps) => {
 		}, [])
 	);
 
+	console.log({ assets });
+
 	return (
 		<SafeAreaWrapper
 			title={`Assets for ${memberDetails?.first_name || "Woman"}`}
