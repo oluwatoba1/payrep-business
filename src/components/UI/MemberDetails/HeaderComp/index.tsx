@@ -55,7 +55,7 @@ const MemberDetailsHeaderComp = ({
 						title={
 							status === "INACTIVE"
 								? "OTP pending to join circle: Tap to manage verifiers"
-								: "OTP verified"
+								: "Member verified"
 						}
 						type='label-r'
 						color={Colors.cardColor.brown[200]}

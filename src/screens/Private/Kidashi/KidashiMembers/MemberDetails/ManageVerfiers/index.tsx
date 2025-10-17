@@ -272,7 +272,7 @@ const ManageVerfiers = () => {
 				],
 			}).unwrap();
 			if (status) {
-				setShowGenerateOTPModal(false);
+				setShowOTPModal(false);
 				setRefresh(new Date().toISOString());
 			} else {
 				showToast("danger", message);
@@ -288,7 +288,7 @@ const ManageVerfiers = () => {
 	const _addVote = async () => {
 		try {
 			const { status, message } = await addVote({
-				vote_id: vote?.id || "",
+				trust_circle_id: memberDetails?.trust_circle || null,
 				voter_id: voter?.id || "",
 			}).unwrap();
 			if (status) {
@@ -360,7 +360,7 @@ const ManageVerfiers = () => {
 						style={styles.subtitle}
 					/>
 				</View>
-				{memberDetails?.status === "INACTIVE" ? (
+				{memberDetails?.status === "INACTIVE" && memberDetails.trust_circle ? (
 					<View>
 						<Typography
 							title='Search a verifier (Account Number)'

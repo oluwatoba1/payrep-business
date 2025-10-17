@@ -1,29 +1,34 @@
+import { BackHandler, FlatList, Image, Pressable } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { styles } from "./style";
+import { useFocusEffect } from "@react-navigation/native";
+import { StackScreenProps } from "@react-navigation/stack";
+
 import SafeAreaWrapper from "@components/Layout/SafeAreaWrapper";
 import MemberDetailsHeaderComp from "@components/UI/MemberDetails/HeaderComp";
 import MemberDetailsCard from "@components/UI/MemberDetails/MemberDetailsCard";
-import Colors from "@theme/Colors";
-import Tab from "@components/Miscellaneous/Tab";
 import AccountInfo from "@components/UI/MemberDetails/AccountInfo";
 import MoreDetails from "@components/UI/MemberDetails/MoreDetails";
-import Transactions from "@components/UI/MemberDetails/Transactions";
+import { TransactonItem } from "@components/Cards";
 import Pad from "@components/Pad";
-import { StackScreenProps } from "@react-navigation/stack";
 import { MembersStackParamList } from "@navigation/types";
-import { BackHandler, Image, Pressable } from "react-native";
 import { Typography } from "@components/Forms";
 import ScreenImages from "@assets/images/screens";
 import PerformActionModal from "@components/UI/MemberDetails/PerformActionModal";
-import { useFocusEffect } from "@react-navigation/native";
-
 import { useGetMemberDetailsMutation } from "@store/apis/kidashiApi";
 import useToast from "@hooks/useToast";
-import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
+import {
+	BOTTOM_TAB_CONTAINER_HEIGHT,
+	DEFAULT_ERROR_MESSAGE,
+} from "@utils/Constants";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { setMemberDetails } from "@store/slices/kidashiSlice";
 import { KidashiDashboardEmptyState } from "@components/Miscellaneous";
 import { KidashiDashboardEmptyStateProps } from "@components/Miscellaneous/KidashiDashboardEmptyState";
+import { useGetTransactionsMutation } from "@store/apis/accountApi";
+import { setTransactions } from "@store/slices/transactionSlice";
+import { scaleHeight } from "@utils/Helpers";
+import Tab from "@components/Miscellaneous/Tab";
+import { styles } from "./style";
 
 const emptyStateData: KidashiDashboardEmptyStateProps = {
 	icon: ScreenImages.kidashiHome.noTrustCircles,
@@ -43,14 +48,33 @@ const MemberDetails = ({
 }: MemberDetailsProps) => {
 	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
-	const [getMemberDetails, { isLoading }] = useGetMemberDetailsMutation();
+	const [getMemberDetails] = useGetMemberDetailsMutation();
+	const [getTransactions] = useGetTransactionsMutation();
 
 	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
+	const transactionsData =
+		useAppSelector((state) => state.transactions.transactions) || [];
 
 	const [activeTab, setActiveTab] = useState<TabType>("Transactions");
 	const [visible, setVisible] = useState<boolean>(false);
 
-	// console.log(route.params.id);
+	const fetchTransactions = async (params: ITransactionQueryParams) => {
+		try {
+			const { status, message, data } = await getTransactions(params).unwrap();
+
+			if (status) {
+				// TODO: REMOVE DISPATCH, TRANSACTIONS CAN BE ACCESSED IN THE SCREEN STATE
+				dispatch(setTransactions(data));
+			} else {
+				showToast("danger", message);
+			}
+		} catch (error: ErrorResponse | any) {
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
 
 	const fetchDetails = async () => {
 		try {
@@ -66,7 +90,6 @@ const MemberDetails = ({
 				goBack();
 			}
 		} catch (error: ErrorResponse | any) {
-			console.log(error);
 			showToast(
 				"danger",
 				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
@@ -74,9 +97,12 @@ const MemberDetails = ({
 		}
 	};
 
-	useEffect(() => {
-		fetchDetails();
-	}, [route.params.id]);
+	useFocusEffect(
+		useCallback(() => {
+			fetchDetails();
+			fetchTransactions({ account: memberDetails?.account_number || "" });
+		}, [route.params.id])
+	);
 
 	const backAction = () => {
 		navigate("Members");
@@ -93,8 +119,6 @@ const MemberDetails = ({
 			return () => backHandler.remove(); // Cleanup
 		}, [])
 	);
-
-	// console.log({ memberDetails });
 
 	return (
 		<SafeAreaWrapper backAction={backAction} title='Member Details'>
@@ -116,11 +140,25 @@ const MemberDetails = ({
 			/>
 			<Pad size={16} />
 			{/* {activeTab === "Transactions" && <Transactions navigate={navigate} />} */}
-			{activeTab === "Transactions" && (
-				<KidashiDashboardEmptyState {...emptyStateData} />
-			)}
+			{activeTab === "Transactions" &&
+				(transactionsData.length === 0 ? (
+					<KidashiDashboardEmptyState {...emptyStateData} />
+				) : (
+					<FlatList
+						data={transactionsData as ITransaction[]}
+						renderItem={({ item }) => {
+							return <TransactonItem transaction={item} onPress={() => {}} />;
+						}}
+						keyExtractor={(item) => item.reference_number}
+						contentContainerStyle={{
+							paddingBottom: scaleHeight(BOTTOM_TAB_CONTAINER_HEIGHT * 5),
+						}}
+						showsVerticalScrollIndicator={false}
+					/>
+				))}
 			{activeTab === "More details" && <MoreDetails details={memberDetails} />}
 			{activeTab === "Account Info" && <AccountInfo details={memberDetails} />}
+
 			<Pressable
 				style={styles.performActionButton}
 				onPress={() => setVisible(true)}

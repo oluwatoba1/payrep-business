@@ -114,7 +114,7 @@ const KidashiApi = createApi({
 		}),
 		addVote: builder.mutation<
 			AuthResponse<null>,
-			{ vote_id: string; voter_id: string }
+			{ trust_circle_id: string | null; voter_id: string }
 		>({
 			query: (body) => ({
 				url: "trust_circle/mobile/vote/add",

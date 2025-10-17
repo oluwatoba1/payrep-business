@@ -566,6 +566,27 @@ interface ITransferResponse extends ITransaction {
 	pin_try_exceed?: boolean;
 }
 
+interface Transaction {
+	reference_number: string;
+	amount: number;
+	transaction_type: "credit" | "debit";
+	status: "successful" | "pending" | "failed";
+	transaction_date: string;
+	service?: number | string;
+	remarks?: string;
+	source_account_number: string;
+	source_account_name: string;
+	account__account_name: string;
+	account__account_number: string;
+	session_id?: string;
+	beneficiary_account_number: string;
+	beneficiary_account_name: string;
+	bank_name?: string;
+	bank_code?: string;
+	bank?: string;
+	fi: string;
+}
+
 interface SourceAccount {
 	accountName: string;
 	accountNumber: string;
@@ -1072,7 +1093,7 @@ interface IAsset {
 	end_date?: string;
 	metrics: {
 		repayment_progress: number; // e.g., 0 to 100
-	}
+	};
 }
 
 type AssetStatus =
