@@ -1072,10 +1072,11 @@ interface IAsset {
 	end_date?: string;
 	metrics: {
 		repayment_progress: number; // e.g., 0 to 100
-	}
+	};
 }
 
 type AssetStatus =
+	| "RUNNING"
 	| "REQUESTED"
 	| "QUERIED"
 	| "APPROVED"

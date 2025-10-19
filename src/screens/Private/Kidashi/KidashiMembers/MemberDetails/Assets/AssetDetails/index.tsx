@@ -103,7 +103,7 @@ const AssetDetails = ({
 					status={assetDetails?.asset?.status || "ALL"}
 				/>
 			</ScrollView>
-			{assetDetails?.asset?.status === "REQUESTED" && (
+			{assetDetails?.asset?.status === "RUNNING" && (
 				<Button
 					title='Cancel Request'
 					containerStyle={styles.rejectedCardContainer}
@@ -112,10 +112,10 @@ const AssetDetails = ({
 				/>
 			)}
 			<Pad size={scaleHeight(16)} />
-			<CancelRequestModal
+			{/* <CancelRequestModal
 				visible={cancelRequestModalVisible}
 				onClose={() => setCancelRequestModalVisible(false)}
-			/>
+			/> */}
 		</SafeAreaWrapper>
 	);
 };
