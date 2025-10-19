@@ -7,6 +7,11 @@ export const getStatusColor = (status: AssetStatus) => {
 				backgroundColor: Colors.primary[100],
 				color: Colors.cardColor.brown["200"],
 			};
+		case "RUNNING":
+			return {
+				backgroundColor: Colors.primary[100],
+				color: Colors.cardColor.brown["200"],
+			};
 		case "APPROVED":
 			return {
 				backgroundColor: Colors.success[50],

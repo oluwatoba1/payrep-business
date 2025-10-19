@@ -50,6 +50,7 @@ const OngoingCard = ({ asset }: { asset: iAssetDetails | null }) => {
 	const progress = metrics?.repayment_progress || 0;
 	const amountPaid = metrics?.amount_repaid || 0;
 	const amountRemaining = metrics?.amount_unpaid || 0;
+	// console.log({ asset });
 
 	// Calculate total installments (assuming 14-day intervals)
 	const totalDays = metrics
@@ -302,6 +303,7 @@ const AssetStatusCard = ({
 	status: AssetStatus;
 	asset: iAssetDetails | null;
 }) => {
+	// console.log({ asset });
 	return (
 		<View style={styles.container}>
 			<View style={styles.assetStatusContainerView}>
@@ -319,7 +321,7 @@ const AssetStatusCard = ({
 			</View>
 			<Pad size={scaleHeight(8)} />
 			{status === "APPROVED" && <ApprovedCard asset={asset} />}
-			{status === "REQUESTED" && <OngoingCard asset={asset} />}
+			{status === "RUNNING" && <OngoingCard asset={asset} />}
 			{status === "REJECTED" && <DeniedCard asset={asset} />}
 			{status === "FAILED" && <RejectedCard asset={asset} />}
 		</View>

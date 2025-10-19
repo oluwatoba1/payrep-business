@@ -21,7 +21,7 @@ type KidashiMembersProps = CompositeScreenProps<
 >;
 
 const Assets = ({ navigation }: KidashiMembersProps) => {
-	const [activeTab, setActiveTab] = useState<string>("REQUESTED");
+	const [activeTab, setActiveTab] = useState<string>("RUNNING");
 	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
 
 	const { showToast } = useToast();
@@ -62,7 +62,7 @@ const Assets = ({ navigation }: KidashiMembersProps) => {
 		}, [])
 	);
 
-	console.log({ assets });
+	// console.log({ assets });
 
 	return (
 		<SafeAreaWrapper
@@ -70,7 +70,7 @@ const Assets = ({ navigation }: KidashiMembersProps) => {
 			backAction={backAction}
 		>
 			<Tab
-				items={["REQUESTED", "ALL"]}
+				items={["RUNNING", "ALL"]}
 				onTap={(value) => setActiveTab(value.toUpperCase() as AssetStatus)}
 				value={activeTab}
 			/>
