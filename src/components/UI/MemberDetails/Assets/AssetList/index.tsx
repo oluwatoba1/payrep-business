@@ -124,7 +124,7 @@ const AssetList = ({
 			<Divider gapY={scaleHeight(16)} />
 			<FlatList
 				data={
-					status === "REQUESTED"
+					status === "RUNNING"
 						? assets.filter((item) => item.status === status)
 						: assets
 				}

@@ -1097,6 +1097,7 @@ interface IAsset {
 }
 
 type AssetStatus =
+	| "RUNNING"
 	| "REQUESTED"
 	| "QUERIED"
 	| "APPROVED"
