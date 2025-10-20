@@ -156,7 +156,7 @@ export default function Dashboard({
 
 	const getVendor = async () => {
 		try {
-			const { status, message, data } = await fetchKidashiVendor({
+			const { status, data } = await fetchKidashiVendor({
 				cba_customer_id: customer?.id || "",
 			}).unwrap();
 

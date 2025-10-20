@@ -1,4 +1,5 @@
 import Colors from "@theme/Colors";
+import { BOTTOM_TAB_CONTAINER_HEIGHT } from "@utils/Constants";
 import { moderateScale, scale, scaleHeight } from "@utils/Helpers";
 import { StyleSheet } from "react-native";
 
@@ -36,5 +37,10 @@ export const styles = StyleSheet.create({
 	},
 	performActionText: {
 		fontSize: moderateScale(12),
+	},
+	transactionContainer: {
+		height: scaleHeight(400),
+		paddingTop: scaleHeight(10),
+		paddingBottom: scaleHeight(BOTTOM_TAB_CONTAINER_HEIGHT * 5),
 	},
 });

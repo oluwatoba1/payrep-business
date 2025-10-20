@@ -1,5 +1,5 @@
-import { BackHandler, FlatList, Image, Pressable } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import { Alert, BackHandler, FlatList, Image, Pressable } from "react-native";
+import React, { useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 
@@ -138,7 +138,7 @@ const MemberDetails = ({
 				value={activeTab}
 				onTap={(value) => setActiveTab(value as TabType)}
 			/>
-			<Pad size={16} />
+			<Pad size={20} />
 			{/* {activeTab === "Transactions" && <Transactions navigate={navigate} />} */}
 			{activeTab === "Transactions" &&
 				(transactionsData.length === 0 ? (
@@ -150,9 +150,8 @@ const MemberDetails = ({
 							return <TransactonItem transaction={item} onPress={() => {}} />;
 						}}
 						keyExtractor={(item) => item.reference_number}
-						contentContainerStyle={{
-							paddingBottom: scaleHeight(BOTTOM_TAB_CONTAINER_HEIGHT * 5),
-						}}
+						style={{ flex: 1 }}
+						contentContainerStyle={styles.transactionContainer}
 						showsVerticalScrollIndicator={false}
 					/>
 				))}
