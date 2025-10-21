@@ -91,7 +91,6 @@ const RepaymentOverview = ({
 			const { status, message } = await createAsset({
 				vendor_id: vendor?.id || "",
 				woman_id: memberDetails?.id || "",
-				// product_code: "Asset001",
 				value: assetRequest.value || "0",
 				markup: String(
 					(interestRatePercent / 100) * Number(assetRequest.value || "0")
