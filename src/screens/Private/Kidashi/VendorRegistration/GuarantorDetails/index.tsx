@@ -3,7 +3,7 @@ import { ActivityIndicator, BackHandler, View } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 
-import { MainLayout, Row } from "@components/Layout";
+import { MainLayout } from "@components/Layout";
 import {
 	Typography,
 	Button,
