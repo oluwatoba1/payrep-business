@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { BackHandler, View } from "react-native";
+import React, { useCallback, useEffect, useState, useRef } from "react";
+import { ActivityIndicator, BackHandler, View } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 
@@ -27,11 +27,17 @@ import useGuarantorDetails from "./validators";
 import { Stepper } from "@components/Miscellaneous";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { setRegistrationDetails } from "@store/slices/kidashiSlice";
+import { useNinLookupMutation } from "@store/apis/complianceApi";
 
 type GuarantorDetailsProps = CompositeScreenProps<
 	StackScreenProps<KidashiRegistrationStackParamList, "GuarantorDetails">,
 	StackScreenProps<BottomTabParamList, "Home">
 >;
+
+interface DefaultDropdownOption {
+	label: string;
+	value: string;
+}
 
 export default function GuarantorDetails({
 	navigation: { navigate },
@@ -68,8 +74,9 @@ export default function GuarantorDetails({
 				...statesData.data.filter((s: any) => s.name !== "Kaduna"),
 		  ]
 		: [];
-	// Fetch LGAs dynamically
+
 	const [fetchLgas, { isLoading: lgasLoading }] = useFetchLgasMutation();
+	const [ninLookup, { isLoading: ninLookupLoading }] = useNinLookupMutation();
 
 	// Local states for dropdown selections
 	const [selectedGender, setSelectedGender] = useState<
@@ -86,7 +93,25 @@ export default function GuarantorDetails({
 		DefaultDropdownOption | undefined
 	>(undefined);
 	const [agreed, setAgreed] = useState<boolean>(false);
-	const [clearDateField, setClearDateField] = useState<boolean>(false);
+
+	const [ninLookupPerformed, setNinLookupPerformed] = useState<{
+		[key: number]: string;
+	}>({});
+
+	const [hasNINData, setHasNINData] = useState(false);
+
+	const ninLookupInProgress = useRef(false);
+
+	const clearFormFields = () => {
+		setFirstName("");
+		setLastName("");
+		setGender("");
+		setPhoneNumber("");
+		setDateOfBirth("");
+		setEmail("");
+		setSelectedGender(undefined);
+		setHasNINData(false);
+	};
 
 	const _fetchLgas = async () => {
 		try {
@@ -106,26 +131,148 @@ export default function GuarantorDetails({
 		}
 	};
 
-	const handleSubmit = () => {
-		validateForm((guarantors) => {
-			console.log(guarantors);
-			setSelectedGender(undefined);
-			setSelectedState(undefined);
-			setSelectedLga(undefined);
-			setSelectedRelationship(undefined);
-			setDateOfBirth(undefined);
+	const _ninLookup = async (nin: string) => {
+		if (ninLookupInProgress.current) return;
+		// if (ninLookupPerformed[guarantorNumber] === nin) return;
 
-			dispatch(setRegistrationDetails({ guarantors }));
-			guarantors.length === 2 && navigate("ReviewDetails");
+		try {
+			ninLookupInProgress.current = true;
+
+			const { status, message, data } = await ninLookup({
+				nin: nin,
+			}).unwrap();
+
+			if (status && data) {
+				setHasNINData(true);
+
+				setNinLookupPerformed((prev) => ({
+					...prev,
+					[guarantorNumber]: nin,
+				}));
+
+				setFirstName(data.first_name || "");
+				setLastName(data.last_name || "");
+				setGender(data.gender || "");
+				setPhoneNumber(data.phone_number || "");
+				setDateOfBirth(data.date_of_birth || "");
+
+				// Update selected gender for the dropdown
+				if (data.gender) {
+					setSelectedGender({ label: data.gender, value: data.gender });
+				}
+			} else {
+				setHasNINData(false);
+				showToast("danger", message);
+			}
+		} catch (error: ErrorResponse | any) {
+			setHasNINData(false);
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		} finally {
+			ninLookupInProgress.current = false;
+		}
+	};
+
+	const handleSubmit = () => {
+		if (!agreed) {
+			showToast("danger", "Please confirm the guarantor details");
+			return;
+		}
+
+		validateForm((updatedGuarantors) => {
+			console.log("Guarantors:", updatedGuarantors);
+
+			dispatch(setRegistrationDetails({ guarantors: updatedGuarantors }));
+			if (updatedGuarantors.length === 2) {
+				navigate("ReviewDetails");
+			} else {
+				clearFormFields();
+				setSelectedState(undefined);
+				setSelectedLga(undefined);
+				setSelectedRelationship(undefined);
+				setAgreed(false);
+				setNin("");
+				showToast("success", "Guarantor 1 saved. Please add Guarantor 2");
+			}
 		});
 	};
 
-	// Update LGAs when state changes
 	useEffect(() => {
-		if (selectedState) {
+		if (selectedState && formData.state) {
 			_fetchLgas();
 		}
-	}, [selectedState]);
+	}, [selectedState, formData.state]);
+
+	useEffect(() => {
+		if (formData.nin && formData.nin.length === 11) {
+			_ninLookup(formData.nin);
+		} else if (formData.nin && formData.nin.length < 11) {
+			setHasNINData(false);
+		}
+	}, [formData.nin, guarantorNumber]);
+
+	useEffect(() => {
+		const existingGuarantor = guarantors[guarantorNumber - 1];
+
+		if (existingGuarantor) {
+			setNin(existingGuarantor.nin || "");
+			setFirstName(existingGuarantor.first_name || "");
+			setLastName(existingGuarantor.surname || "");
+			setPhoneNumber(existingGuarantor.phone || "");
+			setDateOfBirth(existingGuarantor.dob || "");
+			setEmail(existingGuarantor.email || "");
+
+			if (existingGuarantor.gender) {
+				setGender(existingGuarantor.gender);
+				setSelectedGender({
+					label: existingGuarantor.gender,
+					value: existingGuarantor.gender,
+				});
+			}
+
+			if (existingGuarantor.state_id) {
+				setState(existingGuarantor.state_id);
+				const state = sortedStates.find(
+					(s: any) => s.id === existingGuarantor.state_id
+				);
+				if (state) {
+					setSelectedState({ label: state.name, value: state.id });
+				}
+			}
+
+			if (existingGuarantor.lga_id) {
+				setLga(existingGuarantor.lga_id);
+			}
+
+			if (existingGuarantor.relationship) {
+				setRelationship(existingGuarantor.relationship);
+				const relationshipLabel =
+					existingGuarantor.relationship.charAt(0).toUpperCase() +
+					existingGuarantor.relationship.slice(1);
+				setSelectedRelationship({
+					label: relationshipLabel,
+					value: existingGuarantor.relationship,
+				});
+			}
+
+			if (existingGuarantor.nin) {
+				setHasNINData(true);
+				setNinLookupPerformed((prev) => ({
+					...prev,
+					[guarantorNumber]: existingGuarantor.nin,
+				}));
+			}
+		} else {
+			clearFormFields();
+			setNin("");
+			setSelectedState(undefined);
+			setSelectedLga(undefined);
+			setSelectedRelationship(undefined);
+			setAgreed(false);
+		}
+	}, [guarantorNumber]);
 
 	useFocusEffect(
 		useCallback(() => {
@@ -142,14 +289,17 @@ export default function GuarantorDetails({
 		}, [])
 	);
 
-	const gurantorDetails = !vendorGuarantors.length
+	const guarantorDetails = vendorGuarantors.length
 		? vendorGuarantors
 		: guarantors;
 
 	return (
 		<MainLayout
 			keyboardAvoidingType='scroll-view'
-			backAction={() => [setGuarantors([]), navigate("VendorItems")]}
+			backAction={() => {
+				setGuarantors([]);
+				navigate("VendorItems");
+			}}
 		>
 			<Stepper steps={3} currentStep={3} />
 
@@ -166,14 +316,30 @@ export default function GuarantorDetails({
 
 			<View>
 				<TextInput
+					label='NIN'
+					placeholder='Ex: 12345678901'
+					keyboardType='numeric'
+					maxLength={11}
+					onChangeText={(text) => {
+						setNin(text);
+						if (text.length < 11) {
+							setHasNINData(false);
+						}
+					}}
+					value={formData.nin}
+					error={formErrors.nin}
+					rightNode={ninLookupLoading ? <ActivityIndicator /> : undefined}
+				/>
+
+				<Pad size={12} />
+
+				<TextInput
 					label='First Name'
 					placeholder='e.g John'
 					onChangeText={setFirstName}
-					value={
-						gurantorDetails[guarantorNumber - 1]?.first_name ||
-						formData.firstName
-					}
+					value={formData.firstName}
 					error={formErrors.firstName}
+					editable={!hasNINData}
 				/>
 
 				<Pad size={12} />
@@ -182,10 +348,9 @@ export default function GuarantorDetails({
 					label='Last Name'
 					placeholder='e.g Doe'
 					onChangeText={setLastName}
-					value={
-						gurantorDetails[guarantorNumber - 1]?.surname || formData.lastName
-					}
+					value={formData.lastName}
 					error={formErrors.lastName}
+					editable={!hasNINData}
 				/>
 
 				<Pad size={12} />
@@ -195,7 +360,7 @@ export default function GuarantorDetails({
 					options={
 						sortedStates.map((option: any) => ({
 							label: option.name,
-							value: option.id,
+							value: String(option.id),
 						})) || []
 					}
 					selectedOption={selectedState}
@@ -203,20 +368,20 @@ export default function GuarantorDetails({
 						setSelectedState(option);
 						setState(option.value);
 						setSelectedLga(undefined); // Reset LGA when state changes
+						setLga("");
 					}}
-					error=''
+					error={formErrors.state}
 					isLoading={statesLoading}
 				/>
 
 				<Pad size={12} />
 
-				{/* LGA Dropdown */}
 				<Dropdown
 					label='Local Govt. Area'
 					options={
 						lgas.map((option: any) => ({
 							label: option.name,
-							value: option.id,
+							value: String(option.id),
 						})) || []
 					}
 					selectedOption={selectedLga}
@@ -230,19 +395,27 @@ export default function GuarantorDetails({
 
 				<Pad size={12} />
 
-				<Dropdown
-					label='Gender'
-					options={[
-						{ label: "Male", value: "Male" },
-						{ label: "Female", value: "Female" },
-					]}
-					selectedOption={selectedGender}
-					onSelect={(option) => {
-						setSelectedGender(option);
-						setGender(option.value);
-					}}
-					error={formErrors.gender}
-				/>
+				{hasNINData ? (
+					<TextInput
+						label='Gender'
+						value={selectedGender?.label || formData.gender || ""}
+						editable={false}
+					/>
+				) : (
+					<Dropdown
+						label='Gender'
+						options={[
+							{ label: "Male", value: "Male" },
+							{ label: "Female", value: "Female" },
+						]}
+						selectedOption={selectedGender}
+						onSelect={(option) => {
+							setSelectedGender(option);
+							setGender(option.value);
+						}}
+						error={formErrors.gender}
+					/>
+				)}
 
 				<Pad size={12} />
 
@@ -259,11 +432,19 @@ export default function GuarantorDetails({
 
 				<Pad size={12} />
 
-				<DateField
-					label='Date of Birth'
-					onDateChange={setDateOfBirth}
-					error={formErrors.dateOfBirth}
-				/>
+				{hasNINData ? (
+					<TextInput
+						label='Date of Birth'
+						value={formData.dateOfBirth || ""}
+						editable={false}
+					/>
+				) : (
+					<DateField
+						label='Date of Birth'
+						onDateChange={setDateOfBirth}
+						error={formErrors.dateOfBirth}
+					/>
+				)}
 
 				<Pad size={12} />
 
@@ -274,18 +455,7 @@ export default function GuarantorDetails({
 					value={formData.email}
 					error={formErrors.email}
 					autoCapitalize='none'
-				/>
-
-				<Pad size={12} />
-
-				<TextInput
-					label='NIN'
-					keyboardType='numeric'
-					placeholder='Ex: 12345678901'
-					maxLength={11} // adjust if NIN length differs
-					onChangeText={setNin}
-					value={formData.nin}
-					error={formErrors.nin}
+					keyboardType='email-address'
 				/>
 
 				<Pad size={12} />
@@ -316,7 +486,11 @@ export default function GuarantorDetails({
 
 			<Pad size={80} />
 
-			<Button title='Next' onPress={handleSubmit} />
+			<Button
+				title={guarantorNumber === 1 ? "Next" : "Submit"}
+				onPress={handleSubmit}
+				disabled={!agreed}
+			/>
 			<Pad size={20} />
 		</MainLayout>
 	);

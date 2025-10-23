@@ -20,7 +20,9 @@ export default function KidashiRegistrationStack() {
 	return (
 		<Stack.Navigator
 			screenOptions={{ headerShown: false }}
-			initialRouteName={!vendor ? "KidashiOnboarding" : "OnboardingStatus"}
+			// TODO: remove this comment
+			// initialRouteName={!vendor ? "KidashiOnboarding" : "OnboardingStatus"}
+			initialRouteName={"KidashiOnboarding"}
 		>
 			<Stack.Screen name='VendorInformation' component={VendorInformation} />
 			<Stack.Screen name='KidashiOnboarding' component={KidashiOnboarding} />
