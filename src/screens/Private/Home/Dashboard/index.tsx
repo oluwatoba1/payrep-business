@@ -228,14 +228,13 @@ export default function Dashboard({
 	};
 
 	const navigateToKidashi = useCallback(() => {
-		// TODO: remove this comment
 		switch (vendor?.status) {
-			// case "ACTIVE":
-			// 	navigate("KidashiBottomTabs", {
-			// 		screen: "KidashiHome",
-			// 		params: { screen: "KidashiDashboard" },
-			// 	});
-			// 	break;
+			case "ACTIVE":
+				navigate("KidashiBottomTabs", {
+					screen: "KidashiHome",
+					params: { screen: "KidashiDashboard" },
+				});
+				break;
 
 			default:
 				navigate("KidashiBottomTabs", {
