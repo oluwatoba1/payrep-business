@@ -21,6 +21,7 @@ import { useVerifyWomanEmailMutation } from "@store/apis/kidashiApi";
 import { setRegistrationDetails } from "@store/slices/authSlice";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import { useVerifyEmailMutation } from "@store/apis/authApi";
+import { Stepper } from "@components/Miscellaneous";
 
 type MemberEmailProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberEmail">,
@@ -78,6 +79,8 @@ export default function MemberEmail({
 
 	return (
 		<MainLayout backAction={backAction} isLoading={isLoading}>
+			{/* Stepper */}
+			<Stepper steps={8} currentStep={1} />
 			<Typography title='Provide your Email Address' type='heading-sb' />
 			<Typography title='Please enter a valid email address' type='label-sb' />
 

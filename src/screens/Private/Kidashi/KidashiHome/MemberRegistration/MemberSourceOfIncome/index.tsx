@@ -21,6 +21,7 @@ import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import { useAppSelector } from "@store/hooks";
 import Pad from "@components/Pad";
 import { useUpdateWomanIncomeMutation } from "@store/apis/kidashiApi";
+import { Stepper } from "@components/Miscellaneous";
 
 type MemberSourceOfIncomeProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberSourceOfIncome">,
@@ -95,6 +96,7 @@ export default function MemberSourceOfIncome({
 			backAction={() => navigate("KidashiDashboard")}
 			isLoading={isLoading}
 		>
+			<Stepper steps={8} currentStep={8} />
 			<Typography type='heading4-sb' title='Source of Income' />
 			<Typography
 				type='body-r'

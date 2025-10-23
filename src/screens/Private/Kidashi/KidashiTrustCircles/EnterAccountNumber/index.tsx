@@ -25,6 +25,7 @@ import {
 	setSelectedAccountDetails,
 } from "@store/slices/kidashiSlice";
 import { useFocusEffect } from "@react-navigation/native";
+import { Stepper } from "@components/Miscellaneous";
 
 type EnterAccountNumberProps = StackScreenProps<
 	TrustCircleStackParamList,
@@ -153,7 +154,7 @@ export default function EnterAccountNumber({
 	return (
 		<MainLayout backAction={resetAndGoBack} keyboardAvoidingType='scroll-view'>
 			<Pad size={16} />
-
+			<Stepper steps={4} currentStep={1} />
 			<Typography title='Enter Account Number' type='heading-sb' />
 			<Typography
 				title='Enter the account number linked to the member'
