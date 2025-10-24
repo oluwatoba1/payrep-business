@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
 		fontFamily: PNR,
 		fontSize: moderateScale(16),
 		color: Colors.black,
+		textAlign: "left",
 	},
 	flagIcon: {
 		width: scale(24),

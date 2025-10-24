@@ -35,6 +35,7 @@ import {
 	useBvnLookupMutation,
 	useNinLookupMutation,
 } from "@store/apis/complianceApi";
+import { Stepper } from "@components/Miscellaneous";
 
 interface IKycData {
 	customer: string;
@@ -222,7 +223,7 @@ export default function MemberMeansOfVerification({
 			/>
 
 			<Pad size={16} />
-
+			<Stepper steps={8} currentStep={3} />
 			<Typography title='Means of Verification' type='heading-sb' />
 			<Typography
 				title='Select your identity verification method'

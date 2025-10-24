@@ -24,6 +24,7 @@ import {
 } from "@store/apis/authApi";
 import Colors from "@theme/Colors";
 import { useRegisterWomanEmailMutation } from "@store/apis/kidashiApi";
+import { Stepper } from "@components/Miscellaneous";
 
 type MemberEmailVerificationProps = StackScreenProps<
 	MemberRegistrationStackParamList,
@@ -138,8 +139,8 @@ export default function MemberEmailVerification({
 			isLoading={isLoading}
 			loadingTitle={loadingTitle}
 		>
+			<Stepper steps={8} currentStep={2} />
 			<Typography title='Verify Email Address' type='heading-sb' />
-
 			<HybridTypography
 				textTray={[
 					{ text: "We sent a 6-digit code to ", bold: false },
@@ -147,9 +148,7 @@ export default function MemberEmailVerification({
 					{ text: "Enter it below to continue", bold: false },
 				]}
 			/>
-
 			<Pad size={16} />
-
 			<PinPad
 				pin={otp}
 				onInput={setOtp}
@@ -157,9 +156,7 @@ export default function MemberEmailVerification({
 				secure={false}
 				error={formErrors.otp}
 			/>
-
 			<Pad size={8} />
-
 			<Typography
 				title={
 					countdown === 0
@@ -169,13 +166,10 @@ export default function MemberEmailVerification({
 				type='body-sb'
 				onPress={() => countdown === 0 && resend()}
 			/>
-
 			{isResending ? (
 				<ActivityIndicator size={16} color={Colors.black} />
 			) : null}
-
 			<Pad size={176} />
-
 			<Button title='Continue' onPress={() => validateForm(submit)} />
 		</MainLayout>
 	);

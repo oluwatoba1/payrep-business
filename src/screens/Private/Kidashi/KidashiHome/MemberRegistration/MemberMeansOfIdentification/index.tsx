@@ -21,6 +21,7 @@ import { chunkArray } from "@utils/Helpers";
 import styles from "./styles";
 import { useWomanUploadMeansofIdentificationMutation } from "@store/apis/kidashiApi";
 import { useAppSelector } from "@store/hooks";
+import { Stepper } from "@components/Miscellaneous";
 
 type MemberMeansOfIdentificationProps = CompositeScreenProps<
 	StackScreenProps<
@@ -94,6 +95,7 @@ export default function MemberMeansOfIdentification({
 			keyboardAvoidingType='scroll-view'
 			isLoading={isLoading}
 		>
+			<Stepper steps={8} currentStep={6} />
 			<Typography title='Means of Identification' type='heading-sb' />
 			<Typography
 				type='label-sb'
