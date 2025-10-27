@@ -16,6 +16,7 @@ import Pad from "@components/Pad";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { useUpdateWomanPepMutation } from "@store/apis/kidashiApi";
 import { useAppSelector } from "@store/hooks";
+import { Stepper } from "@components/Miscellaneous";
 
 const OPTIONS = [
 	{ label: "Yes", value: "yes" },
@@ -87,6 +88,7 @@ export default function MemberPep({
 			backAction={() => navigate("KidashiDashboard")}
 			isLoading={isLoading}
 		>
+			<Stepper steps={8} currentStep={7} />
 			<Typography title='PEP Status' type='heading-sb' />
 			<Typography
 				title='Are you politically exposed? Please respond with either Yes or No.'

@@ -24,6 +24,7 @@ import {
 	formatToInternationalPhoneNumber,
 	normalizeName,
 } from "@utils/Helpers";
+import { Stepper } from "@components/Miscellaneous";
 
 interface VerifyBvnProps {
 	startTime: number;
@@ -165,13 +166,13 @@ export default function MemberFaceCaptureVerification({
 			loadingTitle='Validating KYC'
 		>
 			<Pad size={16} />
+			<Stepper steps={8} currentStep={4} />
 			<Typography title='Face Capture Verification' type='heading-sb' />
 			<Typography
 				title='Please capture a photo of yourself. This will be used to confirm that your face matches the image on your identity card.'
 				type='label-sb'
 			/>
 			<Pad size={24} />
-
 			<View style={styles.cardContainer}>
 				<CustomCard visible={true} customContainerStyle={styles.container}>
 					<View style={{ gap: 14, alignItems: "center" }}>
@@ -199,9 +200,7 @@ export default function MemberFaceCaptureVerification({
 					</View>
 				</CustomCard>
 			</View>
-
 			<Pad size={100} />
-
 			<Button title='Start Face Capture' onPress={onSubmit} />
 		</MainLayout>
 	);

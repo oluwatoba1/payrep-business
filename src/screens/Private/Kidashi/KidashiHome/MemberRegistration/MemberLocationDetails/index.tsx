@@ -22,6 +22,7 @@ import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import { useUpdateWomanLocationMutation } from "@store/apis/kidashiApi";
 import { useAppSelector } from "@store/hooks";
+import { Stepper } from "@components/Miscellaneous";
 
 type MemberLocationDetailsProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberLocationDetails">,
@@ -153,6 +154,7 @@ export default function MemberLocationDetails({
 			isLoading={isLoading}
 			keyboardAvoidingType='scroll-view'
 		>
+			<Stepper steps={8} currentStep={5} />
 			<Typography title='Location' type='heading-sb' />
 			<Typography type='label-r' title='Please provide your full address' />
 
