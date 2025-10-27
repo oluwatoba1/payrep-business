@@ -16,6 +16,11 @@ const styles = StyleSheet.create({
 	homeButton: {
 		width: width - 2 * scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
 	},
+	reregisterIcon: {
+		width: scaleHeight(16),
+		height: scaleHeight(16),
+		resizeMode: "contain",
+	},
 });
 
 export default styles;

@@ -168,6 +168,91 @@ export const defaultAttestationText = (fullName: string) => `
   </html>
 `;
 
+export const kidashiDefaultAttestationText = () => `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <title>Attestation Agreement</title>
+      <style>
+          body {
+              font-family: Arial, sans-serif;
+              padding: 20px;
+              line-height: 1.6;
+              background-color: #f9f9f9;
+              color: #333;
+          }
+          h1 {
+              text-align: center;
+              font-size: 24px;
+              margin-bottom: 30px;
+          }
+          .content {
+              background-color: #fff;
+              padding: 20px;
+              border-radius: 8px;
+              box-shadow: 0 0 10px rgba(0,0,0,0.1);
+          }
+          .signature-section {
+              margin-top: 40px;
+          }
+          .signature-line {
+              border-bottom: 1px solid #333;
+              width: 250px;
+              margin-top: 10px;
+          }
+          .label {
+              font-weight: bold;
+              margin-top: 20px;
+          }
+      </style>
+  </head>
+  <body>
+      <h1>Attestation Agreement</h1>
+      <div class="content">
+          <p>
+              <span class="label">1. Purpose of Account</span> <br/>
+              This account is created to access business-related financial services and loan facilities from PayRep Microfinance Bank (PayRepMFB).
+          </p>
+          
+          <p>
+              <span class="label">2. Loan Commitment</span> <br/>
+              By creating this account, I acknowledge that any loan facility obtained is a credit obligation that must be repaid in full, according to the agreed terms and repayment schedule.
+          </p>
+
+          <p>
+              <span class="label">3. Business Ownership</span> <br/>
+			  I confirm that I operate or manage a legitimate business or trade and that all information provided in my application is accurate and verifiable.
+          </p>
+
+          <p>
+              <span class="label">4. Repayment Obligation</span> <br/>
+			  I understand that I must repay all loan amounts—including charges—on or before the due date. Failure to do so may attract penalties or affect my access to future loans.
+          </p>
+
+          <p>
+              <span class="label">5. Default & Recovery Terms</span> <br/>
+			  If I fail to repay as agreed: <br/>
+				a. PayRepMFB may recover outstanding funds from any linked accounts or guarantors. <br/>
+				b. My default may be reported to credit bureaus and other financial institutions. <br/>
+				c. I may be restricted from accessing new loans or other credit facilities. <br/>
+          </p>
+
+		  <p>
+              <span class="label">6. Verification & Data Use</span> <br/>
+			   I authorize PayRepMFB to verify my information, obtain credit records, and process my personal and business data in line with the Bank’s Privacy Policy and applicable data protection laws.
+          </p>
+
+		  <p>
+              <span class="label">7. Consent to Terms</span> <br/>
+			   By proceeding, I confirm that I have read, understood, and agree to the PayRepMFB Terms & Conditions, including all obligations related to business loan repayment.
+          </p>
+      </div>
+  </body>
+  </html>
+`;
+
 export const ACCOUNT_TYPES = [
 	{ label: "Savings", value: "savings" },
 	{ label: "Current", value: "current" },

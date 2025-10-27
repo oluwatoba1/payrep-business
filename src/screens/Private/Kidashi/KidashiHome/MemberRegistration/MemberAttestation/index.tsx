@@ -15,6 +15,7 @@ import useToast from "@hooks/useToast";
 import {
 	DEFAULT_ERROR_MESSAGE,
 	defaultAttestationText,
+	kidashiDefaultAttestationText,
 } from "@utils/Constants";
 import { useAffirmAttestationMutation } from "@store/apis/customerApi";
 import { useGetAttestationMutation } from "@store/apis/complianceApi";
@@ -22,10 +23,7 @@ import styles from "./styles";
 import Colors from "@theme/Colors";
 import { useAppSelector } from "@store/hooks";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import {
-	useAffirmWomanAttestationMutation,
-	useOnboardWomanMutation,
-} from "@store/apis/kidashiApi";
+import { useOnboardWomanMutation } from "@store/apis/kidashiApi";
 
 type MemberAttestationProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberAttestation">,
@@ -46,9 +44,7 @@ export default function MemberAttestation({
 		useGetAttestationMutation();
 
 	const [agreementHtml, setAgreementHtml] = useState<string>(
-		defaultAttestationText(
-			`${customer?.first_name || ""} ${customer?.surname || ""}`
-		)
+		kidashiDefaultAttestationText()
 	);
 	const [isChecked, setIsChecked] = useState<boolean>(false);
 

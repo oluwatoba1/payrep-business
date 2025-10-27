@@ -52,6 +52,7 @@ const ScreenImages = {
 		success: require("../screens/Kidashi/OnboardingStatus/check.png"),
 		pending: require("../screens/Kidashi/OnboardingStatus/hourglass.png"),
 		rejected: require("../screens/Kidashi/OnboardingStatus/error.png"),
+		reregister: require("../screens/Kidashi/OnboardingStatus/reregister-icon.png"),
 	},
 	kidashiHome: {
 		caretRight: require("./Kidashi/KidashiHome/caret-right-icon.png"),

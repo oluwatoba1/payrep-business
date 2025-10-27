@@ -55,17 +55,17 @@ const overview: KidashiHomeCardProps["items"] = [
 ];
 
 const emptyStateData: Record<TabType, KidashiDashboardEmptyStateProps> = {
-	"Top Performing": {
+	"Resource Requests": {
 		icon: ScreenImages.kidashiHome.noTrustCircles,
-		title: "Your top circles will grow here",
+		title: "No resource requests yet",
 		description:
-			"Circles with high repayments and will appear here once your members stay consistent",
+			"Once members start applying for resource financing, their requests will appear here for your review.",
 	},
-	"Recent Transactions": {
+	"My Earnings": {
 		icon: ScreenImages.kidashiHome.noTransactions,
-		title: "No Transactions yet",
+		title: "No Earnings Yet",
 		description:
-			"When loans are created or payments are made, you’ll see them listed here",
+			"Start funding members to grow your income and see your earnings here",
 	},
 };
 
@@ -108,7 +108,7 @@ const dummyMemberTransactionData: IMemberTransaction[] = [
 	},
 ];
 
-type TabType = "Top Performing" | "Recent Transactions";
+type TabType = "Resource Requests" | "My Earnings";
 
 type KidashiDashboardProps = CompositeScreenProps<
 	StackScreenProps<KidashiHomeStackParamList, "KidashiDashboard">,
@@ -121,7 +121,7 @@ type KidashiDashboardProps = CompositeScreenProps<
 export default function KidashiDashboard({
 	navigation: { navigate },
 }: KidashiDashboardProps) {
-	const [activeTab, setActiveTab] = useState<TabType>("Top Performing");
+	const [activeTab, setActiveTab] = useState<TabType>("Resource Requests");
 	const [showBottomSheet, setShowBottomSheet] = useState(false);
 	const [notificationCount, setNotificationCount] = useState<number>(0);
 
@@ -227,7 +227,7 @@ export default function KidashiDashboard({
 			<Pad size={16} />
 
 			<Tab
-				items={["Top Performing", "Recent Transactions"]}
+				items={["Resource Requests", "My Earnings"]}
 				value={activeTab}
 				onTap={(value) => setActiveTab(value as TabType)}
 			/>
@@ -235,7 +235,7 @@ export default function KidashiDashboard({
 			<FlatList<ITrustCircleItem | IMemberTransaction>
 				data={[]}
 				renderItem={({ item, index }) =>
-					activeTab === "Recent Transactions" ? (
+					activeTab === "My Earnings" ? (
 						<MemberTransactionCard
 							item={item as IMemberTransaction}
 							isLastItem={index === dummyMemberTransactionData.length - 1}
