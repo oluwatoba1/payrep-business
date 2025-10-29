@@ -8,17 +8,13 @@ import { MainLayout, Row } from "@components/Layout";
 import Pad from "@components/Pad";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import useToast from "@hooks/useToast";
-import { TrustCircleStackParamList } from "@navigation/types";
+import { KidashiHomeStackParamList } from "@navigation/types";
 import ComponentImages from "@assets/images/components";
 import styles from "./styles";
 import Colors from "@theme/Colors";
 import ScreenImages from "@assets/images/screens";
 import { useGetAccountsMutation } from "@store/apis/accountApi";
-import {
-	useAddMemberToTrustCircleMutation,
-	useGetMemberDetailsMutation,
-	useGetWomanDetailsMutation,
-} from "@store/apis/kidashiApi";
+import { useGetMemberDetailsMutation } from "@store/apis/kidashiApi";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import {
 	setMemberDetails,
@@ -27,14 +23,14 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import { Stepper } from "@components/Miscellaneous";
 
-type EnterAccountNumberProps = StackScreenProps<
-	TrustCircleStackParamList,
-	"EnterAccountNumber"
+type TransferAccountNumberProps = StackScreenProps<
+	KidashiHomeStackParamList,
+	"TransferAccountNumber"
 >;
 
-export default function EnterAccountNumber({
+export default function TransferAccountNumber({
 	navigation: { navigate, goBack, reset },
-}: EnterAccountNumberProps) {
+}: TransferAccountNumberProps) {
 	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
 	const {
@@ -44,19 +40,10 @@ export default function EnterAccountNumber({
 		setAccountNumber,
 		clearFormError,
 	} = useAccountNumberValidation();
-	const circle_details = useAppSelector(
-		(state) => state.kidashi.circle_details
-	);
-	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
 
 	const [getMemberDetails, { isLoading }] = useGetMemberDetailsMutation();
 	const [getAccounts, { isLoading: isLoadingAccounts }] =
 		useGetAccountsMutation();
-	const [
-		addMemberToTrustCircle,
-		{ isLoading: isLoadingAddMemberToTrustCircle },
-	] = useAddMemberToTrustCircleMutation();
-	const vendor_id = useAppSelector((state) => state.kidashi.vendor?.id);
 	const selected_account = useAppSelector(
 		(state) => state.kidashi.selected_account
 	);
@@ -93,25 +80,7 @@ export default function EnterAccountNumber({
 
 	// Submit dynamically depending on ID type
 	const submit = async () => {
-		try {
-			const { status, message, data } = await addMemberToTrustCircle({
-				initiating_vendor_id: vendor_id || "",
-				woman_id: memberDetails?.id || "",
-				trust_circle_id: circle_details?.id || "",
-			}).unwrap();
-
-			if (data?.verifier_required) {
-				navigate("SelectVerifiers");
-				return;
-			}
-			if (status) {
-				navigate("MemberAdditionSuccessScreen");
-			} else {
-				showToast("danger", message || DEFAULT_ERROR_MESSAGE);
-			}
-		} catch (error: any) {
-			showToast("danger", error.data.message || DEFAULT_ERROR_MESSAGE);
-		}
+		navigate("TransferAmount");
 	};
 
 	const fetchAccounts = async () => {
@@ -135,7 +104,7 @@ export default function EnterAccountNumber({
 	};
 
 	const resetAndGoBack = () => {
-		navigate("TrustCircles");
+		navigate("KidashiDashboard");
 		return true;
 	};
 
@@ -154,9 +123,6 @@ export default function EnterAccountNumber({
 		<MainLayout backAction={resetAndGoBack} keyboardAvoidingType='scroll-view'>
 			<Pad size={16} />
 
-			<Stepper steps={3} currentStep={1} />
-
-			<Pad size={16} />
 			<Typography title='Enter Account Number' type='heading-sb' />
 			<Typography
 				title='Enter the account number linked to the member'
@@ -226,15 +192,7 @@ export default function EnterAccountNumber({
 
 			<Pad size={100} />
 
-			<Button
-				title={
-					isLoadingAddMemberToTrustCircle
-						? "Adding Member..."
-						: "Add Member to Trust Circle"
-				}
-				onPress={() => submit()}
-				disabled={!showAccountContainer || isLoadingAddMemberToTrustCircle}
-			/>
+			<Button title='Next' onPress={submit} disabled={!showAccountContainer} />
 		</MainLayout>
 	);
 }

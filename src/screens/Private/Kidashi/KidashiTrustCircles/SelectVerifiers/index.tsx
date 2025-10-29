@@ -18,6 +18,7 @@ import {
 	useSearchWomanMutation,
 } from "@store/apis/kidashiApi";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
+import { Stepper } from "@components/Miscellaneous";
 
 type SelectVerifiersProps = StackScreenProps<
 	TrustCircleStackParamList,
@@ -101,6 +102,10 @@ export default function SelectVerifiers({
 			keyboardAvoidingType='view'
 			isLoading={isLoading}
 		>
+			<Pad size={16} />
+
+			<Stepper steps={3} currentStep={2} />
+
 			<Pad size={16} />
 
 			<Typography title='Select Verifiers' type='heading-sb' />

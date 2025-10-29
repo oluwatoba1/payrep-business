@@ -5,7 +5,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { MainLayout } from "@components/Layout";
 import { Button, Typography } from "@components/Forms";
 import { styles } from "./styles";
-import { TransferStackParamList } from "@navigation/types";
+import { KidashiHomeStackParamList } from "@navigation/types";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import PinInputModal from "@components/Modal/PinInputModal";
 import RetryPinModal from "@components/Modal/RetryModal";
@@ -15,14 +15,14 @@ import { useBankTransferMutation } from "@store/apis/transferApi";
 import { setSelectedTransaction } from "@store/slices/accountSlice";
 import Pad from "@components/Pad";
 
-type ConfirmTransactionProps = StackScreenProps<
-	TransferStackParamList,
-	"ConfirmTransaction"
+type TransferConfirmationProps = StackScreenProps<
+	KidashiHomeStackParamList,
+	"TransferConfirmation"
 >;
 
-export default function ConfirmTransaction({
+export default function TransferConfirmation({
 	navigation: { navigate, goBack },
-}: ConfirmTransactionProps) {
+}: TransferConfirmationProps) {
 	// selectors
 	const transferDetails = useAppSelector(
 		(state) => state.transfer.transferDetails
@@ -77,7 +77,7 @@ export default function ConfirmTransaction({
 
 			if (status && data.txn_status === "successful") {
 				dispatch(setSelectedTransaction(data));
-				navigate("TransactionSuccess");
+				navigate("TransferSuccess");
 				return true;
 			} else {
 				handleFailedTransfer(data, message);

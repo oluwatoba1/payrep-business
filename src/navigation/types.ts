@@ -51,6 +51,10 @@ export type KidashiHomeStackParamList = {
 	MemberRegistration: NavigatorScreenParams<MemberRegistrationStackParamList>;
 	KidashiNotifications: undefined;
 	KidashiNotificationDetails: { notification_id: string };
+	TransferAccountNumber: undefined;
+	TransferAmount: undefined;
+	TransferConfirmation: undefined;
+	TransferSuccess: undefined;
 };
 
 export type TrustCircleStackParamList = {

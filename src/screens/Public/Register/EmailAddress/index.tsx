@@ -12,6 +12,7 @@ import useRegisterEmailValidation from "./validator";
 import useToast from "@hooks/useToast";
 import { useVerifyEmailMutation } from "@store/apis/authApi";
 import { useFocusEffect } from "@react-navigation/native";
+import { setRegistrationDetails } from "@store/slices/authSlice";
 
 type EmailAddressProps = StackScreenProps<
 	PublicNavigatorParamList,
@@ -31,8 +32,8 @@ export default function EmailAddress({
 	} = useRegisterEmailValidation();
 	const [verifyEmail, { isLoading }] = useVerifyEmailMutation();
 
-	const mobileNumber = useAppSelector(
-		(state) => state.auth.registration.mobileNumber
+	const registrationDetails = useAppSelector(
+		(state) => state.auth.registration
 	);
 
 	const submit = async () => {
@@ -40,6 +41,12 @@ export default function EmailAddress({
 			const { status } = await verifyEmail({ email }).unwrap();
 			if (status) {
 				navigate("EmailVerification");
+				dispatch(
+					setRegistrationDetails({
+						...registrationDetails,
+						email,
+					})
+				);
 			}
 		} catch (error: any) {
 			showToast(

@@ -17,6 +17,7 @@ import {
 	useValidateVoteMutation,
 } from "@store/apis/kidashiApi";
 import { useAppSelector } from "@store/hooks";
+import { Stepper } from "@components/Miscellaneous";
 
 type MemberVerificationProps = StackScreenProps<
 	TrustCircleStackParamList,
@@ -96,6 +97,10 @@ export default function MemberVerification({
 			keyboardAvoidingType='scroll-view'
 			isLoading={isLoadingVotes || isLoadingValidateVote}
 		>
+			<Pad size={16} />
+
+			<Stepper steps={3} currentStep={3} />
+
 			<Pad size={16} />
 
 			<Typography title='Member Verification' type='heading-sb' />

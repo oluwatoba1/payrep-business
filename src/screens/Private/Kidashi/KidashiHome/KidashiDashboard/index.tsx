@@ -132,6 +132,12 @@ export default function KidashiDashboard({
 
 	const options = [
 		{
+			label: "Transfer to Member",
+			sub: "Transfer money to a member's account",
+			icon: ScreenImages.kidashiHome.transferIcon,
+			onPress: () => navigate("TransferAccountNumber"),
+		},
+		{
 			label: "Create a Trust Circle",
 			sub: "Set up a new group for loans",
 			icon: ScreenImages.kidashiHome.createTrustCircle,
