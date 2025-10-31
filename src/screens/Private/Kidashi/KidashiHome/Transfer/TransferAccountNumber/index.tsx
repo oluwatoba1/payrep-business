@@ -125,7 +125,7 @@ export default function TransferAccountNumber({
 
 			<Typography title='Enter Account Number' type='heading-sb' />
 			<Typography
-				title='Enter the account number linked to the member'
+				title='Add member’s account number to continue. If they don’t have one, you would need to create an account'
 				type='label-r'
 			/>
 

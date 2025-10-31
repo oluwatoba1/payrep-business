@@ -87,8 +87,7 @@ export default function BankTransfer({ navigation }: BankTransferProps) {
 	] = useNameEnquiryMutation();
 	const [checkTransferLimits, { isLoading: isCheckingLimits }] =
 		useCheckTransferLimitsMutation();
-	const [fetchCustomerBeneficiaries, { isLoading: isLoadingBeneficiaries }] =
-		useFetchCustomerBeneficiariesMutation();
+	const [fetchCustomerBeneficiaries] = useFetchCustomerBeneficiariesMutation();
 
 	// ======================================
 	// Component State
@@ -231,11 +230,6 @@ export default function BankTransfer({ navigation }: BankTransferProps) {
 				if (result.status && result.data.length > 0) {
 					setRelatedBanks(result.data);
 					setShowBankModal(true);
-					// if (result.data.length === 1) {
-					//   handleBankSelection(result.data[0])
-					// } else {
-					//   setShowBankModal(true);
-					// }
 				} else {
 					const allBanks = await fetchBanks({}).unwrap();
 

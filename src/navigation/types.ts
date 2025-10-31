@@ -55,6 +55,7 @@ export type KidashiHomeStackParamList = {
 	TransferAmount: undefined;
 	TransferConfirmation: undefined;
 	TransferSuccess: undefined;
+	TransferDetails: undefined;
 };
 
 export type TrustCircleStackParamList = {

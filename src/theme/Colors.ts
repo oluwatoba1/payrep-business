@@ -48,6 +48,7 @@ const Colors = {
 	},
 	neutral: {
 		50: "#E9EBEC",
+		100: "#D9DCDD",
 		200: "#C0C4C7",
 		300: "#A1A7AA",
 		400: "#828A8E",

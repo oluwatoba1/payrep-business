@@ -1,119 +1,126 @@
-import React, {useCallback, useState} from 'react';
-import {BackHandler} from 'react-native';
-import {StackScreenProps} from '@react-navigation/stack';
-import {
-  useFocusEffect,
-  useNavigation,
-} from '@react-navigation/native';
-import {
-  BottomTabNavigationProp,
-} from '@react-navigation/bottom-tabs';
+import React, { useCallback, useState } from "react";
+import { BackHandler, Image, View } from "react-native";
+import { StackScreenProps } from "@react-navigation/stack";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 
 import {
-  BottomTabParamList,
-  TransferStackParamList,
-} from '@navigation/types';
-import {SuccessMessage} from '@components/Miscellaneous';
-import AddBeneficiaryModal from '@components/Modal/AddBeneficiaryModal';
-import {useAppSelector} from '@store/hooks';
-import {MainLayout} from '@components/Layout';
-import {useAddCustomerBeneficiaryMutation} from '@store/apis/transferApi';
-import useToast from '@hooks/useToast';
-import {DEFAULT_ERROR_MESSAGE} from '@utils/Constants';
+	KidashiBottomTabParamList,
+	KidashiHomeStackParamList,
+} from "@navigation/types";
+import { useAppSelector } from "@store/hooks";
+import { MainLayout } from "@components/Layout";
+import ScreenImages from "@assets/images/screens";
+import Pad from "@components/Pad";
+import { Button, HybridTypography, Typography } from "@components/Forms";
+import Colors from "@theme/Colors";
+import { addCommas, scale } from "@utils/Helpers";
+import styles from "./styles";
+import { PNSB } from "@theme/Fonts";
+import { MAIN_LAYOUT_HORIZONTAL_PADDING, width } from "@utils/Constants";
 
-type TransactionSuccessProps = StackScreenProps<TransferStackParamList, 'TransactionSuccess'>;
+type TransactionSuccessProps = StackScreenProps<
+	KidashiHomeStackParamList,
+	"TransferSuccess"
+>;
 
 export default function TransactionSuccess({
-  navigation: {navigate},
+	navigation: { navigate },
 }: TransactionSuccessProps) {
-  const {reset} = useNavigation<BottomTabNavigationProp<BottomTabParamList>>();
+	const { reset } =
+		useNavigation<BottomTabNavigationProp<KidashiBottomTabParamList>>();
 
-  const transferDetails = useAppSelector(
-    state => state.transfer.transferDetails,
-  );
-  const customerId = useAppSelector(state => state.customer.customer?.id);
-  const destinationAccount = transferDetails?.destinationAccount;
+	const transferDetails = useAppSelector(
+		(state) => state.transfer.transferDetails
+	);
 
-  const {showToast} = useToast();
+	const destinationAccount = transferDetails?.destinationAccount;
 
-  const [addCustomerBeneficiary] = useAddCustomerBeneficiaryMutation();
+	const handleViewReceipt = () => {
+		navigate("TransferDetails");
+	};
 
-  const [beneficiaryShowModal, setBeneficiaryShowModal] = useState(false);
+	const handleNavigation = () => {
+		reset({
+			index: 0,
+			routes: [
+				{
+					name: "KidashiHome",
+					state: {
+						index: 0,
+						routes: [{ name: "KidashiDashboard" }],
+					},
+				},
+			],
+		});
+		return true;
+	};
 
-  const handleViewReceipt = () => {
-    navigate('TransactionReceipt');
-  };
+	useFocusEffect(
+		useCallback(() => {
+			const backHandler = BackHandler.addEventListener(
+				"hardwareBackPress",
+				handleNavigation
+			);
 
-  const handleNavigation = () => {
-    reset({
-      index: 0,
-      routes: [
-        {
-          name: 'Home',
-          state: {
-            index: 0,
-            routes: [{name: 'Dashboard'}],
-          },
-        },
-      ],
-    });
-    return true;
-  };
+			return () => backHandler.remove(); // Cleanup
+		}, [])
+	);
 
-  const handleAddBeneficiary = async (beneficiaryName: string) => {
-    try {
-      const result = await addCustomerBeneficiary({
-        name: beneficiaryName || destinationAccount?.accountName,
-        customer_id: customerId,
-        account_number: destinationAccount?.accountNumber,
-        bank_code: destinationAccount?.bankCode,
-        bank_name: destinationAccount?.bankName,
-        service_code: transferDetails?.service,
-      }).unwrap();
+	return (
+		<MainLayout showHeader={false}>
+			<View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+				<Image
+					source={ScreenImages.kidashiHome.transferSuccessIcon}
+					style={styles.successIcon}
+				/>
 
-      if (result && result.status) {
-        showToast('success', result.message);
-      } else {
-        showToast('danger', result.message);
-      }
-      return result;
-    } catch (error: any) {
-      showToast(
-        'danger',
-        error.data?.message || error.message || DEFAULT_ERROR_MESSAGE,
-      );
-      return {status: false, message: DEFAULT_ERROR_MESSAGE};
-    }
-  };
+				<Pad size={8} />
 
-  useFocusEffect(
-    useCallback(() => {
-      const backHandler = BackHandler.addEventListener(
-        'hardwareBackPress',
-        handleNavigation,
-      );
+				<Typography
+					title='Success'
+					color={Colors.success.base}
+					type='body-sb'
+				/>
 
-      return () => backHandler.remove(); // Cleanup
-    }, []),
-  );
+				<Pad size={8} />
 
-  return (
-    <MainLayout showHeader={false}>
-      <AddBeneficiaryModal
-        showModal={beneficiaryShowModal}
-        onClose={() => setBeneficiaryShowModal(false)}
-        onAddBeneficiary={handleAddBeneficiary}
-        destinationAccount={destinationAccount}
-      />
-      <SuccessMessage
-        onBeneficiaryBtnPress={() => setBeneficiaryShowModal(prev => !prev)}
-        showActionCards={true}
-        title="Success!"
-        subTitle="Transfer successful"
-        onButtonPress={handleNavigation}
-        showReceiptButton
-        onReceiptPress={handleViewReceipt}
-      />
-    </MainLayout>
-  );
+				<Typography
+					title={`₦${addCommas(transferDetails?.amount || 0)}`}
+					type='heading'
+				/>
+
+				<Pad size={8} />
+
+				<HybridTypography
+					textTray={[
+						{
+							text: "has been transferred to ",
+							bold: false,
+						},
+						{
+							text: destinationAccount?.accountName || "",
+							bold: true,
+						},
+						{
+							text: " account",
+							bold: false,
+						},
+					]}
+					boldFontColor='#212121'
+					textStyle={{ color: Colors.neutral["400"], fontFamily: PNSB }}
+				/>
+
+				<Pad />
+
+				<Button
+					title='View Receipt'
+					onPress={handleViewReceipt}
+					containerStyle={{
+						width: width - 2 * scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
+					}}
+				/>
+			</View>
+		</MainLayout>
+	);
 }

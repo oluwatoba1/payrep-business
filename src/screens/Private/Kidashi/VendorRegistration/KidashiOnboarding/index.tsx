@@ -3,12 +3,15 @@ import { BackHandler } from "react-native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { StackScreenProps } from "@react-navigation/stack";
 
-import { BottomTabParamList, KidashiStackParamList } from "@navigation/types";
+import {
+	BottomTabParamList,
+	KidashiRegistrationStackParamList,
+} from "@navigation/types";
 import { KidashiOnboarder } from "@components/Miscellaneous";
 import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 
 type KidashiOnboardingProps = CompositeScreenProps<
-	StackScreenProps<KidashiStackParamList, "KidashiOnboarding">,
+	StackScreenProps<KidashiRegistrationStackParamList, "KidashiOnboarding">,
 	BottomTabScreenProps<BottomTabParamList, "Home">
 >;
 

@@ -1,19 +1,20 @@
 import { useCallback, useState } from "react";
-import { View } from "react-native";
+import { Image, View } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 
-import { MainLayout } from "@components/Layout";
+import { MainLayout, Row } from "@components/Layout";
 import { Button, Typography } from "@components/Forms";
 import { styles } from "./styles";
 import { KidashiHomeStackParamList } from "@navigation/types";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import PinInputModal from "@components/Modal/PinInputModal";
 import RetryPinModal from "@components/Modal/RetryModal";
-import { formatValue, removeCommas } from "@utils/Helpers";
+import { removeCommas } from "@utils/Helpers";
 import useToast from "@hooks/useToast";
 import { useBankTransferMutation } from "@store/apis/transferApi";
 import { setSelectedTransaction } from "@store/slices/accountSlice";
 import Pad from "@components/Pad";
+import ScreenImages from "@assets/images/screens";
 
 type TransferConfirmationProps = StackScreenProps<
 	KidashiHomeStackParamList,
@@ -23,18 +24,13 @@ type TransferConfirmationProps = StackScreenProps<
 export default function TransferConfirmation({
 	navigation: { navigate, goBack },
 }: TransferConfirmationProps) {
+	const dispatch = useAppDispatch();
+	const { showToast } = useToast();
+
 	// selectors
 	const transferDetails = useAppSelector(
 		(state) => state.transfer.transferDetails
 	);
-
-	const dispatch = useAppDispatch();
-	const { showToast } = useToast();
-
-	const formatAmount = formatValue(transferDetails?.amount || "0.00");
-	const formatCharges = formatValue(transferDetails?.charges || "0.00");
-	const formatDeductible = formatValue(transferDetails?.deductible || "0.00");
-
 	// hooks
 	const [bankTransfer, { isLoading: isProcessingTransfer }] =
 		useBankTransferMutation();
@@ -136,7 +132,8 @@ export default function TransferConfirmation({
 			isLoading={isProcessingTransfer || isValidating}
 		>
 			<PinInputModal
-				title='Enter your four digit PIN'
+				title='Enter Transaction PIN'
+				description='For security, please enter your 4-digit PIN to complete this funding'
 				showModal={pinModalVisible}
 				onClose={() => setPinModalVisible(false)}
 				onProceed={handlePinValidation}
@@ -151,51 +148,65 @@ export default function TransferConfirmation({
 				errorMessage={pinError}
 				isLocked={isLocked}
 			/>
-			<View>
-				<Typography title='Transaction Confirmation' />
-			</View>
-			<View style={styles.transactionDetailsContainer}>
-				<View style={styles.detailRow}>
-					<Typography title='Sender' type='label-r' />
-					<Typography
-						title={`${sourceAccount?.accountName} - ${sourceAccount?.accountNumber}`}
-						type='body-sb'
-					/>
-				</View>
-				<View style={styles.detailRow}>
-					<Typography title='Receiver' type='label-r' />
-					<Typography
-						title={`${destinationAccount?.accountName} - ${destinationAccount?.accountNumber}`}
-						type='body-sb'
-					/>
-				</View>
-			</View>
-			<View style={styles.detailItem}>
-				<Typography title='Bank' type='label-r' />
-				<Typography title={`${destinationAccount?.bankName}`} type='body-sb' />
-			</View>
-			<View style={styles.detailItem}>
-				<Typography title='Narration' type='label-r' />
-				<Typography title={`${transferDetails?.narration}`} type='body-sb' />
-			</View>
-			<View style={styles.amountDetailsContainer}>
-				<View style={styles.amountRow}>
-					<Typography title='Amount' type='label-r' />
-					<Typography title={`${formatAmount}`} type='label-sb' />
-				</View>
-				<View style={styles.amountRow}>
-					<Typography title='Charges (Fee & VAT)' type='label-r' />
-					<Typography title={`${formatCharges}`} type='label-sb' />
-				</View>
-				<View style={styles.amountRow}>
-					<Typography title='Total' type='label-r' />
-					<Typography title={`${formatDeductible}`} type='label-sb' />
-				</View>
+
+			<View style={styles.boxIconContainer}>
+				<Image
+					source={ScreenImages.kidashiMemberDetails.boxIcon}
+					style={styles.boxIcon}
+				/>
 			</View>
 
-			<Pad size={20} />
+			<Pad size={8} />
 
-			<Button title='Pay now' onPress={() => setPinModalVisible(true)} />
+			<Typography
+				title='Review Funding Details'
+				type='heading4-sb'
+				style={{ textAlign: "center" }}
+			/>
+			<Typography
+				title='You are about to fund this member’s account'
+				type='body-r'
+				style={{ textAlign: "center" }}
+			/>
+
+			<Pad size={16} />
+
+			<View style={styles.summaryContainer}>
+				<Row containerStyle={styles.itemContainer}>
+					<Typography title='Summary' type='body-sb' />
+				</Row>
+				<Row containerStyle={styles.itemContainer}>
+					<Typography title='Member Name' type='body-r' />
+					<Typography
+						title={transferDetails?.destinationAccount.accountName || ""}
+						type='body-sb'
+					/>
+				</Row>
+				<Row containerStyle={styles.itemContainer}>
+					<Typography title='Account Number' type='body-r' />
+					<Typography
+						title={transferDetails?.destinationAccount.accountNumber || ""}
+						type='body-sb'
+					/>
+				</Row>
+				<Row
+					containerStyle={{
+						...styles.itemContainer,
+						borderTopWidth: 1.5,
+						borderBottomWidth: 1.5,
+					}}
+				>
+					<Typography title='Amount' type='body-sb' />
+					<Typography
+						title={`₦${transferDetails?.amount || 0}`}
+						type='body-sb'
+					/>
+				</Row>
+			</View>
+
+			<Pad size={80} />
+
+			<Button title='Confirm' onPress={() => setPinModalVisible(true)} />
 		</MainLayout>
 	);
 }

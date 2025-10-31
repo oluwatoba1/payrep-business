@@ -7,6 +7,13 @@ import MemberRegistrationStack from "./MemberRegistration";
 import KidashiRegistrationStack from "./KidashiRegistrationStack";
 import NotificationIndex from "@screens/Private/Kidashi/KidashiNotifications";
 import KidashiNotificationDetails from "@screens/Private/Kidashi/KidashiNotifications/Details";
+import {
+	TransferAccountNumber,
+	TransferAmount,
+	TransferConfirmation,
+	TransferDetails,
+	TransferSuccess,
+} from "@screens/Private/Kidashi/KidashiHome/Transfer";
 
 const Stack = createNativeStackNavigator<KidashiHomeStackParamList>();
 
@@ -17,6 +24,17 @@ export default function HomeStack() {
 			initialRouteName='KidashiDashboard'
 		>
 			<Stack.Screen name='KidashiDashboard' component={KidashiDashboard} />
+			<Stack.Screen
+				name='TransferAccountNumber'
+				component={TransferAccountNumber}
+			/>
+			<Stack.Screen name='TransferAmount' component={TransferAmount} />
+			<Stack.Screen
+				name='TransferConfirmation'
+				component={TransferConfirmation}
+			/>
+			<Stack.Screen name='TransferSuccess' component={TransferSuccess} />
+			<Stack.Screen name='TransferDetails' component={TransferDetails} />
 			<Stack.Screen
 				name='KidashiRegistration'
 				component={KidashiRegistrationStack}

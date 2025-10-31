@@ -69,6 +69,9 @@ const ScreenImages = {
 		trustCircleDetailsIcon: require("./Kidashi/KidashiHome/trust-circle-details-icon.png"),
 		bellIcon: require("./Kidashi/KidashiHome/bell.png"),
 		transferIcon: require("./Kidashi/KidashiHome/transfer-icon.png"),
+		transferSuccessIcon: require("./Kidashi/KidashiHome/transfer-success-icon.png"),
+		transactionDetailsHeaderIcon: require("./Kidashi/KidashiHome/transaction-details-header-icon.png"),
+		transactionDetailsSuccessPill: require("./Kidashi/KidashiHome/transaction-details-success-pill.png"),
 	},
 	kidashiCreateTrustCircles: {
 		headericon: require("./Kidashi/CreateTrustCircle/top-badge.png"),

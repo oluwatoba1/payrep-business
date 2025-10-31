@@ -3,6 +3,15 @@ import { scale, scaleHeight } from "@utils/Helpers";
 import Colors from "@theme/Colors";
 
 export const styles = StyleSheet.create({
+	summaryContainer: {
+		borderTopWidth: 1,
+		borderColor: Colors.gray["1000"],
+	},
+	itemContainer: {
+		borderBottomWidth: 1,
+		borderColor: Colors.gray["1000"],
+		paddingVertical: scaleHeight(12),
+	},
 	transactionDetailsContainer: {
 		borderBottomWidth: scale(1),
 		borderColor: Colors.gray[50],
@@ -35,5 +44,18 @@ export const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		gap: scaleHeight(16),
+	},
+	boxIconContainer: {
+		width: scale(60),
+		height: scale(60),
+		borderRadius: "100%",
+		backgroundColor: Colors.gray["100"],
+		justifyContent: "center",
+		alignItems: "center",
+		marginHorizontal: "auto",
+	},
+	boxIcon: {
+		width: scale(30),
+		height: scale(30),
 	},
 });

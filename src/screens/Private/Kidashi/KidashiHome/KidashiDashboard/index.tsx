@@ -143,13 +143,13 @@ export default function KidashiDashboard({
 			icon: ScreenImages.kidashiHome.createTrustCircle,
 			onPress: () => navigate("Trust Circles", { screen: "CreateTrustCircle" }),
 		},
-		{
-			label: "Add a New Member",
-			sub: "Create account or add to circle",
-			icon: ScreenImages.kidashiHome.joinKidashi,
-			onPress: () =>
-				navigate("MemberRegistration", { screen: "MemberPhoneNumber" }),
-		},
+		// {
+		// 	label: "Add a New Member",
+		// 	sub: "Create account or add to circle",
+		// 	icon: ScreenImages.kidashiHome.joinKidashi,
+		// 	onPress: () =>
+		// 		navigate("MemberRegistration", { screen: "MemberPhoneNumber" }),
+		// },
 	];
 
 	useEffect(() => {

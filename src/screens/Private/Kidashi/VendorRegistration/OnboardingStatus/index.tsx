@@ -94,6 +94,7 @@ export default function OnboardingStatus({
 					onPress={navigateToHome}
 					containerStyle={styles.homeButton}
 				/>
+				<Pad />
 				{vendor?.status !== "PENDING" ? (
 					<IconButton onPress={() => navigate("VendorInformation")}>
 						<Row gap={8} alignItems='center'>

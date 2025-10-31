@@ -40,7 +40,7 @@ const ONBOARDING_ITEMS: OnboardingItem[] = [
 	{
 		title: "List items, set prices, and get paid.",
 		description:
-			"Enter item details in the app, and Kidashi automatically shows the woman how much she will repay with just 5% interest. No hidden charges.",
+			"Enter item details in the app, and Kidashi automatically shows the woman how much she will repay. No hidden charges.",
 		image: ComponentImages.kidashiOnboarder.backgroundTwo,
 	},
 	{
