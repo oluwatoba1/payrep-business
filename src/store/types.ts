@@ -999,6 +999,12 @@ interface IWomanDetails {
 	};
 }
 
+interface IGetMemberRequest {
+	cba_customer_id: string;
+	add_to_trust_circle?: boolean;
+	vendor_id?: string;
+}
+
 interface ITrustCircleDetail {
 	id: string;
 	circle_name: string;

@@ -152,7 +152,7 @@ const KidashiApi = createApi({
 		}),
 		getMemberDetails: builder.mutation<
 			AuthResponse<IWomanDetails>,
-			{ cba_customer_id: string }
+			IGetMemberRequest
 		>({
 			query: (body) => ({
 				url: "woman/mobile/basic_details",

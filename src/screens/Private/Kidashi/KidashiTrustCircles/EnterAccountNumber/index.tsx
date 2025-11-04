@@ -74,6 +74,8 @@ export default function EnterAccountNumber({
 		try {
 			const { status, message, data } = await getMemberDetails({
 				cba_customer_id: id,
+				add_to_trust_circle: true,
+				vendor_id: vendor_id || ''
 			}).unwrap();
 			if (status) {
 				setShowAccountContainer(true);

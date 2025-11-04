@@ -307,7 +307,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 							type='heading5-sb'
 							title={
 								!notYou
-									? "Welcome back"
+									? `Welcome back, ${appState?.customer?.first_name || ""}`
 									: "Login with your username and password"
 							}
 						/>
