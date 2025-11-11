@@ -12,11 +12,13 @@ const styles = StyleSheet.create({
 	onboardingContainer: {
 		height,
 		width,
-		paddingHorizontal: scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
-		justifyContent: "space-between",
 	},
 	headerContainer: {
-		paddingTop: scaleHeight(40),
+		position: "absolute",
+		top: scaleHeight(50),
+		zIndex: 10,
+		width: "100%",
+		paddingHorizontal: scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
 	},
 	headerContainerLeft: {
 		width: scaleHeight(56),
@@ -42,17 +44,18 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 	},
 	footerContainer: {
+		position: "absolute",
+		bottom: scaleHeight(70),
 		alignItems: "center",
-		justifyContent: "flex-end",
-		paddingBottom: scaleHeight(40),
+		width: "100%",
 	},
 	kidashiLogo: {
 		height: scaleHeight(24),
 		resizeMode: "contain",
 	},
 	onboardingTitle: {
-		fontSize: scale(20),
-		lineHeight: scale(20 * 1.24),
+		fontSize: scale(22),
+		lineHeight: scale(26),
 		color: Colors.white,
 		textAlign: "center",
 	},
@@ -61,33 +64,64 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 	dotContainer: {
-		justifyContent: "center",
 		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		marginBottom: scaleHeight(12),
 	},
 	activeDot: {
 		height: scaleHeight(6),
-		width: scale(31),
+		width: scale(30),
 		borderRadius: scale(7),
 		backgroundColor: Colors.white,
-		marginRight: scale(6),
+		marginHorizontal: scale(3),
 	},
 	inactiveDot: {
 		height: scaleHeight(6),
 		width: scaleHeight(6),
 		borderRadius: scaleHeight(6),
 		backgroundColor: "#919091",
-		marginRight: scale(6),
+		marginHorizontal: scale(3),
 	},
-	onboardingButtonContainer: {
-		position: "absolute",
-		bottom: scaleHeight(75),
-		left: 0,
-		width,
-		paddingHorizontal: scale(38),
+	overlay: {
+		...StyleSheet.absoluteFillObject,
+		backgroundColor: "rgba(0,0,0,0.45)"
 	},
-	joinNowButton: {
+	rootContainer: {
+		flex: 1,
+		backgroundColor: Colors.black,
+	},
+	cancelContainer: {
+		paddingHorizontal: scale(5)
+	},
+
+	navButtonsContainer: {
 		width: width - 2 * scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
 	},
+
+	navButton: {
+		width: width * 0.4,
+		alignSelf: "center",
+	},
+	textContainer: {
+		position: "absolute",
+		bottom: scaleHeight(190),
+		width: width - 2 * scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
+		alignSelf: "center",
+		alignItems: "center",
+	},
+	outlinedButton: {
+		width: width * 0.4,
+		borderWidth: 1,
+		borderColor: Colors.white,
+		backgroundColor: "transparent",
+		alignSelf: "center",
+	},
+	fullButton: {
+		width: width * 0.9,
+		alignSelf: "center",
+	},
+
 });
 
 export default styles;

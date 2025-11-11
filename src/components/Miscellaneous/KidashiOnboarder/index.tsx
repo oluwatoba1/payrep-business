@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
 	Animated,
 	Image,
@@ -59,126 +59,164 @@ const ONBOARDING_ITEMS: OnboardingItem[] = [
 
 export default function Onboarder({ onProceed, onCancel }: OnboarderProps) {
 	const [animatedValue] = useState(new Animated.Value(0));
+	const fadeAnim = useRef(new Animated.Value(1)).current;
+	const buttonFade = useRef(new Animated.Value(1)).current;
 	const [currentIndex, setCurrentIndex] = useState<number>(0);
 	const [currentWidth, setCurrentWidth] = useState<number>(0);
+
+	const triggerButtonTransition = () => {
+		Animated.sequence([
+			Animated.timing(buttonFade, { toValue: 1, duration: 250, useNativeDriver: true }),
+			Animated.timing(buttonFade, { toValue: 1.5, duration: 250, useNativeDriver: true }),
+		]).start();
+	};
+
+	const animateToIndex = (index: number) => {
+		Animated.timing(animatedValue, {
+			toValue: -index * width,
+			duration: 400,
+			useNativeDriver: false
+		}).start();
+
+		Animated.sequence([
+			Animated.timing(fadeAnim, { toValue: 0, duration: 150, useNativeDriver: true }),
+			Animated.timing(fadeAnim, { toValue: 1, duration: 150, useNativeDriver: true }),
+		]).start();
+		triggerButtonTransition();
+		setCurrentIndex(index)
+	}
+
+	const goToNext = () => {
+		if (currentIndex < ONBOARDING_ITEMS.length - 1) animateToIndex(currentIndex + 1)
+	}
+
+	const goToPrev = () => {
+		if (currentIndex > 0) animateToIndex(currentIndex - 1)
+	}
+
 	const panResponder = PanResponder.create({
 		onStartShouldSetPanResponder: () => true,
-		onPanResponderMove: (_, gestureState) => {
-			const { dx } = gestureState;
-			if ((dx >= 0 && currentIndex !== 0) || (dx <= 0 && currentIndex < 2))
-				animatedValue.setValue(currentWidth + dx);
+		onPanResponderMove: (_, { dx }) => {
+			const offset = -currentIndex * width + dx;
+			animatedValue.setValue(offset);
 		},
-		onPanResponderRelease: (_, gestureState) => {
-			const { dx } = gestureState;
-			if (dx < -THRESHOLD && currentIndex !== ONBOARDING_ITEMS.length - 1) {
-				Animated.timing(animatedValue, {
-					toValue: currentWidth - width,
-					duration: 300,
-					useNativeDriver: false,
-				}).start(() => {
-					setCurrentIndex(currentIndex + 1);
-					setCurrentWidth(currentWidth - width);
-				});
-			} else if (dx > THRESHOLD && currentIndex !== 0) {
-				Animated.timing(animatedValue, {
-					toValue: currentWidth + width,
-					duration: 300,
-					useNativeDriver: false,
-				}).start(() => {
-					setCurrentIndex(currentIndex - 1);
-					setCurrentWidth(currentWidth + width);
-				});
-			} else {
-				Animated.spring(animatedValue, {
-					toValue: currentWidth,
-					friction: 5,
-					useNativeDriver: false,
-				}).start();
-			}
+		onPanResponderRelease: (_, { dx }) => {
+			if (dx < -THRESHOLD && currentIndex < ONBOARDING_ITEMS.length - 1) goToNext();
+			else if (dx > THRESHOLD && currentIndex > 0) goToPrev();
+			else animateToIndex(currentIndex)
 		},
 	});
 
-	const animatedStyles: ViewStyle = {
+	const animatedBackgroundStyles: ViewStyle = {
 		flexDirection: "row",
+		width: width * ONBOARDING_ITEMS.length,
 		transform: [{ translateX: animatedValue }],
 	};
 
+	const currentItem = ONBOARDING_ITEMS[currentIndex];
+
 	return (
-		<Animated.View style={animatedStyles} {...panResponder.panHandlers}>
-			{ONBOARDING_ITEMS.map((item, index) => (
-				<ImageBackground
-					key={index}
-					style={styles.onboardingContainer}
-					source={item.image}
-				>
-					<Row
-						alignItems='center'
-						justifyContent='space-between'
-						containerStyle={styles.headerContainer}
-					>
-						<View style={styles.headerContainerLeft} />
-						<View style={styles.headerContainerMiddle}>
-							<Image
-								source={ComponentImages.kidashiOnboarder.payrepMonochromeLogo}
-								style={styles.headerContainerMiddleLogo}
-							/>
-						</View>
-						<IconButton onPress={onCancel}>
-							<Row alignItems='center' justifyContent='flex-start' gap={5}>
-								<Image
-									source={ComponentImages.kidashiOnboarder.cancelIcon}
-									style={styles.cancelIcon}
-								/>
-								<Typography
-									title='Cancel'
-									type='label-r'
-									color={Colors.neutral["200"]}
-								/>
-							</Row>
-						</IconButton>
-					</Row>
-					<View style={styles.footerContainer}>
+		<View style={styles.rootContainer}>
+			<Row
+				alignItems='center'
+				justifyContent='space-between'
+				containerStyle={styles.headerContainer}
+			>
+				<View style={styles.headerContainerLeft} />
+				<View style={styles.headerContainerMiddle}>
+					<Image
+						source={ComponentImages.kidashiOnboarder.payrepMonochromeLogo}
+						style={styles.headerContainerMiddleLogo}
+					/>
+				</View>
+				<IconButton containerStyle={styles.cancelContainer} onPress={onCancel}>
+					<Row alignItems='center' justifyContent='flex-start' gap={5}>
 						<Image
-							source={ComponentImages.kidashiOnboarder.kidashiLogo}
-							style={styles.kidashiLogo}
+							source={ComponentImages.kidashiOnboarder.cancelIcon}
+							style={styles.cancelIcon}
 						/>
-						<Pad size={16} />
 						<Typography
-							title={item.title}
-							type='heading-sb'
-							style={styles.onboardingTitle}
+							title='Cancel'
+							type='label-r'
+							color={Colors.neutral["200"]}
 						/>
-						<Pad size={8} />
-						<Typography
-							title={item.description}
-							type='label-sb'
-							style={styles.onboardingDescription}
+					</Row>
+				</IconButton>
+			</Row>
+			<Animated.View style={[animatedBackgroundStyles]} {...panResponder.panHandlers}>
+				{ONBOARDING_ITEMS.map((item, index) => (
+					<ImageBackground
+						key={index}
+						style={[styles.onboardingContainer, { width }]}
+						source={item.image}
+					>
+						<View style={styles.overlay} />
+					</ImageBackground>
+				))}
+			</Animated.View>
+			<Animated.View style={[styles.textContainer, { opacity: fadeAnim }]}>
+				<Image source={ComponentImages.kidashiOnboarder.kidashiLogo} style={styles.kidashiLogo} />
+				<Pad size={16} />
+				<Typography title={currentItem.title} type="heading-sb" style={styles.onboardingTitle} />
+				<Pad size={8} />
+				<Typography title={currentItem.description} type="label-sb" style={styles.onboardingDescription} />
+			</Animated.View>
+
+			<View style={styles.footerContainer}>
+
+				<View style={styles.dotContainer}>
+					{ONBOARDING_ITEMS.map((_, item) => (
+						<View
+							key={item}
+							style={
+								item === currentIndex
+									? styles.activeDot
+									: styles.inactiveDot
+							}
 						/>
-						<Pad size={16} />
-						<View style={styles.dotContainer}>
-							{[0, 1, 2, 3].map((item) => (
-								<View
-									key={item}
-									style={
-										item === currentIndex
-											? styles.activeDot
-											: styles.inactiveDot
-									}
-								/>
-							))}
-						</View>
-						<Pad size={16} />
-						{currentIndex === ONBOARDING_ITEMS.length - 1 ? (
+					))}
+				</View>
+				<Pad size={16} />
+				<Animated.View style={{ opacity: buttonFade }}>
+					{currentIndex === 0 ? (
+						<Button
+							title="Next"
+							color={Colors.white}
+							onPress={goToNext}
+							containerStyle={styles.fullButton}
+						/>
+					) : currentIndex === ONBOARDING_ITEMS.length - 1 ? (
+						<Button
+							title="Join Now"
+							color={Colors.white}
+							onPress={onProceed}
+							containerStyle={styles.fullButton}
+						/>
+					) : (
+						<Row
+							alignItems="center"
+							justifyContent="space-between"
+							containerStyle={styles.navButtonsContainer}
+						>
 							<Button
-								title='Join Now'
-								color={Colors.white}
-								onPress={onProceed}
-								containerStyle={styles.joinNowButton}
+								title="Previous"
+								color="transparent"
+								onPress={goToPrev}
+								containerStyle={styles.outlinedButton}
+								textStyle={{ color: Colors.white }}
 							/>
-						) : null}
-					</View>
-				</ImageBackground>
-			))}
-		</Animated.View>
+							<Button
+								title="Next"
+								color={Colors.white}
+								onPress={goToNext}
+								containerStyle={styles.navButton}
+							/>
+						</Row>
+					)}
+				</Animated.View>
+
+			</View>
+		</View>
+
 	);
 }

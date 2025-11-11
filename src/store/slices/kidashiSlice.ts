@@ -17,6 +17,8 @@ const initialState: IKidashi = {
 		items_requested: [],
 		value: "0",
 	},
+	loanProduct: null,
+	repaymentPlan: null,
 };
 
 const KidashiSlice = createSlice({
@@ -56,6 +58,12 @@ const KidashiSlice = createSlice({
 		setAssetRequest: (state, action: PayloadAction<Partial<IAssetRequest>>) => {
 			state.assetRequest = action.payload;
 		},
+		setLoanProduct: (state, action: PayloadAction<ILoanProduct | null>) => {
+			state.loanProduct = action.payload;
+		},
+		setRepaymentPlan: (state, action: PayloadAction<IRepaymentPlan | null>) => {
+			state.repaymentPlan = action.payload;
+		},
 	},
 });
 
@@ -67,6 +75,8 @@ export const {
 	setSelectedAccountDetails,
 	setMemberDetails,
 	setAssetRequest,
+	setLoanProduct,
+	setRepaymentPlan,
 } = KidashiSlice.actions;
 
 export default KidashiSlice;

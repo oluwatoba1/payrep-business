@@ -1,5 +1,5 @@
 import { Image, ScrollView, View } from "react-native";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import SafeAreaWrapper from "@components/Layout/SafeAreaWrapper";
 import { Button, Typography } from "@components/Forms";
 import { MainLayout, Row } from "@components/Layout";
@@ -16,9 +16,11 @@ import {
 	useCreateAssetMutation,
 	useGenerateOtpMutation,
 } from "@store/apis/kidashiApi";
+import { useGetRepaymentPlanMutation } from "@store/apis/loanApi";
 import useToast from "@hooks/useToast";
-import { useAppSelector } from "@store/hooks";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
+import { setRepaymentPlan } from "@store/slices/kidashiSlice";
 
 type ReviewAssetRequestProps = StackScreenProps<
 	MembersStackParamList,
@@ -29,26 +31,89 @@ const RepaymentOverview = ({
 	navigation: { navigate },
 }: ReviewAssetRequestProps) => {
 	const { showToast } = useToast();
+	const dispatch = useAppDispatch();
 	const [createAsset, { isLoading }] = useCreateAssetMutation();
 	const [generateOtp] = useGenerateOtpMutation();
+	const [getRepaymentPlan, { isLoading: isLoadingPlan }] =
+		useGetRepaymentPlanMutation();
 
-	const { vendor, memberDetails, assetRequest } = useAppSelector(
+	const { vendor, memberDetails, assetRequest, repaymentPlan } = useAppSelector(
 		(state) => state.kidashi
 	);
 
 	const [showOtpModal, setShowOtpModal] = useState(false);
 	const [otp, setOtp] = useState<string>("");
 
-	const totalCost = 46000;
-	const interestRatePercent = 5;
-	const interestAmount = 1380;
-	const totalPayable = totalCost + interestAmount;
+	useEffect(() => {
+		if (assetRequest.product_code && assetRequest.value) {
+			fetchRepaymentPlan();
+		}
+	}, [assetRequest.product_code, assetRequest.value]);
 
-	const installmentFrequencyDays = 14;
-	const installmentAmount = 5250;
+	const fetchRepaymentPlan = async () => {
+		try {
+			const { status, message, data } = await getRepaymentPlan({
+				product_code: assetRequest.product_code || "",
+				amount: parseFloat(assetRequest.value || "0"),
+			}).unwrap();
 
-	const startDate = useMemo(() => new Date(2025, 8, 20), []);
-	const endDate = useMemo(() => new Date(2025, 9, 31), []);
+			if (status) {
+				dispatch(setRepaymentPlan(data));
+			} else {
+				showToast("danger", message);
+			}
+		} catch (error: ErrorResponse | any) {
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
+
+	// Calculate loan details from repayment plan
+	const totalCost = useMemo(
+		() => repaymentPlan?.amount || 0,
+		[repaymentPlan]
+	);
+
+	const interestRatePercent = useMemo(
+		() => repaymentPlan?.interest_rate || 0,
+		[repaymentPlan]
+	);
+
+	const interestAmount = useMemo(
+		() => repaymentPlan?.total_interest || 0,
+		[repaymentPlan]
+	);
+
+	const totalPayable = useMemo(
+		() => repaymentPlan?.total_repayable || 0,
+		[repaymentPlan]
+	);
+
+	const tenor = useMemo(() => repaymentPlan?.tenor || 30, [repaymentPlan]);
+
+	const repaymentCycle = useMemo(
+		() => repaymentPlan?.repayment_cycle || "DAILY",
+		[repaymentPlan]
+	);
+
+	const installmentAmount = useMemo(
+		() => repaymentPlan?.repayment_amount || 0,
+		[repaymentPlan]
+	);
+
+	const totalFees = useMemo(
+		() => repaymentPlan?.total_fees || 0,
+		[repaymentPlan]
+	);
+
+	const startDate = useMemo(() => new Date(), []);
+	const endDate = useMemo(() => {
+		const end = new Date();
+		end.setDate(end.getDate() + tenor);
+		return end;
+	}, [tenor]);
 
 	const formatDate = (date: Date) =>
 		date.toLocaleDateString("en-GB", {
@@ -92,11 +157,9 @@ const RepaymentOverview = ({
 				vendor_id: vendor?.id || "",
 				woman_id: memberDetails?.id || "",
 				value: assetRequest.value || "0",
-				markup: String(
-					(interestRatePercent / 100) * Number(assetRequest.value || "0")
-				),
+				markup: String(repaymentPlan?.total_cost || 0),
 				items_requested: assetRequest?.items_requested || [],
-				product_code: "KIDASHI_WEEKLY",
+				product_code: assetRequest.product_code || "",
 				otp,
 			}).unwrap();
 			if (status) {
@@ -116,7 +179,10 @@ const RepaymentOverview = ({
 	};
 
 	return (
-		<SafeAreaWrapper title='Review Payment Terms' isLoading={isLoading}>
+		<SafeAreaWrapper
+			title='Review Payment Terms'
+			isLoading={isLoading || isLoadingPlan}
+		>
 			<ScrollView>
 				<View>
 					<View style={styles.boxIconContainer}>
@@ -147,9 +213,12 @@ const RepaymentOverview = ({
 					<View style={styles.cardInner}>
 						<Typography title='Repayment Plan' type='body-sb' />
 						<Typography
-							title={`${formatCurrency(
-								installmentAmount
-							)} every ${installmentFrequencyDays} days (includes ${interestRatePercent}% interest)`}
+							title={`${formatCurrency(installmentAmount)} ${repaymentCycle === "DAILY"
+								? "daily"
+								: repaymentCycle === "WEEKLY"
+									? "weekly"
+									: "monthly"
+								} (includes ${interestRatePercent}% interest)`}
 							type='body-b'
 							color={Colors.gray["900"]}
 						/>
@@ -159,9 +228,12 @@ const RepaymentOverview = ({
 							gapX={-20}
 						/>
 						<Typography title='Duration' type='body-sb' />
-						<Typography title='1 Month' type='body-b' />
-						<Divider gapY={scaleHeight(16)} />
-						<Row justifyContent='space-between'>
+						<Typography
+							title={`${tenor} ${repaymentPlan?.tenor_type?.toLowerCase() || "days"}`}
+							type='body-b'
+						/>
+						{/* <Divider gapY={scaleHeight(16)} /> */}
+						{/* <Row justifyContent='space-between'>
 							<View style={{ flex: 1 }}>
 								<Typography title='Start Date' type='body-sb' />
 								<Typography title={formatDate(startDate)} type='body-b' />
@@ -171,7 +243,7 @@ const RepaymentOverview = ({
 								<Typography title='End Date' type='body-sb' />
 								<Typography title={formatDate(endDate)} type='body-b' />
 							</View>
-						</Row>
+						</Row> */}
 						<Divider
 							gapY={scaleHeight(16)}
 							dividerColor={Colors.gray[300]}
@@ -179,7 +251,7 @@ const RepaymentOverview = ({
 						/>
 
 						<View>
-							<Typography title='Total Cost' type='body-sb' />
+							<Typography title='Principal Amount' type='body-sb' />
 							<Typography title={formatCurrency(totalCost)} type='body-b' />
 						</View>
 						<Pad size={scaleHeight(16)} />
@@ -193,6 +265,18 @@ const RepaymentOverview = ({
 								type='body-b'
 							/>
 						</View>
+						{totalFees > 0 && (
+							<>
+								<Pad size={scaleHeight(16)} />
+								<View>
+									<Typography title='Processing Fees' type='body-sb' />
+									<Typography
+										title={formatCurrency(totalFees)}
+										type='body-b'
+									/>
+								</View>
+							</>
+						)}
 					</View>
 					<View style={styles.scheduleCardHeader}>
 						<Typography title='Total Payable' type='body-sb' />

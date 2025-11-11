@@ -8,3 +8,4 @@ export { default as ServiceApi } from "./serviceApi";
 export { default as BillsApi } from "./billsApi";
 export { default as ReportApi } from "./reportApi";
 export { default as KidashiApi } from "./kidashiApi";
+export { default as LoanApi } from "./loanApi";
