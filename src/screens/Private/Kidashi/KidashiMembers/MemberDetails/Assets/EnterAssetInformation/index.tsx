@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, TextInput, Pressable, Image } from "react-native";
 import SafeAreaWrapper from "@components/Layout/SafeAreaWrapper";
-import { Button, Typography } from "@components/Forms";
+import { Button, Typography, Dropdown } from "@components/Forms";
 import { styles } from "./style";
 import Divider from "@components/Miscellaneous/Divider";
 import { MainLayout, Row } from "@components/Layout";
@@ -12,6 +12,7 @@ import { KeyboardAvoider } from "@components/Layout/KidashiLayout";
 import Pad from "@components/Pad";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MembersStackParamList } from "@navigation/types";
+import { KIDASHI_TYPES } from "@utils/Constants";
 
 interface AssetItem {
 	id: string;
@@ -26,6 +27,10 @@ const EnterAssetInformation = ({ navigation }: EnterAssetInformationProps) => {
 	const [items, setItems] = useState<AssetItem[]>([
 		{ id: "1", name: "", price: "" },
 	]);
+	const [selectedKidashiType, setSelectedKidashiType] = useState<{
+		label: string;
+		value: string;
+	} | null>(null);
 
 	const addItem = () => {
 		const newItem: AssetItem = {
@@ -73,11 +78,20 @@ const EnterAssetInformation = ({ navigation }: EnterAssetInformationProps) => {
 			<Pad size={20} />
 			<Typography title='Enter Asset Information' style={styles.screenTitle} />
 			<Typography
-				title='Add the items your member is requesting and their prices'
+				title='Select Repayment type and Add the items your member is requesting and their prices'
 				type='body-sr'
 				style={styles.screenSubTitle}
 			/>
 			<Divider gapY={scaleHeight(12)} gapTop={scaleHeight(20)} />
+
+			<Dropdown
+				label="Select Kidashi Type"
+				selectedOption={selectedKidashiType}
+				options={KIDASHI_TYPES}
+				onSelect={(option) => setSelectedKidashiType(option)}
+				placeholder="Select type"
+			/>
+			<Divider gapY={scaleHeight(12)} />
 
 			<View style={styles.itemListContainer}>
 				<Row justifyContent='space-between' alignItems='center' gap={4}>
@@ -166,9 +180,11 @@ const EnterAssetInformation = ({ navigation }: EnterAssetInformationProps) => {
 			<Divider gapY={scaleHeight(16)} gapX={scale(-16)} />
 			<Button
 				title='Next'
+				disabled={!selectedKidashiType}
 				onPress={() =>
 					navigation.navigate("ReviewAssetRequest", {
 						items: items.filter((i) => i.name.trim() !== "" && i.price !== ""),
+						productCode: selectedKidashiType?.value || "",
 					})
 				}
 			/>

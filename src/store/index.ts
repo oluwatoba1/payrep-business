@@ -23,6 +23,7 @@ import {
 	BillsApi,
 	ReportApi,
 	KidashiApi,
+	LoanApi,
 } from "./apis";
 
 export const store = configureStore({
@@ -48,6 +49,7 @@ export const store = configureStore({
 		[ReportApi.reducerPath]: ReportApi.reducer,
 		[KidashiSlice.reducerPath]: KidashiSlice.reducer,
 		[KidashiApi.reducerPath]: KidashiApi.reducer,
+		[LoanApi.reducerPath]: LoanApi.reducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware()
@@ -60,7 +62,8 @@ export const store = configureStore({
 			.concat(ServiceApi.middleware)
 			.concat(BillsApi.middleware)
 			.concat(ReportApi.middleware)
-			.concat(KidashiApi.middleware),
+			.concat(KidashiApi.middleware)
+			.concat(LoanApi.middleware),
 	// to add more middleware, simply chain `.concat(middle)` to the code above and
 });
 

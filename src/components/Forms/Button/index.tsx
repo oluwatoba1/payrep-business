@@ -4,23 +4,24 @@ import {
   PressableProps,
   TextStyle,
   ViewStyle,
+  StyleProp,
 } from 'react-native';
-import {lighten} from 'polished';
+import { lighten } from 'polished';
 
-import {styles} from './styles';
+import { styles } from './styles';
 import Colors from '../../../theme/Colors';
 
 interface ButtonProps extends PressableProps {
   title: string;
   color?: string;
-  containerStyle?: ViewStyle;
+  containerStyle?: StyleProp<ViewStyle>;
   textStyle?: TextStyle;
 }
 
 export default function Button({
   title,
   color = Colors.primary?.base,
-  containerStyle = {},
+  containerStyle,
   textStyle = {},
   ...props
 }: ButtonProps) {
@@ -28,8 +29,8 @@ export default function Button({
   return (
     <Pressable
       {...props}
-      style={{...styles.buttonContainer(backgroundColor), ...containerStyle}}>
-      <Text style={{...styles.buttonText, ...textStyle}}>{title}</Text>
+      style={[styles.buttonContainer(backgroundColor), containerStyle]}>
+      <Text style={{ ...styles.buttonText, ...textStyle }}>{title}</Text>
     </Pressable>
   );
 }

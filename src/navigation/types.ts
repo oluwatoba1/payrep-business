@@ -76,7 +76,10 @@ export type MembersStackParamList = {
 	Assets: undefined;
 	AssetDetails: { asset_id: string } | undefined;
 	EnterAssetInformation: undefined;
-	ReviewAssetRequest: { items: { id: string; name: string; price: string }[] };
+	ReviewAssetRequest: {
+		items: { id: string; name: string; price: string }[];
+		productCode: string;
+	};
 	RepaymentOverview: undefined;
 	RequestSubmitted: undefined;
 	ManageVerfiers: undefined;

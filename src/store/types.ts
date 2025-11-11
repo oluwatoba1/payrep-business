@@ -912,6 +912,8 @@ interface IKidashi {
 	selected_account: iWomanAccount | null;
 	memberDetails: IWomanDetails | null;
 	assetRequest: Partial<IAssetRequest>;
+	loanProduct: ILoanProduct | null;
+	repaymentPlan: IRepaymentPlan | null;
 }
 
 interface CreateTrustCircleRequest {
@@ -1155,4 +1157,58 @@ interface IVerifier {
 	completed_at: string;
 	created_at: string;
 	updated_at: string;
+}
+
+interface ILoanProduct {
+	id: string;
+	name: string;
+	code: string;
+	accounting_code: string;
+	description: string;
+	interest_rate: string;
+	processing_fees: string;
+	management_fees: string;
+	other_fees: string;
+	risk_premium: string;
+	has_collateral: boolean;
+	collateral_value: string;
+	tenor_type: string;
+	tenor: number;
+	repayment_type: string;
+	repayment_cycle: string;
+	is_reducing_balance: boolean;
+	has_moratorium: boolean;
+	moratorium: number;
+	has_penalty: boolean;
+	penalty_rate: string;
+	max_loan_amount: string;
+	interest_accounting_code: string;
+	interest_receivable_accounting_code: string;
+	processing_fee_accounting_code: string;
+	management_fee_accounting_code: string;
+	other_fee_accounting_code: string;
+	risk_premium_accounting_code: string;
+	penalty_fee_accounting_code: string | null;
+	termination_type: string;
+	termination_rate: number;
+	required_documents: any[];
+	loss_expense_accounting_code: string | null;
+	provision_accounting_code: string | null;
+	repayment_reminder_days: number;
+}
+
+interface IRepaymentPlan {
+	amount: number;
+	interest_rate: number;
+	tenor: number;
+	tenor_type: string;
+	repayment_cycle: string;
+	total_interest: number;
+	processing_fees: number;
+	management_fees: number;
+	other_fees: number;
+	total_fees: number;
+	total_cost: number;
+	total_repayable: number;
+	repayment_amount: number;
 }

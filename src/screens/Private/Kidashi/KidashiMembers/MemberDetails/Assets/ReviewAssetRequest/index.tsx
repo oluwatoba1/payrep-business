@@ -26,6 +26,7 @@ const ReviewAssetRequest = ({
 }: ReviewAssetRequestProps) => {
 	const dispatch = useAppDispatch();
 	const items = route.params?.items || [];
+	const productCode = route.params?.productCode || "";
 
 	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
 
@@ -50,7 +51,13 @@ const ReviewAssetRequest = ({
 	}, []);
 
 	const proceed = () => {
-		dispatch(setAssetRequest({ items_requested: items, value: String(total) }));
+		dispatch(
+			setAssetRequest({
+				items_requested: items,
+				value: String(total),
+				product_code: productCode,
+			})
+		);
 		navigate("RepaymentOverview");
 	};
 
