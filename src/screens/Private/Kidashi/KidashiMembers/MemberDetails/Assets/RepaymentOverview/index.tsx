@@ -157,7 +157,7 @@ const RepaymentOverview = ({
 				vendor_id: vendor?.id || "",
 				woman_id: memberDetails?.id || "",
 				value: assetRequest.value || "0",
-				markup: String(repaymentPlan?.total_cost || 0),
+				markup: String(repaymentPlan?.total_cost.toFixed(2) || 0),
 				items_requested: assetRequest?.items_requested || [],
 				product_code: assetRequest.product_code || "",
 				otp,

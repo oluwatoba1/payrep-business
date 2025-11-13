@@ -21,7 +21,7 @@ const OutstandingCard = ({ outstanding }: { outstanding: string }) => {
 	const isNegative = true;
 	return (
 		<Pressable
-			onPress={() => {}}
+			onPress={() => { }}
 			style={[
 				styles.card,
 				{
@@ -60,7 +60,7 @@ const AssetsCard = ({
 				onAssetPress();
 			}}
 			style={[styles.card, { backgroundColor: Colors.neutral["50"] }]}
-			// disabled={!isOngoing}
+		// disabled={!isOngoing}
 		>
 			<Typography
 				title='Assets'
@@ -99,7 +99,7 @@ const MemberDetailsCard = ({
 			<Row containerStyle={styles.cardContainer}>
 				<AssetsCard
 					onAssetPress={onAssetPress}
-					ongoingAssetCount={memberDetails?.ongoing_asset_count || 0}
+					ongoingAssetCount={memberDetails?.loan_summary.running_loans || 0}
 				/>
 				<OutstandingCard
 					outstanding={memberDetails?.loan_summary?.total_outstanding || "0"}
