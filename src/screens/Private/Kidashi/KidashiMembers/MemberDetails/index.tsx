@@ -1,5 +1,5 @@
 import { Alert, BackHandler, FlatList, Image, Pressable } from "react-native";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 
@@ -100,9 +100,15 @@ const MemberDetails = ({
 	useFocusEffect(
 		useCallback(() => {
 			fetchDetails();
-			fetchTransactions({ account: memberDetails?.account_number || "" });
+			// fetchTransactions({ account: memberDetails?.account_number || "" });
 		}, [route.params.id])
 	);
+
+	useEffect(() => {
+		if (memberDetails?.account_number) {
+			fetchTransactions({ account: memberDetails.account_number });
+		}
+	}, [memberDetails?.account_number]);
 
 	const backAction = () => {
 		navigate("Members");
@@ -124,9 +130,8 @@ const MemberDetails = ({
 		<SafeAreaWrapper backAction={backAction} title='Member Details'>
 			<MemberDetailsHeaderComp
 				onOTPManagePress={() => navigate("ManageVerfiers")}
-				userName={`${memberDetails?.first_name || ""} ${
-					memberDetails?.surname || ""
-				}`}
+				userName={`${memberDetails?.first_name || ""} ${memberDetails?.surname || ""
+					}`}
 				status={memberDetails?.status}
 			/>
 			<MemberDetailsCard
@@ -147,7 +152,7 @@ const MemberDetails = ({
 					<FlatList
 						data={transactionsData as ITransaction[]}
 						renderItem={({ item }) => {
-							return <TransactonItem transaction={item} onPress={() => {}} />;
+							return <TransactonItem transaction={item} onPress={() => { }} />;
 						}}
 						keyExtractor={(item) => item.reference_number}
 						style={{ flex: 1 }}
@@ -178,7 +183,7 @@ const MemberDetails = ({
 				onClose={() => setVisible(false)}
 				parent='MemberDetails'
 				onRequestAssetPress={() => navigate("EnterAssetInformation")}
-				// onAddMemberPress={() => navigate("")}
+			// onAddMemberPress={() => navigate("")}
 			/>
 		</SafeAreaWrapper>
 	);
