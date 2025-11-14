@@ -69,12 +69,12 @@ export default function MemberAttestation({
 
 	const registerWoman = async () => {
 		try {
-			const { status, message } = await onboardWoman({
+			const { status, message, data } = await onboardWoman({
 				vendor_cba_customer_id: customer?.id || "",
 				woman_cba_customer_id: womanCustomerId,
 			}).unwrap();
 			if (status) {
-				navigate("MemberSuccessScreen");
+				navigate("AlternateAccount", { womanId: data.woman_id });
 			} else {
 				showToast("danger", message);
 			}

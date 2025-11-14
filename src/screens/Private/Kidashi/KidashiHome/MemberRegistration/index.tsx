@@ -11,3 +11,5 @@ export { default as MemberPep } from "./MemberPep";
 export { default as MemberSourceOfIncome } from "./MemberSourceOfIncome";
 export { default as MemberAttestation } from "./MemberAttestation";
 export { default as MemberSuccessScreen } from "./MemberSuccessScreen";
+export { default as AlternateAccount } from "./AlternateAccount";
+export { default as AlternateAccountSuccess } from "./AlternateAccountSuccess";

@@ -1018,6 +1018,14 @@ interface ITrustCircleDetail {
 	women: IWomen[];
 }
 
+interface ICreateAlternateAccount {
+	woman_id: string;
+	bank_name: string;
+	bank_code: string;
+	account_number: string;
+	account_name: string;
+}
+
 interface iWomanAccount {
 	id: string;
 	customer__first_name: string;

@@ -16,6 +16,8 @@ import {
 	MemberSourceOfIncome,
 	MemberAttestation,
 	MemberSuccessScreen,
+	AlternateAccount,
+	AlternateAccountSuccess,
 } from "@screens/Private/Kidashi/KidashiHome/MemberRegistration";
 
 const Stack = createNativeStackNavigator<MemberRegistrationStackParamList>();
@@ -65,6 +67,11 @@ export default function MemberRegistrationStack() {
 			<Stack.Screen
 				name='MemberSuccessScreen'
 				component={MemberSuccessScreen}
+			/>
+			<Stack.Screen name='AlternateAccount' component={AlternateAccount} />
+			<Stack.Screen
+				name='AlternateAccountSuccess'
+				component={AlternateAccountSuccess}
 			/>
 		</Stack.Navigator>
 	);
