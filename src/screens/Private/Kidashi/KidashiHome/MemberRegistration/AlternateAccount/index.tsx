@@ -67,21 +67,6 @@ export default function AlternateAccount({
 		label: string;
 		value: string;
 	}>(INITIAL_BANK_STATE);
-	const [enquiryResponse, setEnquiryResponse] = useState<INameEnquiryResponse>({
-		status: false,
-		response_code: "",
-		message: "",
-		transfer_type: "debit",
-		beneficiary_account_number: "",
-		beneficiary_account_name: "",
-		bank_code: "",
-		bank_name: "",
-		ner: "",
-		session_id: "",
-		bvn: "",
-		kyc: 0,
-		fi: "",
-	});
 
 	// Loading States
 	const [isLoadingMoreBanks, setIsLoadingMoreBanks] = useState(false);
@@ -119,8 +104,6 @@ export default function AlternateAccount({
 					bank_name: bankName || "",
 				}).unwrap();
 
-				setEnquiryResponse(result);
-
 				if (result.status) {
 					setAccountName(result.beneficiary_account_name || "");
 					setBankName(result.bank_name || "");
@@ -150,7 +133,7 @@ export default function AlternateAccount({
 				account_name: formData.accountName,
 			}).unwrap();
 			if (status) {
-				// navigate("");
+				navigate("AlternateAccountSuccess", { womanId: womanId! });
 			} else {
 				showToast("danger", message);
 			}

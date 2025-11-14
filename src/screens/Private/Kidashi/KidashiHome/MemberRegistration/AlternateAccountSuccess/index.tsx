@@ -21,14 +21,14 @@ import { scale } from "@utils/Helpers";
 
 type AlternateAccountSuccessProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "AlternateAccountSuccess">,
-	CompositeScreenProps<
-		BottomTabScreenProps<KidashiHomeStackParamList, "KidashiDashboard">,
-		BottomTabScreenProps<KidashiBottomTabParamList, "Trust Circles">
-	>
+	BottomTabScreenProps<KidashiHomeStackParamList, "KidashiDashboard">
 >;
 
 export default function AlternateAccountSuccess({
 	navigation: { navigate },
+	route: {
+		params: { womanId },
+	},
 }: AlternateAccountSuccessProps) {
 	const backAction = () => {
 		navigate("KidashiDashboard");
@@ -70,24 +70,17 @@ export default function AlternateAccountSuccess({
 
 				<Pad size={16} />
 
-				<View style={styles.accountContainer}>
-					<Row alignItems='center' justifyContent='space-between'>
-						<Typography title='Account number' type='label-r' />
-						<Typography title='0123456789' type='body-b' />
-					</Row>
-					<Row alignItems='center' justifyContent='space-between'>
-						<Typography title='Tier Type' type='label-r' />
-						<Typography title='Tier 1' type='body-b' />
-					</Row>
-				</View>
+				<Button
+					title='Add Another Alternate Bank Details'
+					onPress={() => navigate("AlternateAccount", { womanId: womanId! })}
+					containerStyle={{ backgroundColor: "#FAFAFA" }}
+				/>
 
-				<Pad size={24} />
+				<Pad />
 
 				<Button
-					title='Add Member to Kidashi'
-					onPress={() =>
-						navigate("Trust Circles", { screen: "EnterAccountNumber" })
-					}
+					title='Return to Home'
+					onPress={() => navigate("KidashiDashboard")}
 					containerStyle={{
 						width: width - 2 * scale(MAIN_LAYOUT_HORIZONTAL_PADDING),
 					}}

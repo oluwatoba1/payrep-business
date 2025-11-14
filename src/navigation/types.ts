@@ -144,8 +144,8 @@ export type MemberRegistrationStackParamList = {
 	MemberPep: undefined;
 	MemberSourceOfIncome: undefined;
 	MemberAttestation: undefined;
-	AlternateAccount: {womanId: string};
-	AlternateAccountSuccess: undefined;
+	AlternateAccount: { womanId: string };
+	AlternateAccountSuccess: { womanId: string };
 	MemberSuccessScreen: undefined;
 };
 
