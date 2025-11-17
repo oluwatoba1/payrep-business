@@ -341,6 +341,16 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 						onChangeText={setPassword}
 						error={formErrors.password}
 					/>
+
+					<Pad />
+
+					<Typography
+						title='Forgot Password?'
+						type='label-sb'
+						color={Colors.primary.base}
+						onPress={() => navigate("ForgotPassword")}
+					/>
+
 					<Pad size={20} />
 					<Button
 						title='Login'
@@ -363,12 +373,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 						]}
 						textStyle={{ textAlign: "center" }}
 					/>
-					<Text
-						onPress={() => navigate("ForgotPassword")}
-						style={styles.forgotPass}
-					>
-						Forgot Password?
-					</Text>
+					<Pad size={16} />
 					{biometricAvailable ? (
 						<TouchableOpacity
 							style={styles.biometricsContainer}

@@ -15,6 +15,9 @@ import {
 	TrustCircleStackParamList,
 } from "@navigation/types";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { persistAppState } from "@utils/Helpers";
+import { updateAppstate } from "@store/slices/appSlice";
+import { useAppDispatch } from "@store/hooks";
 
 type CreateTrustCircleProps = StackScreenProps<
 	TrustCircleStackParamList,
@@ -24,15 +27,38 @@ type CreateTrustCircleProps = StackScreenProps<
 export default function CreateTrustCircle({
 	navigation: { navigate },
 }: CreateTrustCircleProps) {
+	const dispatch = useAppDispatch();
+
 	const { reset } =
 		useNavigation<BottomTabNavigationProp<KidashiBottomTabParamList>>();
 
 	const resetAndGoBack = () => {
+		persistAppState({
+			newKidashiVendor: false,
+		});
+		dispatch(
+			updateAppstate({
+				newKidashiVendor: false,
+			})
+		);
 		reset({
 			index: 0,
 			routes: [{ name: "Trust Circles" }],
 		});
 		navigate("TrustCircles");
+	};
+
+	const proceed = () => {
+		persistAppState({
+			newKidashiVendor: false,
+		});
+		dispatch(
+			updateAppstate({
+				newKidashiVendor: false,
+			})
+		);
+
+		navigate("CircleName");
 	};
 
 	useFocusEffect(
@@ -67,10 +93,7 @@ export default function CreateTrustCircle({
 					/>
 				</Pressable>
 				<Pad size={40} />
-				<Button
-					onPress={() => navigate("CircleName")}
-					title={`Alright, Let's Go`}
-				/>
+				<Button onPress={proceed} title={`Alright, Let's Go`} />
 			</View>
 		</ScrollView>
 	);

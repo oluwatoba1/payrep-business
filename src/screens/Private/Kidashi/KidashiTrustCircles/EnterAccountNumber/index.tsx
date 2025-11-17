@@ -75,7 +75,7 @@ export default function EnterAccountNumber({
 			const { status, message, data } = await getMemberDetails({
 				cba_customer_id: id,
 				add_to_trust_circle: true,
-				vendor_id: vendor_id || ''
+				vendor_id: vendor_id || "",
 			}).unwrap();
 			if (status) {
 				setShowAccountContainer(true);
@@ -124,7 +124,6 @@ export default function EnterAccountNumber({
 				.then((res) => {
 					if (res.status) {
 						const account = res.data[0] as unknown as iWomanAccount;
-						fetchWomanDetails(account.customer_id);
 						dispatch(setSelectedAccountDetails(account));
 					} else {
 						showToast("danger", res.message || DEFAULT_ERROR_MESSAGE);

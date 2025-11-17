@@ -141,7 +141,7 @@ export default function KidashiDashboard({
 			label: "Create a Trust Circle",
 			sub: "Set up a new group for loans",
 			icon: ScreenImages.kidashiHome.createTrustCircle,
-			onPress: () => navigate("Trust Circles", { screen: "CreateTrustCircle" }),
+			onPress: () => navigate("Trust Circles", { screen: "CircleName" }),
 		},
 		// {
 		// 	label: "Add a New Member",

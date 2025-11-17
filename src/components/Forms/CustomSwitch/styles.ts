@@ -1,10 +1,20 @@
-import {StyleSheet} from 'react-native';
-import {scale, scaleHeight} from '../../../utils/Helpers';
+import { StyleSheet } from "react-native";
+import { scale, scaleHeight } from "../../../utils/Helpers";
 
 export const styles = StyleSheet.create({
-  switch: {
-    width: scale(40),
-    height: scaleHeight(25),
-    transform: [{scaleX: 0.8}, {scaleY: 0.8}],
-  },
+	wrapper: {
+		alignSelf: "flex-start",
+	},
+	track: {
+		width: scale(40),
+		height: scaleHeight(20),
+		borderRadius: scaleHeight(30),
+		justifyContent: "center",
+	},
+	thumb: {
+		width: scaleHeight(18),
+		height: scaleHeight(18),
+		borderRadius: scaleHeight(18),
+		elevation: 2,
+	},
 });
