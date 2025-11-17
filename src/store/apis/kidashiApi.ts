@@ -140,7 +140,7 @@ const KidashiApi = createApi({
 			}),
 		}),
 		onboardWoman: builder.mutation<
-			AuthResponse<null>,
+			AuthResponse<{ woman_id: string }>,
 			{ vendor_cba_customer_id: string; woman_cba_customer_id: string }
 		>({
 			query: (body) => ({
@@ -149,6 +149,16 @@ const KidashiApi = createApi({
 				body,
 			}),
 			invalidatesTags: [TAGS.MemberDetails],
+		}),
+		createAlternateAccount: builder.mutation<
+			AuthResponse<null>,
+			ICreateAlternateAccount
+		>({
+			query: (body) => ({
+				url: "woman/mobile/alternate_account/create",
+				method: "POST",
+				body,
+			}),
 		}),
 		getMemberDetails: builder.mutation<
 			AuthResponse<IWomanDetails>,
@@ -409,6 +419,7 @@ export const {
 	useUpdateWomanIncomeMutation,
 	useUpdateWomanLocationMutation,
 	useAffirmWomanAttestationMutation,
+	useCreateAlternateAccountMutation,
 	useUpdateWomanPepMutation,
 	useWomanBvnLookupMutation,
 	useWomanNinLookupMutation,

@@ -12,6 +12,8 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import styles from "./styles";
 import Colors from "../../../theme/Colors";
 import Pad from "../../Pad";
+import { Row } from "@components/Layout";
+import { MAIN_LAYOUT_HORIZONTAL_PADDING, width } from "@utils/Constants";
 
 interface PinPadProps {
 	codeLength?: number;
@@ -23,6 +25,11 @@ interface PinPadProps {
 	pinScale?: number;
 }
 
+const GAP = 12; // px between boxes
+const MAX_BOX = 64; // cap on tablets
+const MIN_BOX = 44; // minimum touchable size
+const MAX_CONTENT = 420; // clamp the whole pad width so it doesn't stretch
+
 export default function PinPad({
 	codeLength = 4,
 	pin = "",
@@ -30,12 +37,23 @@ export default function PinPad({
 	onInput,
 	onResendOtp,
 	error = "",
-	pinScale = 2,
+	pinScale = 3,
 }: PinPadProps) {
 	const [pinArray, setPinArray] = useState<string[]>(
 		Array(codeLength).fill("")
 	);
 	const inputRefs = useRef<Array<TextInput | null>>([]);
+
+	const horizontalPadding = 2 * MAIN_LAYOUT_HORIZONTAL_PADDING; // left + right
+	// Clamp available content width so tablets look sane
+	const contentWidth = Math.min(width - horizontalPadding, MAX_CONTENT);
+
+	// Box side: (content - total gaps) / count, then clamp to min/max
+	const totalGaps = (codeLength - 1) * GAP;
+	const boxSide = Math.max(
+		MIN_BOX,
+		Math.min(MAX_BOX, Math.floor((contentWidth - totalGaps) / codeLength))
+	);
 
 	// ---------- helpers ----------
 	const emit = (arr: string[]) => {
@@ -139,22 +157,26 @@ export default function PinPad({
 		setPinArray(arr);
 	}, [pin, codeLength]);
 
+	useEffect(() => {
+		focusIndex(0);
+	}, [inputRefs?.current]);
+
 	// ---------- render ----------
 	const firstEmptyIndex = pinArray.findIndex((p) => !p);
 
 	return (
 		<View>
-			<View style={styles.pinPadContainer}>
+			<View style={[styles.pinPadContainer, { width: contentWidth }]}>
 				{Array.from({ length: codeLength }).map((_, index) => {
 					const value = pinArray[index];
 					return (
-						<View
+						<Row
 							key={index}
-							style={styles.pinBoxContainer(
+							containerStyle={styles.pinBoxContainer(
 								index === firstEmptyIndex,
 								index + 1 === codeLength,
-								codeLength,
-								pinScale
+								boxSide,
+								GAP
 							)}
 						>
 							<TextInput
@@ -163,7 +185,10 @@ export default function PinPad({
 								onChangeText={(text) => handleChange(text, index)}
 								onKeyPress={(e) => handleKeyPress(e, index)}
 								keyboardType='number-pad'
-								style={styles.pinInput}
+								style={[
+									styles.pinInput(codeLength),
+									{ width: boxSide, height: boxSide },
+								]}
 								autoFocus={index === 0}
 								cursorColor={Colors.black}
 								textContentType='oneTimeCode'
@@ -183,7 +208,7 @@ export default function PinPad({
 								contextMenuHidden={false} // keep native paste menu
 								// ❌ no onSelectionChange clipboard reads (prevents re-paste loops)
 							/>
-						</View>
+						</Row>
 					);
 				})}
 			</View>

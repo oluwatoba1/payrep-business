@@ -107,6 +107,7 @@ export type ProfileStackParamList = {
 	BusinessInformation: undefined;
 	Pin: undefined;
 	Attestation: undefined;
+	AlternateAccount: undefined;
 };
 
 export type BillsStackParamList = {
@@ -144,6 +145,8 @@ export type MemberRegistrationStackParamList = {
 	MemberPep: undefined;
 	MemberSourceOfIncome: undefined;
 	MemberAttestation: undefined;
+	AlternateAccount: { womanId: string };
+	AlternateAccountSuccess: { womanId: string };
 	MemberSuccessScreen: undefined;
 };
 
