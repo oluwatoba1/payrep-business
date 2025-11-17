@@ -164,9 +164,13 @@ export default function Dashboard({
 				cba_customer_id: customer?.id || "",
 			}).unwrap();
 
+			console.log("====", data);
+
 			if (status) {
 				dispatch(setVendor(data));
+				return;
 			}
+			dispatch(setVendor(null));
 		} catch (error: ErrorResponse | any) {
 			// fail silently
 		}
@@ -229,6 +233,7 @@ export default function Dashboard({
 	};
 
 	const navigateToKidashi = useCallback(() => {
+		console.log("======>>>", vendor);
 		switch (vendor?.status) {
 			case "ACTIVE":
 				navigate("KidashiBottomTabs", {
@@ -369,7 +374,10 @@ export default function Dashboard({
 					// onProceed={() => navigate("Home", { screen: "KidashiRegistration" })}
 					onProceed={() =>
 						appState?.newKidashiVendor
-							? navigate("Trust Circles", { screen: "CreateTrustCircle" })
+							? navigate("KidashiBottomTabs", {
+									screen: "Trust Circles",
+									params: { screen: "CreateTrustCircle" },
+							  })
 							: navigateToKidashi()
 					}
 				/>

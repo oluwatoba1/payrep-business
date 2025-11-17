@@ -37,7 +37,7 @@ const KidashiSlice = createSlice({
 		setVendorId: (state, action: PayloadAction<string>) => {
 			state.vendor_id = action.payload;
 		},
-		setVendor: (state, action: PayloadAction<IVendor>) => {
+		setVendor: (state, action: PayloadAction<IVendor | null>) => {
 			state.vendor = action.payload;
 		},
 		setTrustCircleDetails: (
