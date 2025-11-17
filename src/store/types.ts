@@ -5,6 +5,7 @@ interface IAppState {
 	enableBiometrics?: boolean;
 	customer?: ICustomerInfo | null;
 	hasEverLoggedIn?: boolean;
+	newKidashiVendor?: boolean;
 }
 
 interface IBank {

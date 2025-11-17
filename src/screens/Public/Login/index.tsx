@@ -180,8 +180,9 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 				return;
 			}
 
-			const payload = `Login attempt for user ${customer?.username || username
-				} at ${new Date().toISOString()}`;
+			const payload = `Login attempt for user ${
+				customer?.username || username
+			} at ${new Date().toISOString()}`;
 
 			const promptMessage =
 				Platform.OS === "ios" ? "Login with Face ID" : "Login with Biometrics";
@@ -340,12 +341,14 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 						onChangeText={setPassword}
 						error={formErrors.password}
 					/>
+
 					<Pad />
+
 					<Typography
-						title="Forgot Password?"
-						type="label-sb"
+						title='Forgot Password?'
+						type='label-sb'
 						color={Colors.primary.base}
-						onPress={() => navigate('ForgotPassword')}
+						onPress={() => navigate("ForgotPassword")}
 					/>
 
 					<Pad size={20} />
@@ -359,7 +362,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 							{
 								text: "Don't have an account? ",
 								bold: false,
-								action: () => { },
+								action: () => {},
 							},
 							{
 								text: "Create an Account",
@@ -370,7 +373,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 						]}
 						textStyle={{ textAlign: "center" }}
 					/>
-
+					<Pad size={16} />
 					{biometricAvailable ? (
 						<TouchableOpacity
 							style={styles.biometricsContainer}

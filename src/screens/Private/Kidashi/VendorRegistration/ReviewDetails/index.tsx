@@ -17,6 +17,8 @@ import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { useRegisterMutation } from "@store/apis/kidashiApi";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import { setVendorId } from "@store/slices/kidashiSlice";
+import { persistAppState } from "@utils/Helpers";
+import { updateAppstate } from "@store/slices/appSlice";
 
 type ReviewDetailsProps = StackScreenProps<
 	KidashiRegistrationStackParamList,
@@ -46,7 +48,14 @@ export default function ReviewDetails({
 			}).unwrap();
 
 			if (status) {
-				console.log(vendor_id);
+				persistAppState({
+					newKidashiVendor: true,
+				});
+				dispatch(
+					updateAppstate({
+						newKidashiVendor: true,
+					})
+				);
 				navigate("OnboardingSuccess");
 				dispatch(setVendorId(vendor_id));
 			} else {

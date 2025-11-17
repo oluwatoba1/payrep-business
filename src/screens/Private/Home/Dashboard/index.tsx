@@ -53,13 +53,16 @@ import { setVendor } from "@store/slices/kidashiSlice";
 import { useFetchKidashiVendorMutation } from "@store/apis/kidashiApi";
 
 type DashboardProps = CompositeScreenProps<
+	StackScreenProps<HomeStackParamList, "Dashboard">,
 	CompositeScreenProps<
-		StackScreenProps<HomeStackParamList, "Dashboard">,
-		BottomTabScreenProps<KidashiBottomTabParamList, "KidashiHome">
-	>,
-	CompositeScreenProps<
-		BottomTabScreenProps<BottomTabParamList, "More">,
-		BottomTabScreenProps<BottomTabParamList, "History">
+		CompositeScreenProps<
+			BottomTabScreenProps<KidashiBottomTabParamList, "Trust Circles">,
+			BottomTabScreenProps<KidashiBottomTabParamList, "KidashiHome">
+		>,
+		CompositeScreenProps<
+			BottomTabScreenProps<BottomTabParamList, "More">,
+			BottomTabScreenProps<BottomTabParamList, "History">
+		>
 	>
 >;
 
@@ -73,6 +76,7 @@ export default function Dashboard({
 		(state) => state.account.selectedAccount
 	);
 	const vendor = useAppSelector((state) => state.kidashi.vendor);
+	const appState = useAppSelector((state) => state.app.appState);
 
 	const { accounts, transactions, disputes } = useAppSelector(
 		(state) => state.account
@@ -164,10 +168,7 @@ export default function Dashboard({
 				dispatch(setVendor(data));
 			}
 		} catch (error: ErrorResponse | any) {
-			// showToast(
-			// 	"danger",
-			// 	error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
-			// );
+			// fail silently
 		}
 	};
 
@@ -323,22 +324,13 @@ export default function Dashboard({
 						<Typography
 							title={`Hello ${displayName() || "User"}! 🖐`}
 							type='subheading-sb'
+<<<<<<< HEAD
 						// style={styles.profileText}
+=======
+>>>>>>> main
 						/>
 					</View>
 				</View>
-
-				{/* <View style={styles.notificationArea}>
-          <TouchableOpacity
-            style={styles.notificationIcon}
-            onPress={handleNotifications}>
-            <Image
-              style={styles.notificationIcon}
-              source={IconImages.icon.notification}
-            />
-            <View style={styles.notificationIndicator} />
-          </TouchableOpacity>
-        </View> */}
 			</Row>
 			<Pad size={24} />
 
@@ -379,7 +371,11 @@ export default function Dashboard({
 			>
 				<KidashiCard
 					// onProceed={() => navigate("Home", { screen: "KidashiRegistration" })}
-					onProceed={navigateToKidashi}
+					onProceed={() =>
+						appState?.newKidashiVendor
+							? navigate("Trust Circles", { screen: "CreateTrustCircle" })
+							: navigateToKidashi()
+					}
 				/>
 			</ShimmerPlaceholder>
 
