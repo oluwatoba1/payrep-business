@@ -20,8 +20,10 @@ interface TrustCircleItem {
 export default function TrustCircleItem({
 	item,
 	isLastItem,
-	onPress = () => {},
+	onPress = () => { },
 }: TrustCircleItem) {
+	console.log("ITEMS", item);
+
 	return (
 		<Pressable onPress={onPress}>
 			<Row

@@ -13,7 +13,7 @@ import { getStatusColor } from "./utll";
 
 const TapReview = () => {
 	return (
-		<Pressable onPress={() => {}} style={styles.infoRedIconContainer}>
+		<Pressable onPress={() => { }} style={styles.infoRedIconContainer}>
 			<Image
 				source={ScreenImages.kidashiMemberDetails.infoRedIcon}
 				style={styles.infoRedIcon}
@@ -29,15 +29,18 @@ const TapReview = () => {
 const AssetCard = ({
 	asset,
 	navigation,
+	from,
 }: {
 	asset: IAsset;
 	navigation: any;
+	from?: "KidashiDashboard" | "Assets";
 }) => {
 	return (
 		<Pressable
 			onPress={() =>
 				navigation.navigate("AssetDetails", {
 					asset_id: asset.id,
+					from,
 				})
 			}
 		>
@@ -105,10 +108,12 @@ const AssetList = ({
 	status,
 	assets,
 	navigation,
+	from,
 }: {
 	status?: string;
 	assets: IAsset[];
 	navigation: any;
+	from: "KidashiDashboard" | "Assets";
 }) => {
 	return (
 		<View style={{ flex: 1 }}>
@@ -129,7 +134,7 @@ const AssetList = ({
 						: assets
 				}
 				renderItem={({ item }) => (
-					<AssetCard asset={item} navigation={navigation} />
+					<AssetCard asset={item} navigation={navigation} from={from} />
 				)}
 				keyExtractor={(item) => item.id}
 			/>

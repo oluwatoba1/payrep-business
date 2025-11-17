@@ -15,6 +15,7 @@ import { MembersStackParamList } from "@navigation/types";
 import { useGetAssetDetailsMutation } from "@store/apis/kidashiApi";
 
 import { useFocusEffect } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 export type Status =
 	| "approved"
 	| "pending approval"
@@ -29,10 +30,11 @@ type AssetDetailsProps = StackScreenProps<
 >;
 
 const AssetDetails = ({
-	navigation: { navigate },
+	navigation,
 	route,
 }: AssetDetailsProps) => {
 	const asset_id = route?.params?.asset_id ?? "";
+	const from = route?.params?.from ?? "";
 	const [cancelRequestModalVisible, setCancelRequestModalVisible] =
 		useState(false);
 	const [getAssetDetails, { isLoading }] = useGetAssetDetailsMutation();
@@ -51,11 +53,27 @@ const AssetDetails = ({
 		if (asset_id) fetchAssetDetails();
 	}, [asset_id]);
 
+	// const backAction = () => {
+	// 	navigate("Assets");
+	// 	return true; // Prevent default behavior
+	// };
 	const backAction = () => {
-		navigate("Assets");
-		return true; // Prevent default behavior
+		if (from === "KidashiDashboard") {
+			navigation.getParent<BottomTabNavigationProp<any>>()?.navigate("KidashiHome", {
+				screen: "KidashiDashboard",
+			});
+		} else if (from === "VendorAssets") {
+			navigation.getParent<BottomTabNavigationProp<any>>()?.navigate("KidashiHome", {
+				screen: "VendorAssets",
+			});
+		}
+		else if (from === "Assets") {
+			navigation.goBack();
+		} else {
+			navigation.goBack();
+		}
+		return true;
 	};
-
 	useFocusEffect(
 		useCallback(() => {
 			const backHandler = BackHandler.addEventListener(
@@ -70,7 +88,7 @@ const AssetDetails = ({
 	return (
 		<SafeAreaWrapper
 			title='Asset Details'
-			backAction={() => navigate("Assets")}
+			backAction={backAction}
 		>
 			<ScrollView showsVerticalScrollIndicator={false}>
 				<AssetDetailsHeader
@@ -86,9 +104,8 @@ const AssetDetails = ({
 					asset={assetDetails}
 				/>
 				<AssetDetailList
-					memberName={`${assetDetails?.asset?.woman__first_name ?? ""} ${
-						assetDetails?.asset?.woman__surname ?? ""
-					}`.trim()}
+					memberName={`${assetDetails?.asset?.woman__first_name ?? ""} ${assetDetails?.asset?.woman__surname ?? ""
+						}`.trim()}
 					date={assetDetails?.asset?.created_at?.split("T")[0]}
 					time={assetDetails?.asset?.created_at?.split("T")[1]?.slice(0, 5)}
 					items={(assetDetails?.asset?.items_requested ?? []).map((it) => ({
@@ -103,7 +120,7 @@ const AssetDetails = ({
 					status={assetDetails?.asset?.status || "ALL"}
 				/>
 			</ScrollView>
-			{assetDetails?.asset?.status === "RUNNING" && (
+			{assetDetails?.asset?.status !== "RUNNING" && (
 				<Button
 					title='Cancel Request'
 					containerStyle={styles.rejectedCardContainer}

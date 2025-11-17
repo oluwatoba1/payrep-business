@@ -47,6 +47,7 @@ export type KidashiBottomTabParamList = {
 
 export type KidashiHomeStackParamList = {
 	KidashiDashboard: undefined;
+	VendorAssets: undefined;
 	KidashiRegistration: undefined;
 	MemberRegistration: NavigatorScreenParams<MemberRegistrationStackParamList>;
 	KidashiNotifications: undefined;
@@ -56,6 +57,7 @@ export type KidashiHomeStackParamList = {
 	TransferConfirmation: undefined;
 	TransferSuccess: undefined;
 	TransferDetails: undefined;
+	AssetDetails: { asset_id: string };
 };
 
 export type TrustCircleStackParamList = {
@@ -74,7 +76,7 @@ export type MembersStackParamList = {
 	MemberDetails: { id: string };
 	TransactionDetails: undefined;
 	Assets: undefined;
-	AssetDetails: { asset_id: string } | undefined;
+	AssetDetails: { asset_id: string, from?: "KidashiDashboard" | "Assets" | "VendorAssets" } | undefined;
 	EnterAssetInformation: undefined;
 	ReviewAssetRequest: {
 		items: { id: string; name: string; price: string }[];

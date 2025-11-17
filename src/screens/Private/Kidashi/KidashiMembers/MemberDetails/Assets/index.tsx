@@ -83,7 +83,7 @@ const Assets = ({ navigation }: KidashiMembersProps) => {
 				/>
 			)}
 
-			<AssetList status={activeTab} assets={assets} navigation={navigation} />
+			<AssetList status={activeTab} assets={assets} navigation={navigation} from="Assets" />
 		</SafeAreaWrapper>
 	);
 };

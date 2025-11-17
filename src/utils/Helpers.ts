@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {height, width} from './Constants';
-import {APP_STATE} from '@env';
+import { height, width } from './Constants';
+import { APP_STATE } from '@env';
 import ComponentImages from '@assets/images/components';
 
 const GUIDELINEWIDTH = 375;
@@ -145,14 +145,14 @@ export const removeCommas = (value: string): string => {
 };
 
 export const ACTIONS_DATA = [
-  {id: '01', title: 'Send', icon: ComponentImages.accountDetailsCard.send},
-  {id: '02', title: 'Bills', icon: ComponentImages.accountDetailsCard.bills},
+  { id: '01', title: 'Send', icon: ComponentImages.accountDetailsCard.send },
+  { id: '02', title: 'Bills', icon: ComponentImages.accountDetailsCard.bills },
   {
     id: '03',
     title: 'Earnings',
     icon: ComponentImages.accountDetailsCard.earnings,
   },
-  {id: '04', title: 'My Cards', icon: ComponentImages.accountDetailsCard.cards},
+  { id: '04', title: 'My Cards', icon: ComponentImages.accountDetailsCard.cards },
 ];
 
 export const formatCurrency = (amount: number) => {
@@ -190,11 +190,16 @@ export const formatDateTime = (isoString: string) => {
   const hours = String(date.getUTCHours()).padStart(2, '0');
   const minutes = String(date.getUTCMinutes()).padStart(2, '0');
 
+  const shortMonth = date.toLocaleString('en-US', { month: 'short' }); // e.g. "Aug"
+  const shortDate = `${day} ${shortMonth}`;
+
   return {
     date: `${day}/${month}/${year}`,
     time: `${hours}:${minutes}`,
+    shortDate,
   };
 };
+
 
 export const formatDateForFilter = (date?: Date) =>
   date ? date.toLocaleDateString('en-GB') : undefined;
@@ -313,52 +318,42 @@ export const buildReceiptHTML = (
 
           <div class="amount">${formatCurrency(amount)}</div>
 
-          <div class="row"><span class="label">Sender:</span><span class="value">${
-            source_account_name || account__account_name
-          }</span></div>
+          <div class="row"><span class="label">Sender:</span><span class="value">${source_account_name || account__account_name
+    }</span></div>
           <div class="row">
             <span class="label">Recipient:</span>
             <div>
-              <span class="value" style="padding-bottom: 5px; display: block;">${
-                beneficiary_account_name || ''
-              }</span>
-              <span class="value">${beneficiary_account_number}${
-    bank_name || bank ? ` | ${bank_name || bank}` : ''
-  }</span>
+              <span class="value" style="padding-bottom: 5px; display: block;">${beneficiary_account_name || ''
+    }</span>
+              <span class="value">${beneficiary_account_number}${bank_name || bank ? ` | ${bank_name || bank}` : ''
+    }</span>
             </div>
           </div>
-          <div class="row"><span class="label">Date:</span><span class="value">${
-            transactionDate.date
-          } ${transactionDate.time}</span></div>
+          <div class="row"><span class="label">Date:</span><span class="value">${transactionDate.date
+    } ${transactionDate.time}</span></div>
           <div class="row"><span class="label">Reference:</span><span class="value">${reference_number}</span></div>
-          ${
-            token
-              ? `<div class="row"><span class="label">Token:</span><span class="value">${token}</span></div>`
-              : ''
-          }
-          ${
-            units
-              ? `<div class="row"><span class="label">Units:</span><span class="value">${units}</span></div>`
-              : ''
-          }
-          ${
-            address
-              ? `<div class="row"><span class="label">Address:</span><span class="value">${address}</span></div>`
-              : ''
-          }
-          ${
-            session_id
-              ? `<div class="row"><span class="label">Session ID:</span><span class="value">${session_id}</span></div>`
-              : ''
-          }
-          <div class="row"><span class="label">Narration:</span><span class="value">${
-            remarks || '-'
-          }</span></div>
+          ${token
+      ? `<div class="row"><span class="label">Token:</span><span class="value">${token}</span></div>`
+      : ''
+    }
+          ${units
+      ? `<div class="row"><span class="label">Units:</span><span class="value">${units}</span></div>`
+      : ''
+    }
+          ${address
+      ? `<div class="row"><span class="label">Address:</span><span class="value">${address}</span></div>`
+      : ''
+    }
+          ${session_id
+      ? `<div class="row"><span class="label">Session ID:</span><span class="value">${session_id}</span></div>`
+      : ''
+    }
+          <div class="row"><span class="label">Narration:</span><span class="value">${remarks || '-'
+    }</span></div>
           <div class="row no-border">
             <span class="label">Status:</span>
-            <span class="value status-${txn_status ?? status}">${
-    txn_status ?? status
-  }</span>
+            <span class="value status-${txn_status ?? status}">${txn_status ?? status
+    }</span>
           </div>
         </div>
       </body>
