@@ -14,6 +14,7 @@ import {
 	TransferDetails,
 	TransferSuccess,
 } from "@screens/Private/Kidashi/KidashiHome/Transfer";
+import AssetDetails from "@screens/Private/Kidashi/KidashiMembers/MemberDetails/Assets/AssetDetails";
 
 const Stack = createNativeStackNavigator<KidashiHomeStackParamList>();
 
@@ -49,6 +50,7 @@ export default function HomeStack() {
 				component={KidashiNotificationDetails}
 				options={{ presentation: "modal" }}
 			/>
+			<Stack.Screen name="AssetDetails" component={AssetDetails} />
 		</Stack.Navigator>
 	);
 }

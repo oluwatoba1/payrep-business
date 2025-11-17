@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { FlatList, Image, Pressable, Text } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
-import { CompositeScreenProps } from "@react-navigation/native";
+import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { useCallback } from "react";
 
 import { Typography } from "@components/Forms";
 import { KidashiLayout, Row } from "@components/Layout";
@@ -24,6 +25,7 @@ import {
 import CreateTrustCircleModal from "@components/Modal/CreateTrustCircleModal";
 import { addCommas } from "@utils/Helpers";
 import { ITrustCircleItem } from "@components/UI/TrustCircle/Cards/TrustCircleItemCard";
+import { IResourceItem } from "@components/UI/TrustCircle/Cards/ResourceITemCard";
 import {
 	TrustCircleItemCard,
 	MemberTransactionCard,
@@ -32,27 +34,15 @@ import { IMemberTransaction } from "@components/UI/TrustCircle/Cards/MemberTrans
 import { useAppSelector } from "@store/hooks";
 import {
 	useFetchNotificationsMutation,
+	useGetAllAssetsMutation,
 	useOnboardWomanMutation,
 } from "@store/apis/kidashiApi";
 import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
+import ResourceItemCard from "@components/UI/TrustCircle/Cards/ResourceITemCard";
+import AssetList from "@components/UI/MemberDetails/Assets/AssetList";
 
-const overview: KidashiHomeCardProps["items"] = [
-	{
-		title: "Running Assets",
-		value: "0",
-		backgroundColor: Colors.neutral["50"],
-		titleColor: Colors.neutral["400"],
-		descriptionColor: Colors.black,
-	},
-	{
-		title: "Overdue Payments",
-		value: "₦0.00",
-		backgroundColor: Colors.success["100"],
-		titleColor: Colors.success["400"],
-		descriptionColor: Colors.success["700"],
-	},
-];
+
 
 const emptyStateData: Record<TabType, KidashiDashboardEmptyStateProps> = {
 	"Resource Requests": {
@@ -119,14 +109,17 @@ type KidashiDashboardProps = CompositeScreenProps<
 >;
 
 export default function KidashiDashboard({
-	navigation: { navigate },
+	navigation,
 }: KidashiDashboardProps) {
 	const [activeTab, setActiveTab] = useState<TabType>("Resource Requests");
+	const [resources, setResources] = useState<any[]>([]);
+	const [resourceCount, setResourceCount] = useState(0)
 	const [showBottomSheet, setShowBottomSheet] = useState(false);
 	const [notificationCount, setNotificationCount] = useState<number>(0);
-
+	const [getAllAssets] = useGetAllAssetsMutation()
 	const { showToast } = useToast();
 	const customer = useAppSelector((state) => state.customer.customer);
+	const vendor_id = useAppSelector((state) => state.kidashi.vendor?.id)
 	const [onboardWoman] = useOnboardWomanMutation();
 	const [fetchNotifications] = useFetchNotificationsMutation();
 
@@ -135,13 +128,13 @@ export default function KidashiDashboard({
 			label: "Transfer to Member",
 			sub: "Transfer money to a member's account",
 			icon: ScreenImages.kidashiHome.transferIcon,
-			onPress: () => navigate("TransferAccountNumber"),
+			onPress: () => navigation.navigate("TransferAccountNumber"),
 		},
 		{
 			label: "Create a Trust Circle",
 			sub: "Set up a new group for loans",
 			icon: ScreenImages.kidashiHome.createTrustCircle,
-			onPress: () => navigate("Trust Circles", { screen: "CreateTrustCircle" }),
+			onPress: () => navigation.navigate("Trust Circles", { screen: "CreateTrustCircle" }),
 		},
 		// {
 		// 	label: "Add a New Member",
@@ -152,20 +145,57 @@ export default function KidashiDashboard({
 		// },
 	];
 
-	useEffect(() => {
-		const getUnreadCount = async () => {
-			try {
-				const res = await fetchNotifications({ filters: {} }).unwrap();
-				if (res?.status && Array.isArray(res?.data)) {
-					const unread = res.data.filter((n: any) => !n?.is_read).length;
-					setNotificationCount(unread);
-				}
-			} catch (e) {
-				// noop
+	const getUnreadCount = useCallback(async () => {
+		try {
+			const res = await fetchNotifications({ filters: {} }).unwrap();
+			if (res?.status && Array.isArray(res?.data)) {
+				const unread = res.data.filter((n: any) => !n?.is_read).length;
+				setNotificationCount(unread);
 			}
-		};
-		getUnreadCount();
+		} catch (e) {
+			// noop
+		}
 	}, [fetchNotifications]);
+
+	const fetchAllVendorResources = useCallback(async () => {
+		try {
+			const res = await getAllAssets({ filters: { vendor_id } }).unwrap();
+			if (res?.status && Array.isArray(res?.data)) {
+				const items = res?.data.filter(item => item.status === "RUNNING");
+				setResources(items);
+				setResourceCount(items.length)
+			}
+
+		} catch (e) {
+			setResourceCount(0)
+			setResources([]);
+		}
+	}, [getAllAssets])
+
+	useFocusEffect(
+		useCallback(() => {
+			getUnreadCount();
+			fetchAllVendorResources()
+		}, [getUnreadCount, getAllAssets])
+	);
+
+	const overview: KidashiHomeCardProps["items"] = [
+		{
+			title: "Running Assets",
+			value: `${resourceCount}`,
+			backgroundColor: Colors.neutral["50"],
+			titleColor: Colors.neutral["400"],
+			descriptionColor: Colors.black,
+		},
+		{
+			title: "Overdue Payments",
+			value: "₦0.00",
+			backgroundColor: Colors.success["100"],
+			titleColor: Colors.success["400"],
+			descriptionColor: Colors.success["700"],
+		},
+	];
+
 
 	const registerWoman = async () => {
 		try {
@@ -190,8 +220,8 @@ export default function KidashiDashboard({
 
 	return (
 		<KidashiLayout
-			rightAction={() => navigate("Dashboard")}
-			goToNotification={() => navigate("KidashiNotifications")}
+			rightAction={() => navigation.navigate("Dashboard")}
+			goToNotification={() => navigation.navigate("KidashiNotifications")}
 			notificationCount={notificationCount}
 			headerFooter={
 				<Row
@@ -233,13 +263,40 @@ export default function KidashiDashboard({
 			<Pad size={16} />
 
 			<Tab
-				items={["Resource Requests", "My Earnings"]}
+				// items={["Resource Requests", "My Earnings"]}
+				items={["Resource Requests"]}
 				value={activeTab}
 				onTap={(value) => setActiveTab(value as TabType)}
 			/>
+			{activeTab === "Resource Requests" ? (
+				resources.length === 0 ? (
+					<KidashiDashboardEmptyState {...emptyStateData["Resource Requests"]} />
+				) : (
+					<AssetList
+						status="RUNNING"
+						assets={resources}
+						navigation={navigation}
+						from="KidashiDashboard"
+					/>
+				)
+			) : (
+				<FlatList
+					data={dummyMemberTransactionData}
+					renderItem={({ item, index }) => (
+						<MemberTransactionCard
+							item={item}
+							isLastItem={index === dummyMemberTransactionData.length - 1}
+						/>
+					)}
+					keyExtractor={(_, index) => index.toString()}
+					ListEmptyComponent={
+						<KidashiDashboardEmptyState {...emptyStateData["My Earnings"]} />
+					}
+				/>
+			)}
 
-			<FlatList<ITrustCircleItem | IMemberTransaction>
-				data={[]}
+			{/* <FlatList<IAsset | IMemberTransaction>
+				data={activeTab === "Resource Requests" ? resources : dummyMemberTransactionData}
 				renderItem={({ item, index }) =>
 					activeTab === "My Earnings" ? (
 						<MemberTransactionCard
@@ -247,17 +304,19 @@ export default function KidashiDashboard({
 							isLastItem={index === dummyMemberTransactionData.length - 1}
 						/>
 					) : (
-						<TrustCircleItemCard
-							item={item as ITrustCircleItem}
-							isLastItem={index === dummyTrustCircleData.length - 1}
-						/>
+						<AssetList status={activeTab} assets={item} navigation={""} />
+						// <ResourceItemCard
+						// 	item={item as IResourceItem}
+						// 	isLastItem={index === dummyTrustCircleData.length - 1}
+						// 	onPress={}
+						// />
 					)
 				}
 				keyExtractor={(_, index) => index.toString()}
 				ListEmptyComponent={
 					<KidashiDashboardEmptyState {...emptyStateData[activeTab]} />
 				}
-			/>
+			/> */}
 
 			<Pressable
 				onPress={() => setShowBottomSheet(true)}

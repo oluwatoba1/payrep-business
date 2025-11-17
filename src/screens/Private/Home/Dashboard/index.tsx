@@ -323,7 +323,7 @@ export default function Dashboard({
 						<Typography
 							title={`Hello ${displayName() || "User"}! 🖐`}
 							type='subheading-sb'
-							// style={styles.profileText}
+						// style={styles.profileText}
 						/>
 					</View>
 				</View>
@@ -350,10 +350,10 @@ export default function Dashboard({
 				style={
 					isLoadingAccounts
 						? {
-								borderRadius: moderateScale(8),
-								height: scaleHeight(150),
-								width: "100%",
-						  }
+							borderRadius: moderateScale(8),
+							height: scaleHeight(150),
+							width: "100%",
+						}
 						: {}
 				}
 			>

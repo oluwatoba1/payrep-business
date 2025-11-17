@@ -56,6 +56,7 @@ export type KidashiHomeStackParamList = {
 	TransferConfirmation: undefined;
 	TransferSuccess: undefined;
 	TransferDetails: undefined;
+	AssetDetails: { asset_id: string };
 };
 
 export type TrustCircleStackParamList = {
@@ -74,7 +75,7 @@ export type MembersStackParamList = {
 	MemberDetails: { id: string };
 	TransactionDetails: undefined;
 	Assets: undefined;
-	AssetDetails: { asset_id: string } | undefined;
+	AssetDetails: { asset_id: string, from?: "KidashiDashboard" | "Assets" } | undefined;
 	EnterAssetInformation: undefined;
 	ReviewAssetRequest: {
 		items: { id: string; name: string; price: string }[];
