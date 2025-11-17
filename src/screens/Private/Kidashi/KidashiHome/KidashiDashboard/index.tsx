@@ -43,8 +43,6 @@ import ResourceItemCard from "@components/UI/TrustCircle/Cards/ResourceITemCard"
 import AssetList from "@components/UI/MemberDetails/Assets/AssetList";
 import KidashiAssetList from "@components/UI/KidashiDashboard/AssetList";
 
-
-
 const emptyStateData: Record<TabType, KidashiDashboardEmptyStateProps> = {
 	"Resource Requests": {
 		icon: ScreenImages.kidashiHome.noTrustCircles,
@@ -114,13 +112,13 @@ export default function KidashiDashboard({
 }: KidashiDashboardProps) {
 	const [activeTab, setActiveTab] = useState<TabType>("Resource Requests");
 	const [resources, setResources] = useState<any[]>([]);
-	const [resourceCount, setResourceCount] = useState(0)
+	const [resourceCount, setResourceCount] = useState(0);
 	const [showBottomSheet, setShowBottomSheet] = useState(false);
 	const [notificationCount, setNotificationCount] = useState<number>(0);
-	const [getAllAssets] = useGetAllAssetsMutation()
+	const [getAllAssets] = useGetAllAssetsMutation();
 	const { showToast } = useToast();
 	const customer = useAppSelector((state) => state.customer.customer);
-	const vendor_id = useAppSelector((state) => state.kidashi.vendor?.id)
+	const vendor_id = useAppSelector((state) => state.kidashi.vendor?.id);
 	const [onboardWoman] = useOnboardWomanMutation();
 	const [fetchNotifications] = useFetchNotificationsMutation();
 
@@ -135,7 +133,8 @@ export default function KidashiDashboard({
 			label: "Create a Trust Circle",
 			sub: "Set up a new group for loans",
 			icon: ScreenImages.kidashiHome.createTrustCircle,
-			onPress: () => navigate("Trust Circles", { screen: "CircleName" }),
+			onPress: () =>
+				navigation.navigate("Trust Circles", { screen: "CircleName" }),
 		},
 		// {
 		// 	label: "Add a New Member",
@@ -162,21 +161,20 @@ export default function KidashiDashboard({
 		try {
 			const res = await getAllAssets({ filters: { vendor_id } }).unwrap();
 			if (res?.status && Array.isArray(res?.data)) {
-				const items = res?.data.filter(item => item.status === "RUNNING");
+				const items = res?.data.filter((item) => item.status === "RUNNING");
 				setResources(items);
-				setResourceCount(items.length)
+				setResourceCount(items.length);
 			}
-
 		} catch (e) {
-			setResourceCount(0)
+			setResourceCount(0);
 			setResources([]);
 		}
-	}, [getAllAssets])
+	}, [getAllAssets]);
 
 	useFocusEffect(
 		useCallback(() => {
 			getUnreadCount();
-			fetchAllVendorResources()
+			fetchAllVendorResources();
 		}, [getUnreadCount, getAllAssets])
 	);
 
@@ -196,7 +194,6 @@ export default function KidashiDashboard({
 			descriptionColor: Colors.success["700"],
 		},
 	];
-
 
 	const registerWoman = async () => {
 		try {
@@ -271,13 +268,15 @@ export default function KidashiDashboard({
 			/>
 			{activeTab === "Resource Requests" ? (
 				resources.length === 0 ? (
-					<KidashiDashboardEmptyState {...emptyStateData["Resource Requests"]} />
+					<KidashiDashboardEmptyState
+						{...emptyStateData["Resource Requests"]}
+					/>
 				) : (
 					<KidashiAssetList
-						status="RUNNING"
+						status='RUNNING'
 						assets={resources}
 						navigation={navigation}
-						from="KidashiDashboard"
+						from='KidashiDashboard'
 					/>
 				)
 			) : (
