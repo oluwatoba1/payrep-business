@@ -41,6 +41,7 @@ import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import ResourceItemCard from "@components/UI/TrustCircle/Cards/ResourceITemCard";
 import AssetList from "@components/UI/MemberDetails/Assets/AssetList";
+import KidashiAssetList from "@components/UI/KidashiDashboard/AssetList";
 
 
 
@@ -181,7 +182,7 @@ export default function KidashiDashboard({
 
 	const overview: KidashiHomeCardProps["items"] = [
 		{
-			title: "Running Assets",
+			title: "Running Resources",
 			value: `${resourceCount}`,
 			backgroundColor: Colors.neutral["50"],
 			titleColor: Colors.neutral["400"],
@@ -272,7 +273,7 @@ export default function KidashiDashboard({
 				resources.length === 0 ? (
 					<KidashiDashboardEmptyState {...emptyStateData["Resource Requests"]} />
 				) : (
-					<AssetList
+					<KidashiAssetList
 						status="RUNNING"
 						assets={resources}
 						navigation={navigation}
@@ -294,29 +295,6 @@ export default function KidashiDashboard({
 					}
 				/>
 			)}
-
-			{/* <FlatList<IAsset | IMemberTransaction>
-				data={activeTab === "Resource Requests" ? resources : dummyMemberTransactionData}
-				renderItem={({ item, index }) =>
-					activeTab === "My Earnings" ? (
-						<MemberTransactionCard
-							item={item as IMemberTransaction}
-							isLastItem={index === dummyMemberTransactionData.length - 1}
-						/>
-					) : (
-						<AssetList status={activeTab} assets={item} navigation={""} />
-						// <ResourceItemCard
-						// 	item={item as IResourceItem}
-						// 	isLastItem={index === dummyTrustCircleData.length - 1}
-						// 	onPress={}
-						// />
-					)
-				}
-				keyExtractor={(_, index) => index.toString()}
-				ListEmptyComponent={
-					<KidashiDashboardEmptyState {...emptyStateData[activeTab]} />
-				}
-			/> */}
 
 			<Pressable
 				onPress={() => setShowBottomSheet(true)}

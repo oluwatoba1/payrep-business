@@ -62,7 +62,12 @@ const AssetDetails = ({
 			navigation.getParent<BottomTabNavigationProp<any>>()?.navigate("KidashiHome", {
 				screen: "KidashiDashboard",
 			});
-		} else if (from === "Assets") {
+		} else if (from === "VendorAssets") {
+			navigation.getParent<BottomTabNavigationProp<any>>()?.navigate("KidashiHome", {
+				screen: "VendorAssets",
+			});
+		}
+		else if (from === "Assets") {
 			navigation.goBack();
 		} else {
 			navigation.goBack();
