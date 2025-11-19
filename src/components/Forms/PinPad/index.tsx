@@ -28,7 +28,7 @@ interface PinPadProps {
 const GAP = 12; // px between boxes
 const MAX_BOX = 64; // cap on tablets
 const MIN_BOX = 44; // minimum touchable size
-const MAX_CONTENT = 420; // clamp the whole pad width so it doesn't stretch
+const MAX_CONTENT = 500; // clamp the whole pad width so it doesn't stretch
 
 export default function PinPad({
 	codeLength = 4,

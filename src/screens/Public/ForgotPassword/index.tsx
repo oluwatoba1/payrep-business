@@ -37,10 +37,10 @@ export default function ForgotPassword({
 		try {
 			const { status } = await verifyDevice({
 				mobile_number: `0${username}`,
-				type: "individual",
+				type: "corporate",
 			}).unwrap();
 			if (status) {
-				navigate("RegisterNewDevice", { username, customerType: "individual" });
+				navigate("RegisterNewDevice", { username, customerType: "corporate" });
 			}
 		} catch (error: any) {
 			showToast(

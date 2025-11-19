@@ -371,7 +371,6 @@ export default function Dashboard({
 				}
 			>
 				<KidashiCard
-					// onProceed={() => navigate("Home", { screen: "KidashiRegistration" })}
 					onProceed={() =>
 						appState?.newKidashiVendor
 							? navigate("KidashiBottomTabs", {

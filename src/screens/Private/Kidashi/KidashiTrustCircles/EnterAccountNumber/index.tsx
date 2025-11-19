@@ -124,6 +124,9 @@ export default function EnterAccountNumber({
 				.then((res) => {
 					if (res.status) {
 						const account = res.data[0] as unknown as iWomanAccount;
+						setTimeout(() => {
+							fetchWomanDetails(account.customer_id);
+						}, 1000);
 						dispatch(setSelectedAccountDetails(account));
 					} else {
 						showToast("danger", res.message || DEFAULT_ERROR_MESSAGE);

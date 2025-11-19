@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
 	},
 	headerImage: {
 		width: "100%",
-		height: scaleHeight(121),
+		height: scaleHeight(126),
 		resizeMode: "cover",
 	},
 	arrowRight: {
