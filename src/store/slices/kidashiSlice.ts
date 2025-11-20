@@ -8,6 +8,8 @@ const initialState: IKidashi = {
 		community: "",
 		guarantors: [],
 		business_description: "",
+		state_id: "",
+		lga_id: "",
 	},
 	circle_details: null,
 	vendor: null,

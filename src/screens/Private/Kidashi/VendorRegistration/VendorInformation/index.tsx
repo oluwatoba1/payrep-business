@@ -14,13 +14,10 @@ import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE, VENDOR_CATEGORIES } from "@utils/Constants";
 import useVendorInformation from "./validators";
 import Pad from "@components/Pad";
-import {
-	useFetchLgasMutation,
-	useFetchStatesQuery,
-} from "@store/apis/generalApi";
 import { Stepper } from "@components/Miscellaneous";
 import { useAppDispatch } from "@store/hooks";
 import { setRegistrationDetails } from "@store/slices/kidashiSlice";
+import { useFetchKidashiLgasMutation, useFetchKidashiStatesQuery } from "@store/apis/kidashiApi";
 
 type VendorInformationProps = CompositeScreenProps<
 	StackScreenProps<KidashiRegistrationStackParamList, "VendorInformation">,
@@ -40,20 +37,22 @@ export default function VendorInformation({
 		setState,
 		setLga,
 		setCommunity,
+		clearFormError,
+		clearForm
 	} = useVendorInformation();
 
-	const { data: statesData, isLoading: statesLoading } = useFetchStatesQuery();
+	const { data: statesData, isLoading: statesLoading } = useFetchKidashiStatesQuery();
 
 	// Move Kaduna to the first position if present
 	const sortedStates = statesData?.data
 		? [
-				...statesData.data.filter((s: any) => s.name === "Kaduna"),
-				...statesData.data.filter((s: any) => s.name !== "Kaduna"),
-		  ]
+			...statesData.data.filter((s: any) => s.name === "Kaduna"),
+			...statesData.data.filter((s: any) => s.name !== "Kaduna"),
+		]
 		: [];
 
 	// Fetch LGAs dynamically
-	const [fetchLgas, { isLoading: lgasLoading }] = useFetchLgasMutation();
+	const [fetchKidashiLgas, { isLoading: lgasLoading }] = useFetchKidashiLgasMutation();
 
 	// Local states for dropdown selections
 	const [selectedState, setSelectedState] = useState<
@@ -78,7 +77,7 @@ export default function VendorInformation({
 
 	const _fetchLgas = async () => {
 		try {
-			const { status, message, data } = await fetchLgas({
+			const { status, message, data } = await fetchKidashiLgas({
 				state: formData.state,
 			}).unwrap();
 			if (status) {
@@ -139,6 +138,7 @@ export default function VendorInformation({
 				options={VENDOR_CATEGORIES}
 				selectedOption={selectedCategory}
 				onSelect={(option) => {
+					clearFormError("businessType")
 					setSelectedCategory(option);
 					setBusinessType(option.value);
 				}}
@@ -158,6 +158,8 @@ export default function VendorInformation({
 				}
 				selectedOption={selectedState}
 				onSelect={(option) => {
+					clearFormError("state")
+					clearFormError("lga")
 					setSelectedState(option);
 					setState(option.value);
 					setSelectedLga(undefined); // Reset LGA when state changes
@@ -179,6 +181,7 @@ export default function VendorInformation({
 				}
 				selectedOption={selectedLga}
 				onSelect={(option) => {
+					clearFormError("lga");
 					setSelectedLga(option);
 					setLga(option.value);
 				}}
@@ -191,12 +194,15 @@ export default function VendorInformation({
 			<TextInput
 				label='Community'
 				placeholder='Enter community'
-				onChangeText={setCommunity}
+				onChangeText={(text) => {
+					clearFormError("community")
+					setCommunity(text);
+				}}
 				value={formData.community}
 				error={formErrors.community}
 			/>
 
-			<Pad size={150} />
+			<Pad size={100} />
 
 			<Button title='Next' onPress={handleSubmit} />
 		</MainLayout>

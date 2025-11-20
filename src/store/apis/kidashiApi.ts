@@ -399,6 +399,23 @@ const KidashiApi = createApi({
 				body,
 			}),
 		}),
+		fetchKidashiStates: builder.query<AuthResponse<any>, void>({
+			query: () => ({
+				url: 'general/mobile/states',
+			}),
+		}),
+		fetchKidashiLgas: builder.mutation<AuthResponse<any>, { state: string }>({
+			query: body => ({
+				url: 'general/mobile/lgas',
+				method: 'POST',
+				body,
+			}),
+		}),
+		fetchKidashiCountries: builder.query<AuthResponse<ICountry[]>, void>({
+			query: () => ({
+				url: 'general/mobile/countries',
+			}),
+		}),
 	}),
 });
 
@@ -436,6 +453,9 @@ export const {
 	useAddVoteMutation,
 	useRemoveVoteMutation,
 	useFetchVotesMutation,
+	useFetchKidashiStatesQuery,
+	useFetchKidashiLgasMutation,
+	useFetchKidashiCountriesQuery,
 } = KidashiApi;
 
 export default KidashiApi;

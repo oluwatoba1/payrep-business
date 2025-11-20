@@ -1,4 +1,4 @@
-import { Alert, BackHandler, FlatList, Image, Pressable } from "react-native";
+import { ActivityIndicator, Alert, BackHandler, FlatList, Image, Pressable } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -46,10 +46,11 @@ const MemberDetails = ({
 	navigation: { navigate, goBack },
 	route,
 }: MemberDetailsProps) => {
+	const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
 	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
-	const [getMemberDetails] = useGetMemberDetailsMutation();
-	const [getTransactions] = useGetTransactionsMutation();
+	const [getMemberDetails, { isLoading: memberDetailsLoading }] = useGetMemberDetailsMutation();
+	const [getTransactions, { isLoading: transactionsLoading }] = useGetTransactionsMutation();
 
 	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
 	const transactionsData =
@@ -99,6 +100,7 @@ const MemberDetails = ({
 
 	useFocusEffect(
 		useCallback(() => {
+			setIsInitialLoad(true);
 			fetchDetails();
 			// fetchTransactions({ account: memberDetails?.account_number || "" });
 		}, [route.params.id])
@@ -145,21 +147,27 @@ const MemberDetails = ({
 			/>
 			<Pad size={20} />
 			{/* {activeTab === "Transactions" && <Transactions navigate={navigate} />} */}
-			{activeTab === "Transactions" &&
-				(transactionsData.length === 0 ? (
-					<KidashiDashboardEmptyState {...emptyStateData} />
-				) : (
-					<FlatList
-						data={transactionsData as ITransaction[]}
-						renderItem={({ item }) => {
-							return <TransactonItem transaction={item} onPress={() => { }} />;
-						}}
-						keyExtractor={(item) => item.reference_number}
-						style={{ flex: 1 }}
-						contentContainerStyle={styles.transactionContainer}
-						showsVerticalScrollIndicator={false}
-					/>
-				))}
+			{activeTab === "Transactions" && (
+				<>
+					{transactionsLoading ? (
+						<ActivityIndicator size="large" />
+					) :
+						transactionsData.length === 0 ? (
+							<KidashiDashboardEmptyState {...emptyStateData} />
+						) : (
+							<FlatList
+								data={transactionsData as ITransaction[]}
+								renderItem={({ item }) => {
+									return <TransactonItem transaction={item} onPress={() => { }} />;
+								}}
+								keyExtractor={(item) => item.reference_number}
+								style={{ flex: 1 }}
+								contentContainerStyle={styles.transactionContainer}
+								showsVerticalScrollIndicator={false}
+							/>
+						)}
+				</>
+			)}
 			{activeTab === "More details" && <MoreDetails details={memberDetails} />}
 			{activeTab === "Account Info" && <AccountInfo details={memberDetails} />}
 

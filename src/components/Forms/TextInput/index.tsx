@@ -39,6 +39,8 @@ export default function TextInput({
 	placeholder,
 	customTextInputStyle = {},
 	customInputContainerStyle = {},
+	onFocus,
+	onChangeText,
 	...props
 }: RNTextInputProps) {
 	const [leftElement, setLeftElement] = useState<ReactNode | null>(leftNode);
@@ -123,7 +125,13 @@ export default function TextInput({
 					cursorColor={Colors.black}
 					placeholder={placeholder || label}
 					placeholderTextColor={Colors.custom.textInputPlaceholderColor}
-					onFocus={() => setIsFocused(true)}
+					onFocus={(e) => {
+						setIsFocused(true)
+						onFocus?.(e);
+					}}
+					onChangeText={(text) => {
+						onChangeText?.(text);
+					}}
 					onBlur={() => setIsFocused(false)}
 					secureTextEntry={!passwordVisible}
 					{...props}

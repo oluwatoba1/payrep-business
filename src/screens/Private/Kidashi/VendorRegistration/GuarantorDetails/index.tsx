@@ -19,15 +19,12 @@ import {
 import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import Pad from "@components/Pad";
-import {
-	useFetchLgasMutation,
-	useFetchStatesQuery,
-} from "@store/apis/generalApi";
 import useGuarantorDetails from "./validators";
 import { Stepper } from "@components/Miscellaneous";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { setRegistrationDetails } from "@store/slices/kidashiSlice";
 import { useNinLookupMutation } from "@store/apis/complianceApi";
+import { useFetchKidashiLgasMutation, useFetchKidashiStatesQuery } from "@store/apis/kidashiApi";
 
 type GuarantorDetailsProps = CompositeScreenProps<
 	StackScreenProps<KidashiRegistrationStackParamList, "GuarantorDetails">,
@@ -64,18 +61,19 @@ export default function GuarantorDetails({
 		guarantorNumber,
 		setNin,
 		setRelationship,
+		clearFormError,
 	} = useGuarantorDetails();
 
-	const { data: statesData, isLoading: statesLoading } = useFetchStatesQuery();
+	const { data: statesData, isLoading: statesLoading } = useFetchKidashiStatesQuery();
 
 	const sortedStates = statesData?.data
 		? [
-				...statesData.data.filter((s: any) => s.name === "Kaduna"),
-				...statesData.data.filter((s: any) => s.name !== "Kaduna"),
-		  ]
+			...statesData.data.filter((s: any) => s.name === "Kaduna"),
+			...statesData.data.filter((s: any) => s.name !== "Kaduna"),
+		]
 		: [];
 
-	const [fetchLgas, { isLoading: lgasLoading }] = useFetchLgasMutation();
+	const [fetchKidashiLgas, { isLoading: lgasLoading }] = useFetchKidashiLgasMutation();
 	const [ninLookup, { isLoading: ninLookupLoading }] = useNinLookupMutation();
 
 	// Local states for dropdown selections
@@ -115,7 +113,7 @@ export default function GuarantorDetails({
 
 	const _fetchLgas = async () => {
 		try {
-			const { status, message, data } = await fetchLgas({
+			const { status, message, data } = await fetchKidashiLgas({
 				state: formData.state,
 			}).unwrap();
 			if (status) {
@@ -321,6 +319,7 @@ export default function GuarantorDetails({
 					keyboardType='numeric'
 					maxLength={11}
 					onChangeText={(text) => {
+						clearFormError("nin");
 						setNin(text);
 						if (text.length < 11) {
 							setHasNINData(false);
@@ -336,7 +335,10 @@ export default function GuarantorDetails({
 				<TextInput
 					label='First Name'
 					placeholder='e.g John'
-					onChangeText={setFirstName}
+					onChangeText={(text) => {
+						clearFormError("firstName");
+						setFirstName(text);
+					}}
 					value={formData.firstName}
 					error={formErrors.firstName}
 					editable={!hasNINData}
@@ -347,7 +349,10 @@ export default function GuarantorDetails({
 				<TextInput
 					label='Last Name'
 					placeholder='e.g Doe'
-					onChangeText={setLastName}
+					onChangeText={(text) => {
+						clearFormError("lastName");
+						setLastName(text);
+					}}
 					value={formData.lastName}
 					error={formErrors.lastName}
 					editable={!hasNINData}
@@ -365,6 +370,8 @@ export default function GuarantorDetails({
 					}
 					selectedOption={selectedState}
 					onSelect={(option) => {
+						clearFormError("state");
+						clearFormError("lga");
 						setSelectedState(option);
 						setState(option.value);
 						setSelectedLga(undefined); // Reset LGA when state changes
@@ -386,6 +393,7 @@ export default function GuarantorDetails({
 					}
 					selectedOption={selectedLga}
 					onSelect={(option) => {
+						clearFormError("lga");
 						setSelectedLga(option);
 						setLga(option.value);
 					}}
@@ -410,6 +418,7 @@ export default function GuarantorDetails({
 						]}
 						selectedOption={selectedGender}
 						onSelect={(option) => {
+							clearFormError("gender");
 							setSelectedGender(option);
 							setGender(option.value);
 						}}
@@ -425,7 +434,10 @@ export default function GuarantorDetails({
 					keyboardType='numeric'
 					placeholder='Ex: 08012345678'
 					value={formData.phoneNumber}
-					onChangeText={setPhoneNumber}
+					onChangeText={(text) => {
+						clearFormError("phoneNumber");
+						setPhoneNumber(text);
+					}}
 					maxLength={11}
 					error={formErrors.phoneNumber}
 				/>
@@ -441,7 +453,10 @@ export default function GuarantorDetails({
 				) : (
 					<DateField
 						label='Date of Birth'
-						onDateChange={setDateOfBirth}
+						onDateChange={(date) => {
+							clearFormError("dateOfBirth");
+							setDateOfBirth(date);
+						}}
 						error={formErrors.dateOfBirth}
 					/>
 				)}
@@ -451,7 +466,10 @@ export default function GuarantorDetails({
 				<TextInput
 					label='Email'
 					placeholder='e.g. zababubakarr@gmail.com'
-					onChangeText={setEmail}
+					onChangeText={(text) => {
+						clearFormError("email");
+						setEmail(text);
+					}}
 					value={formData.email}
 					error={formErrors.email}
 					autoCapitalize='none'
@@ -469,6 +487,7 @@ export default function GuarantorDetails({
 					]}
 					selectedOption={selectedRelationship}
 					onSelect={(option) => {
+						clearFormError("relationship");
 						setSelectedRelationship(option);
 						setRelationship(option.value);
 					}}

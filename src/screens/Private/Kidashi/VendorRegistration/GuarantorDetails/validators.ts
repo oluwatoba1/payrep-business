@@ -92,7 +92,7 @@ const useGuarantorDetails = () => {
 		relationship,
 	};
 
-	const [formErrors, setFormErrors] = useState<FormError>(defaultForm);
+	const [formErrors, setFormErrors] = useState<FormError>({ ...defaultForm });
 
 	const clearForm = () => {
 		setFirstName("");
@@ -105,7 +105,7 @@ const useGuarantorDetails = () => {
 		setEmail("");
 		setNin("");
 		setRelationship("");
-		setFormErrors(defaultForm);
+		setFormErrors({ ...defaultForm });
 	};
 
 	const addGuarantor = (guarantorData: IVendorGuarantor) => {
@@ -119,7 +119,7 @@ const useGuarantorDetails = () => {
 	const validateForm = (cb: (guarantors: IVendorGuarantor[]) => void) => {
 		try {
 			guarantorSchema.parse(formData);
-			setFormErrors(defaultForm);
+			setFormErrors({ ...defaultForm });
 
 			const guarantorData: IVendorGuarantor = {
 				first_name: firstName,
@@ -142,11 +142,10 @@ const useGuarantorDetails = () => {
 		} catch (error) {
 			console.log(error);
 			if (error instanceof z.ZodError) {
-				const errors: Record<keyof Form, string> = defaultForm;
+				const errors: FormError = { ...defaultForm };
 				error.errors.forEach((err) => {
-					const field = err.path[0];
-					const message = err.message;
-					errors[field as keyof Form] = message;
+					const field = err.path[0] as keyof FormError;
+					errors[field] = err.message;
 				});
 				setFormErrors(errors);
 			}
@@ -160,8 +159,8 @@ const useGuarantorDetails = () => {
 		guarantors,
 		guarantorNumber,
 		validateForm,
-		clearFormError: (key: string) =>
-			setFormErrors((errors) => ({ ...errors, [key]: "" })),
+		clearFormError: (key: keyof FormError) =>
+			setFormErrors((prev) => ({ ...prev, [key]: "" })),
 		setFirstName,
 		setLastName,
 		setGender,
