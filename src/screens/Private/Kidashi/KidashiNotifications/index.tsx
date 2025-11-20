@@ -22,6 +22,7 @@ import { styles } from "./style";
 import { formatDateTime } from "@utils/Helpers";
 import { Typography } from "@components/Forms";
 import ModalWrapper from "@components/Modal/ModalWrapper";
+import { useAppSelector } from "@store/hooks";
 
 const NotificationItem = ({
 	item,
@@ -76,9 +77,10 @@ const NotificationIndex = () => {
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [selected, setSelected] = useState<any>(null);
 	const [isDetailLoading, setIsDetailLoading] = useState(false);
+	const customer = useAppSelector((state) => state.customer.customer);
 	const getNotifications = async () => {
 		fetchNotifications({
-			filters: {},
+			filters: { cba_customer_id: customer?.id || "" },
 		})
 			.unwrap()
 			.then((res) => {
@@ -169,9 +171,8 @@ const NotificationIndex = () => {
 								style={{ fontSize: 16, fontWeight: "600", marginBottom: 6 }}
 							/>
 							<Typography
-								title={`${formatDateTime(selected.created_at).date} ${
-									formatDateTime(selected.created_at).time
-								}`}
+								title={`${formatDateTime(selected.created_at).date} ${formatDateTime(selected.created_at).time
+									}`}
 								style={styles.detailsDateText}
 							/>
 						</View>

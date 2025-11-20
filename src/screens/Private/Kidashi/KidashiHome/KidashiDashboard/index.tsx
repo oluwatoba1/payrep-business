@@ -148,7 +148,7 @@ export default function KidashiDashboard({
 
 	const getUnreadCount = useCallback(async () => {
 		try {
-			const res = await fetchNotifications({ filters: {} }).unwrap();
+			const res = await fetchNotifications({ filters: { cba_customer_id: customer?.id } }).unwrap();
 			if (res?.status && Array.isArray(res?.data)) {
 				const unread = res.data.filter((n: any) => !n?.is_read).length;
 				setNotificationCount(unread);

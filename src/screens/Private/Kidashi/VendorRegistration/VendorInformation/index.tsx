@@ -14,13 +14,10 @@ import useToast from "@hooks/useToast";
 import { DEFAULT_ERROR_MESSAGE, VENDOR_CATEGORIES } from "@utils/Constants";
 import useVendorInformation from "./validators";
 import Pad from "@components/Pad";
-import {
-	useFetchLgasMutation,
-	useFetchStatesQuery,
-} from "@store/apis/generalApi";
 import { Stepper } from "@components/Miscellaneous";
 import { useAppDispatch } from "@store/hooks";
 import { setRegistrationDetails } from "@store/slices/kidashiSlice";
+import { useFetchKidashiLgasMutation, useFetchKidashiStatesQuery } from "@store/apis/kidashiApi";
 
 type VendorInformationProps = CompositeScreenProps<
 	StackScreenProps<KidashiRegistrationStackParamList, "VendorInformation">,
@@ -42,18 +39,18 @@ export default function VendorInformation({
 		setCommunity,
 	} = useVendorInformation();
 
-	const { data: statesData, isLoading: statesLoading } = useFetchStatesQuery();
+	const { data: statesData, isLoading: statesLoading } = useFetchKidashiStatesQuery();
 
 	// Move Kaduna to the first position if present
 	const sortedStates = statesData?.data
 		? [
-				...statesData.data.filter((s: any) => s.name === "Kaduna"),
-				...statesData.data.filter((s: any) => s.name !== "Kaduna"),
-		  ]
+			...statesData.data.filter((s: any) => s.name === "Kaduna"),
+			...statesData.data.filter((s: any) => s.name !== "Kaduna"),
+		]
 		: [];
 
 	// Fetch LGAs dynamically
-	const [fetchLgas, { isLoading: lgasLoading }] = useFetchLgasMutation();
+	const [fetchKidashiLgas, { isLoading: lgasLoading }] = useFetchKidashiLgasMutation();
 
 	// Local states for dropdown selections
 	const [selectedState, setSelectedState] = useState<
@@ -78,7 +75,7 @@ export default function VendorInformation({
 
 	const _fetchLgas = async () => {
 		try {
-			const { status, message, data } = await fetchLgas({
+			const { status, message, data } = await fetchKidashiLgas({
 				state: formData.state,
 			}).unwrap();
 			if (status) {
