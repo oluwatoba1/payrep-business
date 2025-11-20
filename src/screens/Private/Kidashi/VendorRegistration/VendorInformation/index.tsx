@@ -37,6 +37,8 @@ export default function VendorInformation({
 		setState,
 		setLga,
 		setCommunity,
+		clearFormError,
+		clearForm
 	} = useVendorInformation();
 
 	const { data: statesData, isLoading: statesLoading } = useFetchKidashiStatesQuery();
@@ -136,6 +138,7 @@ export default function VendorInformation({
 				options={VENDOR_CATEGORIES}
 				selectedOption={selectedCategory}
 				onSelect={(option) => {
+					clearFormError("businessType")
 					setSelectedCategory(option);
 					setBusinessType(option.value);
 				}}
@@ -155,6 +158,8 @@ export default function VendorInformation({
 				}
 				selectedOption={selectedState}
 				onSelect={(option) => {
+					clearFormError("state")
+					clearFormError("lga")
 					setSelectedState(option);
 					setState(option.value);
 					setSelectedLga(undefined); // Reset LGA when state changes
@@ -176,6 +181,7 @@ export default function VendorInformation({
 				}
 				selectedOption={selectedLga}
 				onSelect={(option) => {
+					clearFormError("lga");
 					setSelectedLga(option);
 					setLga(option.value);
 				}}
@@ -188,12 +194,15 @@ export default function VendorInformation({
 			<TextInput
 				label='Community'
 				placeholder='Enter community'
-				onChangeText={setCommunity}
+				onChangeText={(text) => {
+					clearFormError("community")
+					setCommunity(text);
+				}}
 				value={formData.community}
 				error={formErrors.community}
 			/>
 
-			<Pad size={150} />
+			<Pad size={100} />
 
 			<Button title='Next' onPress={handleSubmit} />
 		</MainLayout>

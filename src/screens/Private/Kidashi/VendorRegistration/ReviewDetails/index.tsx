@@ -41,7 +41,8 @@ export default function ReviewDetails({
 				community: registration?.community || "",
 				guarantors: registration?.guarantors || [],
 				business_description: registration?.business_description || "",
-
+				state_id: registration?.state_id,
+				lga_id: registration?.lga_id,
 				cba_customer_id: customer?.id || "",
 			}).unwrap();
 

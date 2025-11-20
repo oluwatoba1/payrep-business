@@ -45,10 +45,18 @@ const useVendorInformation = () => {
 
 	const [formErrors, setFormErrors] = useState<FormError>(defaultForm);
 
+	const clearForm = () => {
+		setBusinessType("");
+		setState("");
+		setLga("");
+		setCommunity("");
+		setFormErrors({ ...defaultForm });
+	}
+
 	const validateForm = (cb: Function) => {
 		try {
 			vendorInfoSchema.parse(formData);
-			setFormErrors(defaultForm);
+			setFormErrors({ ...defaultForm });
 
 			const vendorData = {
 				business_type: businessType,
@@ -60,7 +68,7 @@ const useVendorInformation = () => {
 			cb(vendorData);
 		} catch (error) {
 			if (error instanceof z.ZodError) {
-				const errors: Record<keyof Form, string> = defaultForm;
+				const errors: FormError = { ...defaultForm };
 				error.errors.forEach((err) => {
 					const field = err.path[0];
 					const message = err.message;
@@ -75,12 +83,13 @@ const useVendorInformation = () => {
 		formData,
 		formErrors,
 		validateForm,
-		clearFormError: (key: string) =>
-			setFormErrors((errors) => ({ ...errors, [key]: "" })),
+		clearFormError: (key: keyof FormError) =>
+			setFormErrors((prev) => ({ ...prev, [key]: "" })),
 		setBusinessType,
 		setState,
 		setLga,
 		setCommunity,
+		clearForm,
 	};
 };
 

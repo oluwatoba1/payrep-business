@@ -361,7 +361,7 @@ interface SuccessResponse<Type> {
 	token: string;
 }
 
-interface ErrorResponse {}
+interface ErrorResponse { }
 
 interface CustomerBasicResponse {
 	id: string;
@@ -637,11 +637,11 @@ interface IDispute {
 	amount: number;
 	status: boolean;
 	action:
-		| "reversed-to-customer"
-		| "credited-to-wallet"
-		| "advice-to-bank"
-		| "no-debit"
-		| "rejected";
+	| "reversed-to-customer"
+	| "credited-to-wallet"
+	| "advice-to-bank"
+	| "no-debit"
+	| "rejected";
 	description: string;
 	treated_date: string;
 	created_at: string;
@@ -902,6 +902,8 @@ interface VendorRegistrationRequest {
 	community: string;
 	guarantors: IVendorGuarantor[];
 	business_description: string;
+	state_id: string;
+	lga_id: string;
 }
 
 interface IKidashi {
