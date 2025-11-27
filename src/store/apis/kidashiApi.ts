@@ -36,6 +36,7 @@ const customBaseQuery: BaseQueryFn<
 		typeof result?.error.data.message === "string" &&
 		result?.error.data.message?.toLowerCase().includes("invalid token")
 	) {
+		console.log("Invalid token detected on kidashi api, logging out user.");
 		api.dispatch(setCredentials({ token: null, user_id: null }));
 	}
 
@@ -401,19 +402,19 @@ const KidashiApi = createApi({
 		}),
 		fetchKidashiStates: builder.query<AuthResponse<any>, void>({
 			query: () => ({
-				url: 'general/mobile/states',
+				url: "general/mobile/states",
 			}),
 		}),
 		fetchKidashiLgas: builder.mutation<AuthResponse<any>, { state: string }>({
-			query: body => ({
-				url: 'general/mobile/lgas',
-				method: 'POST',
+			query: (body) => ({
+				url: "general/mobile/lgas",
+				method: "POST",
 				body,
 			}),
 		}),
 		fetchKidashiCountries: builder.query<AuthResponse<ICountry[]>, void>({
 			query: () => ({
-				url: 'general/mobile/countries',
+				url: "general/mobile/countries",
 			}),
 		}),
 	}),

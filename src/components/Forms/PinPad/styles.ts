@@ -32,6 +32,7 @@ const styles: PinPadStyle = {
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
+		alignSelf: "center",
 	},
 	pinBoxContainer: (isFocused, isLastItem, boxSide, gap) => ({
 		borderWidth: 1,

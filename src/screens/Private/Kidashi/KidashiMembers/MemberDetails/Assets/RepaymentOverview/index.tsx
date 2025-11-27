@@ -71,10 +71,7 @@ const RepaymentOverview = ({
 	};
 
 	// Calculate loan details from repayment plan
-	const totalCost = useMemo(
-		() => repaymentPlan?.amount || 0,
-		[repaymentPlan]
-	);
+	const totalCost = useMemo(() => repaymentPlan?.amount || 0, [repaymentPlan]);
 
 	const interestRatePercent = useMemo(
 		() => repaymentPlan?.interest_rate || 0,
@@ -213,12 +210,13 @@ const RepaymentOverview = ({
 					<View style={styles.cardInner}>
 						<Typography title='Repayment Plan' type='body-sb' />
 						<Typography
-							title={`${formatCurrency(installmentAmount)} ${repaymentCycle === "DAILY"
-								? "daily"
-								: repaymentCycle === "WEEKLY"
+							title={`${formatCurrency(installmentAmount)} ${
+								repaymentCycle === "DAILY"
+									? "daily"
+									: repaymentCycle === "WEEKLY"
 									? "weekly"
 									: "monthly"
-								} (includes ${interestRatePercent}% interest)`}
+							} (includes ${interestRatePercent}% interest)`}
 							type='body-b'
 							color={Colors.gray["900"]}
 						/>
@@ -229,21 +227,11 @@ const RepaymentOverview = ({
 						/>
 						<Typography title='Duration' type='body-sb' />
 						<Typography
-							title={`${tenor} ${repaymentPlan?.tenor_type?.toLowerCase() || "days"}`}
+							title={`${tenor} ${
+								repaymentPlan?.tenor_type?.toLowerCase() || "days"
+							}`}
 							type='body-b'
 						/>
-						{/* <Divider gapY={scaleHeight(16)} /> */}
-						{/* <Row justifyContent='space-between'>
-							<View style={{ flex: 1 }}>
-								<Typography title='Start Date' type='body-sb' />
-								<Typography title={formatDate(startDate)} type='body-b' />
-							</View>
-							<View style={{ width: scale(16) }} />
-							<View style={{ flex: 1 }}>
-								<Typography title='End Date' type='body-sb' />
-								<Typography title={formatDate(endDate)} type='body-b' />
-							</View>
-						</Row> */}
 						<Divider
 							gapY={scaleHeight(16)}
 							dividerColor={Colors.gray[300]}
@@ -270,10 +258,7 @@ const RepaymentOverview = ({
 								<Pad size={scaleHeight(16)} />
 								<View>
 									<Typography title='Processing Fees' type='body-sb' />
-									<Typography
-										title={formatCurrency(totalFees)}
-										type='body-b'
-									/>
+									<Typography title={formatCurrency(totalFees)} type='body-b' />
 								</View>
 							</>
 						)}

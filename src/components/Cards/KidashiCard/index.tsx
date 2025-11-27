@@ -14,7 +14,6 @@ interface KidashiCardProps {
 
 export default function KidashiCard({ onProceed }: KidashiCardProps) {
 	const vendor_id = useAppSelector((state) => state.kidashi.vendor_id);
-	console.log("Vendor ID in KidashiCard:", vendor_id);
 
 	return (
 		<Pressable onPress={onProceed} style={styles.container}>
@@ -37,7 +36,7 @@ export default function KidashiCard({ onProceed }: KidashiCardProps) {
 
 			<Row justifyContent='flex-start' alignItems='center' gap={8}>
 				<Typography
-					title={vendor_id ? 'Continue' : 'Get Started'}
+					title={vendor_id ? "Continue" : "Get Started"}
 					type='body-b'
 					color={Colors.primary["600"]}
 				/>

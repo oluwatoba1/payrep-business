@@ -8,7 +8,6 @@ import useChangePinValidation from "./validator";
 import { usePinChangeMutation } from "@store/apis/authApi";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import useToast from "@hooks/useToast";
-import { setCredentials } from "@store/slices/authSlice";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 
 type ChangePinProps = StackScreenProps<MoreStackParamList, "ChangePin">;

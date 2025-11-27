@@ -35,6 +35,7 @@ const customBaseQuery: BaseQueryFn<
 		typeof result?.error.data.message === "string" &&
 		result?.error.data.message?.toLowerCase().includes("invalid token")
 	) {
+		console.log("Invalid token detected on auth api, logging out user.");
 		api.dispatch(setCredentials({ token: null, user_id: null }));
 	}
 

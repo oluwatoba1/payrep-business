@@ -164,8 +164,6 @@ export default function Dashboard({
 				cba_customer_id: customer?.id || "",
 			}).unwrap();
 
-			console.log("====", data);
-
 			if (status) {
 				dispatch(setVendor(data));
 				return;
@@ -233,7 +231,6 @@ export default function Dashboard({
 	};
 
 	const navigateToKidashi = useCallback(() => {
-		console.log("======>>>", vendor);
 		switch (vendor?.status) {
 			case "ACTIVE":
 				navigate("KidashiBottomTabs", {
