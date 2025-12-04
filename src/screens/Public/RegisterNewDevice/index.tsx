@@ -1,14 +1,20 @@
+import { ActivityIndicator, AppState, AppStateStatus } from "react-native";
+import DeviceInfo from "react-native-device-info";
 import { StackScreenProps } from "@react-navigation/stack";
 
 import { Button, PinPad, Typography } from "@components/Forms";
-import { MainLayout } from "@components/Layout";
+import { MainLayout, Row } from "@components/Layout";
 import Pad from "@components/Pad";
 import { PublicNavigatorParamList } from "@navigation/types";
-import { useState } from "react";
-import { useRegisterDeviceMutation } from "@store/apis/authApi";
+import { useEffect, useRef, useState } from "react";
+import {
+	useRegisterDeviceMutation,
+	useVerifyMobileNumberMutation,
+} from "@store/apis/authApi";
 import useToast from "@hooks/useToast";
-import DeviceInfo from "react-native-device-info";
-import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
+import { DEFAULT_ERROR_MESSAGE, RESEND_COUNTDOWN } from "@utils/Constants";
+import Colors from "@theme/Colors";
+import { formatCountdown } from "@utils/Helpers";
 
 type RegisterNewDeviceProps = StackScreenProps<
 	PublicNavigatorParamList,
@@ -21,9 +27,17 @@ export default function RegisterNewDevice({
 }: RegisterNewDeviceProps) {
 	const { showToast } = useToast();
 	const [registerDevice, { isLoading }] = useRegisterDeviceMutation();
+	const [verifyMobileNumber, { isLoading: isResending }] =
+		useVerifyMobileNumberMutation();
 
 	const [otp, setOtp] = useState<string>("");
 	const [error, setError] = useState<string>("");
+	const [countdown, setCountdown] = useState<number>(RESEND_COUNTDOWN);
+	const [countdownEndTime, setCountdownEndTime] = useState<number>(
+		Date.now() + RESEND_COUNTDOWN * 1000
+	);
+
+	const appState = useRef(AppState.currentState);
 
 	const submit = async () => {
 		if (!otp) {
@@ -57,6 +71,64 @@ export default function RegisterNewDevice({
 			);
 		}
 	};
+
+	const resend = async () => {
+		setOtp("");
+		try {
+			const { status } = await verifyMobileNumber({
+				mobile_number: route.params.username || "",
+			}).unwrap();
+			if (status) {
+				const endTime = Date.now() + RESEND_COUNTDOWN * 1000;
+				setCountdownEndTime(endTime);
+			}
+		} catch (error: any) {
+			showToast(
+				"danger",
+				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
+			);
+		}
+	};
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			const now = Date.now();
+			const secondsLeft = Math.max(
+				Math.floor((countdownEndTime - now) / 1000),
+				0
+			);
+			setCountdown(secondsLeft);
+		}, 1000);
+
+		return () => clearInterval(interval);
+	}, [countdownEndTime]);
+
+	useEffect(() => {
+		const handleAppStateChange = (nextAppState: AppStateStatus) => {
+			if (
+				appState.current.match(/inactive|background/) &&
+				nextAppState === "active"
+			) {
+				const now = Date.now();
+				const secondsLeft = Math.max(
+					Math.floor((countdownEndTime - now) / 1000),
+					0
+				);
+				setCountdown(secondsLeft);
+			}
+			appState.current = nextAppState;
+		};
+
+		const subscription = AppState.addEventListener(
+			"change",
+			handleAppStateChange
+		);
+
+		return () => {
+			subscription.remove();
+		};
+	}, [countdownEndTime]);
+
 	return (
 		<MainLayout backAction={goBack} isLoading={isLoading}>
 			<Typography title='Device Registration' type='heading' />
@@ -75,6 +147,32 @@ export default function RegisterNewDevice({
 				secure={false}
 				error={error}
 			/>
+
+			<Pad size={16} />
+
+			<Row
+				alignItems='flex-end'
+				justifyContent={countdown === 0 ? "flex-start" : "space-between"}
+			>
+				{countdown ? (
+					<Typography
+						title={`Code to be resent in ${formatCountdown(countdown)}`}
+						type='body-sb'
+						color={Colors.black}
+					/>
+				) : (
+					<Typography
+						title='Resend'
+						type='body-b'
+						color={Colors.primary.base}
+						onPress={resend}
+					/>
+				)}
+			</Row>
+
+			{isResending ? (
+				<ActivityIndicator size={16} color={Colors.black} />
+			) : null}
 
 			<Pad size={50} />
 

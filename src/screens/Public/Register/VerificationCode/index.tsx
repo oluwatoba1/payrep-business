@@ -180,7 +180,7 @@ export default function VerificationCode({
 
 				<Row
 					alignItems='flex-end'
-					justifyContent={countdown === 0 ? "flex-end" : "space-between"}
+					justifyContent={countdown === 0 ? "flex-start" : "space-between"}
 				>
 					{countdown ? (
 						<Typography

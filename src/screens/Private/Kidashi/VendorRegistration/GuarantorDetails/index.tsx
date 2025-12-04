@@ -24,7 +24,10 @@ import { Stepper } from "@components/Miscellaneous";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { setRegistrationDetails } from "@store/slices/kidashiSlice";
 import { useNinLookupMutation } from "@store/apis/complianceApi";
-import { useFetchKidashiLgasMutation, useFetchKidashiStatesQuery } from "@store/apis/kidashiApi";
+import {
+	useFetchKidashiLgasMutation,
+	useFetchKidashiStatesQuery,
+} from "@store/apis/kidashiApi";
 
 type GuarantorDetailsProps = CompositeScreenProps<
 	StackScreenProps<KidashiRegistrationStackParamList, "GuarantorDetails">,
@@ -59,21 +62,24 @@ export default function GuarantorDetails({
 		guarantors,
 		setGuarantors,
 		guarantorNumber,
+		setGuarantorNumber,
 		setNin,
 		setRelationship,
 		clearFormError,
 	} = useGuarantorDetails();
 
-	const { data: statesData, isLoading: statesLoading } = useFetchKidashiStatesQuery();
+	const { data: statesData, isLoading: statesLoading } =
+		useFetchKidashiStatesQuery();
 
 	const sortedStates = statesData?.data
 		? [
-			...statesData.data.filter((s: any) => s.name === "Kaduna"),
-			...statesData.data.filter((s: any) => s.name !== "Kaduna"),
-		]
+				...statesData.data.filter((s: any) => s.name === "Kaduna"),
+				...statesData.data.filter((s: any) => s.name !== "Kaduna"),
+		  ]
 		: [];
 
-	const [fetchKidashiLgas, { isLoading: lgasLoading }] = useFetchKidashiLgasMutation();
+	const [fetchKidashiLgas, { isLoading: lgasLoading }] =
+		useFetchKidashiLgasMutation();
 	const [ninLookup, { isLoading: ninLookupLoading }] = useNinLookupMutation();
 
 	// Local states for dropdown selections
@@ -183,8 +189,9 @@ export default function GuarantorDetails({
 			console.log("Guarantors:", updatedGuarantors);
 
 			dispatch(setRegistrationDetails({ guarantors: updatedGuarantors }));
-			if (updatedGuarantors.length === 2) {
+			if (updatedGuarantors.length > 2) {
 				navigate("ReviewDetails");
+				setGuarantorNumber(1);
 			} else {
 				clearFormFields();
 				setSelectedState(undefined);

@@ -1,4 +1,4 @@
-import { Image, Pressable, View } from "react-native";
+import { Image, ImageSourcePropType, Pressable, View } from "react-native";
 import React from "react";
 import ScreenImages from "@assets/images/screens";
 import { ModalWrapper } from "@components/Modal";
@@ -7,16 +7,17 @@ import { Typography } from "@components/Forms";
 import { styles } from "./style";
 import Divider from "@components/Miscellaneous/Divider";
 import { scale, scaleHeight } from "@utils/Helpers";
-import { MembersStackParamList } from "@navigation/types";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { StackScreenProps } from "@react-navigation/stack";
 
+interface Option {
+	title: string;
+	subTitle: string;
+	icon: ImageSourcePropType;
+	onPress: () => void;
+}
 interface PerformActionModalProps {
 	visible: boolean;
 	onClose: () => void;
-	parent: "MemberDetails" | "TrustCircle";
-	onAddMemberPress?: () => void;
-	onRequestAssetPress?: () => void;
+	options: Option[];
 }
 
 interface ActionCardProps {
@@ -56,9 +57,7 @@ const ActionCard = ({ title, subTitle, icon, onPress }: ActionCardProps) => {
 const PerformActionModal = ({
 	visible,
 	onClose,
-	parent,
-	onAddMemberPress,
-	onRequestAssetPress,
+	options,
 }: PerformActionModalProps) => {
 	return (
 		<ModalWrapper visible={visible} onClose={onClose}>
@@ -73,27 +72,14 @@ const PerformActionModal = ({
 			</Row>
 			<Divider gapY={scaleHeight(16)} gapX={scale(-16)} />
 
-			<ActionCard
-				title='Request Asset Finance'
-				subTitle='Apply for asset support'
-				icon={ScreenImages.kidashiMemberDetails.boxIcon}
-				onPress={() => {
-					onRequestAssetPress?.();
-				}}
-			/>
-
-			{parent === "TrustCircle" && (
-				<>
-					<ActionCard
-						title='Add a Member'
-						subTitle='Add a new member to this Trust Circle'
-						icon={ScreenImages.kidashiMemberDetails.addTeamIcon}
-						onPress={() => {
-							onAddMemberPress?.();
-						}}
-					/>
-				</>
-			)}
+			{options.map((option) => (
+				<ActionCard
+					title={option.title}
+					subTitle={option.subTitle}
+					icon={ScreenImages.kidashiMemberDetails.boxIcon}
+					onPress={option.onPress}
+				/>
+			))}
 		</ModalWrapper>
 	);
 };

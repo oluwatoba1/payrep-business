@@ -217,18 +217,21 @@ export default function TrustCircleDetails({
 			</Pressable>
 
 			<PerformActionModal
+				options={[
+					{
+						title: "Add a Member",
+						subTitle: "Add a new member to this Trust Circle",
+						icon: ScreenImages.kidashiMemberDetails.addTeamIcon,
+						onPress: () => {
+							navigate("KidashiHome", {
+								screen: "MemberRegistration",
+								params: { screen: "MemberPhoneNumber" },
+							});
+						},
+					},
+				]}
 				visible={visible}
 				onClose={() => setVisible(false)}
-				parent='TrustCircle'
-				onAddMemberPress={() =>
-					navigate("KidashiHome", {
-						screen: "MemberRegistration",
-						params: { screen: "MemberPhoneNumber" },
-					})
-				}
-				onRequestAssetPress={() =>
-					navigate("KidashiMembers", { screen: "EnterAssetInformation" })
-				}
 			/>
 		</MainLayout>
 	);

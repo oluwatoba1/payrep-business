@@ -171,6 +171,7 @@ export default function Dashboard({
 			dispatch(setVendor(null));
 		} catch (error: ErrorResponse | any) {
 			// fail silently
+			dispatch(setVendor(null));
 		}
 	};
 

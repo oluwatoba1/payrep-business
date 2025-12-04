@@ -1,4 +1,11 @@
-import { ActivityIndicator, Alert, BackHandler, FlatList, Image, Pressable } from "react-native";
+import {
+	ActivityIndicator,
+	Alert,
+	BackHandler,
+	FlatList,
+	Image,
+	Pressable,
+} from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -49,8 +56,10 @@ const MemberDetails = ({
 	const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
 	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
-	const [getMemberDetails, { isLoading: memberDetailsLoading }] = useGetMemberDetailsMutation();
-	const [getTransactions, { isLoading: transactionsLoading }] = useGetTransactionsMutation();
+	const [getMemberDetails, { isLoading: memberDetailsLoading }] =
+		useGetMemberDetailsMutation();
+	const [getTransactions, { isLoading: transactionsLoading }] =
+		useGetTransactionsMutation();
 
 	const memberDetails = useAppSelector((state) => state.kidashi.memberDetails);
 	const transactionsData =
@@ -132,8 +141,9 @@ const MemberDetails = ({
 		<SafeAreaWrapper backAction={backAction} title='Member Details'>
 			<MemberDetailsHeaderComp
 				onOTPManagePress={() => navigate("ManageVerfiers")}
-				userName={`${memberDetails?.first_name || ""} ${memberDetails?.surname || ""
-					}`}
+				userName={`${memberDetails?.first_name || ""} ${
+					memberDetails?.surname || ""
+				}`}
 				status={memberDetails?.status}
 			/>
 			<MemberDetailsCard
@@ -150,22 +160,21 @@ const MemberDetails = ({
 			{activeTab === "Transactions" && (
 				<>
 					{transactionsLoading ? (
-						<ActivityIndicator size="large" />
-					) :
-						transactionsData.length === 0 ? (
-							<KidashiDashboardEmptyState {...emptyStateData} />
-						) : (
-							<FlatList
-								data={transactionsData as ITransaction[]}
-								renderItem={({ item }) => {
-									return <TransactonItem transaction={item} onPress={() => { }} />;
-								}}
-								keyExtractor={(item) => item.reference_number}
-								style={{ flex: 1 }}
-								contentContainerStyle={styles.transactionContainer}
-								showsVerticalScrollIndicator={false}
-							/>
-						)}
+						<ActivityIndicator size='large' />
+					) : transactionsData.length === 0 ? (
+						<KidashiDashboardEmptyState {...emptyStateData} />
+					) : (
+						<FlatList
+							data={transactionsData as ITransaction[]}
+							renderItem={({ item }) => {
+								return <TransactonItem transaction={item} onPress={() => {}} />;
+							}}
+							keyExtractor={(item) => item.reference_number}
+							style={{ flex: 1 }}
+							contentContainerStyle={styles.transactionContainer}
+							showsVerticalScrollIndicator={false}
+						/>
+					)}
 				</>
 			)}
 			{activeTab === "More details" && <MoreDetails details={memberDetails} />}
@@ -185,13 +194,18 @@ const MemberDetails = ({
 					style={styles.performActionText}
 				/>
 			</Pressable>
-			{/* */}
+
 			<PerformActionModal
+				options={[
+					{
+						title: "Request Asset Finance",
+						subTitle: "Apply for asset support",
+						icon: ScreenImages.kidashiMemberDetails.boxIcon,
+						onPress: () => navigate("EnterAssetInformation"),
+					},
+				]}
 				visible={visible}
 				onClose={() => setVisible(false)}
-				parent='MemberDetails'
-				onRequestAssetPress={() => navigate("EnterAssetInformation")}
-			// onAddMemberPress={() => navigate("")}
 			/>
 		</SafeAreaWrapper>
 	);
