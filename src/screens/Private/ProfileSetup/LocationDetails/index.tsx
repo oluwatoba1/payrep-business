@@ -66,7 +66,7 @@ export default function LocationDetails({
         residential_address: formData.residentialAddress,
       }).unwrap();
       if (status) {
-        navigate('MeansOfIdentification');
+        navigate("Pep");
       } else {
         showToast('danger', message);
       }

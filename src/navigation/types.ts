@@ -16,7 +16,10 @@ export type PublicNavigatorParamList = {
 	VerificationCode: { userType: string };
 	EmailVerification: undefined;
 	EmailAddress: undefined;
-	RegisterNewDevice: { username: string; customerType: string | null };
+	RegisterNewDevice: {
+		username: string;
+		action?: "password_reset";
+	};
 	FacialRecognition: { token: string; customer: string };
 	SuccessMessage: {
 		title: string;
@@ -76,7 +79,12 @@ export type MembersStackParamList = {
 	MemberDetails: { id: string };
 	TransactionDetails: undefined;
 	Assets: undefined;
-	AssetDetails: { asset_id: string, from?: "KidashiDashboard" | "Assets" | "VendorAssets" } | undefined;
+	AssetDetails:
+		| {
+				asset_id: string;
+				from?: "KidashiDashboard" | "Assets" | "VendorAssets";
+		  }
+		| undefined;
 	EnterAssetInformation: undefined;
 	ReviewAssetRequest: {
 		items: { id: string; name: string; price: string }[];

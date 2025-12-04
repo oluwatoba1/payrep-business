@@ -38,7 +38,9 @@ export default function RegisterNewDevice({
 				customer_type: "corporate",
 			}).unwrap();
 			if (status && !data?.facial_recognition) {
-				goBack();
+				route.params.action === "password_reset"
+					? navigate("ResetPassword", { username: route.params.username })
+					: navigate("Login");
 				return;
 			} else if (status && data?.facial_recognition) {
 				navigate("FacialRecognition", {

@@ -23,7 +23,7 @@ interface FormError {
 	state: string;
 	lga: string;
 	email: string;
-	nin: string;
+	nin?: string;
 	relationship: string;
 }
 
@@ -72,10 +72,10 @@ const useGuarantorDetails = () => {
 		email: z.string().email("Invalid email").min(1, "Email is required"),
 		nin: z
 			.string()
-			.min(1, "NIN is required")
 			.refine((val) => /^\d{11}$/.test(val), {
 				message: "NIN must be exactly 11 digits",
-			}),
+			})
+			.optional(),
 		relationship: z.string().min(1, "Relationship is required"),
 	});
 

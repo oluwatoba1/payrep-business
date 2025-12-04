@@ -40,7 +40,7 @@ export default function ForgotPassword({
 				type: "corporate",
 			}).unwrap();
 			if (status) {
-				navigate("RegisterNewDevice", { username, customerType: "corporate" });
+				navigate("RegisterNewDevice", { username, action: "password_reset" });
 			}
 		} catch (error: any) {
 			showToast(
@@ -63,6 +63,7 @@ export default function ForgotPassword({
 				setShowRegisterDeviceModal(true);
 				return;
 			}
+
 			if (status) {
 				navigate("ResetPassword", { username });
 				return;

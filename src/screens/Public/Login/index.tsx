@@ -209,7 +209,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 				type: "corporate",
 			}).unwrap();
 			if (status) {
-				navigate("RegisterNewDevice", { username, customerType: "corporate" });
+				navigate("RegisterNewDevice", { username });
 			}
 		} catch (error: any) {
 			showToast(
