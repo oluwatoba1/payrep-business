@@ -42,8 +42,7 @@ export default function MemberPhoneNumber({
 		validateForm,
 		setMobileNumber,
 	} = useRegisterMobileValidation();
-	const [verifyMobileNumber, { isLoading }] =
-		useVerifyMobileNumberMutation();
+	const [verifyMobileNumber, { isLoading }] = useVerifyMobileNumberMutation();
 	const [clonePersonalProfile, { isLoading: isCloning }] =
 		useClonePersonalProfileMutation();
 
@@ -179,7 +178,7 @@ export default function MemberPhoneNumber({
 
 			<Button title='Continue' onPress={() => validateForm(submit)} />
 
-			<Pad size={360} />
+			<Pad size={320} />
 
 			<IconButton
 				onPress={() =>

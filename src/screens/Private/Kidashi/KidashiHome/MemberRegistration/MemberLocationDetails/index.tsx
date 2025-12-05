@@ -81,7 +81,7 @@ export default function MemberLocationDetails({
 				residential_address: formData.residentialAddress,
 			}).unwrap();
 			if (status) {
-				navigate("MemberMeansOfIdentification");
+				navigate("MemberPep");
 			} else {
 				showToast("danger", message);
 			}
@@ -154,7 +154,6 @@ export default function MemberLocationDetails({
 			isLoading={isLoading}
 			keyboardAvoidingType='scroll-view'
 		>
-			<Stepper steps={8} currentStep={5} />
 			<Typography title='Location' type='heading-sb' />
 			<Typography type='label-r' title='Please provide your full address' />
 

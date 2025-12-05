@@ -45,6 +45,7 @@ const ComponentImages = {
 		cards: require("./AccountDetailsCard/cards.png"),
 		polygon: require("./AccountDetailsCard/Polygon.png"),
 		polygonTwo: require("./AccountDetailsCard/Polygon-two.png"),
+		accountCard: require("./AccountDetailsCard/account-card.png"),
 	},
 	commissionsCard: {
 		card: require("./CommissionsCard/card.png"),

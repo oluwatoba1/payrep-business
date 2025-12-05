@@ -69,13 +69,8 @@ const useGuarantorDetails = () => {
 		dateOfBirth: z.string().min(1, "Date of birth is required"),
 		state: z.string().min(1, "State is required"),
 		lga: z.string().min(1, "LGA is required"),
-		email: z.string().email("Invalid email").min(1, "Email is required"),
-		nin: z
-			.string()
-			.refine((val) => /^\d{11}$/.test(val), {
-				message: "NIN must be exactly 11 digits",
-			})
-			.optional(),
+		email: z.string().optional(),
+		nin: z.string().optional(),
 		relationship: z.string().min(1, "Relationship is required"),
 	});
 
@@ -140,6 +135,7 @@ const useGuarantorDetails = () => {
 
 			let _guarantors = [...guarantors];
 			_guarantors[guarantorNumber - 1] = guarantorData;
+			console.log("_guarantors", _guarantors);
 			setGuarantors(_guarantors);
 			if (guarantorNumber !== 2) {
 				setGuarantorNumber(guarantorNumber + 1);

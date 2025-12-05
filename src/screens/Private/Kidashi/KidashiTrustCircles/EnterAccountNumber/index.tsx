@@ -17,7 +17,6 @@ import { useGetAccountsMutation } from "@store/apis/accountApi";
 import {
 	useAddMemberToTrustCircleMutation,
 	useGetMemberDetailsMutation,
-	useGetWomanDetailsMutation,
 } from "@store/apis/kidashiApi";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import {

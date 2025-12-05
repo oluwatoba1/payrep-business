@@ -155,7 +155,12 @@ export default function MemberPersonalInformation({
 
 			<Pad />
 
-			<DateField label='Date of Birth' onDateChange={() => {}} error='' />
+			<DateField
+				label='Date of Birth'
+				date=''
+				onDateChange={() => {}}
+				error=''
+			/>
 
 			<Pad />
 

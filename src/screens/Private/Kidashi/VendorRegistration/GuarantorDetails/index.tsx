@@ -189,7 +189,7 @@ export default function GuarantorDetails({
 			console.log("Guarantors:", updatedGuarantors);
 
 			dispatch(setRegistrationDetails({ guarantors: updatedGuarantors }));
-			if (updatedGuarantors.length > 2) {
+			if (updatedGuarantors.length >= 2) {
 				navigate("ReviewDetails");
 				setGuarantorNumber(1);
 			} else {
@@ -337,8 +337,6 @@ export default function GuarantorDetails({
 					rightNode={ninLookupLoading ? <ActivityIndicator /> : undefined}
 				/>
 
-				<Pad size={12} />
-
 				<TextInput
 					label='First Name'
 					placeholder='e.g John'
@@ -351,8 +349,6 @@ export default function GuarantorDetails({
 					editable={!hasNINData}
 				/>
 
-				<Pad size={12} />
-
 				<TextInput
 					label='Last Name'
 					placeholder='e.g Doe'
@@ -364,8 +360,6 @@ export default function GuarantorDetails({
 					error={formErrors.lastName}
 					editable={!hasNINData}
 				/>
-
-				<Pad size={12} />
 
 				<Dropdown
 					label='State'
@@ -388,8 +382,6 @@ export default function GuarantorDetails({
 					isLoading={statesLoading}
 				/>
 
-				<Pad size={12} />
-
 				<Dropdown
 					label='Local Govt. Area'
 					options={
@@ -407,8 +399,6 @@ export default function GuarantorDetails({
 					error={formErrors.lga}
 					isLoading={lgasLoading}
 				/>
-
-				<Pad size={12} />
 
 				{hasNINData ? (
 					<TextInput
@@ -433,8 +423,6 @@ export default function GuarantorDetails({
 					/>
 				)}
 
-				<Pad size={12} />
-
 				<TextInput
 					type='phone'
 					label='Phone Number'
@@ -449,8 +437,6 @@ export default function GuarantorDetails({
 					error={formErrors.phoneNumber}
 				/>
 
-				<Pad size={12} />
-
 				{hasNINData ? (
 					<TextInput
 						label='Date of Birth'
@@ -460,6 +446,7 @@ export default function GuarantorDetails({
 				) : (
 					<DateField
 						label='Date of Birth'
+						date={formData.dateOfBirth}
 						onDateChange={(date) => {
 							clearFormError("dateOfBirth");
 							setDateOfBirth(date);
@@ -467,8 +454,6 @@ export default function GuarantorDetails({
 						error={formErrors.dateOfBirth}
 					/>
 				)}
-
-				<Pad size={12} />
 
 				<TextInput
 					label='Email'
@@ -482,8 +467,6 @@ export default function GuarantorDetails({
 					autoCapitalize='none'
 					keyboardType='email-address'
 				/>
-
-				<Pad size={12} />
 
 				<Dropdown
 					label='Relationship'

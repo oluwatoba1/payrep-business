@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
 	Alert,
 	BackHandler,
@@ -9,8 +9,6 @@ import {
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
-import LinearGradient from "react-native-linear-gradient";
 
 import styles from "./styles";
 import Pad from "@components/Pad";
@@ -24,14 +22,9 @@ import {
 } from "@components/Cards";
 import { Typography } from "@components/Forms";
 import IconImages from "@assets/images/appIcons";
-import { addCommas, moderateScale, scaleHeight } from "@utils/Helpers";
-import { DEFAULT_ERROR_MESSAGE, shimmerDelay } from "@utils/Constants";
-import {
-	BottomTabParamList,
-	HomeStackParamList,
-	KidashiBottomTabParamList,
-	KidashiHomeStackParamList,
-} from "@navigation/types";
+import { addCommas, mmkvStorage } from "@utils/Helpers";
+import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
+import { BottomTabParamList, HomeStackParamList } from "@navigation/types";
 import useToast from "@hooks/useToast";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import {
@@ -46,23 +39,24 @@ import {
 	setSelectedAccount,
 } from "@store/slices/accountSlice";
 import { AccountsModal } from "@components/Modal";
-import { IAction } from "@components/Cards/AccountDetailsCard";
 import ComponentImages from "@assets/images/components";
 import { setCredentials } from "@store/slices/authSlice";
-import { setVendor } from "@store/slices/kidashiSlice";
 import { useFetchKidashiVendorMutation } from "@store/apis/kidashiApi";
+import { setVendor } from "@store/slices/kidashiSlice";
+import { IAction } from "@components/Cards/AccountDetailsCard";
+
+// Keys for storage
+const STORAGE_KEYS = {
+	ACCOUNTS: "user_accounts",
+	TRANSACTIONS: "user_transactions",
+	DISPUTES: "user_disputes",
+};
 
 type DashboardProps = CompositeScreenProps<
 	StackScreenProps<HomeStackParamList, "Dashboard">,
 	CompositeScreenProps<
-		CompositeScreenProps<
-			BottomTabScreenProps<KidashiBottomTabParamList, "Trust Circles">,
-			BottomTabScreenProps<KidashiBottomTabParamList, "KidashiHome">
-		>,
-		CompositeScreenProps<
-			BottomTabScreenProps<BottomTabParamList, "More">,
-			BottomTabScreenProps<BottomTabParamList, "History">
-		>
+		BottomTabScreenProps<BottomTabParamList, "More">,
+		BottomTabScreenProps<BottomTabParamList, "History">
 	>
 >;
 
@@ -81,10 +75,9 @@ export default function Dashboard({
 	const { accounts, transactions, disputes } = useAppSelector(
 		(state) => state.account
 	);
+
 	const [fetchKidashiVendor, { isLoading: isLoadingVendors }] =
 		useFetchKidashiVendorMutation();
-
-	const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 
 	const [getAccounts, { isLoading: isLoadingAccounts }] =
 		useGetAccountsMutation();
@@ -144,6 +137,8 @@ export default function Dashboard({
 
 			if (status) {
 				dispatch(setAccounts(data));
+				mmkvStorage.set(STORAGE_KEYS.ACCOUNTS, JSON.stringify(data));
+
 				const primaryAccount =
 					data.find((account) => account.account_class === "primary") || null;
 				dispatch(setSelectedAccount(primaryAccount));
@@ -184,6 +179,7 @@ export default function Dashboard({
 
 			if (status) {
 				dispatch(setTransactions(data));
+				mmkvStorage.set(STORAGE_KEYS.TRANSACTIONS, JSON.stringify(data));
 			} else {
 				showToast("danger", message);
 			}
@@ -203,6 +199,7 @@ export default function Dashboard({
 			}).unwrap();
 			if (status) {
 				dispatch(setDisputes(data));
+				mmkvStorage.set(STORAGE_KEYS.DISPUTES, JSON.stringify(data));
 			} else {
 				showToast("danger", message);
 			}
@@ -219,9 +216,6 @@ export default function Dashboard({
 	};
 
 	const displayName = (): string => {
-		if (customer?.type === "individual") {
-			return customer.first_name || "";
-		}
 		return customer?.business_name || "";
 	};
 
@@ -234,10 +228,15 @@ export default function Dashboard({
 	const navigateToKidashi = useCallback(() => {
 		switch (vendor?.status) {
 			case "ACTIVE":
-				navigate("KidashiBottomTabs", {
-					screen: "KidashiHome",
-					params: { screen: "KidashiDashboard" },
-				});
+				appState?.newKidashiVendor
+					? navigate("KidashiBottomTabs", {
+							screen: "Trust Circles",
+							params: { screen: "CreateTrustCircle" },
+					  })
+					: navigate("KidashiBottomTabs", {
+							screen: "KidashiHome",
+							params: { screen: "KidashiDashboard" },
+					  });
 				break;
 
 			default:
@@ -247,6 +246,39 @@ export default function Dashboard({
 				});
 		}
 	}, [vendor?.status]);
+
+	useEffect(() => {
+		const loadCachedData = () => {
+			// Safely check if we have data in MMKV
+			const cachedAccounts = mmkvStorage.getString(STORAGE_KEYS.ACCOUNTS);
+			const cachedTransactions = mmkvStorage.getString(
+				STORAGE_KEYS.TRANSACTIONS
+			);
+			const cachedDisputes = mmkvStorage.getString(STORAGE_KEYS.DISPUTES);
+
+			// If Redux is empty but Cache exists, populate Redux immediately
+			if (accounts.length === 0 && cachedAccounts) {
+				const parsedAccounts = JSON.parse(cachedAccounts);
+				dispatch(setAccounts(parsedAccounts));
+
+				// Also restore the primary account selection
+				const primaryAccount = parsedAccounts.find(
+					(acc: any) => acc.account_class === "primary"
+				);
+				if (primaryAccount) dispatch(setSelectedAccount(primaryAccount));
+			}
+
+			if (transactions.length === 0 && cachedTransactions) {
+				dispatch(setTransactions(JSON.parse(cachedTransactions)));
+			}
+
+			if (disputes.length === 0 && cachedDisputes) {
+				dispatch(setDisputes(JSON.parse(cachedDisputes)));
+			}
+		};
+
+		loadCachedData();
+	}, []);
 
 	useFocusEffect(
 		useCallback(() => {
@@ -318,10 +350,12 @@ export default function Dashboard({
 								title={`Tier ${customer?.tier?.code ?? ""} Account`}
 								type='body-r'
 							/>
-							<Pill
-								onPress={() => navigate("More", { screen: "AccountTiers" })}
-								text='Upgrade'
-							/>
+							{customer?.tier?.code !== 3 ? (
+								<Pill
+									onPress={() => navigate("More", { screen: "AccountTiers" })}
+									text='Upgrade'
+								/>
+							) : null}
 						</Row>
 						<Pad size={5} />
 						<Typography
@@ -333,83 +367,31 @@ export default function Dashboard({
 			</Row>
 			<Pad size={24} />
 
-			<Pad size={8} />
-
-			<ShimmerPlaceholder
-				visible={!isLoadingAccounts}
-				delay={shimmerDelay}
-				style={
-					isLoadingAccounts
-						? {
-								borderRadius: moderateScale(8),
-								height: scaleHeight(150),
-								width: "100%",
-						  }
-						: {}
-				}
-			>
-				<AccountDetailsCard
-					accountName={selectedAccount?.account_name || "---"}
-					accountNumber={selectedAccount?.account_number || "---"}
-					walletBalance={addCommas(selectedAccount?.balance || "0.00")}
-					showAccountModalOnPress={() => setShowAccountsModal(true)}
-					actions={ACTIONS_DATA}
-				/>
-			</ShimmerPlaceholder>
+			<AccountDetailsCard
+				accountName={selectedAccount?.account_name || "---"}
+				accountNumber={selectedAccount?.account_number || "---"}
+				walletBalance={addCommas(selectedAccount?.balance || "0.00")}
+				showAccountModalOnPress={() => setShowAccountsModal(true)}
+				actions={ACTIONS_DATA}
+				onSelectAccountNumber={showToast}
+			/>
 
 			<Pad size={24} />
 
-			<ShimmerPlaceholder
-				visible={
-					!isLoadingAccounts && !isLoadingTransactions && !isLoadingVendors
-				}
-				delay={shimmerDelay}
-				style={
-					isLoadingVendors ? { height: scaleHeight(100), width: "100%" } : {}
-				}
-			>
-				<KidashiCard
-					onProceed={() =>
-						appState?.newKidashiVendor
-							? navigate("KidashiBottomTabs", {
-									screen: "Trust Circles",
-									params: { screen: "CreateTrustCircle" },
-							  })
-							: navigateToKidashi()
-					}
-				/>
-			</ShimmerPlaceholder>
+			<KidashiCard onProceed={navigateToKidashi} />
 
 			<Pad size={20} />
 
-			<ShimmerPlaceholder
-				visible={!isLoadingAccounts && !isLoadingTransactions}
-				delay={shimmerDelay}
-				style={
-					isLoadingTransactions
-						? { height: scaleHeight(100), width: "100%" }
-						: {}
+			<TransactionsCard
+				transactions={[...transactions].slice(0, 3)}
+				handleNavigate={() =>
+					navigate("History", { screen: "TransactionHistory" })
 				}
-			>
-				<TransactionsCard
-					transactions={[...transactions].slice(0, 3)}
-					handleNavigate={() =>
-						navigate("History", { screen: "TransactionHistory" })
-					}
-				/>
-			</ShimmerPlaceholder>
+			/>
 
 			<Pad size={24} />
 
-			<ShimmerPlaceholder
-				visible={!isLoadingAccounts && !isLoadingDisputes}
-				delay={shimmerDelay}
-				style={
-					isLoadingDisputes ? { height: scaleHeight(150), width: "100%" } : {}
-				}
-			>
-				<DisputesCard disputes={[...disputes].slice(0, 3)} />
-			</ShimmerPlaceholder>
+			<DisputesCard disputes={[...disputes].slice(0, 3)} />
 		</MainLayout>
 	);
 }

@@ -2,6 +2,7 @@ import {Fragment, useState} from 'react';
 import {
   FlatList,
   Image,
+  ImageBackground,
   ImageSourcePropType,
   TouchableOpacity,
   View,
@@ -15,6 +16,7 @@ import Colors from '../../../theme/Colors';
 import IconImages from '../../../../assets/images/appIcons';
 import ActionItem from './ActionItems';
 import {Row} from '@components/Layout';
+import Pad from '@components/Pad';
 
 export interface IAction {
   id: string;
@@ -31,6 +33,7 @@ interface AcctDetailsProps {
   showActions?: boolean;
   actions?: IAction[];
   showAccountModalOnPress?: () => void;
+  onSelectAccountNumber?: Function;
 }
 
 export default function AcctDetailsCard({
@@ -40,6 +43,7 @@ export default function AcctDetailsCard({
   showDetails = true,
   showActions = true,
   actions = [],
+  onSelectAccountNumber,
   showAccountModalOnPress = () => {},
 }: AcctDetailsProps) {
   const [isBalanceHidden, setIsBalanceHidden] = useState(true);
@@ -48,74 +52,82 @@ export default function AcctDetailsCard({
     setIsBalanceHidden(!isBalanceHidden);
   };
 
+  const onTap = () => {
+    Clipboard.setString(accountNumber);
+    onSelectAccountNumber &&
+      onSelectAccountNumber('success', 'Account number copied to clipboard');
+  };
+
   return (
-    <View style={{gap: 24}}>
-      <View style={styles.main}>
-        <View style={styles.top}>
-          <View style={styles.balanceContainer}>
-            <View style={styles.cardHeader}>
-              <View style={styles.cardHeaderText}>
-                <Typography title="Balance" type="heading5-sb" />
-              </View>
-              <View style={styles.iconButtonAlignment}>
-                <IconButton
-                  onPress={showAccountModalOnPress}
-                  containerStyle={styles.iconButtonContainerStyle}
-                  activeOpacity={0.7}>
-                  <Image
-                    source={ComponentImages.dropdDown.arrowDown}
-                    tintColor={Colors.black}
-                  />
-                </IconButton>
-              </View>
-            </View>
+    <View>
+      <ImageBackground
+        source={ComponentImages.accountDetailsCard.accountCard}
+        style={styles.container}
+        imageStyle={styles.imageContainer}>
+        <Row alignItems="center" justifyContent="space-between">
+          <View>
+            <Typography title="Balance" type="label-sb" color="#434F56" />
+            <Pad />
             <View style={styles.balance}>
-              <View style={styles.nairaBalanceArea}>
-                <Typography title="₦" type="heading3-b" color={Colors.black} />
-                <Typography
-                  title={isBalanceHidden ? '**************' : walletBalance}
-                  type="heading4-b"
-                  color={Colors.black}
-                  style={{verticalAlign: 'middle'}}
-                />
-              </View>
+              {isBalanceHidden ? (
+                <View style={styles.nairaBalanceArea}>
+                  <Typography
+                    title="₦"
+                    type="heading4-b"
+                    color={Colors.black}
+                  />
+                  <Typography
+                    title={walletBalance}
+                    type="heading4-b"
+                    color={Colors.black}
+                    style={{verticalAlign: 'middle'}}
+                  />
+                </View>
+              ) : (
+                <Row gap={4}>
+                  {Array.from(Array(6).keys()).map((_, i) => (
+                    <View key={i} style={styles.hiddenDot} />
+                  ))}
+                </Row>
+              )}
               <TouchableOpacity onPress={toggleBalanceVisibility}>
                 <Image source={IconImages.icon.eye} style={styles.hideIcon} />
               </TouchableOpacity>
             </View>
           </View>
-          {showDetails && (
-            <Fragment>
-              <Row
-                gap={8}
-                justifyContent="space-between"
-                containerStyle={{width: '100%'}}>
+          <View style={styles.iconButtonAlignment}>
+            <IconButton
+              onPress={showAccountModalOnPress}
+              containerStyle={styles.iconButtonContainerStyle}
+              activeOpacity={0.7}>
+              <Image
+                source={ComponentImages.dropdDown.arrowDown}
+                tintColor={Colors.black}
+              />
+            </IconButton>
+            <Pad />
+            <Row
+              gap={8}
+              justifyContent="space-between"
+              containerStyle={{width: '100%'}}>
+              <TouchableOpacity
+                onPress={onTap}
+                style={styles.accountNumberContainer}>
                 <Typography
-                  title={accountName}
-                  type="body-r"
+                  title={accountNumber}
+                  type="body-sb"
                   color={Colors.black}
-                  numberOfLines={1}
-                  style={{width: '55%'}}
                 />
-                <View style={styles.accountNumberContainer}>
-                  <Typography
-                    title={accountNumber}
-                    type="body-sb"
-                    color={Colors.black}
-                  />
-                  <TouchableOpacity
-                    onPress={() => Clipboard.setString(accountNumber)}>
-                    <Image
-                      source={IconImages.icon.copyDark}
-                      style={styles.copyIcon}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </Row>
-            </Fragment>
-          )}
-        </View>
-      </View>
+                <Image
+                  source={IconImages.icon.copyDark}
+                  style={styles.copyIcon}
+                />
+              </TouchableOpacity>
+            </Row>
+          </View>
+        </Row>
+      </ImageBackground>
+      <Pad size={16} />
       {showActions && (
         <View style={styles.bottom}>
           <FlatList

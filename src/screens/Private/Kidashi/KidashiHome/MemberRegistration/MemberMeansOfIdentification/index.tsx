@@ -95,7 +95,6 @@ export default function MemberMeansOfIdentification({
 			keyboardAvoidingType='scroll-view'
 			isLoading={isLoading}
 		>
-			<Stepper steps={8} currentStep={6} />
 			<Typography title='Means of Identification' type='heading-sb' />
 			<Typography
 				type='label-sb'

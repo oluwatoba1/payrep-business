@@ -1,4 +1,4 @@
-import {Platform, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 import Colors from '@theme/Colors';
 import {moderateScale, scale, scaleHeight} from '@utils/Helpers';
@@ -6,8 +6,13 @@ import {MAIN_LAYOUT_HORIZONTAL_PADDING, width} from '@utils/Constants';
 
 const styles = StyleSheet.create({
   container: {
-    height: 'auto',
-    gap: scale(32),
+    width: width - 2 * MAIN_LAYOUT_HORIZONTAL_PADDING,
+    height: scaleHeight(82),
+    borderRadius: moderateScale(16),
+    padding: scaleHeight(16),
+  },
+  imageContainer: {
+    resizeMode: 'contain',
   },
   main: {
     backgroundColor: Colors.primary['base'],
@@ -48,6 +53,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: scale(8),
   },
+  hiddenDot: {
+    width: scaleHeight(8),
+    height: scaleHeight(8),
+    backgroundColor: Colors.black,
+    borderRadius: scaleHeight(8),
+  },
   accountDetailsContainer: {
     justifyContent: 'center',
     alignItems: 'flex-start',
@@ -67,8 +78,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   hideIcon: {
-    width: scale(24),
-    height: scale(24),
+    width: scale(20),
+    height: scale(20),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -106,12 +117,14 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 8,
+    shadowOpacity: 0.6,
     shadowRadius: 0.1,
     elevation: 4,
   },
   iconButtonContainerStyle: {
-    backgroundColor: Colors.primary[300],
+    height: scaleHeight(24),
+    width: scaleHeight(24),
+    backgroundColor: '#FFE399',
     borderRadius: moderateScale(90),
     padding: scaleHeight(5),
     shadowColor: Colors.black,
@@ -121,6 +134,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     alignItems: 'center',
     justifyContent: 'center',
+    alignSelf: 'flex-end',
   },
   iconButtonAlignment: {
     alignSelf: 'flex-end',

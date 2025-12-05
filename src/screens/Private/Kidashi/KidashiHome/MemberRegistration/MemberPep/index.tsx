@@ -88,7 +88,6 @@ export default function MemberPep({
 			backAction={() => navigate("KidashiDashboard")}
 			isLoading={isLoading}
 		>
-			<Stepper steps={8} currentStep={7} />
 			<Typography title='PEP Status' type='heading-sb' />
 			<Typography
 				title='Are you politically exposed? Please respond with either Yes or No.'

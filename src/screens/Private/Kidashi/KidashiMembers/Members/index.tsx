@@ -101,7 +101,7 @@ export default function Members({
 			<SearchContainer
 				searchText={searchText}
 				setSearchText={setSearchText}
-				onSearch={() => handleSearch()}
+				onSearch={handleSearch}
 				placeholder='Phone, Account no or NIN'
 				isLoading={isLoadingSearchWoman}
 			/>

@@ -6,7 +6,7 @@ import Colors from '@theme/Colors';
 export const styles = StyleSheet.create({
   container: {
     width: '100%',
-    marginBottom: scaleHeight(16),
+    marginTop: scaleHeight(16),
   },
   dateContainer: {
     borderWidth: 1,

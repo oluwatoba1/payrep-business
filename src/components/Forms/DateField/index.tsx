@@ -11,12 +11,14 @@ import Pad from "@components/Pad";
 
 interface CustomDatePickerProps {
 	label: string;
+	date: Date | string | undefined;
 	onDateChange: (date: string) => void;
 	error?: string;
 	clearDateField?: boolean;
 }
 
-function formatDate(date: Date): string {
+function formatDate(date: Date | undefined): string {
+	if (!date) return "";
 	return `${date.getFullYear()}-${(date.getMonth() + 1)
 		.toString()
 		.padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
@@ -24,25 +26,25 @@ function formatDate(date: Date): string {
 
 export default function DateField({
 	label,
+	date,
 	onDateChange,
 	error = "",
 	clearDateField = false,
 }: CustomDatePickerProps) {
-	const [date, setDate] = useState<Date | undefined>(undefined);
 	const [show, setShow] = useState(false);
+	const [internalDate, setInternalDate] = useState<Date | undefined>();
 
 	const handleChange = (_: any, selectedDate?: Date) => {
 		setShow(false);
 
 		if (selectedDate) {
-			setDate(selectedDate);
 			selectedDate && onDateChange(formatDate(selectedDate));
 		}
 	};
 
 	useEffect(() => {
-		clearDateField && setDate(undefined);
-	}, [clearDateField]);
+		setInternalDate(date ? new Date(date) : undefined);
+	}, [date]);
 
 	return (
 		<View style={styles.container}>
@@ -55,9 +57,13 @@ export default function DateField({
 			)}
 			<Pressable style={styles.dateContainer} onPress={() => setShow(true)}>
 				<Typography
-					title={date ? formatDate(date) : "dd-mm-yyyy"}
+					title={internalDate ? formatDate(internalDate) : "dd-mm-yyyy"}
 					type='subheading'
-					color={date ? Colors.black : Colors.custom.textInputPlaceholderColor}
+					color={
+						internalDate
+							? Colors.black
+							: Colors.custom.textInputPlaceholderColor
+					}
 				/>
 			</Pressable>
 
@@ -70,7 +76,7 @@ export default function DateField({
 
 			{show && (
 				<DateTimePicker
-					value={date || new Date()}
+					value={(date as Date) || new Date()}
 					mode='date'
 					display='default'
 					onChange={handleChange}

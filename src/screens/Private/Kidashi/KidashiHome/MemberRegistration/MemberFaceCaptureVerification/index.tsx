@@ -166,7 +166,6 @@ export default function MemberFaceCaptureVerification({
 			loadingTitle='Validating KYC'
 		>
 			<Pad size={16} />
-			<Stepper steps={8} currentStep={4} />
 			<Typography title='Face Capture Verification' type='heading-sb' />
 			<Typography
 				title='Please capture a photo of yourself. This will be used to confirm that your face matches the image on your identity card.'

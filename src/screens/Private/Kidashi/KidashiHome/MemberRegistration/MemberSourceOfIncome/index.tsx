@@ -96,7 +96,6 @@ export default function MemberSourceOfIncome({
 			backAction={() => navigate("KidashiDashboard")}
 			isLoading={isLoading}
 		>
-			<Stepper steps={8} currentStep={8} />
 			<Typography type='heading4-sb' title='Source of Income' />
 			<Typography
 				type='body-r'

@@ -23,7 +23,6 @@ import {
 	useVerifyMobileNumberMutation,
 } from "@store/apis/authApi";
 import Colors from "@theme/Colors";
-import { useRegisterWomanEmailMutation } from "@store/apis/kidashiApi";
 import { Stepper } from "@components/Miscellaneous";
 
 type MemberEmailVerificationProps = StackScreenProps<
@@ -139,7 +138,6 @@ export default function MemberEmailVerification({
 			isLoading={isLoading}
 			loadingTitle={loadingTitle}
 		>
-			<Stepper steps={8} currentStep={2} />
 			<Typography title='Verify Email Address' type='heading-sb' />
 			<HybridTypography
 				textTray={[

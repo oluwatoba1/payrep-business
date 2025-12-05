@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useState, memo } from "react";
 import {
 	View,
 	TextInput as RNTextInput,
@@ -7,14 +7,12 @@ import {
 	Pressable,
 	ViewStyle,
 } from "react-native";
-
 import { Typography } from "@components/Forms";
 import styles from "./styles";
 import ComponentImages from "@assets/images/components";
 import { Row } from "@components/Layout";
 import Colors from "@theme/Colors";
 import Pad from "@components/Pad";
-import { scaleHeight } from "@utils/Helpers";
 
 interface RNTextInputProps extends TextInputProps {
 	label: string;
@@ -28,9 +26,9 @@ interface RNTextInputProps extends TextInputProps {
 	customInputContainerStyle?: ViewStyle;
 }
 
-export default function TextInput({
+const TextInput = memo(function TextInput({
 	label,
-	type,
+	type = "text",
 	leftNode,
 	rightNode,
 	leftNodeAction,
@@ -39,112 +37,102 @@ export default function TextInput({
 	placeholder,
 	customTextInputStyle = {},
 	customInputContainerStyle = {},
-	onFocus,
-	onChangeText,
 	...props
 }: RNTextInputProps) {
-	const [leftElement, setLeftElement] = useState<ReactNode | null>(leftNode);
-	const [rightElement, setRightElement] = useState<ReactNode | null>(rightNode);
-	const [isFocused, setIsFocused] = useState<boolean>(false);
-	const [passwordVisible, setPasswordVisible] = useState<boolean>(
+	const [passwordVisible, setPasswordVisible] = useState(
 		!(type === "password")
 	);
 
-	const handleInputType = () => {
-		switch (type) {
-			case "phone":
-				setLeftElement(
-					<Pressable onPress={leftNodeAction}>
-						<Row justifyContent='flex-start' gap={8}>
-							<Image
-								source={ComponentImages.textInput.flag}
-								style={styles.flagIcon}
-							/>
-							<Typography title='+234' type='body-sr' color='#9DA1A8' />
-						</Row>
-					</Pressable>
-				);
-				break;
-			case "password":
-				setRightElement(
-					<Pressable
-						onPress={() =>
-							rightNodeAction
-								? rightNodeAction()
-								: setPasswordVisible(!passwordVisible)
-						}
-					>
+	/** ✅ Compute left element declaratively (no state mutation) */
+	const renderLeftElement = () => {
+		if (leftNode) return leftNode;
+
+		if (type === "phone") {
+			return (
+				<Pressable onPress={leftNodeAction}>
+					<Row justifyContent='flex-start' gap={8}>
 						<Image
-							source={
-								passwordVisible
-									? ComponentImages.textInput.eyeLiner
-									: ComponentImages.textInput.offEyeLiner
-							}
+							source={ComponentImages.textInput.flag}
+							style={styles.flagIcon}
 						/>
-					</Pressable>
-				);
-				break;
-			default:
-				break;
+						<Typography title='+234' type='body-sr' color='#9DA1A8' />
+					</Row>
+				</Pressable>
+			);
 		}
+
+		return null;
 	};
 
-	useEffect(() => {
-		handleInputType();
-	}, [type, passwordVisible]);
+	/** ✅ Compute right element declaratively (no useEffect flicker) */
+	const renderRightElement = () => {
+		if (rightNode) return rightNode;
+
+		if (type === "password") {
+			return (
+				<Pressable
+					onPress={() =>
+						rightNodeAction
+							? rightNodeAction()
+							: setPasswordVisible((prev) => !prev)
+					}
+				>
+					<Image
+						source={
+							passwordVisible
+								? ComponentImages.textInput.eyeLiner
+								: ComponentImages.textInput.offEyeLiner
+						}
+					/>
+				</Pressable>
+			);
+		}
+
+		return null;
+	};
+
+	const leftElement = renderLeftElement();
+	const rightElement = renderRightElement();
 
 	return (
-		<View
-			style={[
-				styles.inputContainer,
-				{ marginTop: label ? scaleHeight(16) : 0 },
-			]}
-		>
-			{isFocused ? (
-				<Typography title={label} type='label-sb' style={styles.inputLabel} />
-			) : null}
+		<View style={styles.inputContainer}>
+			<Typography title={label} type='label-sb' />
+			<Pad size={4} />
 
 			<View style={[styles.textInputContainer, customInputContainerStyle]}>
-				{/* Left Node */}
-				{leftNode || leftElement ? (
-					<View style={styles.leftNodeContainer}>
-						{leftNode || leftElement}
-					</View>
-				) : null}
-
-				{/* Text Input */}
-				<RNTextInput
+				{/* Left Node — always keep space reserved */}
+				<View
 					style={[
-						styles.textInput,
-						{
-							paddingLeft: leftElement ? 10 : 16, // Adjust left padding
-							paddingRight: rightElement ? 10 : 16, // Adjust right padding
-						},
-						customTextInputStyle,
+						styles.leftNodeContainer,
+						!leftElement ? { opacity: 0, width: 0 } : {},
 					]}
+				>
+					{leftElement}
+				</View>
+
+				{/* Input — use key to force proper remount on secureTextEntry toggle */}
+				<RNTextInput
+					key={passwordVisible ? "visible" : "hidden"}
+					style={[styles.textInput, customTextInputStyle]}
 					cursorColor={Colors.black}
 					placeholder={placeholder || label}
 					placeholderTextColor={Colors.custom.textInputPlaceholderColor}
-					onFocus={(e) => {
-						setIsFocused(true)
-						onFocus?.(e);
-					}}
-					onChangeText={(text) => {
-						onChangeText?.(text);
-					}}
-					onBlur={() => setIsFocused(false)}
-					secureTextEntry={!passwordVisible}
+					secureTextEntry={type === "password" && !passwordVisible}
 					{...props}
 				/>
 
-				{/* Right Node */}
-				{rightNode || rightElement ? (
-					<View style={styles.rightNodeContainer}>
-						{rightNode || rightElement}
-					</View>
-				) : null}
+				{/* Right Node — always reserved space */}
+				<View
+					style={[
+						styles.rightNodeContainer,
+						!rightElement ? { opacity: 0, width: 0 } : {},
+					]}
+				>
+					{rightElement}
+				</View>
 			</View>
 
+			{/* Error Message */}
 			{error && (
 				<View>
 					<Pad size={4} />
@@ -153,4 +141,6 @@ export default function TextInput({
 			)}
 		</View>
 	);
-}
+});
+
+export default TextInput;

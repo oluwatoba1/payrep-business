@@ -79,8 +79,6 @@ export default function MemberEmail({
 
 	return (
 		<MainLayout backAction={backAction} isLoading={isLoading}>
-			{/* Stepper */}
-			<Stepper steps={8} currentStep={1} />
 			<Typography title='Provide your Email Address' type='heading-sb' />
 			<Typography title='Please enter a valid email address' type='label-sb' />
 
