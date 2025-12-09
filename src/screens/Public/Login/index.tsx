@@ -94,12 +94,15 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 			!appState?.hasEverLoggedIn
 				? setShowBiometricsModal(true)
 				: dispatch(setCredentials({ token: data.token, user_id: null }));
-
+			const customerUsername =
+				customer?.username?.length === 10
+					? `0${customer?.username}`
+					: customer?.username;
 			// persist customer details
 			await persistAppState({
 				customer: {
 					...data.customer,
-					username: !!username ? username : customer?.username,
+					username: !!username ? username : customerUsername,
 				},
 				hasEverLoggedIn: true,
 			});
@@ -205,7 +208,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 	const sendOtp = async () => {
 		try {
 			const { status } = await verifyDevice({
-				mobile_number: `0${username}`,
+				mobile_number: username.length === 10 ? `0${username}` : username,
 				type: "corporate",
 			}).unwrap();
 			if (status) {
@@ -327,8 +330,8 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 							type='phone'
 							label='Username'
 							keyboardType='numeric'
-							placeholder='Ex: 8123456789'
-							maxLength={10}
+							placeholder='Ex: 08123456789'
+							maxLength={11}
 							value={username}
 							onChangeText={setUsername}
 							error={formErrors.username}

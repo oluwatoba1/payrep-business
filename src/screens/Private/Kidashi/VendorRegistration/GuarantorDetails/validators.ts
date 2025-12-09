@@ -66,7 +66,7 @@ const useGuarantorDetails = () => {
 			.refine((val) => /^\d{11}$/.test(val), {
 				message: "Phone number must be exactly 11 digits",
 			}),
-		dateOfBirth: z.string().min(1, "Date of birth is required"),
+		dateOfBirth: z.string().optional(),
 		state: z.string().min(1, "State is required"),
 		lga: z.string().min(1, "LGA is required"),
 		email: z.string().optional(),

@@ -31,7 +31,7 @@ type MemberAttestationProps = CompositeScreenProps<
 >;
 
 export default function MemberAttestation({
-	navigation: { navigate, canGoBack, goBack },
+	navigation: { navigate },
 }: MemberAttestationProps) {
 	const { showToast } = useToast();
 	const customer = useAppSelector((state) => state.customer.customer);
@@ -56,7 +56,7 @@ export default function MemberAttestation({
 
 	const fetchAttestation = async () => {
 		try {
-			const { status, message, data } = await getAttestion({
+			const { status, data } = await getAttestion({
 				name: "attestation",
 			}).unwrap();
 			if (status && data) {
@@ -92,7 +92,7 @@ export default function MemberAttestation({
 			return;
 		}
 		try {
-			const { status, message } = await affirmAttestation().unwrap();
+			const { status, message, data } = await affirmAttestation().unwrap();
 			if (status) {
 				registerWoman();
 			} else {

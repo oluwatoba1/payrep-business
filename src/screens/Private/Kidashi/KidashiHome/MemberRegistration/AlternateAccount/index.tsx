@@ -149,6 +149,7 @@ export default function AlternateAccount({
 		navigate("MemberSuccessScreen");
 		return true; // Prevent default behavior
 	};
+
 	useFocusEffect(
 		useCallback(() => {
 			const backHandler = BackHandler.addEventListener(

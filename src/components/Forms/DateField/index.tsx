@@ -76,7 +76,7 @@ export default function DateField({
 
 			{show && (
 				<DateTimePicker
-					value={(date as Date) || new Date()}
+					value={(internalDate as Date) || new Date()}
 					mode='date'
 					display='default'
 					onChange={handleChange}
