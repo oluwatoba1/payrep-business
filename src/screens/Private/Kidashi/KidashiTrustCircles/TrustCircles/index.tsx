@@ -1,9 +1,9 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { StackScreenProps } from "@react-navigation/stack";
 import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 
-import { Button, Typography } from "@components/Forms";
+import { Typography } from "@components/Forms";
 import { KidashiLayout } from "@components/Layout";
 import ScreenImages from "@assets/images/screens";
 import Colors from "@theme/Colors";
@@ -22,9 +22,8 @@ import { useFetchTrustCirclesMutation } from "@store/apis/kidashiApi";
 import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import { ActivityIndicator, FlatList } from "react-native";
 import { TrustCircleItemCard } from "@components/UI/TrustCircle/Cards";
-import { ITrustCircleItem } from "@components/UI/TrustCircle/Cards/TrustCircleItemCard";
 import Pad from "@components/Pad";
-import MemberDetails from "../../KidashiMembers/MemberDetails";
+import useDebounce from "@hooks/useDebounce";
 
 type TrustCirclesProps = CompositeScreenProps<
 	StackScreenProps<TrustCircleStackParamList, "TrustCircles">,
@@ -40,6 +39,7 @@ export default function TrustCircles({
 	const [fetchTrustCircles, { isLoading }] = useFetchTrustCirclesMutation();
 
 	const [searchText, setSearchText] = useState("");
+	const debouncedSearchTerm = useDebounce(searchText, 300);
 	const [trustCircles, setTrustCircles] = useState<ITrustCircle[]>([]);
 
 	const emptyStateData: KidashiDashboardEmptyStateProps = {
@@ -76,6 +76,13 @@ export default function TrustCircles({
 			_fetchTrustCircles();
 		}, [vendor])
 	);
+
+	// This effect runs ONLY when the *debounced* value changes
+	useEffect(() => {
+		if (debouncedSearchTerm) {
+			_fetchTrustCircles();
+		}
+	}, [debouncedSearchTerm]);
 
 	return (
 		<KidashiLayout

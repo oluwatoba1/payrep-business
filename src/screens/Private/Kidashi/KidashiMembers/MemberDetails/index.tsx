@@ -122,7 +122,7 @@ const MemberDetails = ({
 	}, [memberDetails?.account_number]);
 
 	const backAction = () => {
-		navigate("Members");
+		goBack();
 		return true; // Prevent default behavior
 	};
 

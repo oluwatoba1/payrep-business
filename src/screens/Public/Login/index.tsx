@@ -81,11 +81,15 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 		data,
 	}: AuthResponse<LoginResponse>) => {
 		if (status && data) {
+			const customerUsername =
+				customer?.username?.length === 10
+					? `0${customer?.username}`
+					: customer?.username;
 			setToken(data.token);
 			dispatch(
 				setCustomer({
 					...data.customer,
-					username: !!username ? username : customer?.username,
+					username: !!username ? username : customerUsername,
 				})
 			);
 
@@ -94,10 +98,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 			!appState?.hasEverLoggedIn
 				? setShowBiometricsModal(true)
 				: dispatch(setCredentials({ token: data.token, user_id: null }));
-			const customerUsername =
-				customer?.username?.length === 10
-					? `0${customer?.username}`
-					: customer?.username;
+
 			// persist customer details
 			await persistAppState({
 				customer: {
@@ -117,9 +118,10 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 		payload?: string
 	) => {
 		setLoginType(loginType);
+		const _username = !!username ? username : customer?.username || "";
 		try {
 			const { status, message, data } = await login({
-				username: !!username ? username : customer?.username || "",
+				username: _username.length === 11 ? _username.substring(1) : _username,
 				password,
 				device_id: await DeviceInfo.getUniqueId(),
 				login_type: loginType,

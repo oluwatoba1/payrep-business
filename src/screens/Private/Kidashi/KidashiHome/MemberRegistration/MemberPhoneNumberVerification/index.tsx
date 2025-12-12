@@ -75,7 +75,7 @@ export default function MemberPhoneNumberVerification({
 						customer_id: data?.customer_id || "",
 					})
 				);
-				navigate("MemberEmail");
+				navigate("MemberMeansOfVerification");
 				return;
 			}
 			showToast("danger", message);

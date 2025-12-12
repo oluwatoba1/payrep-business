@@ -67,14 +67,16 @@ export default function MemberAttestation({
 		}
 	};
 
-	const registerWoman = async () => {
+	const registerWoman = async (accountNumber: string) => {
 		try {
 			const { status, message, data } = await onboardWoman({
 				vendor_cba_customer_id: customer?.id || "",
 				woman_cba_customer_id: womanCustomerId,
 			}).unwrap();
 			if (status) {
-				navigate("AlternateAccount", { womanId: data.woman_id });
+				navigate("MemberSuccessScreen", {
+					accountNumber,
+				});
 			} else {
 				showToast("danger", message);
 			}
@@ -94,7 +96,7 @@ export default function MemberAttestation({
 		try {
 			const { status, message, data } = await affirmAttestation().unwrap();
 			if (status) {
-				registerWoman();
+				registerWoman(data?.account_number || "");
 			} else {
 				showToast("danger", message);
 			}

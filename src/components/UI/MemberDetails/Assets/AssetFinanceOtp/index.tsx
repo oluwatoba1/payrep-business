@@ -97,37 +97,8 @@ const AssetFinanceOtp = ({
 
 			<Divider gapY={scaleHeight(8)} />
 
-			<View style={styles.infoBox}>
-				<Image
-					source={ScreenImages.kidashiMemberDetails.infoIcon}
-					style={styles.infoIcon}
-				/>
-				<Typography
-					title='If you don’t have the OTP now, select Complete later to finish once you receive it'
-					type='body-r'
-					color={Colors.neutral[400]}
-					style={{ flex: 1, fontSize: 12 }}
-				/>
-			</View>
-
 			<Pad size={scaleHeight(12)} />
 
-			{/* <Row gap={12}>
-				<View style={{ flex: 1 }}>
-					<Button
-						title='Complete Later'
-						color={Colors.gray["100"]}
-						onPress={onClose}
-					/>
-				</View>
-				<View style={{ flex: 1 }}>
-					<Button
-						title='Verify'
-						onPress={handleVerify}
-						disabled={otp.length !== 4}
-					/>
-				</View>
-			</Row> */}
 			<Button
 				title='Verify'
 				onPress={handleVerify}

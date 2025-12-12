@@ -61,7 +61,6 @@ export default function AlternateAccount({
 
 	const [showAccountContainer, setShowAccountContainer] =
 		useState<boolean>(false);
-	const [showBankModal, setShowBankModal] = useState(false);
 	const [relatedBanks, setRelatedBanks] = useState<IBank[]>([]);
 	const [selectedBank, setSelectedBank] = useState<{
 		label: string;
@@ -146,7 +145,7 @@ export default function AlternateAccount({
 	};
 
 	const backAction = () => {
-		navigate("MemberSuccessScreen");
+		navigate("MemberSuccessScreen", { accountNumber: "" });
 		return true; // Prevent default behavior
 	};
 

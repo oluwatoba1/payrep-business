@@ -190,7 +190,7 @@ const RepaymentOverview = ({
 					</View>
 					<Typography title='Review Payment Terms' style={styles.screenTitle} />
 					<Typography
-						title='Please go through the repayment schedule, cost, and interest carefully. Confirm the terms before the request is submitted'
+						title='Please go through the repayment schedule, and cosr. Confirm the terms before the request is submitted'
 						type='body-sr'
 						style={styles.screenSubTitle}
 					/>
@@ -216,7 +216,7 @@ const RepaymentOverview = ({
 									: repaymentCycle === "WEEKLY"
 									? "weekly"
 									: "monthly"
-							} (includes ${interestRatePercent}% interest)`}
+							}`}
 							type='body-b'
 							color={Colors.gray["900"]}
 						/>
@@ -244,10 +244,7 @@ const RepaymentOverview = ({
 						</View>
 						<Pad size={scaleHeight(16)} />
 						<View>
-							<Typography
-								title={`Interest (${interestRatePercent}%)`}
-								type='body-sb'
-							/>
+							<Typography title='Charges' type='body-sb' />
 							<Typography
 								title={formatCurrency(interestAmount)}
 								type='body-b'

@@ -111,7 +111,10 @@ const CustomerApi = createApi({
 				};
 			},
 		}),
-		affirmAttestation: builder.mutation<AuthResponse<null>, void>({
+		affirmAttestation: builder.mutation<
+			AuthResponse<{ account_number: string }>,
+			void
+		>({
 			query: (body) => {
 				const customerId: string = store.getState().auth.customer?.id || "";
 				const womanCustomerId: string =

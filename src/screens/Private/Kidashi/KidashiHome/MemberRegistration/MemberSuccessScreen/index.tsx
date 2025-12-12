@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { BackHandler, Image, View } from "react-native";
+import { BackHandler, Image, Pressable, View } from "react-native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { StackScreenProps } from "@react-navigation/stack";
 
@@ -18,6 +18,8 @@ import styles from "./styles";
 import Colors from "@theme/Colors";
 import { MAIN_LAYOUT_HORIZONTAL_PADDING, width } from "@utils/Constants";
 import { scale } from "@utils/Helpers";
+import Clipboard from "@react-native-clipboard/clipboard";
+import useToast from "@hooks/useToast";
 
 type MemberSuccessScreenProps = CompositeScreenProps<
 	StackScreenProps<MemberRegistrationStackParamList, "MemberSuccessScreen">,
@@ -29,7 +31,9 @@ type MemberSuccessScreenProps = CompositeScreenProps<
 
 export default function MemberSuccessScreen({
 	navigation: { navigate },
+	route,
 }: MemberSuccessScreenProps) {
+	const { showToast } = useToast();
 	const backAction = () => {
 		navigate("KidashiDashboard");
 		return true; // Prevent default behavior
@@ -71,10 +75,21 @@ export default function MemberSuccessScreen({
 				<Pad size={16} />
 
 				<View style={styles.accountContainer}>
-					<Row alignItems='center' justifyContent='space-between'>
-						<Typography title='Account number' type='label-r' />
-						<Typography title='0123456789' type='body-b' />
-					</Row>
+					<Pressable
+						onPress={() => {
+							Clipboard.setString(route.params.accountNumber || "");
+							showToast("success", "Account number copied to clipboard");
+						}}
+					>
+						<Row alignItems='center' justifyContent='space-between'>
+							<Typography title='Account number' type='label-r' />
+							<Typography
+								title={route.params.accountNumber || ""}
+								type='body-b'
+								selectable={true}
+							/>
+						</Row>
+					</Pressable>
 					<Row alignItems='center' justifyContent='space-between'>
 						<Typography title='Tier Type' type='label-r' />
 						<Typography title='Tier 1' type='body-b' />

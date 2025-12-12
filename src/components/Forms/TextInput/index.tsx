@@ -1,4 +1,4 @@
-import { ReactNode, useState, memo } from "react";
+import { ReactNode, useState, memo, useMemo, useCallback } from "react";
 import {
 	View,
 	TextInput as RNTextInput,
@@ -24,6 +24,11 @@ interface RNTextInputProps extends TextInputProps {
 	error?: string;
 	customTextInputStyle?: ViewStyle;
 	customInputContainerStyle?: ViewStyle;
+	/**
+	 * If true, only digits will be allowed (in addition to phone type).
+	 * Useful for amounts / OTP etc.
+	 */
+	numericOnly?: boolean;
 }
 
 const TextInput = memo(function TextInput({
@@ -37,14 +42,13 @@ const TextInput = memo(function TextInput({
 	placeholder,
 	customTextInputStyle = {},
 	customInputContainerStyle = {},
+	numericOnly,
 	...props
 }: RNTextInputProps) {
-	const [passwordVisible, setPasswordVisible] = useState(
-		!(type === "password")
-	);
+	const [passwordVisible, setPasswordVisible] = useState(type !== "password");
 
-	/** ✅ Compute left element declaratively (no state mutation) */
-	const renderLeftElement = () => {
+	// Left node
+	const leftElement = useMemo(() => {
 		if (leftNode) return leftNode;
 
 		if (type === "phone") {
@@ -60,17 +64,17 @@ const TextInput = memo(function TextInput({
 				</Pressable>
 			);
 		}
-
 		return null;
-	};
+	}, [leftNode, type, leftNodeAction]);
 
-	/** ✅ Compute right element declaratively (no useEffect flicker) */
-	const renderRightElement = () => {
+	// Right node (password eye icon, etc.)
+	const rightElement = useMemo(() => {
 		if (rightNode) return rightNode;
 
 		if (type === "password") {
 			return (
 				<Pressable
+					hitSlop={10}
 					onPress={() =>
 						rightNodeAction
 							? rightNodeAction()
@@ -87,49 +91,68 @@ const TextInput = memo(function TextInput({
 				</Pressable>
 			);
 		}
-
 		return null;
-	};
+	}, [rightNode, type, passwordVisible, rightNodeAction]);
 
-	const leftElement = renderLeftElement();
-	const rightElement = renderRightElement();
+	// Only use key hack for passwords (avoid focus loss on normal inputs)
+	const inputKey =
+		type === "password" ? (passwordVisible ? "visible" : "hidden") : undefined;
+
+	// Resolve keyboard type so numeric inputs feel more native & responsive
+	const resolvedKeyboardType =
+		type === "phone"
+			? "phone-pad"
+			: props.keyboardType ?? (numericOnly ? "number-pad" : "default");
+
+	// Centralized change handler – super cheap, and we keep digits-only for phone / numeric
+	const handleChangeText = useCallback(
+		(text: string) => {
+			let next = text;
+
+			// For phone / numeric inputs, strip non-digits.
+			// This is very cheap and keeps the field "dumb" and fast.
+			if (type === "phone" || numericOnly) {
+				next = text.replace(/[^\d]/g, "");
+			}
+
+			if (props.onChangeText) {
+				props.onChangeText(next);
+			}
+		},
+		[props.onChangeText, type, numericOnly]
+	);
 
 	return (
 		<View style={styles.inputContainer}>
-			<Typography title={label} type='label-sb' />
+			{label ? <Typography title={label} type='label-sb' /> : null}
 			<Pad size={4} />
 
 			<View style={[styles.textInputContainer, customInputContainerStyle]}>
-				{/* Left Node — always keep space reserved */}
-				<View
-					style={[
-						styles.leftNodeContainer,
-						!leftElement ? { opacity: 0, width: 0 } : {},
-					]}
-				>
-					{leftElement}
-				</View>
+				{/* Left Node */}
+				{leftElement && (
+					<View style={styles.leftNodeContainer}>{leftElement}</View>
+				)}
 
-				{/* Input — use key to force proper remount on secureTextEntry toggle */}
 				<RNTextInput
-					key={passwordVisible ? "visible" : "hidden"}
+					key={inputKey}
 					style={[styles.textInput, customTextInputStyle]}
 					cursorColor={Colors.black}
 					placeholder={placeholder || label}
 					placeholderTextColor={Colors.custom.textInputPlaceholderColor}
 					secureTextEntry={type === "password" && !passwordVisible}
+					// Spread props first so we can override critical perf-related ones below
 					{...props}
+					keyboardType={resolvedKeyboardType}
+					autoCapitalize='none'
+					autoCorrect={false}
+					importantForAutofill='no'
+					onChangeText={handleChangeText}
 				/>
 
-				{/* Right Node — always reserved space */}
-				<View
-					style={[
-						styles.rightNodeContainer,
-						!rightElement ? { opacity: 0, width: 0 } : {},
-					]}
-				>
-					{rightElement}
-				</View>
+				{/* Right Node */}
+				{rightElement && (
+					<View style={styles.rightNodeContainer}>{rightElement}</View>
+				)}
 			</View>
 
 			{/* Error Message */}

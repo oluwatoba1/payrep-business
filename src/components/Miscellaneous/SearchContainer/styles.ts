@@ -5,9 +5,9 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 	searchContainer: {
-		paddingVertical: scaleHeight(12),
 		borderBottomWidth: 1,
 		borderBottomColor: Colors.neutral["50"],
+		paddingVertical: scaleHeight(8),
 	},
 	searchInputContainer: {
 		width: width / 1.5,
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
 		borderRadius: moderateScale(32),
 		paddingVertical: scaleHeight(6),
 		paddingHorizontal: scale(8),
+		marginTop: scaleHeight(16),
 	},
 	clearContainer: {
 		backgroundColor: Colors.neutral.base,

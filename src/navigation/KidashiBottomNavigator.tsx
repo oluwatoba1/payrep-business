@@ -10,7 +10,6 @@ export default function KidashiBottomTabNavigator() {
 	return (
 		<Tab.Navigator
 			tabBar={(props) => <KidashiBottomTabBar {...props} />}
-			initialRouteName='KidashiHome'
 			screenOptions={{
 				headerShown: false,
 			}}
