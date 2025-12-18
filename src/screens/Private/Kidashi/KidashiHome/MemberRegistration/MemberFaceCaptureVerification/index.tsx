@@ -81,7 +81,7 @@ export default function MemberFaceCaptureVerification({
 					return;
 				}
 				data[0].status
-					? navigate("MemberLocationDetails")
+					? navigate("MemberAttestation")
 					: showToast("danger", "KYC verification failed");
 			} else {
 				timeoutAction(args);

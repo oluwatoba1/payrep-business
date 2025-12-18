@@ -190,7 +190,7 @@ const RepaymentOverview = ({
 					</View>
 					<Typography title='Review Payment Terms' style={styles.screenTitle} />
 					<Typography
-						title='Please go through the repayment schedule, and cosr. Confirm the terms before the request is submitted'
+						title='Please go through the repayment schedule, and cost. Confirm the terms before the request is submitted'
 						type='body-sr'
 						style={styles.screenSubTitle}
 					/>
@@ -277,6 +277,7 @@ const RepaymentOverview = ({
 				onVerify={submit}
 				otp={otp}
 				setOtp={setOtp}
+				handleResend={getOtp}
 				phone={memberDetails?.mobile_number || ""}
 			/>
 		</SafeAreaWrapper>

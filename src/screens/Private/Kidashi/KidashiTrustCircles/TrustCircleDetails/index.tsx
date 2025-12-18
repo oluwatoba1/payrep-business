@@ -186,7 +186,10 @@ export default function TrustCircleDetails({
 						onSelect={() => {
 							navigate("KidashiMembers", {
 								screen: "MemberDetails",
-								params: { id: item.cba_customer_id },
+								params: {
+									id: item.cba_customer_id,
+									from: "TrustCircleDetails",
+								},
 							});
 						}}
 						rightNode={

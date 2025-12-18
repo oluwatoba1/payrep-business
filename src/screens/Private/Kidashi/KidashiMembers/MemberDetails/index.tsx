@@ -7,7 +7,8 @@ import {
 	Pressable,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { useFocusEffect } from "@react-navigation/native";
+import { CompositeScreenProps, useFocusEffect } from "@react-navigation/native";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { StackScreenProps } from "@react-navigation/stack";
 
 import SafeAreaWrapper from "@components/Layout/SafeAreaWrapper";
@@ -17,7 +18,10 @@ import AccountInfo from "@components/UI/MemberDetails/AccountInfo";
 import MoreDetails from "@components/UI/MemberDetails/MoreDetails";
 import { TransactonItem } from "@components/Cards";
 import Pad from "@components/Pad";
-import { MembersStackParamList } from "@navigation/types";
+import {
+	KidashiBottomTabParamList,
+	MembersStackParamList,
+} from "@navigation/types";
 import { Typography } from "@components/Forms";
 import ScreenImages from "@assets/images/screens";
 import PerformActionModal from "@components/UI/MemberDetails/PerformActionModal";
@@ -33,7 +37,6 @@ import { KidashiDashboardEmptyState } from "@components/Miscellaneous";
 import { KidashiDashboardEmptyStateProps } from "@components/Miscellaneous/KidashiDashboardEmptyState";
 import { useGetTransactionsMutation } from "@store/apis/accountApi";
 import { setTransactions } from "@store/slices/transactionSlice";
-import { scaleHeight } from "@utils/Helpers";
 import Tab from "@components/Miscellaneous/Tab";
 import { styles } from "./style";
 
@@ -45,14 +48,12 @@ const emptyStateData: KidashiDashboardEmptyStateProps = {
 
 type TabType = "Transactions" | "More details" | "Account Info";
 
-type MemberDetailsProps = StackScreenProps<
-	MembersStackParamList,
-	"MemberDetails"
+type MemberDetailsProps = CompositeScreenProps<
+	StackScreenProps<MembersStackParamList, "MemberDetails">,
+	BottomTabScreenProps<KidashiBottomTabParamList, "Trust Circles">
 >;
-const MemberDetails = ({
-	navigation: { navigate, goBack },
-	route,
-}: MemberDetailsProps) => {
+
+const MemberDetails = ({ navigation, route }: MemberDetailsProps) => {
 	const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
 	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
@@ -97,21 +98,56 @@ const MemberDetails = ({
 				);
 			} else {
 				showToast("danger", message);
-				goBack();
+				// if fetch fails, go back using our custom back handler
+				backAction();
 			}
 		} catch (error: ErrorResponse | any) {
 			showToast(
 				"danger",
 				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
 			);
+			backAction();
 		}
+	};
+
+	// 🔙 Custom back behaviour: prefer going back in-stack; otherwise use route.params.from to return to origin
+	const backAction = () => {
+		// Otherwise, inspect the origin passed when navigating here
+		const from = (route.params as any)?.from as
+			| "TrustCircleDetails"
+			| "Members"
+			| "Assets"
+			| undefined;
+
+		if (from === "Assets") {
+			// If origin was Assets, navigate to Assets screen in Members stack
+			navigation.navigate("Assets");
+			return true;
+		}
+
+		if (from === "TrustCircleDetails") {
+			navigation.navigate("Trust Circles", {
+				screen: "TrustCircleDetails",
+				params: { id: memberDetails?.trust_circle || "" },
+			});
+			return true;
+		}
+
+		if (from === "Members") {
+			// If origin was Members search, navigate to Members screen
+			navigation.navigate("Members");
+			return true;
+		}
+
+		// Fallback: try to go back
+		navigation.goBack();
+		return true;
 	};
 
 	useFocusEffect(
 		useCallback(() => {
 			setIsInitialLoad(true);
 			fetchDetails();
-			// fetchTransactions({ account: memberDetails?.account_number || "" });
 		}, [route.params.id])
 	);
 
@@ -121,11 +157,6 @@ const MemberDetails = ({
 		}
 	}, [memberDetails?.account_number]);
 
-	const backAction = () => {
-		goBack();
-		return true; // Prevent default behavior
-	};
-
 	useFocusEffect(
 		useCallback(() => {
 			const backHandler = BackHandler.addEventListener(
@@ -133,21 +164,21 @@ const MemberDetails = ({
 				backAction
 			);
 
-			return () => backHandler.remove(); // Cleanup
-		}, [])
+			return () => backHandler.remove();
+		}, [backAction])
 	);
 
 	return (
 		<SafeAreaWrapper backAction={backAction} title='Member Details'>
 			<MemberDetailsHeaderComp
-				onOTPManagePress={() => navigate("ManageVerfiers")}
+				onOTPManagePress={() => navigation.navigate("ManageVerfiers")}
 				userName={`${memberDetails?.first_name || ""} ${
 					memberDetails?.surname || ""
 				}`}
 				status={memberDetails?.status}
 			/>
 			<MemberDetailsCard
-				onAssetPress={() => navigate("Assets")}
+				onAssetPress={() => navigation.navigate("Assets")}
 				memberDetails={memberDetails}
 			/>
 			<Tab
@@ -156,7 +187,7 @@ const MemberDetails = ({
 				onTap={(value) => setActiveTab(value as TabType)}
 			/>
 			<Pad size={20} />
-			{/* {activeTab === "Transactions" && <Transactions navigate={navigate} />} */}
+
 			{activeTab === "Transactions" && (
 				<>
 					{transactionsLoading ? (
@@ -201,7 +232,7 @@ const MemberDetails = ({
 						title: "Request Asset Finance",
 						subTitle: "Apply for asset support",
 						icon: ScreenImages.kidashiMemberDetails.boxIcon,
-						onPress: () => navigate("EnterAssetInformation"),
+						onPress: () => navigation.navigate("EnterAssetInformation"),
 					},
 				]}
 				visible={visible}

@@ -127,7 +127,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 				login_type: loginType,
 				signature,
 				signature_payload: payload,
-				customer_type: "corporate",
+				customer_type: "business",
 			}).unwrap();
 
 			if (data?.is_new_device) {

@@ -32,7 +32,8 @@ type EnterAccountNumberProps = StackScreenProps<
 >;
 
 export default function EnterAccountNumber({
-	navigation: { navigate, goBack, reset },
+	navigation: { navigate, goBack },
+	route,
 }: EnterAccountNumberProps) {
 	const dispatch = useAppDispatch();
 	const { showToast } = useToast();
@@ -64,10 +65,12 @@ export default function EnterAccountNumber({
 		useState<boolean>(false);
 	// Auto-fetch account when number reaches 10 digits
 	useEffect(() => {
-		if (formData.accountNumber.length === 10) {
+		const accountNumber =
+			formData.accountNumber || route.params.accountNumber || "";
+		if (accountNumber.length === 10) {
 			fetchAccounts();
 		}
-	}, [formData.accountNumber]);
+	}, [formData.accountNumber, route.params.accountNumber]);
 
 	const fetchWomanDetails = async (id: string) => {
 		try {
@@ -118,7 +121,10 @@ export default function EnterAccountNumber({
 	const fetchAccounts = async () => {
 		validateForm(async () => {
 			setShowAccountContainer(false);
-			await getAccounts({ account_number: formData.accountNumber })
+			await getAccounts({
+				account_number:
+					formData.accountNumber || route.params.accountNumber || "",
+			})
 				.unwrap()
 				.then((res) => {
 					if (res.status) {
@@ -177,7 +183,7 @@ export default function EnterAccountNumber({
 					setAccountNumber(text);
 					clearFormError("accountNumber");
 				}}
-				value={formData.accountNumber}
+				value={formData.accountNumber || route.params.accountNumber || ""}
 				error={formErrors.accountNumber}
 				rightNode={
 					<Pressable

@@ -147,7 +147,9 @@ export default function KidashiDashboard({
 
 	const getUnreadCount = useCallback(async () => {
 		try {
-			const res = await fetchNotifications({ filters: { cba_customer_id: customer?.id } }).unwrap();
+			const res = await fetchNotifications({
+				filters: { cba_customer_id: customer?.id },
+			}).unwrap();
 			if (res?.status && Array.isArray(res?.data)) {
 				const unread = res.data.filter((n: any) => !n?.is_read).length;
 				setNotificationCount(unread);
@@ -187,34 +189,13 @@ export default function KidashiDashboard({
 			descriptionColor: Colors.black,
 		},
 		{
-			title: "Overdue Payments",
+			title: "My Earnings",
 			value: "₦0.00",
 			backgroundColor: Colors.success["100"],
 			titleColor: Colors.success["400"],
 			descriptionColor: Colors.success["700"],
 		},
 	];
-
-	const registerWoman = async () => {
-		try {
-			const { status, message } = await onboardWoman({
-				vendor_cba_customer_id: customer?.id || "",
-				woman_cba_customer_id: "e0d8775f-45d0-4ba3-9442-039dca3948d4",
-			}).unwrap();
-			if (status) {
-				showToast("success", "Success");
-			}
-		} catch (error: ErrorResponse | any) {
-			showToast(
-				"danger",
-				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
-			);
-		}
-	};
-
-	// useEffect(() => {
-	// 	registerWoman();
-	// }, []);
 
 	return (
 		<KidashiLayout

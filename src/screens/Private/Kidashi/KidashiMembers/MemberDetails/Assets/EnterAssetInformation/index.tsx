@@ -5,7 +5,7 @@ import { Button, Typography, Dropdown } from "@components/Forms";
 import { styles } from "./style";
 import Divider from "@components/Miscellaneous/Divider";
 import { MainLayout, Row } from "@components/Layout";
-import { scale, scaleHeight } from "@utils/Helpers";
+import { addCommas, removeCommas, scale, scaleHeight } from "@utils/Helpers";
 import Colors from "@theme/Colors";
 import ScreenImages from "@assets/images/screens";
 import { KeyboardAvoider } from "@components/Layout/KidashiLayout";
@@ -13,6 +13,7 @@ import Pad from "@components/Pad";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MembersStackParamList } from "@navigation/types";
 import { KIDASHI_TYPES } from "@utils/Constants";
+import useToast from "@hooks/useToast";
 
 interface AssetItem {
 	id: string;
@@ -24,6 +25,8 @@ type EnterAssetInformationProps = NativeStackScreenProps<
 	"EnterAssetInformation"
 >;
 const EnterAssetInformation = ({ navigation }: EnterAssetInformationProps) => {
+	const { showToast } = useToast();
+
 	const [items, setItems] = useState<AssetItem[]>([
 		{ id: "1", name: "", price: "" },
 	]);
@@ -73,23 +76,43 @@ const EnterAssetInformation = ({ navigation }: EnterAssetInformationProps) => {
 		return num.toFixed(2);
 	};
 
+	const proceed = () => {
+		const total = items.reduce(
+			(sum, it) => sum + (parseFloat(it.price) || 0),
+			0
+		);
+		if (total > 20000) {
+			showToast("danger", "Woman can't request asset above ₦20,000");
+			return;
+		}
+		navigation.navigate("ReviewAssetRequest", {
+			items: items.filter((i) => i.name.trim() !== "" && i.price !== ""),
+			productCode: "KIDASHI_DAILY",
+		});
+	};
+
 	return (
-		<SafeAreaWrapper title='Enter Asset Information'>
+		<SafeAreaWrapper title='Enter Asset Information' canScroll={true}>
 			<Pad size={20} />
 			<Typography title='Enter Asset Information' style={styles.screenTitle} />
-			<Typography
+			{/* <Typography
 				title='Select Repayment type and Add the items your member is requesting and their prices'
 				type='body-sr'
 				style={styles.screenSubTitle}
-			/>
+			/> */}
 			<Divider gapY={scaleHeight(12)} gapTop={scaleHeight(20)} />
 
-			<Dropdown
-				label="Select Kidashi Type"
+			{/* <Dropdown
+				label='Select Kidashi Type'
 				selectedOption={selectedKidashiType}
 				options={KIDASHI_TYPES}
 				onSelect={(option) => setSelectedKidashiType(option)}
-				placeholder="Select type"
+				placeholder='Select type'
+			/> */}
+			<Typography
+				title='Kidashi Daily'
+				type='body-sr'
+				style={styles.screenSubTitle}
 			/>
 			<Divider gapY={scaleHeight(12)} />
 
@@ -120,74 +143,52 @@ const EnterAssetInformation = ({ navigation }: EnterAssetInformationProps) => {
 			</View>
 
 			<Divider gapBottom={scaleHeight(16)} />
-			<KeyboardAvoider type='scroll-view' enableKeyboardAvoiding={true}>
-				{items.map((item, index) => (
-					<View key={item.id} style={styles.itemRow}>
-						<Typography
-							title={`Item #${index + 1}`}
-							type='body-sb'
-							style={styles.itemLabel}
+			{items.map((item, index) => (
+				<View key={item.id} style={styles.itemRow}>
+					<Typography
+						title={`Item #${index + 1}`}
+						type='body-sb'
+						style={styles.itemLabel}
+					/>
+					<Row gap={scale(8)} alignItems='center'>
+						<TextInput
+							style={styles.itemInput}
+							placeholder='Enter item'
+							placeholderTextColor={Colors.gray["400"]}
+							value={item.name}
+							onChangeText={(value) => updateItem(item.id, "name", value)}
 						/>
-						<Row gap={scale(8)} alignItems='center'>
+						<View style={styles.priceInputContainer}>
+							<Typography title='₦' type='body-sb' style={styles.nairaPrefix} />
 							<TextInput
-								style={styles.itemInput}
-								placeholder='Enter item'
+								style={styles.priceInput}
+								placeholder='0.00'
 								placeholderTextColor={Colors.gray["400"]}
-								value={item.name}
-								onChangeText={(value) => updateItem(item.id, "name", value)}
+								value={addCommas(item.price)}
+								onChangeText={(value) =>
+									updateItem(item.id, "price", removeCommas(value))
+								}
+								keyboardType='decimal-pad'
 							/>
-							<View style={styles.priceInputContainer}>
-								<Typography
-									title='₦'
-									type='body-sb'
-									style={styles.nairaPrefix}
-								/>
-								<TextInput
-									style={styles.priceInput}
-									placeholder='0.00'
-									placeholderTextColor={Colors.gray["400"]}
-									value={item.price}
-									onChangeText={(value) =>
-										updateItem(item.id, "price", sanitizePriceInput(value))
-									}
-									onBlur={() =>
-										updateItem(
-											item.id,
-											"price",
-											normalizeToTwoDecimals(item.price)
-										)
-									}
-									keyboardType='decimal-pad'
-								/>
-							</View>
-							<Pressable
-								onPress={() => (index === 0 ? undefined : removeItem(item.id))}
-								style={styles.deleteButton}
-								disabled={index === 0}
-							>
-								<Image
-									source={ScreenImages.kidashiMemberDetails.trashIcon}
-									style={[
-										styles.trashIcon,
-										index === 0 && styles.trashIconDisabled,
-									]}
-								/>
-							</Pressable>
-						</Row>
-					</View>
-				))}
-			</KeyboardAvoider>
+						</View>
+						<Pressable
+							onPress={() => (index === 0 ? undefined : removeItem(item.id))}
+							style={styles.deleteButton}
+							disabled={index === 0}
+						>
+							<Image
+								source={ScreenImages.kidashiMemberDetails.trashIcon}
+								style={[
+									styles.trashIcon,
+									index === 0 && styles.trashIconDisabled,
+								]}
+							/>
+						</Pressable>
+					</Row>
+				</View>
+			))}
 			<Divider gapY={scaleHeight(16)} gapX={scale(-16)} />
-			<Button
-				title='Next'
-				disabled={!selectedKidashiType}
-				onPress={() =>
-					navigation.navigate("ReviewAssetRequest", {
-						items: items.filter((i) => i.name.trim() !== "" && i.price !== ""),
-						productCode: selectedKidashiType?.value || "",
-					})
-				}
-			/>
+			<Button title='Next' onPress={proceed} />
 		</SafeAreaWrapper>
 	);
 };

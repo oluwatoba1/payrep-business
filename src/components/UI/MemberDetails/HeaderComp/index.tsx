@@ -40,7 +40,7 @@ const MemberDetailsHeaderComp = ({
 
 			{/* OTP Status Bar */}
 
-			<TouchableOpacity
+			{/* <TouchableOpacity
 				style={styles.otpStatusBar}
 				onPress={onOTPManagePress}
 				activeOpacity={0.7}
@@ -67,7 +67,7 @@ const MemberDetailsHeaderComp = ({
 						resizeMode='contain'
 					/>
 				</View>
-			</TouchableOpacity>
+			</TouchableOpacity> */}
 
 			{/* Balance Section */}
 			<View style={styles.balanceContainer}>

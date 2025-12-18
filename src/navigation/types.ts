@@ -68,7 +68,7 @@ export type TrustCircleStackParamList = {
 	TrustCircleDetails: { id: string };
 	CreateTrustCircle: undefined;
 	CircleName: undefined;
-	EnterAccountNumber: undefined;
+	EnterAccountNumber: { accountNumber?: string };
 	SelectVerifiers: undefined;
 	MemberVerification: undefined;
 	MemberAdditionSuccessScreen: undefined;
@@ -76,7 +76,10 @@ export type TrustCircleStackParamList = {
 
 export type MembersStackParamList = {
 	Members: undefined;
-	MemberDetails: { id: string };
+	MemberDetails: {
+		id: string;
+		from?: "TrustCircleDetails" | "Members" | "Assets";
+	};
 	TransactionDetails: undefined;
 	Assets: undefined;
 	AssetDetails:

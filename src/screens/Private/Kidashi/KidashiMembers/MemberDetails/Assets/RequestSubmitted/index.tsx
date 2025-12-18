@@ -54,6 +54,7 @@ const RequestSubmitted = ({ navigation }: RequestProps) => {
 				onPress={() =>
 					navigation.navigate("MemberDetails", {
 						id: memberDetails?.cba_customer_id || "",
+						from: "TrustCircleDetails",
 					})
 				}
 				containerStyle={{ width: "100%" }}

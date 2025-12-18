@@ -17,6 +17,7 @@ interface AssetFinanceOtpProps {
 	otp: string;
 	setOtp: (otp: string) => void;
 	phone: string;
+	handleResend?: () => void;
 }
 
 const AssetFinanceOtp = ({
@@ -26,6 +27,7 @@ const AssetFinanceOtp = ({
 	otp,
 	setOtp,
 	phone,
+	handleResend = () => {},
 }: AssetFinanceOtpProps) => {
 	const maskedPhone = useMemo(() => {
 		return `${phone.slice(0, 3)}**** ${phone.slice(-4)}`;
@@ -34,10 +36,6 @@ const AssetFinanceOtp = ({
 	const handleVerify = () => {
 		onVerify();
 		onClose();
-	};
-
-	const handleResend = () => {
-		// TODO: call resend OTP API
 	};
 
 	return (

@@ -101,7 +101,10 @@ export default function MemberSuccessScreen({
 				<Button
 					title='Add Member to Kidashi'
 					onPress={() =>
-						navigate("Trust Circles", { screen: "EnterAccountNumber" })
+						navigate("Trust Circles", {
+							screen: "EnterAccountNumber",
+							params: { accountNumber: route.params.accountNumber || "" },
+						})
 					}
 					containerStyle={{
 						width: width - 2 * scale(MAIN_LAYOUT_HORIZONTAL_PADDING),

@@ -47,6 +47,7 @@ const Assets = ({ navigation }: KidashiMembersProps) => {
 	const backAction = () => {
 		navigation.navigate("MemberDetails", {
 			id: memberDetails?.cba_customer_id || "",
+			from: "Assets",
 		});
 		return true; // Prevent default behavior
 	};
@@ -83,7 +84,12 @@ const Assets = ({ navigation }: KidashiMembersProps) => {
 				/>
 			)}
 
-			<AssetList status={activeTab} assets={assets} navigation={navigation} from="Assets" />
+			<AssetList
+				status={activeTab}
+				assets={assets}
+				navigation={navigation}
+				from='Assets'
+			/>
 		</SafeAreaWrapper>
 	);
 };

@@ -116,7 +116,10 @@ export default function Members({
 								.map((c, index) => (index > 2 && index < 7 ? "*" : c))
 								.join("")}
 							onSelect={() => {
-								navigate("MemberDetails", { id: item.cba_customer_id });
+								navigate("MemberDetails", {
+									id: item.cba_customer_id,
+									from: "Members",
+								});
 							}}
 							rightNode={
 								<Image
