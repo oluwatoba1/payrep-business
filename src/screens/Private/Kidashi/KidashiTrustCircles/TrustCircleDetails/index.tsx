@@ -200,6 +200,7 @@ export default function TrustCircleDetails({
 						}
 					/>
 				)}
+				keyExtractor={(item) => item.id}
 				showsVerticalScrollIndicator={false}
 				ListEmptyComponent={<KidashiDashboardEmptyState {...emptyStateData} />}
 			/>
