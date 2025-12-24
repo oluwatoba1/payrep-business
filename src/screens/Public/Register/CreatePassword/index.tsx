@@ -11,7 +11,7 @@ import { mainRegisterStyles } from "../styles";
 import { useRegisterPasswordMutation } from "@store/apis/authApi";
 import useRegisterPasswordValidation from "./validator";
 import useToast from "@hooks/useToast";
-import { DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
+import { CUSTOMER_TYPE, DEFAULT_ERROR_MESSAGE } from "@utils/Constants";
 import { useFocusEffect } from "@react-navigation/native";
 import { setRegistrationDetails } from "@store/slices/authSlice";
 
@@ -46,19 +46,13 @@ export default function CreatePassword({
 			return;
 		}
 		setLoadingTitle("Creating Password");
-
-		console.log({
-			password,
-			mobile_number: mobileNumber,
-			device_id: await DeviceInfo.getUniqueId(),
-			customer_id,
-		});
 		try {
 			const { status } = await registerPassword({
 				password,
 				mobile_number: mobileNumber,
 				device_id: await DeviceInfo.getUniqueId(),
 				customer_id,
+				type: CUSTOMER_TYPE,
 			}).unwrap();
 			if (status) {
 				dispatch(

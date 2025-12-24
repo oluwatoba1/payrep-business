@@ -108,6 +108,8 @@ export const IDCardTypes = [
 ];
 
 export const shimmerDelay = 0;
+export const CUSTOMER_TYPE = "corporate";
+export const DOMAIN = "business";
 
 export const defaultAttestationText = (fullName: string) => `
   <!DOCTYPE html>
