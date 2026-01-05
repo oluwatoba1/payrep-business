@@ -27,7 +27,7 @@ import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { setCustomer, setCredentials } from "@store/slices/authSlice";
 import useToast from "@hooks/useToast";
 import { useLoginMutation, useVerifyDeviceMutation } from "@store/apis/authApi";
-import { DEFAULT_ERROR_MESSAGE, DOMAIN } from "@utils/Constants";
+import { DEFAULT_ERROR_MESSAGE, CUSTOMER_TYPE } from "@utils/Constants";
 import useLoginValidation from "./validator";
 import { persistAppState } from "@utils/Helpers";
 import { updateAppstate } from "@store/slices/appSlice";
@@ -126,7 +126,7 @@ export default function Login({ navigation: { navigate } }: LoginProps) {
 				login_type: loginType,
 				signature,
 				signature_payload: payload,
-				customer_type: DOMAIN,
+				customer_type: CUSTOMER_TYPE,
 			}).unwrap();
 
 			if (data?.is_new_device) {
