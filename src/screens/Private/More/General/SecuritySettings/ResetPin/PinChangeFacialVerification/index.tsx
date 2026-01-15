@@ -52,7 +52,7 @@ export default function PinChangeFacialVerification({
     if (Date.now() - args.startTime < args.timeout) {
       verifyBvnVerification(args);
     } else {
-      showToast('danger', 'Verification pending, check back later');
+      showToast('danger', 'Verification pending, try again in 5 minutes');
       navigate('SecuritySettings');
     }
   };

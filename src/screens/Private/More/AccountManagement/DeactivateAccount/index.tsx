@@ -12,6 +12,8 @@ import useToast from '@hooks/useToast';
 import {useDeactivateAccountMutation} from '@store/apis/authApi';
 import {setCredentials} from '@store/slices/authSlice';
 import {DEFAULT_ERROR_MESSAGE} from '@utils/Constants';
+import {updateAppstate} from '@store/slices/appSlice';
+import {persistAppState} from '@utils/Helpers';
 
 type DeactivateAccountProps = StackScreenProps<
   MoreStackParamList,
@@ -39,6 +41,14 @@ export default function DeactivateAccount({
           setCredentials({
             token: null,
             user_id: null,
+          }),
+        );
+        await persistAppState({
+          customer: null,
+        });
+        dispatch(
+          updateAppstate({
+            customer: null,
           }),
         );
         return;

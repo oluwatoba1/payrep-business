@@ -4,10 +4,9 @@ import {StackScreenProps} from '@react-navigation/stack';
 
 import {MoreStackParamList, PrivateNavigatorParamList} from '@navigation/types';
 import {MainLayout} from '@components/Layout';
-import {Typography} from '@components/Forms';
+import {Button, IconButton, Typography} from '@components/Forms';
 import {mainAccountLimitStyles} from '../styles';
 import AccountTierCard from '@components/Cards/AccountTierCard';
-import ScreenImages from '@assets/images/screens';
 import {useGetTiersMutation} from '@store/apis/complianceApi';
 import useToast from '@hooks/useToast';
 import {DEFAULT_ERROR_MESSAGE, shimmerDelay} from '@utils/Constants';
@@ -16,6 +15,7 @@ import {useAppSelector} from '@store/hooks';
 import {createShimmerPlaceholder} from 'react-native-shimmer-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
 import {moderateScale, scaleHeight} from '@utils/Helpers';
+import Pad from '@components/Pad';
 
 type AccountTiersProps = StackScreenProps<MoreStackParamList, 'AccountTiers'>;
 
@@ -39,9 +39,7 @@ export default function AccountTiers({
     }
     switch (index) {
       case 1:
-        customer?.kyc?.nin_verification_status
-          ? navigate('ProofOfAddress')
-          : navigate('NINVerification');
+        navigate('ProofOfAddress');
         break;
       case 2:
         customer?.type === 'individual'
@@ -128,43 +126,22 @@ export default function AccountTiers({
                 }
               />
             ))}
+
+            <Pad size={20} />
+
+
+              <Button
+                title="Upgrade to Business Plus"
+                onPress={() =>
+                  customer?.tier?.code === 3
+                    ? navigate('BusinessIncorporation', {tier: customer.tier})
+                    : showToast(
+                        'warning',
+                        'You need to be on Tier 3 to complete business verification',
+                      )
+                }
+              />
           </ShimmerPlaceholder>
-          {/* <AccountTierCard
-            tierImage={ScreenImages.MoreScreen.tierOneIcon}
-            name="Musa Abdullahi Omeiza"
-            accountNumber="2349998392"
-            dailyLimit="N20,000"
-            balanceLimit="Unlimited"
-            isCurrentTier={true}
-            tier="1"
-          /> */}
-          {/* make the color and background dynamic that is use according to the card current */}
-          {/* <AccountTierCard
-            tierImage={ScreenImages.MoreScreen.tierTwoIcon}
-            name="Musa Abdullahi Omeiza"
-            accountNumber="2349998392"
-            dailyLimit="N20,000"
-            balanceLimit="Unlimited"
-            customContainerStyle={mainAccountLimitStyles.upgradeTierCard}
-            limitCustomStyle={mainAccountLimitStyles.limitCard}
-            textColor={mainAccountLimitStyles.limitText}
-            isCurrentTier={false}
-            tier="2"
-            onNavigate={handleNavigateTierTwo}
-          /> */}
-          {/* <AccountTierCard
-            tierImage={ScreenImages.MoreScreen.tierThreeIcon}
-            name="Musa Abdullahi Omeiza"
-            accountNumber="2349998392"
-            dailyLimit="N20,000"
-            balanceLimit="Unlimited"
-            customContainerStyle={mainAccountLimitStyles.upgradeTierCard}
-            limitCustomStyle={mainAccountLimitStyles.limitCard}
-            textColor={mainAccountLimitStyles.limitText}
-            isCurrentTier={false}
-            tier="3"
-            onNavigate={handleNavigateTierThree}
-          /> */}
         </ScrollView>
       </View>
     </MainLayout>

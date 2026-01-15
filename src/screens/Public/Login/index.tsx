@@ -1,413 +1,448 @@
-import { useCallback, useEffect, useState } from "react";
+import {useCallback, useEffect, useState} from 'react';
 import {
-	Text,
-	View,
-	Image,
-	TouchableOpacity,
-	BackHandler,
-	Alert,
-	Platform,
-} from "react-native";
-import { StackScreenProps } from "@react-navigation/stack";
-import DeviceInfo from "react-native-device-info";
-import ReactNativeBiometrics, { BiometryTypes } from "react-native-biometrics";
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  BackHandler,
+  Alert,
+  Platform,
+} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
+import {StackScreenProps} from '@react-navigation/stack';
+import DeviceInfo from 'react-native-device-info';
+import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 
 // Local
-import styles from "./styles";
-import IconImages from "@assets/images/appIcons";
+import styles from './styles';
+import IconImages from '@assets/images/appIcons';
 import {
-	Button,
-	Typography,
-	TextInput,
-	HybridTypography,
-} from "@components/Forms";
-import { AuthLayout, Row } from "@components/Layout";
-import { PublicNavigatorParamList } from "@navigation/types";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
-import { setCustomer, setCredentials } from "@store/slices/authSlice";
-import useToast from "@hooks/useToast";
-import { useLoginMutation, useVerifyDeviceMutation } from "@store/apis/authApi";
-import { DEFAULT_ERROR_MESSAGE, CUSTOMER_TYPE } from "@utils/Constants";
-import useLoginValidation from "./validator";
-import { persistAppState } from "@utils/Helpers";
-import { updateAppstate } from "@store/slices/appSlice";
-import { useRegisterBiometricsMutation } from "../../../store/apis/authApi";
-import {
-	EnableBiometricsModal,
-	NewDeviceDetectedModal,
-} from "@components/Modal";
-import { PNB } from "@theme/Fonts";
-import Colors from "@theme/Colors";
-import { useFocusEffect } from "@react-navigation/native";
-import Pad from "@components/Pad";
+  Button,
+  Typography,
+  TextInput,
+  HybridTypography,
+} from '@components/Forms';
+import {AuthLayout, Row} from '@components/Layout';
+import {PublicNavigatorParamList} from '@navigation/types';
+import {useAppDispatch, useAppSelector} from '@store/hooks';
+import {setCustomer, setCredentials} from '@store/slices/authSlice';
+import useToast from '@hooks/useToast';
+import {useLoginMutation, useVerifyDeviceMutation} from '@store/apis/authApi';
+import {CUSTOMER_TYPE, DEFAULT_ERROR_MESSAGE} from '@utils/Constants';
+import useLoginValidation from './validator';
+import {persistAppState} from '@utils/Helpers';
+import {updateAppstate} from '@store/slices/appSlice';
+import {useRegisterBiometricsMutation} from '../../../store/apis/authApi';
+import {EnableBiometricsModal, NewDeviceDetectedModal} from '@components/Modal';
+import {PNB} from '@theme/Fonts';
+import Colors from '@theme/Colors';
+import Pad from '@components/Pad';
 
-type LoginProps = StackScreenProps<PublicNavigatorParamList, "Login">;
+type LoginProps = StackScreenProps<PublicNavigatorParamList, 'Login'>;
 
-export default function Login({ navigation: { navigate } }: LoginProps) {
-	const dispatch = useAppDispatch();
-	const appState = useAppSelector((state) => state.app.appState);
-	const { showToast } = useToast();
+export default function Login({navigation: {navigate}}: LoginProps) {
+  const dispatch = useAppDispatch();
+  const appState = useAppSelector(state => state.app.appState);
+  const {showToast} = useToast();
 
-	const {
-		formErrors,
-		formData: { username, password },
-		validateForm,
-		setUsername,
-		setPassword,
-	} = useLoginValidation();
-	const [login, { isLoading }] = useLoginMutation();
-	const [registerBiometrics] = useRegisterBiometricsMutation();
-	const [verifyDevice] = useVerifyDeviceMutation();
+  const {
+    formErrors,
+    formData: {username, password},
+    validateForm,
+    setUsername,
+    setPassword,
+  } = useLoginValidation();
+  const [login, {isLoading}] = useLoginMutation();
+  const [registerBiometrics] = useRegisterBiometricsMutation();
+  const [verifyDevice] = useVerifyDeviceMutation();
 
-	const customer = appState?.customer;
+  const customer = appState?.customer;
 
-	const [biometryType, setBiometryType] = useState<string | null>(null);
-	const [showRegisterDeviceModal, setShowRegisterDeviceModal] =
-		useState<boolean>(false);
-	const [biometricAvailable, setIsBiometricAvailable] =
-		useState<boolean>(false);
-	const [notYou, setNotYou] = useState<boolean>(!customer?.username);
-	const [showBiometricsModal, setShowBiometricsModal] =
-		useState<boolean>(false);
-	const [token, setToken] = useState<string>("");
-	const [loginType, setLoginType] = useState<"password" | "biometrics">(
-		"password"
-	);
+  const [biometryType, setBiometryType] = useState<string | null>(null);
+  const [showRegisterDeviceModal, setShowRegisterDeviceModal] =
+    useState<boolean>(false);
+  const [biometricAvailable, setIsBiometricAvailable] =
+    useState<boolean>(false);
+  const [notYou, setNotYou] = useState<boolean>(!customer?.username);
+  const [showBiometricsModal, setShowBiometricsModal] =
+    useState<boolean>(false);
+  const [token, setToken] = useState<string>('');
+  const [loginType, setLoginType] = useState<'password' | 'biometrics'>(
+    'password',
+  );
+  const [customerType, setCustomerType] = useState<string | null>(null);
 
-	const prepUserDetails = async ({
-		status,
-		message,
-		data,
-	}: AuthResponse<LoginResponse>) => {
-		if (status && data) {
-			const customerUsername =
-				customer?.username?.length === 10
-					? `0${customer?.username}`
-					: customer?.username;
-			setToken(data.token);
-			dispatch(
-				setCustomer({
-					...data.customer,
-					username: !!username ? username : customerUsername,
-				})
-			);
+  const prepUserDetails = async ({
+    status,
+    message,
+    data,
+  }: AuthResponse<LoginResponse>) => {
+    if (status && data) {
+      setToken(data.token);
+      dispatch(
+        setCustomer({
+          ...data.customer,
+          username: !!username ? username : customer?.username,
+        }),
+      );
 
-			// Show biometric modal if user has never logged in, or
-			// Set token to navigate to dashbord or profile setup
-			!appState?.hasEverLoggedIn
-				? setShowBiometricsModal(true)
-				: dispatch(setCredentials({ token: data.token, user_id: null }));
+      // Show biometric modal if user has never logged in, or
+      // Set token to navigate to dashbord or profile setup
+      !appState?.hasEverLoggedIn
+        ? setShowBiometricsModal(true)
+        : dispatch(setCredentials({token: data.token, user_id: null}));
 
-			// persist customer details
-			await persistAppState({
-				customer: {
-					...data.customer,
-					username: !!username ? username : customerUsername,
-				},
-				hasEverLoggedIn: true,
-			});
-		}
+      // persist customer details
+      await persistAppState({
+        customer: {
+          ...data.customer,
+          username: !!username ? username : customer?.username,
+        },
+        hasEverLoggedIn: true,
+      });
+      return;
+    }
 
-		!status && showToast("danger", message);
-	};
+    showToast('danger', message);
+  };
 
-	const handleLogin = async (
-		loginType: "password" | "biometrics",
-		signature?: string,
-		payload?: string
-	) => {
-		setLoginType(loginType);
-		const _username = !!username ? username : customer?.username || "";
-		try {
-			const { status, message, data } = await login({
-				username: _username.length === 11 ? _username.substring(1) : _username,
-				password,
-				device_id: await DeviceInfo.getUniqueId(),
-				login_type: loginType,
-				signature,
-				signature_payload: payload,
-				customer_type: CUSTOMER_TYPE,
-			}).unwrap();
+  const handleLogin = async (
+    loginType: 'password' | 'biometrics',
+    signature?: string,
+    payload?: string,
+  ) => {
+    setLoginType(loginType);
 
-			if (data?.is_new_device) {
-				setShowRegisterDeviceModal(true);
-				return;
-			}
+    try {
+      const {status, message, data} = await login({
+        username: !!username ? username : customer?.username || '',
+        password,
+        device_id: await DeviceInfo.getUniqueId(),
+        login_type: loginType,
+        signature,
+        signature_payload: payload,
+        customer_type: CUSTOMER_TYPE,
+      }).unwrap();
 
-			await prepUserDetails({ status, message, data });
-		} catch (error: ErrorResponse | any) {
-			showToast(
-				"danger",
-				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE,
-				6000
-			);
-		}
-	};
+      if (data?.is_new_device) {
+        setCustomerType(data.customer.type);
+        setShowRegisterDeviceModal(true);
+        return;
+      }
 
-	const handleRegisterBiometrics = async (enableBiometrics: boolean) => {
-		const rnBiometrics = new ReactNativeBiometrics();
+      await prepUserDetails({status, message, data});
+    } catch (error: ErrorResponse | any) {
+      showToast(
+        'danger',
+        error.data?.message || error.message || DEFAULT_ERROR_MESSAGE,
+        6000,
+      );
+    }
+  };
 
-		const { keysExist } = await rnBiometrics.biometricKeysExist();
+  const handleRegisterBiometrics = async (enableBiometrics: boolean) => {
+    const rnBiometrics = new ReactNativeBiometrics();
 
-		if (!keysExist) {
-			const { publicKey } = await rnBiometrics.createKeys();
+    try {
+      // Check if biometric keys already exist
+      const {keysExist} = await rnBiometrics.biometricKeysExist();
 
-			try {
-				const { status, message } = await registerBiometrics({
-					username,
-					public_key: publicKey,
-				}).unwrap();
-				if (status) {
-					persistAppState({
-						enableBiometrics,
-					});
-					dispatch(
-						updateAppstate({
-							enableBiometrics,
-						})
-					);
-					return;
-				}
-				showToast("danger", message);
-			} catch (error) {
-				showToast("danger", "Biometrics setup error");
-			}
-		}
-	};
+      if (keysExist) {
+        await rnBiometrics.deleteKeys();
+      }
 
-	const handleBiometricLogin = async () => {
-		const rnBiometrics = new ReactNativeBiometrics();
+      // Register new biometrics if no keys exist or user confirms overwrite
+      await registerNewBiometrics(enableBiometrics);
+    } catch (error) {
+      showToast('danger', 'Biometrics setup error');
+    }
+  };
 
-		try {
-			if (Platform.OS === "ios" && biometryType !== BiometryTypes.FaceID) {
-				showToast("danger", "Face ID is not available on this device");
-				return;
-			}
+  const registerNewBiometrics = async (enableBiometrics: boolean) => {
+    const rnBiometrics = new ReactNativeBiometrics();
 
-			const payload = `Login attempt for user ${
-				customer?.username || username
-			} at ${new Date().toISOString()}`;
+    const {publicKey} = await rnBiometrics.createKeys();
 
-			const promptMessage =
-				Platform.OS === "ios" ? "Login with Face ID" : "Login with Biometrics";
+    try {
+      const {status, message} = await registerBiometrics({
+        username,
+        public_key: publicKey,
+        customer_type: CUSTOMER_TYPE,
+      }).unwrap();
 
-			const { success, signature } = await rnBiometrics.createSignature({
-				promptMessage,
-				payload,
-				// cancelButtonText is Android-only; harmless on iOS
-				cancelButtonText: "Cancel",
-			});
+      if (status) {
+        await persistAppState({
+          enableBiometrics,
+        });
 
-			if (success && signature) {
-				handleLogin("biometrics", signature, payload);
-			}
-		} catch (error) {
-			showToast("danger", "An error occurred during biometric login");
-		}
-	};
+        dispatch(
+          updateAppstate({
+            enableBiometrics,
+          }),
+        );
+        return;
+      }
+      showToast('danger', message);
+    } catch (error) {
+      showToast('danger', 'Biometrics setup error');
+    }
+  };
 
-	const sendOtp = async () => {
-		try {
-			const { status } = await verifyDevice({
-				mobile_number: username.length === 10 ? `0${username}` : username,
-				type: "corporate",
-			}).unwrap();
-			if (status) {
-				navigate("RegisterNewDevice", { username });
-			}
-		} catch (error: any) {
-			showToast(
-				"danger",
-				error.data?.message || error.message || DEFAULT_ERROR_MESSAGE
-			);
-		} finally {
-			setShowRegisterDeviceModal(false);
-		}
-	};
+  const handleBiometricLogin = async () => {
+    const rnBiometrics = new ReactNativeBiometrics();
 
-	const displayName = (): string => {
-		if (customer?.type === "individual") {
-			return `${customer?.first_name || ""}`;
-		}
-		return customer?.business_name?.substring(0, 10) + "..." || "";
-	};
+    try {
+      if (Platform.OS === 'ios' && biometryType !== BiometryTypes.FaceID) {
+        return;
+      }
 
-	// Check for biometric sensor availability
-	useEffect(() => {
-		const checkBiometricSensor = async () => {
-			const rnBiometrics = new ReactNativeBiometrics();
-			const { available, biometryType } =
-				await rnBiometrics.isSensorAvailable();
+      const payload = `Login attempt for user ${
+        customer?.username || username
+      } at ${new Date().toISOString()}`;
 
-			setBiometryType(biometryType || null);
+      const promptMessage = 'Login with Biometrics';
 
-			// On iOS, require Face ID specifically; on Android just require biometrics
-			const enabledBySetting = !!appState?.enableBiometrics;
-			const iosFaceIdAvailable =
-				Platform.OS === "ios" &&
-				available &&
-				biometryType === BiometryTypes.FaceID;
+      const {success, signature} = await rnBiometrics.createSignature({
+        promptMessage,
+        payload,
+        // cancelButtonText is Android-only; harmless on iOS
+        cancelButtonText: 'Cancel',
+      });
 
-			const androidBiometricsAvailable = Platform.OS === "android" && available;
+      success && signature && handleLogin('biometrics', signature, payload);
+    } catch (error) {
+      showToast('danger', 'An error occurred during biometric login');
+    }
+  };
 
-			setIsBiometricAvailable(
-				enabledBySetting && (iosFaceIdAvailable || androidBiometricsAvailable)
-			);
-		};
+  const sendOtp = async () => {
+    try {
+      const {status} = await verifyDevice({
+        mobile_number: `0${username}`,
+        customer_type: CUSTOMER_TYPE,
+      }).unwrap();
+      if (status) {
+        navigate('RegisterNewDevice', {username, customerType: CUSTOMER_TYPE});
+      }
+    } catch (error: any) {
+      showToast(
+        'danger',
+        error.data?.message || error.message || DEFAULT_ERROR_MESSAGE,
+      );
+    } finally {
+      setShowRegisterDeviceModal(false);
+    }
+  };
 
-		checkBiometricSensor();
-	}, [appState?.enableBiometrics]);
+  const displayName = (): string => {
+    if (customer?.type === CUSTOMER_TYPE) {
+      return `${customer?.first_name || 'User'}`;
+    }
+    return customer?.business_name
+      ? customer?.business_name.substring(0, 10) + '...'
+      : 'User';
+  };
 
-	useEffect(() => {
-		setUsername(customer?.username || "");
-	}, []);
+  // Check for biometric sensor availability
+  useEffect(() => {
+    const checkBiometricSensor = async () => {
+      const rnBiometrics = new ReactNativeBiometrics();
+      const {available, biometryType} = await rnBiometrics.isSensorAvailable();
 
-	useFocusEffect(
-		useCallback(() => {
-			const backAction = () => {
-				Alert.alert("Hold on!", "Are you sure you want to exit the app?.", [
-					{ text: "Cancel", onPress: () => null, style: "cancel" },
-					{ text: "YES", onPress: () => BackHandler.exitApp() },
-				]);
-				return true; // Prevent default behavior
-			};
+      setBiometryType(biometryType || null);
 
-			const backHandler = BackHandler.addEventListener(
-				"hardwareBackPress",
-				backAction
-			);
+      // Check for both Face ID and Fingerprint availability
+      const enabledBySetting = !!appState?.enableBiometrics;
+      const iosFaceIdAvailable =
+        Platform.OS === 'ios' &&
+        available &&
+        biometryType === BiometryTypes.FaceID;
 
-			return () => backHandler.remove(); // Cleanup
-		}, [])
-	);
+      const iosFingerprintAvailable =
+        Platform.OS === 'ios' &&
+        available &&
+        biometryType === BiometryTypes.TouchID;
 
-	return (
-		<AuthLayout isLoading={isLoading}>
-			<EnableBiometricsModal
-				showModal={showBiometricsModal}
-				onClose={() => [
-					setShowBiometricsModal(false),
-					dispatch(setCredentials({ token, user_id: null })),
-				]}
-				onProceed={() => handleRegisterBiometrics(true)}
-			/>
-			<NewDeviceDetectedModal
-				showModal={showRegisterDeviceModal}
-				onClose={() => setShowRegisterDeviceModal(false)}
-				onProceed={sendOtp}
-			/>
+      const androidBiometricsAvailable = Platform.OS === 'android' && available;
 
-			<Row justifyContent='center' containerStyle={styles.logoContainer}>
-				<Image
-					source={IconImages.logo.payrepBlackWithText}
-					style={styles.logo}
-				></Image>
-			</Row>
+      setIsBiometricAvailable(
+        enabledBySetting &&
+          (iosFaceIdAvailable ||
+            iosFingerprintAvailable ||
+            androidBiometricsAvailable),
+      );
 
-			<View style={styles.overlay}>
-				<View>
-					<Row containerStyle={styles.overlayHeader}>
-						<Typography
-							type='heading5-sb'
-							title={
-								!notYou
-									? `Welcome back, ${appState?.customer?.first_name || ""}`
-									: "Login with your username and password"
-							}
-						/>
+      if (enabledBySetting) {
+        if (iosFaceIdAvailable || iosFingerprintAvailable) {
+          setBiometryType(
+            iosFaceIdAvailable ? BiometryTypes.FaceID : BiometryTypes.TouchID,
+          );
+        } else if (androidBiometricsAvailable) {
+          setBiometryType(BiometryTypes.Biometrics);
+        }
 
-						{!notYou ? (
-							<Typography
-								title='Not you?'
-								type='subheading-sb'
-								style={{ fontFamily: PNB }}
-								color={Colors.primary.base}
-								onPress={() => [setNotYou(true), setUsername("")]}
-							/>
-						) : null}
-					</Row>
-					{notYou ? (
-						<TextInput
-							type='phone'
-							label='Username'
-							keyboardType='numeric'
-							placeholder='Ex: 08123456789'
-							maxLength={11}
-							value={username}
-							onChangeText={setUsername}
-							error={formErrors.username}
-						/>
-					) : null}
-					<TextInput
-						type='password'
-						label='Password'
-						value={password}
-						onChangeText={setPassword}
-						error={formErrors.password}
-					/>
+        await handleBiometricLogin();
+      }
+    };
 
-					<Pad />
+    checkBiometricSensor();
+  }, [appState?.enableBiometrics]);
 
-					<Typography
-						title='Forgot Password?'
-						type='label-sb'
-						color={Colors.primary.base}
-						onPress={() => navigate("ForgotPassword")}
-					/>
+  useEffect(() => {
+    setUsername(customer?.username || '');
+  }, []);
 
-					<Pad size={20} />
-					<Button
-						title='Login'
-						onPress={() => validateForm(() => handleLogin("password"))}
-					></Button>
-					<Pad size={16} />
-					<HybridTypography
-						textTray={[
-							{
-								text: "Don't have an account? ",
-								bold: false,
-								action: () => {},
-							},
-							{
-								text: "Create an Account",
-								bold: true,
-								action: () =>
-									navigate("MobileNumber", { userType: "corporate" }),
-							},
-						]}
-						textStyle={{ textAlign: "center" }}
-					/>
-					<Pad size={16} />
-					{biometricAvailable ? (
-						<TouchableOpacity
-							style={styles.biometricsContainer}
-							onPress={handleBiometricLogin}
-						>
-							<Image
-								source={
-									Platform.OS === "ios" && biometryType === BiometryTypes.FaceID
-										? IconImages.icon.faceScan
-										: IconImages.icon.biometrics
-								}
-								style={styles.biometricsIcon}
-							/>
-						</TouchableOpacity>
-					) : null}
-					<Row justifyContent='center' gap={4}>
-						<Image
-							source={IconImages.logo.cbnIcon}
-							style={styles.biometricsIcon}
-						/>
-						<Typography title='LICENSED BY CBN' type='label-sb' />
-					</Row>
-				</View>
+  useFocusEffect(
+    useCallback(() => {
+      const backAction = () => {
+        Alert.alert('Hold on!', 'Are you sure you want to exit the app?.', [
+          {text: 'Cancel', onPress: () => null, style: 'cancel'},
+          {text: 'YES', onPress: () => BackHandler.exitApp()},
+        ]);
+        return true; // Prevent default behavior
+      };
 
-				<Typography
-					title={`v${DeviceInfo.getVersion()}`}
-					type='body-b'
-					style={{ textAlign: "center" }}
-				/>
-			</View>
-		</AuthLayout>
-	);
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction,
+      );
+
+      return () => backHandler.remove(); // Cleanup
+    }, []),
+  );
+
+  return (
+    <AuthLayout isLoading={isLoading}>
+      <EnableBiometricsModal
+        showModal={showBiometricsModal}
+        onClose={() => [
+          setShowBiometricsModal(false),
+          dispatch(setCredentials({token, user_id: null})),
+        ]}
+        onProceed={() => handleRegisterBiometrics(true)}
+      />
+      <NewDeviceDetectedModal
+        showModal={showRegisterDeviceModal}
+        onClose={() => setShowRegisterDeviceModal(false)}
+        onProceed={sendOtp}
+      />
+
+      <Row justifyContent="center" containerStyle={styles.logoContainer}>
+        <Image
+          source={IconImages.logo.payrepBlackWithText}
+          style={styles.logo}></Image>
+      </Row>
+
+      <View style={styles.overlay}>
+        <View>
+          <Row containerStyle={styles.overlayHeader}>
+            <Typography
+              type="heading5-sb"
+              title={
+                !notYou
+                  ? `Welcome back, ${displayName()}`
+                  : 'Login with your username and password'
+              }
+            />
+
+            {!notYou ? (
+              <Typography
+                title="Not you?"
+                type="subheading-sb"
+                style={{fontFamily: PNB}}
+                color={Colors.primary.base}
+                onPress={() => [setNotYou(true), setUsername('')]}
+              />
+            ) : null}
+          </Row>
+          {notYou ? (
+            <TextInput
+              type="phone"
+              label="Username"
+              keyboardType="numeric"
+              placeholder="Ex: 8123456789"
+              maxLength={10}
+              value={username}
+              onChangeText={setUsername}
+              error={formErrors.username}
+            />
+          ) : null}
+          <TextInput
+            type="password"
+            label="Password"
+            placeholder="Enter password"
+            value={password}
+            onChangeText={setPassword}
+            error={formErrors.password}
+          />
+
+          <Pad />
+
+          <Typography
+            title="Forgot Password?"
+            type="label-sb"
+            color={Colors.primary.base}
+            onPress={() => navigate('ForgotPassword')}
+          />
+
+          <Pad size={20} />
+
+          <Button
+            title="Login"
+            onPress={() =>
+              validateForm(() => handleLogin('password'))
+            }></Button>
+
+          <Pad size={16} />
+
+          <HybridTypography
+            textTray={[
+              {
+                text: "Don't have an account? ",
+                bold: false,
+                action: () => {},
+              },
+              {
+                text: 'Create an Account',
+                bold: true,
+                action: () =>
+                  navigate('MobileNumber', {userType: CUSTOMER_TYPE}),
+              },
+            ]}
+            textStyle={{textAlign: 'center'}}
+          />
+
+          <Pad size={16} />
+
+          {biometricAvailable ? (
+            <TouchableOpacity
+              style={styles.biometricsContainer}
+              onPress={handleBiometricLogin}>
+              <Image
+                source={
+                  Platform.OS === 'ios' && biometryType === BiometryTypes.FaceID
+                    ? IconImages.icon.faceScan
+                    : IconImages.icon.biometrics
+                }
+                style={styles.biometricsIcon}
+              />
+            </TouchableOpacity>
+          ) : null}
+          <Row justifyContent="center" gap={4}>
+            <Image
+              source={IconImages.logo.cbnIcon}
+              style={styles.biometricsIcon}
+            />
+            <Typography title="LICENSED BY CBN" type="label-sb" />
+          </Row>
+        </View>
+
+        <Typography
+          title={`v${DeviceInfo.getVersion()}`}
+          type="body-b"
+          style={{textAlign: 'center'}}
+        />
+      </View>
+    </AuthLayout>
+  );
 }

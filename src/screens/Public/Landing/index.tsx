@@ -9,15 +9,11 @@ import IconImages from '@assets/images/appIcons';
 import {styles} from './styles';
 import ComponentImages from '@assets/images/components';
 import {Button} from '@components/Forms';
+import {CUSTOMER_TYPE} from '@utils/Constants';
 
-type LandingProps = StackScreenProps<
-  PublicNavigatorParamList,
-  'Landing'
->;
+type LandingProps = StackScreenProps<PublicNavigatorParamList, 'Landing'>;
 
-export default function Landing({
-  navigation: {navigate},
-}: LandingProps) {
+export default function Landing({navigation: {navigate}}: LandingProps) {
   return (
     <AuthLayout>
       <ImageBackground
@@ -42,7 +38,7 @@ export default function Landing({
             title="Create an Account"
             containerStyle={styles.signupButtonStyle}
             textStyle={styles.signupTextStyle}
-            onPress={() => navigate("MobileNumber", {userType: "corporate"})}
+            onPress={() => navigate('MobileNumber', {userType: CUSTOMER_TYPE})}
           />
           <Button
             title="Login"

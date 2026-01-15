@@ -5,24 +5,30 @@ import * as z from 'zod';
 interface Form {
   rcNumber: string;
   cacDocument: DocumentPickerResponse[];
+  memartDocument: DocumentPickerResponse[];
   tin: string;
 }
 
 interface FormError {
   rcNumber: string;
   cacDocument: string;
+  memartDocument: string;
   tin: string;
 }
 
 const defaultForm = {
   rcNumber: '',
   cacDocument: '',
+  memartDocument: '',
   tin: '',
 };
 
 const useBusinessInformationValidation = (notifier: Function) => {
   const [rcNumber, setRcNumber] = useState<string>('');
   const [cacDocument, setCacDocument] = useState<DocumentPickerResponse[]>([]);
+  const [memartDocument, setMemartDocument] = useState<
+    DocumentPickerResponse[]
+  >([]);
   const [tin, setTin] = useState<string>('');
 
   // Validation schemas
@@ -37,11 +43,20 @@ const useBusinessInformationValidation = (notifier: Function) => {
         size: z.number().positive('File is required').optional(),
       }),
     ),
+    memartDocument: z.array(
+      z.object({
+        uri: z.string().min(1, 'File is required'),
+        name: z.string().min(1, 'File is required'),
+        type: z.string().min(1, 'File is required'),
+        size: z.number().positive('File is required').optional(),
+      }),
+    ),
   });
 
   const formData = {
     rcNumber,
     cacDocument,
+    memartDocument,
     tin,
   };
 
@@ -75,6 +90,7 @@ const useBusinessInformationValidation = (notifier: Function) => {
     validateForm,
     setRcNumber,
     setCacDocument,
+    setMemartDocument,
     setTin,
   };
 };

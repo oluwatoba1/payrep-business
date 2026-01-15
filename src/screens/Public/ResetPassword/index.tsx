@@ -12,7 +12,7 @@ import {
   useVerifyMobileNumberMutation,
 } from '@store/apis/authApi';
 import styles from './styles';
-import {DEFAULT_ERROR_MESSAGE, RESEND_COUNTDOWN} from '@utils/Constants';
+import {CUSTOMER_TYPE, DEFAULT_ERROR_MESSAGE, RESEND_COUNTDOWN} from '@utils/Constants';
 import useResetPasswordValidation from './validator';
 import {formatCountdown} from '@utils/Helpers';
 import Colors from '@theme/Colors';
@@ -81,6 +81,7 @@ export default function ResetPassword({
     try {
       const {status} = await verifyMobileNumber({
         mobile_number: `0${username}`,
+        customer_type: CUSTOMER_TYPE
       }).unwrap();
       if (status) {
         const endTime = Date.now() + RESEND_COUNTDOWN * 1000;

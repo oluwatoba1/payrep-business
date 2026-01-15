@@ -65,16 +65,6 @@ const styles = StyleSheet.create({
   caLink: {
     color: Colors.primary[600],
   },
-  forgotPass: {
-    fontSize: scale(14),
-    color: Colors.gray[600],
-    fontFamily: PNSB,
-    lineHeight: scale(21),
-
-    textAlign: 'center',
-    paddingTop: scale(8),
-    paddingBottom: scale(16),
-  },
   biometricsContainer: {
     borderWidth: 0.5,
     height: scale(48),

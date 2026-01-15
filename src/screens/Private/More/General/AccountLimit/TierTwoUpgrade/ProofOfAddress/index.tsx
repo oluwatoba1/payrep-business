@@ -11,6 +11,9 @@ import {DEFAULT_ERROR_MESSAGE} from '@utils/Constants';
 import {useUploadMeansofIdentificationMutation} from '@store/apis/complianceApi';
 import useDocumentValidation from './validators';
 import {useTierUpgradeMutation} from '@store/apis/customerApi';
+import {useFocusEffect} from '@react-navigation/native';
+import {useCallback} from 'react';
+import {BackHandler} from 'react-native';
 
 type ProofOfAddressProps = StackScreenProps<
   MoreStackParamList,
@@ -31,7 +34,7 @@ export default function ProofOfAddress({
     try {
       const {status, message} = await tierUpgrade().unwrap();
       if (status) {
-        navigate('AccountTiers');
+        navigate('MeansOfIdentification');
       } else {
         showToast('danger', message);
       }
@@ -51,7 +54,7 @@ export default function ProofOfAddress({
     try {
       const {status, message} = await uploadMeansofIdentification(fd).unwrap();
       if (status) {
-        upgradeTier();
+        navigate('MeansOfIdentification');
       } else {
         showToast('danger', message);
       }
@@ -62,6 +65,22 @@ export default function ProofOfAddress({
       );
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      const backAction = () => {
+        navigate('AccountTiers');
+        return true; // Prevent default behavior
+      };
+
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction,
+      );
+
+      return () => backHandler.remove(); // Cleanup
+    }, []),
+  );
 
   return (
     <MainLayout

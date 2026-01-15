@@ -12,17 +12,10 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {MoreStackParamList} from '@navigation/types';
 import {useAppSelector} from '@store/hooks';
 import useToast from '@hooks/useToast';
-import {
-  useKycLimitCheckMutation,
-  useVerificationCheckMutation,
-} from '@store/apis/complianceApi';
-import {
-  DEFAULT_ERROR_MESSAGE,
-  KYCLOG_TYPES,
-  QOREID_CLIENT_ID,
-} from '@utils/Constants';
+import {useVerificationCheckMutation} from '@store/apis/complianceApi';
+import {DEFAULT_ERROR_MESSAGE, QOREID_CLIENT_ID} from '@utils/Constants';
 import Pad from '@components/Pad';
-import {normalizeName} from '@utils/Helpers';
+import {formatToInternationalPhoneNumber, normalizeName} from '@utils/Helpers';
 
 interface VerifyBvnProps {
   startTime: number;
@@ -53,34 +46,13 @@ export default function NINVerification({
   const userId = useAppSelector(state => state.auth.customer?.id);
 
   const [verificationCheck, {isLoading}] = useVerificationCheckMutation();
-  const [kycLimitCheck, {isLoading: isVerifying}] = useKycLimitCheckMutation();
 
   const timeoutAction = (args: VerifyBvnProps) => {
     if (Date.now() - args.startTime < args.timeout) {
       verifyNinVerification(args);
     } else {
-      showToast('danger', 'Verification pending, check back later');
+      showToast('danger', 'Verification pending, try again in 5 minutes');
       navigate('AccountTiers');
-    }
-  };
-
-  const _kycLimitCheck = async () => {
-    try {
-      const {status, message} = await kycLimitCheck({
-        type: KYCLOG_TYPES.NIN_VERIFICATION,
-        customer_id: customer?.id || '',
-        provider: 'QOREID',
-      }).unwrap();
-      if (!status) {
-        showToast('danger', message);
-        return;
-      }
-    } catch (error: ErrorResponse | any) {
-      showToast(
-        'danger',
-        error.data?.message || error.message || DEFAULT_ERROR_MESSAGE,
-      );
-      return;
     }
   };
 
@@ -95,8 +67,8 @@ export default function NINVerification({
           return;
         }
         data[0].status
-          ? navigate('ProofOfAddress')
-          : showToast('danger', 'We could not verify your NIN with your face');
+          ? navigate('AccountTiers')
+          : showToast('danger', 'We could not verify your face');
       } else {
         timeoutAction(args);
       }
@@ -128,29 +100,33 @@ export default function NINVerification({
   });
 
   const onSubmit = async () => {
-    await _kycLimitCheck();
     const cameraPermission = await request(
       Platform.OS === 'ios'
         ? PERMISSIONS.IOS.CAMERA
         : PERMISSIONS.ANDROID.CAMERA,
     );
+    const phoneNumber = customer?.mobile_number || '';
     if (cameraPermission === RESULTS.GRANTED) {
       const formData = {
         flowId: 0 /* Required for workflow */,
         clientId: QOREID_CLIENT_ID /* Required */,
-        productCode: 'liveness_nin' /* Required for collection */,
-        customerReference: userId /* Required */,
+        productCode: customer?.kyc?.bvn_verification_status
+          ? 'liveness_nin'
+          : 'liveness_bvn' /* Required for collection */,
+        customerReference: userId + '_tierupgrade' /* Required */,
         applicantData: {
-          firstName: customer?.first_name,
+          firstName: customer?.first_name || '',
           middleName: normalizeName(customer?.other_name || ''),
-          lastName: customer?.surname,
+          lastName: customer?.surname || '',
           gender: '',
-          phoneNumber: '+234' + customer?.mobile_number.substring(1),
+          phoneNumber: formatToInternationalPhoneNumber(phoneNumber),
           email: '',
         },
         identityData: {
-          idType: 'nin',
-          idNumber: '',
+          idType: customer?.kyc?.bvn_verification_status ? 'nin' : 'bvn',
+          idNumber: customer?.kyc?.bvn_verification_status
+            ? customer?.kyc?.nin || ''
+            : customer?.kyc?.bvn || '',
         },
         addressData: {
           address: '',
@@ -168,10 +144,10 @@ export default function NINVerification({
   return (
     <MainLayout
       keyboardAvoidingType="scroll-view"
-      backAction={() => goBack()}
-      isLoading={isLoading || isVerifying}
-      loadingTitle="Validating NIN"
-      rightTitle="NIN Facial Recognition">
+      backAction={() => navigate('AccountTiers')}
+      isLoading={isLoading}
+      loadingTitle="Validating"
+      rightTitle="Facial Recognition">
       <Pad size={16} />
       <Typography
         type="body-r"

@@ -1,12 +1,10 @@
 import React from 'react';
-import {View} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {types} from '@react-native-documents/picker';
 
 import {MainLayout} from '@components/Layout';
 import {Typography, Button, FileUploader, TextInput} from '@components/Forms';
 import {MoreStackParamList} from '@navigation/types';
-import {styles} from './styles';
 import useToast from '@hooks/useToast';
 import {DEFAULT_ERROR_MESSAGE} from '@utils/Constants';
 import useBusinessInformationValidation from './validators';
@@ -20,7 +18,6 @@ type BusinessInformationProps = StackScreenProps<
 
 export default function BusinessIncorporation({
   navigation: {navigate},
-  route,
 }: BusinessInformationProps) {
   const {showToast} = useToast();
   const {
@@ -29,6 +26,7 @@ export default function BusinessIncorporation({
     validateForm,
     setRcNumber,
     setCacDocument,
+    setMemartDocument,
     setTin,
   } = useBusinessInformationValidation(showToast);
   const [submitBusinessTierRequirements, {isLoading}] =
@@ -36,15 +34,25 @@ export default function BusinessIncorporation({
 
   const submit = async () => {
     const fd = new FormData();
+    fd.append('cac_document', {
+      uri: formData.cacDocument[0].uri,
+      name: formData.cacDocument[0].name,
+      type: formData.cacDocument[0].type,
+    });
+    fd.append('memart_document', {
+      uri: formData.memartDocument[0].uri,
+      name: formData.memartDocument[0].name,
+      type: formData.memartDocument[0].type,
+    });
     fd.append('rc_number', formData.rcNumber);
-    fd.append('cac_document', formData.cacDocument[0]);
     fd.append('tin', formData.tin);
     try {
       const {status, message} = await submitBusinessTierRequirements(
         fd,
       ).unwrap();
+
       if (status) {
-        navigate('IdemnityAgreement', {tier: route.params.tier});
+        navigate('AccountTiers');
       } else {
         showToast('danger', message);
       }
@@ -66,36 +74,43 @@ export default function BusinessIncorporation({
         type="body-r"
         title="Please fill out the following details about your business"
       />
-      <View style={styles.inputContainer}>
-        {/* Business name Inpute */}
-        <TextInput
-          label="RC Number"
-          placeholder="Enter your RC Number"
-          onChangeText={setRcNumber}
-          value={formData.rcNumber}
-          error={formErrors.rcNumber}
-        />
+      {/* Business name Inpute */}
+      <TextInput
+        label="RC Number"
+        placeholder="Enter your RC Number"
+        onChangeText={setRcNumber}
+        value={formData.rcNumber}
+        error={formErrors.rcNumber}
+      />
 
-        <FileUploader
-          title="CAC document"
-          subtitle="Upload your CAC document"
-          file={
-            formData.cacDocument.length > 0 ? formData.cacDocument[0] : null
-          }
-          onChoose={setCacDocument}
-          type={[types.images]}
-          notifier={message => showToast('warning', message)}
-        />
+      <FileUploader
+        title="CAC document"
+        subtitle="Upload your CAC document"
+        file={formData.cacDocument.length > 0 ? formData.cacDocument[0] : null}
+        onChoose={setCacDocument}
+        type={[types.images]}
+        notifier={message => showToast('warning', message)}
+      />
 
-        {/* Tax Identification Number Input */}
-        <TextInput
-          label="TIN"
-          placeholder="Enter your TIN (optional)"
-          onChangeText={setTin}
-          value={formData.tin}
-          error={formErrors.tin}
-        />
-      </View>
+      <FileUploader
+        title="Memart document"
+        subtitle="Upload your memart document"
+        file={
+          formData.memartDocument.length > 0 ? formData.memartDocument[0] : null
+        }
+        onChoose={setMemartDocument}
+        type={[types.pdf]}
+        notifier={message => showToast('warning', message)}
+      />
+
+      {/* Tax Identification Number Input */}
+      <TextInput
+        label="TIN"
+        placeholder="Enter your TIN (optional)"
+        onChangeText={setTin}
+        value={formData.tin}
+        error={formErrors.tin}
+      />
 
       <Pad size={20} />
 

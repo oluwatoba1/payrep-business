@@ -282,6 +282,7 @@ interface RegisterCredentials {
 	otp: string;
 	device_id: string;
 	customer_id: string;
+	customer_type: string;
 }
 
 interface RegisterMobileDataResponse {
@@ -292,9 +293,11 @@ interface RegisterMobileDataResponse {
 
 interface BvnLookupCredentials {
 	bvn: string;
+	customer_type: string;
 }
 interface NinLookupCredentials {
 	nin: string;
+	customer_type: string;
 }
 
 interface VerificationLogsCredentials {

@@ -200,6 +200,8 @@ export type MoreStackParamList = {
 		logo?: undefined;
 	};
 	ProofOfAddress: undefined;
+	MeansOfIdentification: undefined;
+  KycVerification: undefined;
 	NINVerification: undefined;
 	BusinessIncorporation: { tier: ITier };
 	IdemnityAgreement: { tier: ITier };
@@ -217,6 +219,7 @@ export type MoreStackParamList = {
 	ViewDisputeScreen: {
 		disputeId: string;
 	};
+	MemartVerification: undefined;
 	AddAccount: undefined;
 	ChangePin: undefined;
 	OtpVerification: undefined;

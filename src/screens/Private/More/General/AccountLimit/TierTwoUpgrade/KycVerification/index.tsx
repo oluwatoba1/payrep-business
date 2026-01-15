@@ -1,16 +1,16 @@
-import {Button, Dropdown, TextInput} from '@components/Forms';
+import {Button, TextInput} from '@components/Forms';
 import {MainLayout} from '@components/Layout';
 import Pad from '@components/Pad';
-import {ProfileStackParamList} from '@navigation/types';
+import {MoreStackParamList} from '@navigation/types';
 import {StackScreenProps} from '@react-navigation/stack';
-import useBvnVerificationValidation from './validator';
+import useKycVerificationValidation from './validator';
 import {
   useBvnLookupMutation,
   useNinLookupMutation,
 } from '@store/apis/complianceApi';
-import {useAppDispatch} from '@store/hooks';
+import {useAppDispatch, useAppSelector} from '@store/hooks';
 import useToast from '@hooks/useToast';
-import {useState} from 'react';
+import {useState, useMemo} from 'react';
 import {CUSTOMER_TYPE, DEFAULT_ERROR_MESSAGE} from '@utils/Constants';
 import {IsThisYouModal} from '@components/Modal';
 import {updateBvnData, updateNinData} from '@store/slices/complianceSlice';
@@ -29,22 +29,28 @@ interface IKycData {
 }
 
 type KycVerificationProps = StackScreenProps<
-  ProfileStackParamList,
+  MoreStackParamList,
   'KycVerification'
 >;
 
 export default function KycVerification({
-  navigation: {navigate, canGoBack, goBack},
+  navigation: {navigate},
 }: KycVerificationProps) {
   const dispatch = useAppDispatch();
   const {showToast} = useToast();
+  const customer = useAppSelector(state => state.customer.customer);
+
+  // Auto-detect lookup type based on KYC status
+  const lookupType = useMemo(() => {
+    return customer?.kyc?.bvn_verification_status ? 'nin' : 'bvn';
+  }, [customer?.kyc?.bvn_verification_status]);
 
   const {
-    formData: {idNumber}, // we can rename this to `idNumber` if you want generic
-    setIdNumber, // same here, it’s just storing whichever number is typed
+    formData: {idNumber},
+    setIdNumber,
     formErrors,
     validateForm,
-  } = useBvnVerificationValidation();
+  } = useKycVerificationValidation();
 
   const [bvnLookup, {isLoading: isBvnLoading}] = useBvnLookupMutation();
   const [ninLookup, {isLoading: isNinLoading}] = useNinLookupMutation();
@@ -62,20 +68,15 @@ export default function KycVerification({
     email: '',
   });
 
-  const [selectedOption, setSelectedOption] = useState({
-    label: '',
-    value: '',
-  });
-
   const [showIsThisYouModal, setShowIsThisYouModal] = useState<boolean>(false);
 
-  // Submit dynamically depending on ID type
+  // Submit based on auto-detected lookup type
   const submit = async () => {
     try {
-      if (selectedOption.value === 'bvn') {
+      if (lookupType === 'bvn') {
         const {status, message, data} = await bvnLookup({
           bvn: idNumber,
-          customer_type: CUSTOMER_TYPE
+          customer_type: CUSTOMER_TYPE,
         }).unwrap();
         if (status && data) {
           delete data.image;
@@ -88,17 +89,17 @@ export default function KycVerification({
         } else {
           showToast('danger', message);
         }
-      } else if (selectedOption.value === 'nin') {
+      } else {
         const {status, message, data} = await ninLookup({
           nin: idNumber,
-          customer_type: CUSTOMER_TYPE
+          customer_type: CUSTOMER_TYPE,
         }).unwrap();
         if (status && data) {
           delete data.image;
           setKycData({
             ...data,
             nin: idNumber,
-            phoneNumber: data.phone_number, // depends on API shape
+            phoneNumber: data.phone_number,
           });
           setShowIsThisYouModal(true);
         } else {
@@ -113,10 +114,10 @@ export default function KycVerification({
     }
   };
 
-  // Proceed also depends on ID type
+  // Proceed to facial recognition
   const proceed = () => {
     setShowIsThisYouModal(false);
-    if (selectedOption.value === 'bvn') {
+    if (lookupType === 'bvn') {
       dispatch(
         updateNinData({
           firstName: '',
@@ -141,7 +142,7 @@ export default function KycVerification({
           phoneNumber: kycData.phoneNumber,
         }),
       );
-    } else if (selectedOption.value === 'nin') {
+    } else {
       dispatch(
         updateBvnData({
           firstName: '',
@@ -168,14 +169,14 @@ export default function KycVerification({
       );
     }
 
-    navigate('FacialRecognition');
+    navigate('NINVerification');
   };
 
   return (
     <MainLayout
-      rightTitle="KYC Registration"
+      rightTitle="KYC Verification"
       isLoading={isBvnLoading || isNinLoading}
-      backAction={() => canGoBack() && goBack()}>
+      backAction={() => navigate('MeansOfIdentification')}>
       <IsThisYouModal
         title={kycData.first_name + ' ' + kycData.last_name}
         showModal={showIsThisYouModal}
@@ -183,29 +184,17 @@ export default function KycVerification({
         onProceed={proceed}
       />
 
-      <Dropdown
-        label="ID Type"
-        options={[
-          {label: 'BVN', value: 'bvn'},
-          {label: 'NIN', value: 'nin'},
-        ]}
-        selectedOption={selectedOption}
-        onSelect={setSelectedOption}
-      />
-
-      <Pad size={20} />
-
       <TextInput
         label={
-          selectedOption.value === 'bvn'
+          lookupType === 'bvn'
             ? 'BVN (Dial *565*0# to retrieve your BVN)'
             : 'NIN (Dial *346# to retrieve your NIN)'
         }
         keyboardType="numeric"
         placeholder={
-          selectedOption.value === 'bvn' ? 'Ex: 22222222222' : 'Ex: 12345678901'
+          lookupType === 'bvn' ? 'Ex: 22222222222' : 'Ex: 12345678901'
         }
-        maxLength={11} // adjust if NIN length differs
+        maxLength={11}
         onChangeText={setIdNumber}
         value={idNumber}
         error={formErrors.idNumber}
