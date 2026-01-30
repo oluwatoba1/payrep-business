@@ -64,7 +64,7 @@ export default function MemberPhoneNumberVerification({
 		try {
 			const { status, message, data } = await registerMobileNumber({
 				mobile_number: mobileNumber,
-				type: "individual",
+				customer_type: "individual",
 				otp,
 			}).unwrap();
 			if (status) {

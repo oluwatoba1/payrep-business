@@ -39,7 +39,7 @@ export default function AccountTiers({
     }
     switch (index) {
       case 1:
-        navigate('ProofOfAddress');
+        navigate('KycVerification');
         break;
       case 2:
         customer?.type === 'individual'

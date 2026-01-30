@@ -95,7 +95,7 @@ export default function MemberPhoneNumber({
 		try {
 			const { status, data, message } = await verifyMobileNumber({
 				mobile_number: mobileNumber.padStart(11, "0"),
-				type: "individual",
+				customer_type: "individual",
 			}).unwrap();
 
 			if (status) {

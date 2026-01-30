@@ -100,6 +100,7 @@ export default function MemberMeansOfVerification({
 			if (selectedOption.value === "bvn") {
 				const { status, message, data } = await bvnLookup({
 					bvn: idNumber,
+					customer_type: "individual",
 				}).unwrap();
 				if (status && data) {
 					setKycData({
@@ -114,6 +115,7 @@ export default function MemberMeansOfVerification({
 			} else if (selectedOption.value === "nin") {
 				const { status, message, data } = await ninLookup({
 					nin: idNumber,
+					customer_type: "individual",
 				}).unwrap();
 				if (status && data) {
 					setKycData({
