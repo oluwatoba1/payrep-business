@@ -81,8 +81,8 @@ const EnterAssetInformation = ({ navigation }: EnterAssetInformationProps) => {
 			(sum, it) => sum + (parseFloat(it.price) || 0),
 			0
 		);
-		if (total > 20000) {
-			showToast("danger", "Woman can't request asset above ₦20,000");
+		if (total > 40000) {
+			showToast("danger", "Woman can't request asset above ₦40,000");
 			return;
 		}
 		navigation.navigate("ReviewAssetRequest", {
